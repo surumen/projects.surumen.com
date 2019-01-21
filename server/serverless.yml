@@ -10,4 +10,4 @@ functions:
     - http:
         path: graphql
         method: post
-        cors: false
+        cors: true

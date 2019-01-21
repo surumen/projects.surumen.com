@@ -41,6 +41,7 @@ const server = new ApolloServer({
   typeDefs: './src/schema.graphql',
   resolvers,
   context: ({ event, context }) => ({
+    headers: event.headers,
     functionName: context.functionName,
     event,
     context,
@@ -48,4 +49,8 @@ const server = new ApolloServer({
 });
 
 exports.graphqlHandler = server.createHandler({
+  cors: {
+    origin: true,
+    credentials: true,
+  },
 });
