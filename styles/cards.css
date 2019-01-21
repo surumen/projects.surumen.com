@@ -1,0 +1,585 @@
+.y4D4ac .J9fJmf {
+    color: #1a73e8
+}
+
+.tVYxKc {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-justify-content: space-between;
+    justify-content: space-between
+}
+
+.C96I0d {
+    padding: 16px;
+    color: rgba(0, 0, 0, 0.54);
+    font: 400 .75rem/1rem Larsseit, Helvetica, Arial, sans-serif;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    outline: none;
+    -webkit-box-align: center;
+    box-align: center;
+    -webkit-align-items: center;
+    align-items: center
+}
+
+.uOat3d .C96I0d:focus {
+    outline: auto
+}
+
+.C96I0d.FqHwof {
+    color: rgba(255, 255, 255, 0.70)
+}
+
+/*.C96I0d .JUQOtc {
+    fill: rgba(0, 0, 0, 0.54)
+}*/
+
+/*.C96I0d.FqHwof .JUQOtc {
+    fill: rgba(255, 255, 255, 0.70)
+}*/
+
+.z8SUje {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    margin-right: 22px
+}
+
+.wWgD2d,
+.Xe8vw {
+    width: 50%
+}
+
+.hEcW3 {
+    -webkit-align-items: center;
+    align-items: center;
+    display: -webkit-inline-box;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-justify-content: center;
+    justify-content: center
+}
+
+.hEcW3.j6e78e {
+    display: block
+}
+
+.hEcW3 .O0WRkf {
+    display: block;
+    text-transform: none;
+    color: rgba(0, 0, 0, 0.54);
+    font: 400 .875rem/1.25rem Larsseit, Helvetica, Arial, sans-serif
+}
+
+.hEcW3.FqHwof .O0WRkf {
+    color: #fff
+}
+
+.hEcW3 .RveJvd {
+    margin: 12px 8px
+}
+
+.mKF8Oc,
+.hEcW3 .A49Wzc .JUQOtc {
+    fill: rgba(0, 0, 0, 0.54);
+    vertical-align: middle;
+    margin-right: 16px
+}
+
+.eoVQDd {
+    fill: rgba(0, 0, 0, 0.54)
+}
+
+.U9bOZe {
+    margin-right: 8px
+}
+
+.hEcW3.FqHwof .A49Wzc .JUQOtc {
+    fill: #fff
+}
+
+.gGtqMb {
+    padding: 0 16px 16px 16px;
+    outline: none
+}
+
+.uOat3d .gGtqMb:focus {
+    outline: auto
+}
+
+.uIkos {
+    color: #3c4043;
+    font-weight: 400;
+    font-size: 20px;
+    padding: 8px 0 4px 0
+}
+
+.CKdD8 {
+    color: #5f6368;
+    font: 400 .875rem/1.25rem Larsseit, Helvetica, Arial, sans-serif
+}
+
+.gGtqMb.FqHwof .uIkos {
+    color: #fff
+}
+
+.gGtqMb.FqHwof .CKdD8 {
+    color: rgba(255, 255, 255, 0.70)
+}
+
+.aPb80d {
+    position: absolute;
+    right: -16px;
+    width: 280px;
+    max-width: 100vw;
+    -webkit-transition: top .3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transition: top .3s cubic-bezier(0.4, 0.0, 0.2, 1)
+}
+
+.RIGric {
+    padding: 12px;
+    right: 0;
+    white-space: normal
+}
+
+.FaAXx {
+    bottom: 0;
+    right: 38px
+}
+
+.VRz9fc,
+.VPY2Kd {
+    fill: currentColor
+}
+
+.U9bOZe .JUQOtc {
+    fill: #5f6368
+}
+
+.V3UZb {
+    padding: 0 8px 0 12px
+}
+
+.U9bOZe {
+    margin-right: 0
+}
+
+.hEcW3 {
+    margin: 4px 0
+}
+
+.wWgD2d,
+.Xe8vw {
+    -webkit-align-items: center;
+    align-items: center;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    padding: 6px 0
+}
+
+.C96I0d {
+    color: #80868b;
+    letter-spacing: .025em;
+    font-family: Larsseit, Helvetica, Arial, sans-serif;
+    font-size: .75rem;
+    font-weight: 400;
+    line-height: 1rem
+}
+
+/*.C96I0d .JUQOtc {
+    fill: #5f6368
+}*/
+
+.z8SUje {
+    margin-right: 16px
+}
+
+.uIkos {
+    color: #202124;
+    padding: 16px 0 8px 0;
+    font-family: Larsseit, Helvetica, Arial, sans-serif;
+    font-size: 1.375rem;
+    font-weight: 400;
+    line-height: 1.75rem
+}
+
+.CKdD8 {
+    color: #5f6368;
+    letter-spacing: .01428571em;
+    font-family: Larsseit, Helvetica, Arial, sans-serif;
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.25rem
+}
+
+.a1qr4 .qyLJVd {
+    border: none
+}
+
+.BpKFdf {
+    background-color: #185abc;
+    background-image: url(sound.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    -webkit-background-size: auto 192px;
+    background-size: auto 192px;
+    padding: 20px 0;
+    height: 192px;
+    width: 30%
+}
+
+.GDGBoc {
+    cursor: pointer
+}
+
+.zh9Tbe {
+    background-color: #185abc;
+    padding: 0 18px 20px
+}
+
+.mSbCD {
+    color: rgba(255, 255, 255, 1);
+    font: 400 1rem/1.5rem Larsseit, Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    margin-bottom: 2px
+}
+
+.Ecvatc {
+    color: rgba(255, 255, 255, 0.70);
+    font-size: 14px
+}
+
+.TjP4pf {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    width: 100%
+}
+
+.wtmZid .A49Wzc .JUQOtc {
+    fill: rgba(255, 255, 255, 1)
+}
+
+.ajfOOe {
+    background-color: #174ea6
+}
+
+.ajfOOe .snByac {
+    color: rgba(255, 255, 255, 1)
+}
+
+.ajfOOe .A49Wzc .JUQOtc {
+    fill: rgba(255, 255, 255, 1)
+}
+
+@media (min-resolution:1.5dppx),
+(-webkit-min-device-pixel-ratio:1.5) {
+    .BpKFdf {
+        background-image: url(sound.svg)
+    }
+}
+
+.RI6CGf {
+    padding: 0 6px
+}
+
+.Umhtd {
+    cursor: pointer;
+    display: block;
+    width: 100%
+}
+
+.P10HQc {
+    cursor: pointer
+}
+
+.OPy5H {
+    padding: 0 16px;
+    font: 400 1rem/1.5rem Larsseit, Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    color: rgba(0, 0, 0, 0.87)
+}
+
+.e2124 {
+    padding: 0 16px;
+    margin-top: 6px;
+    font: 400 .875rem/1.25rem Larsseit, Helvetica, Arial, sans-serif;
+    color: rgba(0, 0, 0, 0.54)
+}
+
+.byHy1d {
+    padding: 24px 0
+}
+
+.QvnvAb {
+    width: 100%
+}
+
+.a1qr4 {
+    width: 100%;
+    position: absolute;
+    bottom: 0
+}
+
+.a1qr4 .qyLJVd {
+    border-top: 1px solid #dadce0
+}
+
+.qyLJVd {
+    padding: 0 6px
+}
+
+.CR0nxf .byHy1d {
+    background-color: #185abc
+}
+
+.CR0nxf .OPy5H {
+    color: #fff
+}
+
+.CR0nxf .e2124 {
+    color: rgba(255, 255, 255, 0.70)
+}
+
+.TuKPid {
+    background-image: url(//ssl.gstatic.com/social/photosui/images/promo_card_desktop_uploader_344x120dp.svg);
+    width: 100%;
+    padding-bottom: 31.25%;
+    -webkit-background-size: cover;
+    background-size: cover
+}
+
+.CR0nxf .qyLJVd {
+    background-color: #174ea6;
+    -webkit-border-radius: 0 0 2px 2px;
+    border-radius: 0 0 2px 2px
+}
+
+.Ti9V2 {
+    cursor: pointer
+}
+
+.xdakdb {
+    background-position: center;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    background-size: cover;
+    padding-bottom: 56.25%;
+    width: 100%
+}
+
+@media (min-resolution:1.5dppx),
+(-webkit-min-device-pixel-ratio:1.5) {
+    .TuKPid {
+        background-image: url(//ssl.gstatic.com/social/photosui/images/promo_card_desktop_uploader_344x120dp.svg)
+    }
+}
+
+.ZqTjic {
+    background-image: url(//ssl.gstatic.com/social/photosui/images/promo_card_archive_344x120dp.svg);
+    width: 100%;
+    padding-bottom: 31.25%;
+    -webkit-background-size: cover;
+    background-size: cover
+}
+
+.iAee5c {
+    padding: 24px 0;
+    background: #303f9f
+}
+
+.Fl28qe {
+    padding: 0 16px;
+    font: 400 1rem/1.5rem Larsseit, Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    color: #fff
+}
+
+.ENSNUb {
+    padding: 0 16px;
+    margin-top: 6px;
+    font: 400 .875rem/1.25rem Larsseit, Helvetica, Arial, sans-serif;
+    color: rgba(255, 255, 255, 0.70)
+}
+
+.X6X8Cd {
+    width: 100%;
+    background: #1a237e
+}
+
+.FmrCic .A49Wzc .JUQOtc {
+    fill: #fff
+}
+
+.FmrCic .HLOCEe {
+    color: #fff
+}
+
+.QhCIRb .A49Wzc .JUQOtc {
+    fill: rgba(255, 255, 255, 0.50)
+}
+
+@media (min-resolution:1.5dppx),
+(-webkit-min-device-pixel-ratio:1.5) {
+    .ZqTjic {
+        background-image: url(//ssl.gstatic.com/social/photosui/images/promo_card_archive_344x120dp.svg)
+    }
+}
+
+.BpKFdf {
+    background-color: transparent;
+    -webkit-background-size: cover;
+    background-size: cover;
+    height: auto;
+    padding: 0 0 24.89% 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.zh9Tbe {
+    background: none;
+    padding: 10px 24px 16px 24px
+}
+
+.mSbCD {
+    color: #202124;
+    padding: 16px 0 8px 0;
+    font-family: Larsseit, Helvetica, Arial, sans-serif;
+    font-size: 1.375rem;
+    font-weight: 400;
+    line-height: 1.75rem
+}
+
+.Ecvatc {
+    color: #5f6368;
+    margin-top: 0;
+    padding: 0;
+    letter-spacing: .01428571em;
+    font-family: Larsseit, Helvetica, Arial, sans-serif;
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.25rem
+}
+
+.ajfOOe {
+    background: none
+}
+
+.RI6CGf {
+    padding: 6px 8px 6px 12px
+}
+
+.WmOGXd {
+    padding: 6px 8px 6px 12px
+}
+
+.qyLJVd {
+    padding: 6px 8px 6px 12px
+}
+
+.TuKPid {
+    background-color: transparent;
+    -webkit-background-size: cover;
+    background-size: cover;
+    height: auto;
+    padding: 0 0 34.89% 0
+}
+
+.byHy1d {
+    padding: 10px 24px 16px 24px
+}
+
+.CR0nxf .byHy1d {
+    background-color: transparent
+}
+
+.UVCmfb .byHy1d {
+    padding: 0 16px 16px 16px
+}
+
+.OPy5H {
+    color: #202124;
+    padding: 16px 0 8px 0;
+    font-family: Larsseit, Helvetica, Arial, sans-serif;
+    font-size: 1.375rem;
+    font-weight: 400;
+    line-height: 1.75rem
+}
+
+.CR0nxf .OPy5H {
+    color: #202124
+}
+
+.e2124 {
+    color: #5f6368;
+    margin-top: 0;
+    padding: 0;
+    letter-spacing: .01428571em;
+    font-family: Larsseit, Helvetica, Arial, sans-serif;
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.25rem
+}
+
+.CR0nxf .e2124 {
+    color: #5f6368
+}
+
+.CR0nxf .qyLJVd {
+    background: none
+}
+
+.ZqTjic {
+    padding-bottom: 34.89%
+}
+
+.iAee5c {
+    background: none;
+    padding: 10px 24px 16px 24px
+}
+
+.X6X8Cd {
+    background: none;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+.Fl28qe {
+    color: #202124;
+    padding: 16px 0 8px 0;
+    font-family: Larsseit, Helvetica, Arial, sans-serif;
+    font-size: 1.375rem;
+    font-weight: 400;
+    line-height: 1.75rem
+}
+
+.ENSNUb {
+    color: #5f6368;
+    margin-top: 0;
+    padding: 0;
+    letter-spacing: .01428571em;
+    font-family: Larsseit, Helvetica, Arial, sans-serif;
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.25rem
+}
+
+sentinel {}
