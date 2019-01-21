@@ -1051,7 +1051,7 @@ img {
 
 .NlWrkb {
     display: inline-block;
-    line-height: 48px
+   /* line-height: 48px*/
 }
 
 .Mh0NNb {
@@ -4115,7 +4115,7 @@ img {
     -webkit-transition: background linear 270ms, box-shadow linear 0ms 270ms;
     transition: background linear 270ms, box-shadow linear 0ms 270ms;
     white-space: nowrap;
-    margin-left: 30px !important;
+    margin-left: 20px !important;
 }
 
 .Aul2T.qs41qe {
@@ -4185,7 +4185,7 @@ img {
 }
 
 .Aul2T .cI2tlc {
-    height: 48px;
+    height: 40px;
 }
 
 .Aul2T .cI2tlc .ZAGvjd {
