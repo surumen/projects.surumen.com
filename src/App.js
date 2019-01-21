@@ -10,10 +10,10 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div>
-          <Route exact={true} path='/' render={() => (
+          <Route exact={true} path='https://surumen.github.io/projects.surumen.com/' render={() => (
             <Home />
           )}/>
-          <Route exact={true} path='/mixtape' render={() => (
+          <Route exact={true} path='https://surumen.github.io/projects.surumen.com/mixtape' render={() => (
             <Mixtape />
           )}/>
         </div>
