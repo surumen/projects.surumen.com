@@ -20,19 +20,19 @@ self.__precacheManifest = [
     "url": "/projects.surumen.com/static/js/runtime~main.fd34a51e.js"
   },
   {
-    "revision": "537d3ea46086e2d6245d",
-    "url": "/projects.surumen.com/static/js/main.537d3ea4.chunk.js"
+    "revision": "4f42aadba6f92c39ff4b",
+    "url": "/projects.surumen.com/static/js/main.4f42aadb.chunk.js"
   },
   {
-    "revision": "35386e9cb81c0d606de0",
-    "url": "/projects.surumen.com/static/js/1.35386e9c.chunk.js"
+    "revision": "8c85dc5bbc54be84516e",
+    "url": "/projects.surumen.com/static/js/1.8c85dc5b.chunk.js"
   },
   {
-    "revision": "537d3ea46086e2d6245d",
-    "url": "/projects.surumen.com/static/css/main.c4ec45b8.chunk.css"
+    "revision": "4f42aadba6f92c39ff4b",
+    "url": "/projects.surumen.com/static/css/main.37165028.chunk.css"
   },
   {
-    "revision": "afe921621c11f268d456a2d9330def44",
+    "revision": "d1036175c895e5cee0e9397b25aee323",
     "url": "/projects.surumen.com/index.html"
   }
 ];
