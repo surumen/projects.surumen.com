@@ -72,7 +72,7 @@ const ProjectCard = ({ item, viewby }) => {
 				onHide={handleClose}
 				placement="end"
 				name="end"
-				style={{ width: '90vw' }}
+				style={{ width: '92vw' }}
 			>
 				<Offcanvas.Header className="justify-content-end">
 					<Button variant="light" className="border" onClick={handleClose}>Close</Button>
