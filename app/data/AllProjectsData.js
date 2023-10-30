@@ -1,22 +1,8 @@
+import { v4 as uuid } from 'uuid';
+
 export const AllProjectsData = [
 	{
-		id: 1,
-		category: 'gatsby',
-		image: '/images/course/course-gatsby.jpg',
-		title: 'Revolutionize how you build the web',
-		shortdescription:
-			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
-		status: 'Pending',
-		level: 'Intermediate',
-		duration: '1h 46m',
-		rating: 2.0,
-		recommended: false,
-		popular: false,
-		trending: true,
-		progress: 100
-	},
-	{
-		id: 2,
+		id: uuid(),
 		category: 'graphql',
 		image: '/images/course/course-graphql.jpg',
 		title: 'GraphQL: introduction to graphQL for beginners',
@@ -32,7 +18,7 @@ export const AllProjectsData = [
 		progress: 95
 	},
 	{
-		id: 3,
+		id: uuid(),
 		category: 'Python',
 		image: '/images/course/course-html.jpg',
 		title: 'HTML Full Course - Build a Website Tutorial',
@@ -48,7 +34,7 @@ export const AllProjectsData = [
 		progress: 55
 	},
 	{
-		id: 4,
+		id: uuid(),
 		category: 'javascript',
 		image: '/images/course/course-javascript.jpg',
 		title: 'A Complete Beginner’s Guide to JavaScript',
@@ -64,7 +50,7 @@ export const AllProjectsData = [
 		progress: 50
 	},
 	{
-		id: 5,
+		id: uuid(),
 		category: 'nodejs',
 		image: '/images/course/course-node.jpg',
 		title: 'Beginning Node.js, Express & MongoDB Development',
@@ -80,7 +66,7 @@ export const AllProjectsData = [
 		progress: 45
 	},
 	{
-		id: 6,
+		id: uuid(),
 		category: 'laravel',
 		image: '/images/course/course-laravel.jpg',
 		title:
@@ -97,7 +83,7 @@ export const AllProjectsData = [
 		progress: 65
 	},
 	{
-		id: 7,
+		id: uuid(),
 		category: 'react',
 		image: '/images/course/course-react.jpg',
 		title: 'How to easily create a website with React',
@@ -113,7 +99,7 @@ export const AllProjectsData = [
 		progress: 75
 	},
 	{
-		id: 8,
+		id: uuid(),
 		category: 'angular',
 		image: '/images/course/course-angular.jpg',
 		title: 'Angular - the complete guide for beginner',
@@ -129,7 +115,7 @@ export const AllProjectsData = [
 		progress: 45
 	},
 	{
-		id: 9,
+		id: uuid(),
 		category: 'laravel',
 		image: '/images/course/course-laravel.jpg',
 		title:

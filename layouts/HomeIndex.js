@@ -28,7 +28,7 @@ const HomeIndex = (props) => {
 						}}
 					/>
 				</div>
-				<div className='flex-fill overflow-y-lg-auto scrollbar bg-body rounded-top-4 rounded-top-start-lg-4 rounded-top-end-lg-0 border-top border-lg shadow-2'>
+				<div className='flex-fill overflow-y-lg-auto scrollbar overflow-x-hidden bg-body rounded-top-4 rounded-top-start-lg-4 rounded-top-end-lg-0 border-top border-lg shadow-2'>
 					{props.children}
 				</div>
 			</div>

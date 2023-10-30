@@ -48,7 +48,7 @@ const ProjectGridView = () => {
 	const filterOptions = categories.map((category, index) => {
 		return (
 			<Fragment key={index}>
-				<button role='button' className='btn btn-xs btn-outline-dark rounded-pill text-nowrap text-capitalize'>
+				<button role='button' className='btn btn-xs btn-neutral text-bg-light border-dark rounded-pill text-nowrap text-capitalize'>
 					{category}
 				</button>
 			</Fragment>
@@ -62,7 +62,7 @@ const ProjectGridView = () => {
 				<div className="pb-6 border-bottom">
 					<div className="row g-3 align-items-center">
 						<div className="col">
-							<div className="hstack gap-4 justify-content-start">
+							<div className="hstack gap-4 overflow-x-scroll scrollbar justify-content-start">
 								{filterOptions.length > 0 ? (
 									filterOptions
 								) : (
