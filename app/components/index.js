@@ -4,13 +4,12 @@
 
 // import CommonHeaderTabs from './CommonHeaderTabs';
 
+import ProjectGridView from './ProjectGridView';
 import ProjectSummary from './ProjectSummary';
-
-//import FilesTable from './FilesTable';
-
 import ProjectDescription from './ProjectDescription';
 
 export {
+   ProjectGridView,
    ProjectDescription,
    ProjectSummary,
 }

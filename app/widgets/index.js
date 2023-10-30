@@ -12,8 +12,6 @@ import SectionHeadingLeftBold from './section-headings/SectionHeadingLeftBold';
 import SectionHeadingCenter from './section-headings/SectionHeadingCenter';
 import SectionHeadingDarkCenter from './section-headings/SectionHeadingDarkCenter';
 
-// import widget/custom components from form-select folder 
-import { FormSelect } from './form-select/FormSelect';
 
 // import widget/custom components from form-select folder 
 import ReactQuillEditor from './editor/ReactQuillEditor';
@@ -29,8 +27,8 @@ import CustomLightbox from './lightbox/CustomLightbox';
 // import widget/custom components from advance-table folder 
 import Pagination from './advance-table/Pagination';
 
-// import widget/custom components from courses folder
-// import CourseCard from './courses/CourseCard';
+// import widget/custom components from projects folder
+import ProjectCard from './projects/ProjectCard';
 
 // import widget/custom components from passwordstrength folder 
 import PasswordStrengthMeter from './passwordstrength/PasswordStrengthMeter';
@@ -45,7 +43,7 @@ import HighlightCode from './highlight-code/HighlightCode';
 import CustomTippy from './tooltips/CustomTippy';
 
 export {
-   //CourseCard,
+   ProjectCard,
    //FormSelect,
    CustomSEO,
    CustomTippy,

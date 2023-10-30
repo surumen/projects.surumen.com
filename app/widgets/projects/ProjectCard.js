@@ -8,25 +8,55 @@ import {
 	Row,
 	Col,
 	ListGroup,
-	Badge, Offcanvas, Button
+	Badge,
+	Offcanvas,
+	Button,
 } from 'react-bootstrap';
 
-// import widget/custom components
-import { CustomTippy } from '..';
 
-// import custom components
-import LevelIcon from '../miscellaneous/LevelIcon';
-
-// import utility file
-import { numberWithCommas } from 'helper/utils';
-import {Avatar} from "../../components/bootstrap/Avatar";
-import {ProjectDescription} from "../../sub-components";
-
-const CourseCard = ({ item, viewby, showprogressbar, extraclass }) => {
+const ProjectCard = ({ item, viewby }) => {
 	const [show, setShow] = useState(false);
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
-	/** Used in Course Filter Page  */
+
+
+	const ListStackView = () => {
+		return (
+			<div className="vstack gap-2 mx-n3">
+				<div onClick={() => handleShow()}
+					 className="
+					 position-relative
+					 d-flex align-items-center
+					 p-3 rounded-3
+					 bg-body-secondary-hover
+					 cursor-pointer">
+
+					<div className='flex-none'>
+						<div className='icon icon-shape flex-none text-base text-bg-dark rounded-circle'>
+							<Image src='/images/svg/moon.svg' alt="" className='w-rem-6 h-rem-6'></Image>
+						</div>
+					</div>
+
+					<div className="ms-3 ms-md-4 flex-fill">
+
+						<div className="stretched-link text-limit text-heading fw-semibold mb-2">{item.title}</div>
+
+						<div className="d-block text-sm text-muted gap-2 mb-2">
+							<span>{item.shortdescription}</span>
+						</div>
+
+						<div className="d-flex align-items-center gap-2 text-sm">
+							<span className="badge bg-body-secondary rounded-pill text-dark">React</span>
+						</div>
+
+					</div>
+
+
+				</div>
+			</div>
+		);
+	};
+
 	const ListView = () => {
 		return (
 			<Card className="mb-4 card-hover">
@@ -103,12 +133,11 @@ const CourseCard = ({ item, viewby, showprogressbar, extraclass }) => {
 	return (
 		<Fragment>
 			{viewby === 'grid' ? (
-				// <GridView />
-				<ListGroupView />
+				<ListStackView />
 			) : viewby === 'list' ? (
-				<ListView />
+				<ListStackView />
 			) : (
-				<ListGroupView />
+				<ListStackView />
 			)}
 			<Offcanvas
 				show={show}
@@ -124,7 +153,7 @@ const CourseCard = ({ item, viewby, showprogressbar, extraclass }) => {
 					<Row>
 						<Col xs={12} className="mb-4">
 							{/* project summary section */}
-							<ProjectDescription project={item}/>
+							{/*<ProjectDescription project={item}/>*/}
 						</Col>
 					</Row>
 				</Offcanvas.Body>
@@ -134,20 +163,16 @@ const CourseCard = ({ item, viewby, showprogressbar, extraclass }) => {
 };
 
 // Specifies the default values for props
-CourseCard.defaultProps = {
+ProjectCard.defaultProps = {
 	free: false,
-	viewby: 'grid',
-	showprogressbar: false,
-	extraclass: ''
+	viewby: 'stack'
 };
 
 // Typechecking With PropTypes
-CourseCard.propTypes = {
+ProjectCard.propTypes = {
 	item: PropTypes.object.isRequired,
 	free: PropTypes.bool,
-	viewby: PropTypes.string,
-	showprogressbar: PropTypes.bool,
-	extraclass: PropTypes.string
+	viewby: PropTypes.string
 };
 
-export default CourseCard;
+export default ProjectCard;

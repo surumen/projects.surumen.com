@@ -148,7 +148,7 @@
           }
 
           &.show {
-            max-width: $navbar-vertical-open-width;
+            max-width: $navbar-vertical-open-width-compact;
             @include border-radius($navbar-vertical-open-border-radius);
 
             // Sizes

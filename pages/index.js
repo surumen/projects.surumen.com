@@ -1,9 +1,19 @@
-import Head from "next/head";
+import Head from 'next/head';
+import { useEffect, Fragment } from "react";
+import { Row, Col } from 'react-bootstrap';
+
+
+// import widget/custom components
+import { ProjectGridView } from 'app/components';
 
 export default function Home() {
 
+    useEffect(() => {
+        document.body.classList.add('bg-body-tertiary');
+    });
+
     return (
-        <div className="container py-4" style={{ maxWidth: 800 }}>
+        <Fragment>
             <Head>
                 <title>Projects - Moses Surumen</title>
                 <meta
@@ -12,9 +22,9 @@ export default function Home() {
                 />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-
-            <main className="d-flex flex-column gap-4">
+            <main className="container-fluid px-3 py-5 p-lg-6 p-xxl-8">
+                <ProjectGridView/>
             </main>
-        </div>
+        </Fragment>
     );
 }

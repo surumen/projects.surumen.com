@@ -6,9 +6,6 @@ import Sidebar from './navbars/Sidebar';
 import NavbarTop from './navbars/NavbarTop';
 
 const HomeIndex = (props) => {
-	useEffect(() => {
-		document.body.classList.add('bg-body-tertiary');
-	});
 
 	const [showMenu, setShowMenu] = useState(true);
 	const ToggleMenu = () => {
