@@ -1,3 +1,5 @@
+import * as _ from 'lodash';
+
 /**
  * Functions in utils
  */
@@ -22,6 +24,13 @@ export const getFileExtension = (filename) => {
  */
 export const getRandomNo = (min = 0, max = 100) => {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+/**
+ * Get a random value from the given array
+ */
+export const getRandomValue = (array) => {
+	return _.sample(array);
 };
 
 /**

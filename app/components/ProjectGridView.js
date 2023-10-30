@@ -1,17 +1,21 @@
 // import node module libraries
 import React, {Fragment, useState} from 'react';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 
 // import widget/custom components
 import { ProjectCard } from '../widgets';
 
 // import data files
 import { AllProjectsData } from '../data/AllProjectsData';
+import { ThemeColors } from '../data/Colors';
+
+// import utility file
+import { getRandomValue } from '../helper/utils';
 
 const ProjectGridView = () => {
 	const [Records] = useState(AllProjectsData.slice(0, 500));
 
-	//------paging start----------
+	//------grid display start----------
 	const [pageNumber, setPageNumber] = useState(0);
 	const RecordsPerPage = 9;
 	const pagesVisited = pageNumber * RecordsPerPage;
@@ -29,19 +33,55 @@ const ProjectGridView = () => {
 			</Fragment>
 		);
 	});
-	//---end of paging start----------
+	//------end of grid display----------
+
+	//------display filter start----------
+	const categories = Records.map((record) => {
+		return record.category;
+	});
+
+	const colors = [
+		ThemeColors.outlineLight,
+		ThemeColors.softPrimary
+	];
+
+	const filterOptions = categories.map((category, index) => {
+		return (
+			<Fragment key={index}>
+				<button role='button' className='btn btn-xs btn-outline-dark rounded-pill text-nowrap text-capitalize'>
+					{category}
+				</button>
+			</Fragment>
+		);
+	});
+	//------end of display filter----------
 
 	return (
 		<Fragment>
-			<Row>
-				<Col>
-					{displayRecords.length > 0 ? (
-						displayRecords
-					) : (
-						<span>No matching records found.</span>
-					)}
-				</Col>
-			</Row>
+			<main className="container-fluid px-3 py-5 p-lg-6 p-xxl-8">
+				<div className="pb-6 border-bottom">
+					<div className="row g-3 align-items-center">
+						<div className="col">
+							<div className="hstack gap-4 justify-content-start">
+								{filterOptions.length > 0 ? (
+									filterOptions
+								) : (
+									<span>No filters</span>
+								)}
+							</div>
+						</div>
+					</div>
+				</div>
+				<Row>
+					<Col>
+						{displayRecords.length > 0 ? (
+							displayRecords
+						) : (
+							<span>No matching records found.</span>
+						)}
+					</Col>
+				</Row>
+			</main>
 
 			{/*<ReactPaginate*/}
 			{/*	previousLabel={<ChevronLeft size="14px" />}*/}

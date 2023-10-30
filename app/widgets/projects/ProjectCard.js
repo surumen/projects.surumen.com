@@ -29,6 +29,7 @@ const ProjectCard = ({ item, viewby }) => {
 					 d-flex align-items-center
 					 p-3 rounded-3
 					 bg-body-secondary-hover
+					 border-bottom
 					 cursor-pointer">
 
 					<div className='flex-none'>
@@ -46,7 +47,7 @@ const ProjectCard = ({ item, viewby }) => {
 						</div>
 
 						<div className="d-flex align-items-center gap-2 text-sm">
-							<span className="badge bg-body-secondary rounded-pill text-dark">React</span>
+							<span className="badge bg-body-secondary text-bg-secondary text-capitalize rounded-pill">{item.category}</span>
 						</div>
 
 					</div>
@@ -54,79 +55,6 @@ const ProjectCard = ({ item, viewby }) => {
 
 				</div>
 			</div>
-		);
-	};
-
-	const ListView = () => {
-		return (
-			<Card className="mb-4 card-hover">
-				<Row className="g-0" onClick={() => handleShow()}>
-					<Col lg={3} md={0} sm={0}>
-						<Image src={item.image} alt="" className="rounded img-4by3-lg" />
-					</Col>
-					<Col lg={9} md={12} sm={12}>
-						{/* <!-- Card body --> */}
-						<Card.Body>
-							<h3 className="mb-2 text-truncate-line-2 ">
-								<Link href="#" className="text-inherit">
-									{item.title}
-								</Link>
-							</h3>
-							<p className="font-size-md">{item.shortdescription}</p>
-							{/* <!-- Row --> */}
-							<Row className="align-items-center g-0">
-								<Col className="col-auto">
-									<Image
-										src={item.instructor_image}
-										className="rounded-circle avatar-xs"
-										alt=""
-									/>
-								</Col>
-								<Col className="col ms-2">
-									<span>{item.instructor_name}</span>
-								</Col>
-							</Row>
-						</Card.Body>
-					</Col>
-				</Row>
-			</Card>
-		);
-	};
-
-	const ListGroupView = () => {
-		return (
-			<ListGroup.Item
-				as="li"
-				bsPrefix=" "
-				key={item.uuid}
-				role="button"
-				className='py-3 px-4 chat-item contacts-item'
-			>
-				<div
-					className="d-flex justify-content-between align-items-center"
-					onClick={() => handleShow()}
-				>
-					<Link href="#" className="text-link contacts-link">
-						<div className="d-flex">
-							<Avatar
-								size="md"
-								className="rounded-circle"
-								type='image'
-								src={item.image}
-								alt={item.title}
-								name={item.title}
-							/>
-							<div className=" ms-2">
-								<h5 className="mb-0 fw-bold"> {item.title}</h5>
-								<p
-									className="mb-0 text-muted text-truncate">
-									{item.shortdescription}
-								</p>
-							</div>
-						</div>
-					</Link>
-				</div>
-			</ListGroup.Item>
 		);
 	};
 
