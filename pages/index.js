@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useEffect, Fragment } from "react";
-import { Row, Col } from 'react-bootstrap';
+import Link from 'next/link';
 
 
 // import widget/custom components
@@ -25,6 +25,9 @@ export default function Home() {
             <main className="container-fluid px-3 py-5 p-lg-6 p-xxl-8">
                 <ProjectGridView/>
             </main>
+            <div className="d-flex align-items-center gap-2 position-fixed bottom-0 end-0 mb-6 me-6 px-2 py-2 rounded-pill shadow-4 bg-white z-2">
+                <Link href="#" className="mx-2 fw-bold text-xs text-dark stretched-link">Privacy</Link>
+            </div>
         </Fragment>
     );
 }
