@@ -2,6 +2,9 @@
 import React, {Fragment, useState} from 'react';
 import { Row, Col } from 'react-bootstrap';
 
+// import bootstrap icons
+import { X } from 'react-bootstrap-icons';
+
 // import widget/custom components
 import ProjectCard from './ProjectCard';
 
@@ -55,17 +58,14 @@ const ProjectGridView = () => {
 	return (
 		<Fragment>
 			<main className="container-fluid px-3 py-5 p-lg-6 p-xxl-8">
-				<div className="pb-6 border-bottom">
-					<div className="row g-3 align-items-center">
-						<div className="col">
-							<div className="hstack gap-4 overflow-x-scroll scrollbar justify-content-start">
-								{filterOptions.length > 0 ? (
-									filterOptions
-								) : (
-									<span>No filters</span>
-								)}
-							</div>
-						</div>
+				<div className="d-flex gap-4 scrollable-x pb-3 px-3 border-bottom">
+					{filterOptions.length > 0 ? (
+						filterOptions
+					) : (
+						<span>No filters</span>
+					)}
+					<div className="align-items-center ms-auto text-sm text-muted text-primary-hover fw-semibold d-none d-md-flex" role="button">
+						<X size={16} className='me-1' /> <span>Clear filters</span>
 					</div>
 				</div>
 				<Row>

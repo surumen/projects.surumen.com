@@ -2,6 +2,9 @@
 import { Fragment } from 'react';
 import { InputGroup, Form } from 'react-bootstrap';
 
+// import bootstrap icons
+import { Search } from 'react-bootstrap-icons';
+
 // import sub components
 import QuickMenu from 'layouts/navbars/QuickMenu';
 
@@ -12,7 +15,7 @@ const NavbarTop = (props) => {
 				<InputGroup
 					className="input-group input-group-sm input-group-inline w-rem-64 rounded-pill">
 					<InputGroup.Text className="input-group-text rounded-start-pill">
-						<i className="bi bi-search me-2"></i>
+						<Search size={16} className='me-2'/>
 					</InputGroup.Text>
 					<Form.Control
 						type="search"

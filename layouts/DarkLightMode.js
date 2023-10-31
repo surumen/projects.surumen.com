@@ -4,6 +4,9 @@ import { Fragment, useEffect } from 'react'
 import { Form, Image } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 
+// import bootstrap icons
+import { Sun, MoonFill, Moon } from 'react-bootstrap-icons';
+
 // import chat actions from Redux chatSlice
 import { changeSkin } from 'app/store/appSlice'
 
@@ -28,13 +31,17 @@ const DarkLightMode = ({ className }) => {
     }, [storageValue]);
 
     const changeColorMode = () => {
-        setStorageValue(storageValue === "light" ? "dark" : "light");
+        setStorageValue(storageValue === 'light' ? 'dark' : 'light');
         dispatch(changeSkin(storageValue));
     }
     return (
         <Fragment>
             <Link onClick={changeColorMode} href='#' className='nav-item nav-link rounded-pill d-none d-lg-block'>
-                <Image src={storageValue == "dark" ? '/images/svg/moon.svg' : '/images/svg/sun.svg'} alt="" className='avatar avatar-xs'></Image>
+                {storageValue === 'dark' ? (
+                    <MoonFill size={18} />
+                ) : (
+                    <Sun size={24} />
+                )}
             </Link>
         </Fragment>
     )
