@@ -23,7 +23,7 @@ const Sidebar = (props) => {
 		<Fragment>
 			<Container className="container-fluid px-3 px-md-4 px-lg-6">
 				<Navbar.Brand href="/" className="navbar-brand d-inline-block py-lg-1 mb-lg-5">
-					<Image src="/images/svg/logo-dark.svg" alt="" className="logo-dark h-rem-8 h-rem-md-16" />
+					<Image src="/images/icons/python.svg" alt="" className="logo-dark h-rem-8 h-rem-md-16" />
 				</Navbar.Brand>
 			</Container>
 		</Fragment>
