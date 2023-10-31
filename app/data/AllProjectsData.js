@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 export const AllProjectsData = [
 	{
 		id: uuid(),
-		category: 'graphql',
+		categories: ['Python'],
 		image: '/images/course/course-graphql.jpg',
 		title: 'GraphQL: introduction to graphQL for beginners',
 		shortdescription:
@@ -19,7 +19,7 @@ export const AllProjectsData = [
 	},
 	{
 		id: uuid(),
-		category: 'Python',
+		categories: ['Python'],
 		image: '/images/course/course-html.jpg',
 		title: 'HTML Full Course - Build a Website Tutorial',
 		shortdescription:
@@ -35,7 +35,7 @@ export const AllProjectsData = [
 	},
 	{
 		id: uuid(),
-		category: 'javascript',
+		categories: ['React'],
 		image: '/images/course/course-javascript.jpg',
 		title: 'A Complete Beginner’s Guide to JavaScript',
 		shortdescription:
@@ -51,7 +51,7 @@ export const AllProjectsData = [
 	},
 	{
 		id: uuid(),
-		category: 'nodejs',
+		categories: ['NodeJS'],
 		image: '/images/course/course-node.jpg',
 		title: 'Beginning Node.js, Express & MongoDB Development',
 		shortdescription:
@@ -67,7 +67,7 @@ export const AllProjectsData = [
 	},
 	{
 		id: uuid(),
-		category: 'laravel',
+		categories: ['Vue'],
 		image: '/images/course/course-laravel.jpg',
 		title:
 			'Laravel: The Ultimate Beginner’s Guide to Learn Laravel Step by Step',
@@ -84,7 +84,7 @@ export const AllProjectsData = [
 	},
 	{
 		id: uuid(),
-		category: 'react',
+		categories: ['React'],
 		image: '/images/course/course-react.jpg',
 		title: 'How to easily create a website with React',
 		shortdescription:
@@ -100,7 +100,7 @@ export const AllProjectsData = [
 	},
 	{
 		id: uuid(),
-		category: 'angular',
+		categories: ['Angular'],
 		image: '/images/course/course-angular.jpg',
 		title: 'Angular - the complete guide for beginner',
 		shortdescription:
@@ -116,7 +116,7 @@ export const AllProjectsData = [
 	},
 	{
 		id: uuid(),
-		category: 'laravel',
+		categories: ['Machine Learning', 'Python'],
 		image: '/images/course/course-laravel.jpg',
 		title:
 			"Laravel: The Ultimate Beginner's Guide to Learn Laravel Step by Step",

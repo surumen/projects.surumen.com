@@ -7,10 +7,6 @@ import { ProjectCard } from '../widgets';
 
 // import data files
 import { AllProjectsData } from '../data/AllProjectsData';
-import { ThemeColors } from '../data/Colors';
-
-// import utility file
-import { getRandomValue } from '../helper/utils';
 
 const ProjectGridView = () => {
 	const [Records] = useState(AllProjectsData.slice(0, 500));
@@ -36,19 +32,19 @@ const ProjectGridView = () => {
 	//------end of grid display----------
 
 	//------display filter start----------
-	const categories = Records.map((record) => {
-		return record.category;
+	let categories = Records.map((record) => {
+		return record.categories;
+	}).flat();
+	categories = categories.filter((element, index) => {
+		return categories.indexOf(element) === index;
 	});
-
-	const colors = [
-		ThemeColors.outlineLight,
-		ThemeColors.softPrimary
-	];
 
 	const filterOptions = categories.map((category, index) => {
 		return (
 			<Fragment key={index}>
-				<button role='button' className='btn btn-xs btn-neutral text-bg-light border-dark rounded-pill text-nowrap text-capitalize'>
+				<button
+					role='button'
+					className='btn btn-xs btn-outline-primary rounded-pill text-nowrap text-capitalize'>
 					{category}
 				</button>
 			</Fragment>
