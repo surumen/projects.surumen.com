@@ -1,6 +1,6 @@
 // import node module libraries
 import React, {Fragment, useState} from 'react';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Button } from "react-bootstrap";
 
 // import bootstrap icons
 import { X } from 'react-bootstrap-icons';
@@ -10,9 +10,41 @@ import ProjectCard from './ProjectCard';
 
 // import data files
 import { AllProjectsData } from '../../data/AllProjectsData';
+import { CategoryData } from '../../data/CategoryData';
 
 const ProjectGridView = () => {
-	const [Records] = useState(AllProjectsData.slice(0, 500));
+	const [Records, setRecords] = useState(AllProjectsData.slice(0, 500));
+	const [Categories] = useState(CategoryData.filter((element, index) => {
+		return CategoryData.indexOf(element) === index;
+	}).map(category => {
+		return category.title;
+	}));
+
+	//------display filter start----------
+	const [filter, setFilter] = useState('');
+	const clearFilters = () => {
+		setFilter('');
+		setRecords(AllProjectsData.slice(0, 500));
+	};
+
+	const filterOptions = Categories.map((category, index) => {
+		return (
+			<Fragment key={index}>
+				<button onClick={()=> {
+					setFilter(category === filter ? '': category);
+					setRecords(category === filter ? AllProjectsData.slice(0, 500) : AllProjectsData.filter((record) => record.categories.indexOf(category) > -1).slice(0, 500))
+				}}
+						role='button'
+						className={`btn btn-xs rounded-pill text-nowrap text-capitalize ${category === filter ? 'btn-primary' : 'btn-outline-primary'}`}>
+					{category}
+					{category === filter ? (
+						<X size={14} className='ms-1' />
+					) : (<span></span>)}
+				</button>
+			</Fragment>
+		);
+	});
+	//------end of display filter----------
 
 	//------grid display start----------
 	const [pageNumber, setPageNumber] = useState(0);
@@ -22,7 +54,7 @@ const ProjectGridView = () => {
 	const changePage = ({ selected }) => {
 		setPageNumber(selected);
 	};
-	const displayRecords = Records.slice(
+	let displayRecords = Records.slice(
 		pagesVisited,
 		pagesVisited + RecordsPerPage
 	).map((Records, index) => {
@@ -34,27 +66,6 @@ const ProjectGridView = () => {
 	});
 	//------end of grid display----------
 
-	//------display filter start----------
-	let categories = Records.map((record) => {
-		return record.categories;
-	}).flat();
-	categories = categories.filter((element, index) => {
-		return categories.indexOf(element) === index;
-	});
-
-	const filterOptions = categories.map((category, index) => {
-		return (
-			<Fragment key={index}>
-				<button
-					role='button'
-					className='btn btn-xs btn-outline-primary rounded-pill text-nowrap text-capitalize'>
-					{category}
-				</button>
-			</Fragment>
-		);
-	});
-	//------end of display filter----------
-
 	return (
 		<Fragment>
 			<main className="container-fluid px-3 py-5 p-lg-6 p-xxl-8">
@@ -64,7 +75,7 @@ const ProjectGridView = () => {
 					) : (
 						<span>No filters</span>
 					)}
-					<div className="align-items-center ms-auto text-sm text-muted text-primary-hover fw-semibold d-none d-md-flex" role="button">
+					<div onClick={clearFilters} className="align-items-center ms-auto text-sm text-muted text-primary-hover fw-semibold d-none d-md-flex" role="button">
 						<X size={16} className='me-1' /> <span>Clear filters</span>
 					</div>
 				</div>
