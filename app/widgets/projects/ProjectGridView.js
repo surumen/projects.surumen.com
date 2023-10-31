@@ -16,8 +16,6 @@ const ProjectGridView = () => {
 	const [Records, setRecords] = useState(AllProjectsData.slice(0, 500));
 	const [Categories] = useState(CategoryData.filter((element, index) => {
 		return CategoryData.indexOf(element) === index;
-	}).map(category => {
-		return category.title;
 	}));
 
 	//------display filter start----------
@@ -31,13 +29,15 @@ const ProjectGridView = () => {
 		return (
 			<Fragment key={index}>
 				<button onClick={()=> {
-					setFilter(category === filter ? '': category);
-					setRecords(category === filter ? AllProjectsData.slice(0, 500) : AllProjectsData.filter((record) => record.categories.indexOf(category) > -1).slice(0, 500))
+					setFilter(category.title === filter ? '': category.title);
+					setRecords(category.title === filter ? AllProjectsData.slice(0, 500) : AllProjectsData.filter((record) => record.categories.indexOf(category.title) > -1).slice(0, 500))
 				}}
 						role='button'
-						className={`btn btn-xs rounded-pill text-nowrap text-capitalize ${category === filter ? 'btn-primary' : 'btn-primary-light text-primary border-primary-200'}`}>
-					{category}
-					{category === filter ? (
+						className={`btn shadow-none btn-xs rounded-pill text-nowrap text-capitalize ${
+							category.title === filter  ? `btn-${category.color_scheme}` : `btn-primary-light text-primary border-primary-200`} :
+					`}>
+					{category.title}
+					{category.title === filter ? (
 						<X size={14} className='ms-1' />
 					) : (<span></span>)}
 				</button>

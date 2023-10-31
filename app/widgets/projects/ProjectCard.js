@@ -72,7 +72,7 @@ const ProjectCard = ({ item, viewby }) => {
 						<div className="d-flex align-items-center gap-2 text-sm">
 							{item.categories.map((category, index) => {
 								return (
-									<span key={index} className="badge border text-green bg-green-light border-green-200 text-capitalize rounded-pill">{category}</span>
+									<span key={index} className="badge border text-cyan bg-cyan-light border-cyan-200 text-capitalize rounded-pill">{category}</span>
 								);
 							})}
 						</div>

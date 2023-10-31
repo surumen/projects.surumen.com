@@ -4,32 +4,32 @@ export const CategoryData = [
     {
         id: uuid(),
         title: 'Python',
-        color_scheme: 'green'
+        color_scheme: 'primary'
     },
     {
         id: uuid(),
         title: 'React',
-        color_scheme: 'cyan'
+        color_scheme: 'primary'
     },
     {
         id: uuid(),
         title: 'Angular',
-        color_scheme: 'orange'
+        color_scheme: 'primary'
     },
     {
         id: uuid(),
         title: 'Vue',
-        color_scheme: 'teal'
+        color_scheme: 'primary'
     },
     {
         id: uuid(),
         title: 'NodeJS',
-        color_scheme: 'charcoal-gray'
+        color_scheme: 'primary'
     },
     {
         id: uuid(),
         title: 'Machine Learning',
-        color_scheme: 'dark-orange'
+        color_scheme: 'primary'
     },
 ];
 
