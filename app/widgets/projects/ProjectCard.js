@@ -17,20 +17,10 @@ const OffCanvasContainer = props => {
 				   style={{ width: '92vw' }}
 				   {...props}
 		>
-			<Offcanvas.Header className="justify-content-end"></Offcanvas.Header>
-			<Offcanvas.Body className="pt-0">
-				<Row className='mb-6 pb-5 border-bottom'>
-					<Row className='row align-items-center'>
-						<Col>
-							<h2 className="h2">{title}</h2>
-						</Col>
-						<Col className="col-auto">
-							<div className="hstack gap-2 justify-content-md-end">
-								<Button onClick={onHide} className="btn d-inline-flex btn-sm btn-neutral rounded-pill"><span>Back Home</span></Button>
-							</div>
-						</Col>
-					</Row>
-				</Row>
+			<Offcanvas.Header className="justify-content-end border-bottom">
+				<Button onClick={onHide} className="btn d-inline-flex btn-sm btn-neutral rounded-pill"><span>Back Home</span></Button>
+			</Offcanvas.Header>
+			<Offcanvas.Body>
 				{props.children}
 			</Offcanvas.Body>
 		</Offcanvas>
