@@ -58,7 +58,7 @@ const ProjectCard = ({ item, viewby }) => {
 
 					<div className='flex-none'>
 						<div className='icon icon-shape flex-none text-base text-bg-dark rounded-circle'>
-							<Image src='/images/icons/python.svg' alt="" className='w-rem-6 h-rem-6'></Image>
+							<Image src='/images/icons/python.svg' alt="" className='w-rem-12 h-rem-12'></Image>
 						</div>
 					</div>
 
@@ -72,7 +72,7 @@ const ProjectCard = ({ item, viewby }) => {
 						<div className="d-flex align-items-center gap-2 text-sm">
 							{item.categories.map((category, index) => {
 								return (
-									<span key={index} className="badge border text-primary bg-primary-light border-green-200 text-capitalize rounded-pill">{category}</span>
+									<span key={index} className="badge border text-green bg-green-light border-green-200 text-capitalize rounded-pill">{category}</span>
 								);
 							})}
 						</div>

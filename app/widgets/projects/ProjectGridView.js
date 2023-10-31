@@ -35,7 +35,7 @@ const ProjectGridView = () => {
 					setRecords(category === filter ? AllProjectsData.slice(0, 500) : AllProjectsData.filter((record) => record.categories.indexOf(category) > -1).slice(0, 500))
 				}}
 						role='button'
-						className={`btn btn-xs rounded-pill text-nowrap text-capitalize ${category === filter ? 'btn-primary' : 'btn-outline-primary'}`}>
+						className={`btn btn-xs rounded-pill text-nowrap text-capitalize ${category === filter ? 'btn-primary' : 'btn-primary-light text-primary border-primary-200'}`}>
 					{category}
 					{category === filter ? (
 						<X size={14} className='ms-1' />
