@@ -1,17 +1,41 @@
 // import node module libraries
 import React, {Fragment, useState} from 'react';
 import PropTypes from 'prop-types';
-import Link from 'next/link';
-import {
-	Image,
-	Card,
-	Row,
-	Col,
-	ListGroup,
-	Badge,
-	Offcanvas,
-	Button,
-} from 'react-bootstrap';
+import { Image, Row, Col, Offcanvas, Button, } from 'react-bootstrap';
+
+// import sub components
+import ProjectSummary from './ProjectSummary';
+
+
+const OffCanvasContainer = props => {
+	const { title, show, onHide } = props;
+	return (
+		<Offcanvas show={show}
+				   onHide={onHide}
+				   placement="end"
+				   name="end"
+				   style={{ width: '92vw' }}
+				   {...props}
+		>
+			<Offcanvas.Header className="justify-content-end"></Offcanvas.Header>
+			<Offcanvas.Body className="pt-0">
+				<Row className='mb-6 pb-5 border-bottom'>
+					<Row className='row align-items-center'>
+						<Col>
+							<h2 className="h2">{title}</h2>
+						</Col>
+						<Col className="col-auto">
+							<div className="hstack gap-2 justify-content-md-end">
+								<Button onClick={onHide} className="btn d-inline-flex btn-sm btn-neutral rounded-pill"><span>Back Home</span></Button>
+							</div>
+						</Col>
+					</Row>
+				</Row>
+				{props.children}
+			</Offcanvas.Body>
+		</Offcanvas>
+	)
+}
 
 
 const ProjectCard = ({ item, viewby }) => {
@@ -70,25 +94,9 @@ const ProjectCard = ({ item, viewby }) => {
 			) : (
 				<ListStackView />
 			)}
-			<Offcanvas
-				show={show}
-				onHide={handleClose}
-				placement="end"
-				name="end"
-				style={{ width: '92vw' }}
-			>
-				<Offcanvas.Header className="justify-content-end">
-					<Button variant="light" className="border" onClick={handleClose}>Close</Button>
-				</Offcanvas.Header>
-				<Offcanvas.Body className="pt-0">
-					<Row>
-						<Col xs={12} className="mb-4">
-							{/* project summary section */}
-							{/*<ProjectDescription project={item}/>*/}
-						</Col>
-					</Row>
-				</Offcanvas.Body>
-			</Offcanvas>
+			<OffCanvasContainer title={item.title} show={show} onHide={handleClose}>
+				<ProjectSummary item={item} />
+			</OffCanvasContainer>
 		</Fragment>
 	);
 };

@@ -12,10 +12,14 @@ export const AllProjectsData = [
 		level: 'Advance',
 		duration: '2h 40m',
 		rating: 2.5,
-		recommended: true,
-		popular: false,
-		trending: false,
-		progress: 95
+		description: `<p>We'll dive into GraphQL, the fundamentals of GraphQL. 
+        We're only gonna use the pieces of it that we need to build in Gatsby. 
+        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
+        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>
+        <p>We'll dive into GraphQL, the fundamentals of GraphQL. 
+        We're only gonna use the pieces of it that we need to build in Gatsby. 
+        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
+        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>`
 	},
 	{
 		id: uuid(),
@@ -28,10 +32,14 @@ export const AllProjectsData = [
 		level: 'Beginner',
 		duration: '3h 16m',
 		rating: 3.0,
-		recommended: false,
-		popular: true,
-		trending: true,
-		progress: 55
+		description: `<p>We'll dive into GraphQL, the fundamentals of GraphQL. 
+        We're only gonna use the pieces of it that we need to build in Gatsby. 
+        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
+        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>
+        <p>We'll dive into GraphQL, the fundamentals of GraphQL. 
+        We're only gonna use the pieces of it that we need to build in Gatsby. 
+        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
+        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>`
 	},
 	{
 		id: uuid(),
@@ -44,10 +52,14 @@ export const AllProjectsData = [
 		level: 'Advance',
 		duration: '4h 10m',
 		rating: 3.5,
-		recommended: true,
-		popular: true,
-		trending: false,
-		progress: 50
+		description: `<p>We'll dive into GraphQL, the fundamentals of GraphQL. 
+        We're only gonna use the pieces of it that we need to build in Gatsby. 
+        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
+        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>
+        <p>We'll dive into GraphQL, the fundamentals of GraphQL. 
+        We're only gonna use the pieces of it that we need to build in Gatsby. 
+        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
+        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>`
 	},
 	{
 		id: uuid(),
@@ -60,10 +72,14 @@ export const AllProjectsData = [
 		level: 'Intermediate',
 		duration: '2h 00m',
 		rating: 4.0,
-		recommended: true,
-		popular: true,
-		trending: true,
-		progress: 45
+		description: `<p>We'll dive into GraphQL, the fundamentals of GraphQL. 
+        We're only gonna use the pieces of it that we need to build in Gatsby. 
+        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
+        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>
+        <p>We'll dive into GraphQL, the fundamentals of GraphQL. 
+        We're only gonna use the pieces of it that we need to build in Gatsby. 
+        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
+        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>`
 	},
 	{
 		id: uuid(),
@@ -77,10 +93,14 @@ export const AllProjectsData = [
 		level: 'Beginner',
 		duration: '1h 00m',
 		rating: 4.5,
-		recommended: true,
-		popular: false,
-		trending: true,
-		progress: 65
+		description: `<p>We'll dive into GraphQL, the fundamentals of GraphQL. 
+        We're only gonna use the pieces of it that we need to build in Gatsby. 
+        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
+        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>
+        <p>We'll dive into GraphQL, the fundamentals of GraphQL. 
+        We're only gonna use the pieces of it that we need to build in Gatsby. 
+        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
+        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>`
 	},
 	{
 		id: uuid(),
@@ -93,10 +113,14 @@ export const AllProjectsData = [
 		level: 'Advance',
 		duration: '3h 55m',
 		rating: 4.5,
-		recommended: true,
-		popular: true,
-		trending: true,
-		progress: 75
+		description: `<p>We'll dive into GraphQL, the fundamentals of GraphQL. 
+        We're only gonna use the pieces of it that we need to build in Gatsby. 
+        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
+        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>
+        <p>We'll dive into GraphQL, the fundamentals of GraphQL. 
+        We're only gonna use the pieces of it that we need to build in Gatsby. 
+        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
+        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>`
 	},
 	{
 		id: uuid(),
@@ -109,10 +133,14 @@ export const AllProjectsData = [
 		level: 'Intermediate',
 		duration: '2h 46m',
 		rating: 4.5,
-		recommended: true,
-		popular: true,
-		trending: true,
-		progress: 45
+		description: `<p>We'll dive into GraphQL, the fundamentals of GraphQL. 
+        We're only gonna use the pieces of it that we need to build in Gatsby. 
+        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
+        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>
+        <p>We'll dive into GraphQL, the fundamentals of GraphQL. 
+        We're only gonna use the pieces of it that we need to build in Gatsby. 
+        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
+        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>`
 	},
 	{
 		id: uuid(),
@@ -126,10 +154,14 @@ export const AllProjectsData = [
 		level: 'Beginner',
 		duration: '2h 46m',
 		rating: 4.5,
-		recommended: true,
-		popular: true,
-		trending: true,
-		progress: 59
+		description: `<p>We'll dive into GraphQL, the fundamentals of GraphQL. 
+        We're only gonna use the pieces of it that we need to build in Gatsby. 
+        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
+        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>
+        <p>We'll dive into GraphQL, the fundamentals of GraphQL. 
+        We're only gonna use the pieces of it that we need to build in Gatsby. 
+        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
+        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>`
 	}
 ];
 

@@ -1,12 +1,12 @@
 // import node module libraries
 import React, {Fragment, useState} from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 
 // import widget/custom components
-import { ProjectCard } from '../widgets';
+import ProjectCard from './ProjectCard';
 
 // import data files
-import { AllProjectsData } from '../data/AllProjectsData';
+import { AllProjectsData } from '../../data/AllProjectsData';
 
 const ProjectGridView = () => {
 	const [Records] = useState(AllProjectsData.slice(0, 500));
