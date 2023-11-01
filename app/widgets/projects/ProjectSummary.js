@@ -27,10 +27,10 @@ const ProjectSummary = ({ item }) => {
 				<div className='col col-xl-4'>
 					<div className='vstack gap-6'>
 						<h1 className="ls-tight fw-bolder">{item.title}</h1>
-						<div className='d-flex gap-4'>
+						<div className='d-flex gap-4 flex-wrap'>
 							{item.categories.map((category, index) => {
 								return (
-									<span key={index} className="badge badge-md bg-gray-light text-gray border border-gray rounded-pill">{category}</span>
+									<span key={index} className="bg-primary-light bg-opacity-20-hover border rounded px-3 py-1 font-semibold text-primary border-primary-200 text-xs rounded-pill">{category}</span>
 								)
 							})
 							}
@@ -61,15 +61,18 @@ const ProjectSummary = ({ item }) => {
 						</div>
 						<div>
 							<span role='button' className="badge badge-md bg-primary-600 text-bg-primary border border-primary-600 rounded-pill">
-								<span className='me-2'>View Demo</span>
+								<span className='me-2'>View Live</span>
 								<Image src="/images/svg/external-link.svg" alt="" className="h-rem-8 h-rem-md-16" />
 							</span>
 						</div>
 					</div>
 				</div>
 			</Row>
-			<hr className="my-6"/>
-
+			<section className='bg-body-secondary mx-n6 my-6 py-6 px-6'>
+				<video loop={true} autoPlay={true}>
+					<source src='/videos/sonos-radio-01.mp4' type='video/mp4'/>
+				</video>
+			</section>
 		</Fragment>
 	);
 

@@ -1,16 +1,16 @@
 // import node module libraries
-import React, {Fragment, useState} from 'react';
-import { Row, Col, Button } from "react-bootstrap";
+import React, { Fragment, useState } from "react";
+import { Col, Row } from "react-bootstrap";
 
 // import bootstrap icons
-import { X } from 'react-bootstrap-icons';
+import { X } from "react-bootstrap-icons";
 
 // import widget/custom components
-import ProjectCard from './ProjectCard';
+import ProjectCard from "./ProjectCard";
 
 // import data files
-import { AllProjectsData } from '../../data/AllProjectsData';
-import { CategoryData } from '../../data/CategoryData';
+import { AllProjectsData } from "../../data/AllProjectsData";
+import { CategoryData } from "../../data/CategoryData";
 
 const ProjectGridView = () => {
 	const [Records, setRecords] = useState(AllProjectsData.slice(0, 500));
@@ -18,33 +18,51 @@ const ProjectGridView = () => {
 		return CategoryData.indexOf(element) === index;
 	}));
 
-	//------display filter start----------
-	const [filter, setFilter] = useState('');
+	//------display filters start----------
+	const [filters, setFilters] = useState([]);
 	const clearFilters = () => {
-		setFilter('');
+		setFilters([]);
 		setRecords(AllProjectsData.slice(0, 500));
 	};
+
+	const addFilter = (category) => {
+		let selectedFilters = [...filters];
+		if (filters.indexOf(category.title) === -1) {
+			selectedFilters.push(category.title);
+		} else {
+			selectedFilters = selectedFilters.filter(f => f !== category.title);
+		}
+		setFilters(selectedFilters);
+		const filteredRecords = selectedFilters.length === 0 ? AllProjectsData.slice(0, 500) : AllProjectsData.filter(rec => recordIsFiltered(rec, selectedFilters)).slice(0, 500);
+		setRecords(filteredRecords);
+
+	};
+
+	const isSelectedFilter = (category) => {
+		return filters.indexOf(category.title) > -1;
+	};
+
+	const recordIsFiltered = (record, filters) => {
+		return filters.some(r => record.categories.includes(r));
+	}
 
 	const filterOptions = Categories.map((category, index) => {
 		return (
 			<Fragment key={index}>
-				<button onClick={()=> {
-					setFilter(category.title === filter ? '': category.title);
-					setRecords(category.title === filter ? AllProjectsData.slice(0, 500) : AllProjectsData.filter((record) => record.categories.indexOf(category.title) > -1).slice(0, 500))
-				}}
+				<button onClick={()=> {addFilter(category)}}
 						role='button'
 						className={`btn shadow-none btn-xs rounded-pill text-nowrap text-capitalize ${
-							category.title === filter  ? `btn-${category.color_scheme}` : `btn-primary-light text-primary border-primary-200`} :
+							isSelectedFilter(category)  ? `btn-${category.color_scheme}` : `btn-primary-light text-primary border-primary-200`} :
 					`}>
 					{category.title}
-					{category.title === filter ? (
+					{isSelectedFilter(category) ? (
 						<X size={14} className='ms-1' />
 					) : (<span></span>)}
 				</button>
 			</Fragment>
 		);
 	});
-	//------end of display filter----------
+	//------end of display filters----------
 
 	//------grid display start----------
 	const [pageNumber, setPageNumber] = useState(0);

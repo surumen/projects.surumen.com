@@ -18,7 +18,7 @@ const OffCanvasContainer = props => {
 				   {...props}
 		>
 			<Offcanvas.Header className="justify-content-end border-bottom">
-				<Button onClick={onHide} className="btn d-inline-flex btn-sm btn-neutral rounded-pill"><span>Back Home</span></Button>
+				<Button onClick={onHide} className="btn d-inline-flex btn-sm btn-neutral shadow-none rounded-pill"><span>Back Home</span></Button>
 			</Offcanvas.Header>
 			<Offcanvas.Body>
 				{props.children}
@@ -62,7 +62,7 @@ const ProjectCard = ({ item, viewby }) => {
 						<div className="d-flex align-items-center gap-2 text-sm">
 							{item.categories.map((category, index) => {
 								return (
-									<span key={index} className="badge border text-cyan bg-cyan-light border-cyan-200 text-capitalize rounded-pill">{category}</span>
+									<span key={index} className="bg-white bg-opacity-20 bg-opacity-100-hover border text-bg-white px-3 py-1 font-semibold text-heading text-xs rounded-pill">{category}</span>
 								);
 							})}
 						</div>
