@@ -1,16 +1,16 @@
 // import node module libraries
-import React, { Fragment, useState } from "react";
-import { Col, Row } from "react-bootstrap";
+import React, { Fragment, useState } from 'react';
+import { Col, Row } from 'react-bootstrap';
 
 // import bootstrap icons
-import { X } from "react-bootstrap-icons";
+import { X } from 'react-bootstrap-icons';
 
 // import widget/custom components
-import ProjectCard from "./ProjectCard";
+import ProjectCard from './ProjectCard';
 
 // import data files
-import { AllProjectsData } from "../../data/AllProjectsData";
-import { CategoryData } from "../../data/CategoryData";
+import { AllProjectsData } from '../../data/AllProjectsData';
+import { CategoryData } from '../../data/CategoryData';
 
 const ProjectGridView = () => {
 	const [Records, setRecords] = useState(AllProjectsData.slice(0, 500));
@@ -86,14 +86,14 @@ const ProjectGridView = () => {
 
 	return (
 		<Fragment>
-			<main className="container-fluid px-3 py-5 p-lg-6 p-xxl-8">
-				<div className="d-flex gap-4 scrollable-x pb-3 px-3 border-bottom">
+			<main className='container-fluid px-3 py-5 p-lg-6 p-xxl-8'>
+				<div className='d-flex gap-4 scrollable-x pb-3 px-3 border-bottom'>
 					{filterOptions.length > 0 ? (
 						filterOptions
 					) : (
 						<span>No filters</span>
 					)}
-					<div onClick={clearFilters} className="align-items-center ms-auto text-sm text-muted text-primary-hover fw-semibold d-none d-md-flex" role="button">
+					<div onClick={clearFilters} className='align-items-center ms-auto text-sm text-muted text-primary-hover fw-semibold d-none d-md-flex' role='button'>
 						<X size={16} className='me-1' /> <span>Clear filters</span>
 					</div>
 				</div>
@@ -109,8 +109,8 @@ const ProjectGridView = () => {
 			</main>
 
 			{/*<ReactPaginate*/}
-			{/*	previousLabel={<ChevronLeft size="14px" />}*/}
-			{/*	nextLabel={<ChevronRight size="14px" />}*/}
+			{/*	previousLabel={<ChevronLeft size='14px' />}*/}
+			{/*	nextLabel={<ChevronRight size='14px' />}*/}
 			{/*	pageCount={pageCount}*/}
 			{/*	onPageChange={changePage}*/}
 			{/*	containerClassName={'justify-content-center mb-0 pagination'}*/}
