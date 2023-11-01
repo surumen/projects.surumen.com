@@ -25,7 +25,7 @@ const ProjectSummary = ({ item }) => {
 		<Fragment>
 			<Row className='row-cols-1 row-cols-sm-2 row-cols-xl-3 gap-xl-1 gap-6'>
 				<div className='col col-xl-4'>
-					<div className='vstack gap-6'>
+					<div className='vstack gap-6 pointer-event'>
 						<h1 className="ls-tight fw-bolder">{item.title}</h1>
 						<div className='d-flex gap-4 flex-wrap'>
 							{item.categories.map((category, index) => {
@@ -70,7 +70,7 @@ const ProjectSummary = ({ item }) => {
 			</Row>
 			<section className='bg-body-secondary mx-n6 my-6 py-6 px-6'>
 				<video loop={true} autoPlay={true}>
-					<source src='/videos/sonos-radio-01.mp4' type='video/mp4'/>
+					<source src='/videos/sonos-radio-02.mp4' type='video/mp4'/>
 				</video>
 			</section>
 		</Fragment>
