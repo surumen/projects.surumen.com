@@ -10,13 +10,10 @@ import ProjectCard from './ProjectCard';
 
 // import data files
 import { AllProjectsData } from '../../data/AllProjectsData';
-import { CategoryData } from '../../data/CategoryData';
 
 const ProjectGridView = () => {
 	const [Records, setRecords] = useState(AllProjectsData.slice(0, 500));
-	const [Categories] = useState(CategoryData.filter((element, index) => {
-		return CategoryData.indexOf(element) === index;
-	}));
+	const Categories = [...new Set(AllProjectsData.map(project => project.categories).flat())]
 
 	//------display filters start----------
 	const [filters, setFilters] = useState([]);
@@ -27,10 +24,10 @@ const ProjectGridView = () => {
 
 	const addFilter = (category) => {
 		let selectedFilters = [...filters];
-		if (filters.indexOf(category.title) === -1) {
-			selectedFilters.push(category.title);
+		if (filters.indexOf(category) === -1) {
+			selectedFilters.push(category);
 		} else {
-			selectedFilters = selectedFilters.filter(f => f !== category.title);
+			selectedFilters = selectedFilters.filter(f => f !== category);
 		}
 		setFilters(selectedFilters);
 		const filteredRecords = selectedFilters.length === 0 ? AllProjectsData.slice(0, 500) : AllProjectsData.filter(rec => recordIsFiltered(rec, selectedFilters)).slice(0, 500);
@@ -39,7 +36,7 @@ const ProjectGridView = () => {
 	};
 
 	const isSelectedFilter = (category) => {
-		return filters.indexOf(category.title) > -1;
+		return filters.indexOf(category) > -1;
 	};
 
 	const recordIsFiltered = (record, filters) => {
@@ -52,9 +49,9 @@ const ProjectGridView = () => {
 				<button onClick={()=> {addFilter(category)}}
 						role='button'
 						className={`btn shadow-none btn-xs rounded-pill text-nowrap text-capitalize ${
-							isSelectedFilter(category)  ? `btn-${category.color_scheme}` : `btn-primary-light text-primary border-primary-200`} :
+							isSelectedFilter(category)  ? `btn-primary` : `btn-primary-light text-primary border-primary-200`} :
 					`}>
-					{category.title}
+					{category}
 					{isSelectedFilter(category) ? (
 						<X size={14} className='ms-1' />
 					) : (<span></span>)}
@@ -107,20 +104,6 @@ const ProjectGridView = () => {
 					</Col>
 				</Row>
 			</main>
-
-			{/*<ReactPaginate*/}
-			{/*	previousLabel={<ChevronLeft size='14px' />}*/}
-			{/*	nextLabel={<ChevronRight size='14px' />}*/}
-			{/*	pageCount={pageCount}*/}
-			{/*	onPageChange={changePage}*/}
-			{/*	containerClassName={'justify-content-center mb-0 pagination'}*/}
-			{/*	previousLinkClassName={'page-link mx-1 rounded'}*/}
-			{/*	nextLinkClassName={'page-link mx-1 rounded'}*/}
-			{/*	pageClassName={'page-item'}*/}
-			{/*	pageLinkClassName={'page-link mx-1 rounded'}*/}
-			{/*	disabledClassName={'paginationDisabled'}*/}
-			{/*	activeClassName={'active'}*/}
-			{/*/>*/}
 		</Fragment>
 	);
 };
