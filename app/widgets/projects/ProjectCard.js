@@ -14,7 +14,7 @@ const OffCanvasContainer = props => {
 				   onHide={onHide}
 				   placement="end"
 				   name="end"
-				   style={{ width: '92vw' }}
+				   style={{ width: '92vw', border: 'none'}}
 				   {...props}
 		>
 			<Offcanvas.Header className="justify-content-end border-bottom">
