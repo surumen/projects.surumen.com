@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 
 // import sub components
-import { Sidebar, NavbarTop } from '../app/widgets';
+import { Sidebar, NavbarTop } from 'app/widgets';
 
 const ProjectLayout = (props) => {
 
