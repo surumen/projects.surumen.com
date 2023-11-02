@@ -24,7 +24,7 @@ const NavbarTop = (props) => {
 		  return project.title.toLowerCase().includes(params.toLowerCase())
 			  || project.categories.join(' ').toLowerCase().includes(params.toLowerCase())
 			  || project.shortdescription.toLowerCase().includes(params.toLowerCase());
-		}).slice(0, 10);
+		}).slice(0, 6);
 		setRecords(params ? results : []);
 	}
 
