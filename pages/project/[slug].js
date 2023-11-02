@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import { useEffect, Fragment } from 'react';
-import Link from 'next/link';
 
 // import widget/custom components
 import { ProjectSummary } from 'app/widgets';
@@ -14,7 +13,6 @@ const ProjectSingle = () => {
 
     const router = useRouter();
     const slug = router.query.slug;
-    console.log(slug)
 
     const project = AllProjectsData.filter(p => p.slug === slug)[0];
 
