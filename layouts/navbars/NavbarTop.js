@@ -13,17 +13,31 @@ import { AllProjectsData } from 'app/data/AllProjectsData';
 
 const NavbarTop = (props) => {
 	const [open, setOpen] = useState(false);
-	const [Records, setRecords] = useState(AllProjectsData.slice(0, 6));
+	const [Records, setRecords] = useState([]);
 
 	const displayModal = () => {
 		setOpen(true);
+	}
+
+	const searchData = (params) => {
+		const results = AllProjectsData.filter((project) => {
+		  return project.title.toLowerCase().includes(params.toLowerCase())
+			  || project.categories.join(' ').toLowerCase().includes(params.toLowerCase())
+			  || project.shortdescription.toLowerCase().includes(params.toLowerCase());
+		}).slice(0, 10);
+		setRecords(params ? results : []);
+	}
+
+	const onHide = () => {
+		setOpen(false);
+		setRecords([]);
 	}
 
 	return (
         <Fragment>
 			<Form className='flex-none'>
 				<InputGroup
-					className='input-group input-group-sm input-group-inline w-rem-64 rounded-pill'>
+					className='input-group input-group-sm input-group-inline w-rem-64 rounded-pill shadow-none'>
 					<InputGroup.Text className='input-group-text rounded-start-pill'>
 						<Search size={16} className='me-2'/>
 					</InputGroup.Text>
@@ -46,7 +60,7 @@ const NavbarTop = (props) => {
 			<Modal
 				size={'lg'}
 				contentClassName='overflow-hidden'
-				show={open} onHide={() => setOpen(false)}
+				show={open} onHide={() => onHide()}
 				centered={Records.length === 0}
 			>
 				<Modal.Body>
@@ -56,22 +70,25 @@ const NavbarTop = (props) => {
 								type='search'
 								className='form-control rounded shadow-none'
 								placeholder='Search projects, skills, interests ...'
+							    onChange={(e) => {
+									searchData(e.target.value);
+							  	}}
 							/>
 						</Form>
 						<div className='vstack gap-10'>
 							{Records.map((record, index) => {
 								return (
-									<div>
+									<div key={index}>
 										<div className='d-flex align-items-center gap-3'>
 											<div className='icon icon-shape rounded-circle icon-sm flex-none w-rem-10 h-rem-10 text-sm bg-primary bg-opacity-25 text-primary'>
 												<SendFill size={16} />
 											</div>
 											<div>
 												<h6 className='progress-text mb-1 d-block'>{record.title}</h6>
-												<p className='text-muted text-truncate text-xs'>{record.title}</p>
+												<p className='text-muted text-truncate text-xs mw-read'>{record.shortdescription}</p>
 											</div>
 											<div className='text-end ms-auto'>
-												<span className='badge bg-white rounded-pill text-xs text-muted  border'>{record.categories[0]}</span>
+												<span className='badge bg-white rounded-pill text-xs text-muted border'>{record.categories[0]}</span>
 											</div>
 										</div>
 									</div>

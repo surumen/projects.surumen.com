@@ -3,6 +3,7 @@ import React, { Fragment } from "react";
 import { Row, Col, Image } from "react-bootstrap";
 import Link from 'next/link';
 import PropTypes from 'prop-types';
+import { SendFill } from "react-bootstrap-icons";
 
 const ProjectSummary = ({ item }) => {
 
@@ -30,7 +31,7 @@ const ProjectSummary = ({ item }) => {
 						<div className='d-flex gap-4 flex-wrap'>
 							{item.categories.map((category, index) => {
 								return (
-									<span key={index} className="bg-primary-light bg-opacity-20-hover border rounded px-3 py-1 font-semibold text-primary border-primary-200 text-xs rounded-pill">{category}</span>
+									<span key={index} className="bg-primary-light border rounded px-3 py-1 fw-semibold text-primary border-primary-200 text-xs rounded-pill">{category}</span>
 								)
 							})
 							}
@@ -60,9 +61,9 @@ const ProjectSummary = ({ item }) => {
 							<p className='article text-sm'>Individual Project</p>
 						</div>
 						<div>
-							<span role='button' className="badge badge-md bg-primary-600 text-bg-primary border border-primary-600 rounded-pill">
+							<span role='button' className="btn btn-sm bg-primary-600 text-bg-primary shadow-none rounded-pill">
 								<span className='me-2'>View Live</span>
-								<Image src="/images/svg/external-link.svg" alt="" className="h-rem-8 h-rem-md-16" />
+								<SendFill size={12} className='mb-1' />
 							</span>
 						</div>
 					</div>

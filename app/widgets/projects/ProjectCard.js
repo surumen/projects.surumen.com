@@ -3,6 +3,9 @@ import React, {Fragment, useState} from 'react';
 import PropTypes from 'prop-types';
 import { Image, Offcanvas, Button, } from 'react-bootstrap';
 
+// import bootstrap icons
+import { SendFill } from 'react-bootstrap-icons';
+
 // import sub components
 import ProjectSummary from './ProjectSummary';
 
@@ -27,8 +30,8 @@ const ProjectCard = ({ item, viewby }) => {
 					 cursor-pointer">
 
 					<div className='flex-none'>
-						<div className='icon icon-shape flex-none text-base text-bg-dark rounded-circle'>
-							<Image src='/images/icons/python.svg' alt="" className='w-rem-12 h-rem-12'></Image>
+						<div className='icon icon-shape rounded-circle flex-none text-base bg-success-100 text-success border border-success-200'>
+							<SendFill size={16} />
 						</div>
 					</div>
 
