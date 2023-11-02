@@ -4,7 +4,7 @@ import { useMediaQuery } from 'react-responsive';
 
 
 // import custom components
-import DarkLightMode from 'layouts/DarkLightMode';
+import DarkLightMode from './DarkLightMode';
 
 
 const QuickMenu = () => {
