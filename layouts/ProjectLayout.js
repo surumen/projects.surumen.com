@@ -2,8 +2,7 @@
 import React, { useState } from 'react';
 
 // import sub components
-import Sidebar from './navbars/Sidebar';
-import NavbarTop from './navbars/NavbarTop';
+import { Sidebar, NavbarTop } from '../app/widgets';
 
 const ProjectLayout = (props) => {
 

@@ -44,10 +44,16 @@ import HighlightCode from './highlight-code/HighlightCode';
 // import widget/custom components from tooltips folder 
 import CustomTippy from './tooltips/CustomTippy';
 
+// import widget/custom components from navbars folder
+import Sidebar from './navbars/Sidebar';
+import NavbarTop from './navbars/NavbarTop';
+
 export {
    ProjectCard,
    ProjectGridView,
    ProjectSummary,
+   Sidebar,
+   NavbarTop,
    //FormSelect,
    CustomSEO,
    CustomTippy,

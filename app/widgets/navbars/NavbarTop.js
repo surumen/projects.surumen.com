@@ -7,7 +7,7 @@ import { InputGroup, Form, Modal } from 'react-bootstrap';
 import { Search, SendFill } from 'react-bootstrap-icons';
 
 // import sub components
-import QuickMenu from 'layouts/navbars/QuickMenu';
+import QuickMenu from 'app/widgets/navbars/QuickMenu';
 
 import { AllProjectsData } from 'app/data/AllProjectsData';
 import Link from "next/link";

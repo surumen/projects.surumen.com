@@ -2,8 +2,7 @@
 import React from 'react';
 
 // import sub components
-import Sidebar from './navbars/Sidebar';
-import NavbarTop from './navbars/NavbarTop';
+import { Sidebar, NavbarTop } from '../app/widgets';
 
 const DefaultLayout = (props) => {
 
