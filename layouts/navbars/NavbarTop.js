@@ -9,6 +9,7 @@ import { Search, SendFill } from 'react-bootstrap-icons';
 import QuickMenu from 'layouts/navbars/QuickMenu';
 
 import { AllProjectsData } from 'app/data/AllProjectsData';
+import Link from "next/link";
 
 
 const NavbarTop = (props) => {
@@ -84,8 +85,10 @@ const NavbarTop = (props) => {
 												<SendFill size={16} />
 											</div>
 											<div>
-												<h6 className='progress-text mb-1 d-block'>{record.title}</h6>
-												<p className='text-muted text-truncate text-xs mw-read'>{record.shortdescription}</p>
+												<Link onClick={onHide} href={`/project/${record.slug}`}>
+													<h6 className='progress-text mb-1 d-block'>{record.title}</h6>
+													<p className='text-muted text-truncate text-xs mw-read'>{record.shortdescription}</p>
+												</Link>
 											</div>
 											<div className='text-end ms-auto'>
 												<span className='badge bg-white rounded-pill text-xs text-muted border'>{record.categories[0]}</span>

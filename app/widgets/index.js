@@ -30,6 +30,7 @@ import Pagination from './advance-table/Pagination';
 // import widget/custom components from projects folder
 import ProjectCard from './projects/ProjectCard';
 import ProjectGridView from './projects/ProjectGridView';
+import ProjectSummary from './projects/ProjectSummary';
 
 // import widget/custom components from passwordstrength folder 
 import PasswordStrengthMeter from './passwordstrength/PasswordStrengthMeter';
@@ -46,6 +47,7 @@ import CustomTippy from './tooltips/CustomTippy';
 export {
    ProjectCard,
    ProjectGridView,
+   ProjectSummary,
    //FormSelect,
    CustomSEO,
    CustomTippy,

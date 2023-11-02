@@ -6,6 +6,7 @@ export const AllProjectsData = [
 		categories: ['Python'],
 		image: '/images/course/course-graphql.jpg',
 		title: 'GraphQL: introduction to graphQL for beginners',
+		slug: 'introduction-to-graphql',
 		shortdescription:
 			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
 		status: 'Pending',
@@ -23,6 +24,7 @@ export const AllProjectsData = [
 		categories: ['Python'],
 		image: '/images/course/course-html.jpg',
 		title: 'HTML Full Course - Build a Website Tutorial',
+		slug: 'html-full-course',
 		shortdescription:
 			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
 		status: 'Pending',
@@ -40,6 +42,7 @@ export const AllProjectsData = [
 		categories: ['React'],
 		image: '/images/course/course-javascript.jpg',
 		title: 'A Complete Beginner’s Guide to JavaScript',
+		slug: 'complete-guide-to-javascript',
 		shortdescription:
 			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
 		status: 'Live',
@@ -56,6 +59,7 @@ export const AllProjectsData = [
 		categories: ['NodeJS'],
 		image: '/images/course/course-node.jpg',
 		title: 'Beginning Node.js, Express & MongoDB Development',
+		slug: 'beginning-node-js-development',
 		shortdescription:
 			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
 		status: 'Live',
@@ -73,6 +77,7 @@ export const AllProjectsData = [
 		image: '/images/course/course-laravel.jpg',
 		title:
 			'Laravel: The Ultimate Beginner’s Guide to Learn Laravel Step by Step',
+		slug: 'laravel-the-ultimate-beginner',
 		shortdescription:
 			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
 		status: 'Live',
@@ -89,6 +94,7 @@ export const AllProjectsData = [
 		categories: ['React'],
 		image: '/images/course/course-react.jpg',
 		title: 'How to easily create a website with React',
+		slug: 'how-to-easily-create-a-website',
 		shortdescription:
 			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
 		status: 'Live',
@@ -105,6 +111,7 @@ export const AllProjectsData = [
 		categories: ['Angular'],
 		image: '/images/course/course-angular.jpg',
 		title: 'Angular - the complete guide for beginner',
+		slug: 'angular-guide',
 		shortdescription:
 			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
 		status: 'Pending',
@@ -122,6 +129,7 @@ export const AllProjectsData = [
 		image: '/images/course/course-laravel.jpg',
 		title:
 			"Laravel: The Ultimate Beginner's Guide to Learn Laravel Step by Step",
+		slug: 'laravel-learning',
 		shortdescription:
 			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
 		status: 'Live',
