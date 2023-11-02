@@ -22,7 +22,7 @@ const ProjectSingle = () => {
 
     return (
         <Fragment>
-            <main className='container-fluid px-0 py-5 p-lg-6 p-xxl-8'>
+            <main className='container-fluid px-4 py-5 p-lg-6 p-xxl-8'>
                 <Row>
                     <Col>
                         {project ? (

@@ -1,5 +1,6 @@
 // import node module libraries
 import { Fragment, useState } from 'react';
+import PropTypes from 'prop-types';
 import { InputGroup, Form, Modal } from 'react-bootstrap';
 
 // import bootstrap icons
@@ -36,24 +37,28 @@ const NavbarTop = (props) => {
 
 	return (
         <Fragment>
-			<Form className='flex-none'>
-				<InputGroup
-					className='input-group input-group-sm input-group-inline w-rem-64 rounded-pill shadow-none'>
-					<InputGroup.Text className='input-group-text rounded-start-pill'>
-						<Search size={16} className='me-2'/>
-					</InputGroup.Text>
-					<Form.Control onClick={() => displayModal()}
-						type='search'
-						className='form-control ps-0 rounded-end-pill'
-						placeholder='Search Projects...'
-					/>
-				</InputGroup>
-			</Form>
-			<div className='d-flex align-items-center gap-4 px-4 scrollable-x'>
-				<div className='d-flex gap-2 text-xs'>
-					<span className='text-heading fw-semibold'>Last updated:</span> <span className='text-muted'>June 24th, 2023</span>
-				</div>
-			</div>
+			{props.search ? (
+				<Fragment>
+					<Form className='flex-none'>
+						<InputGroup
+							className='input-group input-group-sm input-group-inline w-rem-64 rounded-pill shadow-none'>
+							<InputGroup.Text className='input-group-text rounded-start-pill'>
+								<Search size={16} className='me-2'/>
+							</InputGroup.Text>
+							<Form.Control onClick={() => displayModal()}
+										  type='search'
+										  className='form-control ps-0 rounded-end-pill'
+										  placeholder='Search Projects...'
+							/>
+						</InputGroup>
+					</Form>
+					<div className='d-flex align-items-center gap-4 px-4 scrollable-x'>
+						<div className='d-flex gap-2 text-xs'>
+							<span className='text-heading fw-semibold'>Last updated:</span> <span className='text-muted'>June 24th, 2023</span>
+						</div>
+					</div>
+				</Fragment>
+			) : (<Fragment></Fragment>)}
 			<div className='hstack flex-fill justify-content-end flex-nowrap gap-6 ms-auto px-6 px-xxl-8'>
 				<QuickMenu/>
 			</div>
@@ -85,7 +90,7 @@ const NavbarTop = (props) => {
 												<SendFill size={16} />
 											</div>
 											<div>
-												<Link onClick={onHide} href={`/project/${record.slug}`}>
+												<Link target={'_blank'} href={`/project/${record.slug}`}>
 													<h6 className='progress-text mb-1 d-block'>{record.title}</h6>
 													<p className='text-muted text-truncate text-xs mw-read'>{record.shortdescription}</p>
 												</Link>
@@ -103,6 +108,16 @@ const NavbarTop = (props) => {
 			</Modal>
 		</Fragment>
     );
+};
+
+// Specifies the default values for props
+NavbarTop.defaultProps = {
+	search: true
+};
+
+// Typechecking With PropTypes
+NavbarTop.propTypes = {
+	search: PropTypes.bool,
 };
 
 export default NavbarTop;

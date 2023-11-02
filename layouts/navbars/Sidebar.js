@@ -1,18 +1,9 @@
 // import node module libraries
 import { Fragment } from 'react';
-import Link from 'next/link';
+import PropTypes from "prop-types";
 import { useRouter } from 'next/router'
 import { useMediaQuery } from 'react-responsive';
-import {
-	Image,
-	Navbar,
-	Nav,
-	Container,
-	Form,
-} from 'react-bootstrap';
-
-// import simple bar scrolling used for notification item scrolling
-import SimpleBar from 'simplebar-react';
+import { Image, Navbar, Container } from 'react-bootstrap';
 
 const Sidebar = (props) => {
 	const location = useRouter();
@@ -21,14 +12,29 @@ const Sidebar = (props) => {
 
 	return (
 		<Fragment>
-			<Container className="container-fluid px-3 px-md-4 px-lg-6">
+			<Container className={`container-fluid px-3 px-md-4 px-lg-6 ${props.className}`}>
 				<Navbar.Brand href="/" className="navbar-brand d-inline-block py-lg-1 mb-lg-5">
-					<Image src="/images/icons/brain.svg" alt="" className="logo-dark h-rem-8 h-rem-md-16" />
-					<Image src="/images/icons/logo-light.svg" alt="" className="logo-light h-rem-8 h-rem-md-16" />
+					<Image src="/images/icons/brain.svg" alt="" className={
+						`h-rem-8 h-rem-md-16 ${props.className ? 'd-none' : 'logo-logo-dark'}`
+					} />
+					<Image src="/images/icons/logo-light.svg" alt="" className={
+						`h-rem-8 h-rem-md-16 ${props.className ? props.className : 'logo-light'}`
+					} />
 				</Navbar.Brand>
 			</Container>
 		</Fragment>
 	);
 };
+
+// Specifies the default values for props
+Sidebar.defaultProps = {
+	className: null
+};
+
+// Typechecking With PropTypes
+Sidebar.propTypes = {
+	className: PropTypes.string,
+};
+
 
 export default Sidebar;

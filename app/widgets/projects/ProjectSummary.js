@@ -1,9 +1,8 @@
 // import node module libraries
-import React, { Fragment } from "react";
-import { Row, Col, Image } from "react-bootstrap";
-import Link from 'next/link';
+import React, { Fragment } from 'react';
+import { Row } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import { SendFill } from "react-bootstrap-icons";
+import { SendFill } from 'react-bootstrap-icons';
 
 const ProjectSummary = ({ item }) => {
 

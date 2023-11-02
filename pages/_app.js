@@ -12,8 +12,8 @@ import { store } from 'app/store/store'
 import 'style/_index.scss'
 
 // import default layouts
-import DefaultLayout from 'layouts/HomeIndex';
-import ProjectLayout from 'layouts/HomeIndex'; //TODO: change
+import DefaultLayout from 'layouts/DefaultLayout';
+import ProjectLayout from 'layouts/ProjectLayout'; //TODO: change
 
 
 function MyApp({ Component, pageProps }) {
