@@ -30,7 +30,7 @@ const ProjectCard = ({ item, viewby }) => {
 					 cursor-pointer">
 
 					<div className='flex-none'>
-						<div className='icon icon-shape rounded-circle flex-none text-base bg-success-100 text-success border border-success-200'>
+						<div className='icon icon-shape rounded-circle flex-none text-base bg-success-100 text-success'>
 							<SendFill size={16} />
 						</div>
 					</div>

@@ -49,7 +49,7 @@ const ProjectGridView = () => {
 				<button onClick={()=> {addFilter(category)}}
 						role='button'
 						className={`btn shadow-none btn-xs rounded-pill text-nowrap text-capitalize ${
-							isSelectedFilter(category)  ? `btn-primary` : `btn-primary-light text-primary border-primary-200`} :
+							isSelectedFilter(category)  ? `btn-primary` : `btn-primary-light text-primary`} :
 					`}>
 					{category}
 					{isSelectedFilter(category) ? (
