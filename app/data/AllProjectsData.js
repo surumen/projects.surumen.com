@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 export const AllProjectsData = [
 	{
 		id: uuid(),
-		categories: ['Python'],
+		categories: ['Python', 'Recurrent Neural Networks'],
 		image: '/images/course/course-graphql.jpg',
 		title: 'GraphQL: introduction to graphQL for beginners',
 		slug: 'introduction-to-graphql',
