@@ -9,6 +9,8 @@ import { SendFill } from 'react-bootstrap-icons';
 // import sub components
 import ProjectSummary from './ProjectSummary';
 
+// import data files
+import { LanguageColorMap } from '../../data/ColorMap';
 
 
 const ProjectCard = ({ item, viewby }) => {
@@ -16,6 +18,9 @@ const ProjectCard = ({ item, viewby }) => {
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
 
+	const getLanguageScheme = (language) => {
+		return LanguageColorMap.filter(map => map.color === language)[0].scheme;
+	}
 
 	const ListStackView = () => {
 		return (
@@ -30,7 +35,7 @@ const ProjectCard = ({ item, viewby }) => {
 					 cursor-pointer">
 
 					<div className='flex-none'>
-						<div className='icon icon-shape rounded-circle flex-none text-base bg-success-100 text-success'>
+						<div className='icon icon-shape rounded-circle flex-none text-base bg-gray-100 text-gray-600'>
 							<SendFill size={16} />
 						</div>
 					</div>
@@ -43,11 +48,9 @@ const ProjectCard = ({ item, viewby }) => {
 							<span>{item.shortdescription}</span>
 						</div>
 						<div className="d-flex align-items-center gap-2 text-sm">
-							{item.categories.map((category, index) => {
-								return (
-									<span key={index} className="bg-white bg-opacity-20 bg-opacity-100-hover border text-bg-white px-3 py-1 font-semibold text-heading text-xs rounded-pill">{category}</span>
-								);
-							})}
+							<span className="badge badge-lg badge-dot">
+								<i style={{ backgroundColor: getLanguageScheme(item.language)}}></i>{item.language}
+							</span>
 						</div>
 
 					</div>

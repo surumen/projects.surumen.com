@@ -3,10 +3,11 @@ import { v4 as uuid } from 'uuid';
 export const AllProjectsData = [
 	{
 		id: uuid(),
+		language: 'Python',
 		categories: ['Python', 'Recurrent Neural Networks'],
 		image: '/images/course/course-graphql.jpg',
-		title: 'GraphQL: introduction to graphQL for beginners',
-		slug: 'introduction-to-graphql',
+		title: 'Predictive Analysis: Fantasy Football Players Power Index',
+		slug: 'fantasy-football-power-index',
 		shortdescription:
 			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
 		status: 'Pending',
@@ -21,10 +22,30 @@ export const AllProjectsData = [
 	},
 	{
 		id: uuid(),
+		language: 'Python',
+		categories: ['Python', 'Recurrent Neural Networks'],
+		image: '/images/course/course-graphql.jpg',
+		title: 'Music Recommender: Content Similarity Analysis',
+		slug: 'mixtape-generator',
+		shortdescription:
+			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
+		status: 'Pending',
+		level: 'Advance',
+		duration: '2h 40m',
+		rating: 2.5,
+		description: `<p>We'll dive into GraphQL, the fundamentals of GraphQL. 
+        We're only gonna use the pieces of it that we need to build in Gatsby. 
+        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
+        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>
+        `
+	},
+	{
+		id: uuid(),
+		language: 'Java',
 		categories: ['Python'],
 		image: '/images/course/course-html.jpg',
-		title: 'HTML Full Course - Build a Website Tutorial',
-		slug: 'html-full-course',
+		title: 'Image Classification using Convolutional Neural Networks',
+		slug: 'image-classification-cnn',
 		shortdescription:
 			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
 		status: 'Pending',
@@ -39,10 +60,11 @@ export const AllProjectsData = [
 	},
 	{
 		id: uuid(),
-		categories: ['React'],
+		language: 'C',
+		categories: ['Deep Learning'],
 		image: '/images/course/course-javascript.jpg',
-		title: 'A Complete Beginner’s Guide to JavaScript',
-		slug: 'complete-guide-to-javascript',
+		title: 'Video Processing: Separating foreground and background information from a video',
+		slug: 'video-processor',
 		shortdescription:
 			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
 		status: 'Live',
@@ -56,10 +78,11 @@ export const AllProjectsData = [
 	},
 	{
 		id: uuid(),
+		language: 'Go',
 		categories: ['NodeJS'],
 		image: '/images/course/course-node.jpg',
-		title: 'Beginning Node.js, Express & MongoDB Development',
-		slug: 'beginning-node-js-development',
+		title: 'Mini Cryptocurrency',
+		slug: 'crypto',
 		shortdescription:
 			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
 		status: 'Live',
@@ -71,76 +94,7 @@ export const AllProjectsData = [
         We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
         We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>`
 	},
-	{
-		id: uuid(),
-		categories: ['Vue'],
-		image: '/images/course/course-laravel.jpg',
-		title:
-			'Laravel: The Ultimate Beginner’s Guide to Learn Laravel Step by Step',
-		slug: 'laravel-the-ultimate-beginner',
-		shortdescription:
-			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
-		status: 'Live',
-		level: 'Beginner',
-		duration: '1h 00m',
-		rating: 4.5,
-		description: `<p>We'll dive into GraphQL, the fundamentals of GraphQL. 
-        We're only gonna use the pieces of it that we need to build in Gatsby. 
-        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
-        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>`
-	},
-	{
-		id: uuid(),
-		categories: ['React'],
-		image: '/images/course/course-react.jpg',
-		title: 'How to easily create a website with React',
-		slug: 'how-to-easily-create-a-website',
-		shortdescription:
-			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
-		status: 'Live',
-		level: 'Advance',
-		duration: '3h 55m',
-		rating: 4.5,
-		description: `<p>We'll dive into GraphQL, the fundamentals of GraphQL. 
-        We're only gonna use the pieces of it that we need to build in Gatsby. 
-        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
-        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>`
-	},
-	{
-		id: uuid(),
-		categories: ['Angular'],
-		image: '/images/course/course-angular.jpg',
-		title: 'Angular - the complete guide for beginner',
-		slug: 'angular-guide',
-		shortdescription:
-			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
-		status: 'Pending',
-		level: 'Intermediate',
-		duration: '2h 46m',
-		rating: 4.5,
-		description: `<p>We'll dive into GraphQL, the fundamentals of GraphQL. 
-        We're only gonna use the pieces of it that we need to build in Gatsby. 
-        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
-        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>`
-	},
-	{
-		id: uuid(),
-		categories: ['Machine Learning', 'Python'],
-		image: '/images/course/course-laravel.jpg',
-		title:
-			"Laravel: The Ultimate Beginner's Guide to Learn Laravel Step by Step",
-		slug: 'laravel-learning',
-		shortdescription:
-			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
-		status: 'Live',
-		level: 'Beginner',
-		duration: '2h 46m',
-		rating: 4.5,
-		description: `<p>We'll dive into GraphQL, the fundamentals of GraphQL. 
-        We're only gonna use the pieces of it that we need to build in Gatsby. 
-        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
-        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>`
-	}
+
 ];
 
 export default AllProjectsData;
