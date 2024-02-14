@@ -41,8 +41,8 @@ export const AllProjectsData = [
 	},
 	{
 		id: uuid(),
-		language: 'Java',
-		categories: ['Python'],
+		language: 'C++',
+		categories: ['CNN'],
 		image: '/images/course/course-html.jpg',
 		title: 'Image Classification using Convolutional Neural Networks',
 		slug: 'image-classification-cnn',

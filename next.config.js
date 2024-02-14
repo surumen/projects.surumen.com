@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
-  basePath: '/projects.surumen.com'
+  //zbasePath: '/projects.surumen.com'
 }
 
 module.exports = nextConfig

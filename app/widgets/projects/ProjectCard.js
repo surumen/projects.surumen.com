@@ -29,9 +29,8 @@ const ProjectCard = ({ item, viewby }) => {
 					 className="
 					 position-relative
 					 d-flex align-items-center
-					 p-3 rounded-3
+					 px-3 py-0 rounded-3
 					 bg-body-secondary-hover
-					 border-bottom
 					 cursor-pointer">
 
 					<div className='flex-none'>
@@ -40,11 +39,15 @@ const ProjectCard = ({ item, viewby }) => {
 						</div>
 					</div>
 
-					<div className="ms-3 ms-md-4 flex-fill">
+					<div className="
+					ms-3 ms-md-4 py-6
+					border-bottom border-dotted border-top-0 border-start-0 border-end-0
+					flex-fill
+					">
 
-						<div className="text-heading fw-semibold mb-2">{item.title}</div>
+						<h4 className="text-heading fw-semibold mb-2">{item.title}</h4>
 
-						<div className="d-block text-sm text-muted gap-2 mb-2">
+						<div className="d-block text-sm text-muted gap-2 mb-3">
 							<span>{item.shortdescription}</span>
 						</div>
 						<div className="d-flex align-items-center gap-2 text-sm">
