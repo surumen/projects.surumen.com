@@ -5,10 +5,13 @@ import { useRouter } from 'next/router'
 import { useMediaQuery } from 'react-responsive';
 import { Image, Navbar, Container } from 'react-bootstrap';
 
+import useScroll from 'app/hooks/useScroll';
+
+
 const Sidebar = (props) => {
 	const location = useRouter();
-
 	const isMobile = useMediaQuery({ maxWidth: 767 });
+	const scrollPosition = useScroll();
 
 	return (
 		<Fragment>
@@ -18,16 +21,18 @@ const Sidebar = (props) => {
 					<Image src="/images/icons/logo-light.svg" alt="" className='h-rem-8 h-rem-md-16 logo-light' />
 				</Navbar.Brand>
 			</Container>
-			<Container
-				style={{minHeight: '80%'}}
-				className={`container-fluid d-flex align-content-center justify-content-center px-3 px-md-4 px-lg-6 ${props.className}`}>
+			<div className="hstack gap-0 justify-content-end ps-3">
 				<h1
 					style={{transform: 'rotate(270deg)', transformOrigin: 'center'}}
-					className='display-2 font-display fw-bolder text-gray-200'
+					className='display-4 pt-10 font-display fw-bolder text-gray-200'
 				>
 					2023
 				</h1>
-			</Container>
+				<h2
+					id='navigation-dot'
+					className={`text-limit text-muted m-0 p-0 position-absolute top-${scrollPosition}`}
+				>•</h2>
+			</div>
 
 		</Fragment>
 	);
