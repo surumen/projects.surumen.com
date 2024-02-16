@@ -69,9 +69,9 @@ const ProjectSummary = ({ item }) => {
 				</div>
 			</Row>
 			<section className='bg-body-secondary mx-n6 my-6 py-6 px-6'>
-				<video loop={true} autoPlay={true}>
-					<source src='/videos/sonos-radio-02.mp4' type='video/mp4'/>
-				</video>
+				{/*<video loop={true} autoPlay={true}>*/}
+				{/*	<source src='/videos/sonos-radio-02.mp4' type='video/mp4'/>*/}
+				{/*</video>*/}
 			</section>
 		</Fragment>
 	);

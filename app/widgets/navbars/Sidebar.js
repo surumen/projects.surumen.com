@@ -25,9 +25,9 @@ const Sidebar = (props) => {
 					<h1
 						style={{transform: 'rotate(270deg)', transformOrigin: 'center', marginTop: '3rem'}}
 						className='display-4 font-display fw-bolder text-gray-200'>
-						2023
+						2024
 					</h1>
-					<div className='mt-auto'></div>
+					<div className='nav-divider-step mt-auto'></div>
 					<h1
 						style={{transform: 'rotate(270deg)', transformOrigin: 'center', marginBottom: '2rem'}}
 						className='display-4 font-display fw-bolder text-gray-200'>

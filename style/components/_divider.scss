@@ -1,0 +1,10 @@
+.nav-divider-step {
+  &::after {
+    position: absolute;
+    top: 33%;
+    border-left: $border-width solid $border-color;
+    content: "";
+    bottom: 27%;
+    left: 50%;
+  }
+}
