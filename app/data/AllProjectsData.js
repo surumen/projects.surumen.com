@@ -77,7 +77,7 @@ export const AllProjectsData = [
 		language: 'Python',
 		categories: ['Python', 'Recurrent Neural Networks'],
 		image: '/images/course/course-graphql.jpg',
-		title: 'Music Recommender: Content Similarity Analysis',
+		title: 'Building a Music Playlist Generator',
 		slug: 'mixtape-generator',
 		shortdescription:
 			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
@@ -98,7 +98,7 @@ export const AllProjectsData = [
 					<ul class='nav flex-column mt-lg-6 position-lg-sticky top-lg-6'>
 						<li class='nav-item'>
 							<a class='nav-link px-0' href='#item-1'>
-								Introduction
+								Abstract
 							</a>
 						</li>
 						<li class='nav-item'>
@@ -120,11 +120,11 @@ export const AllProjectsData = [
 				</div>
 				<div class='col-lg'>
 					<article class='article'>
-						<h2 id='item-1'>Introduction</h2>
-						<p>These Website Standard Terms and Conditions written on this webpage shall manage your use of our website, Webiste Name accessible at Website.com.</p>
-						<p>These Terms will be applied fully and affect to your use of this Website. By using this Website, you agreed to accept all terms and conditions written in here. You must not use this Website if you disagree with any of these Website
-							Standard Terms and Conditions.</p>
-						<p>Minors or people below 18 years old are not allowed to use this Website.</p>
+						<h2 id='item-1'>Abstract</h2>
+						<p>A human disc jockey can be very good at figuring out what similar music sounds like and playing songs at just the right sequence. However, this can prove to be a difficult task for an automated music streaming platform. A number of studies have been done on music play sequence in an attempt to learn out how and why Last.fm users include songs in their playlists and how similar tracks in one playlist are [1]. The abundance of data on listeners and the tracks they played make it very important for music streaming platforms to identify music that is both relevant and interesting to their users.</p>
+						<p>The goal of this project is to use existing data about features of one million songs available through the Echo Nest API[2] as well as data on user preferences from Last.fm[3] to build a recommendation system that takes into account the features of individual songs. Echo Nest created the Million Song Dataset, a freely-available collection of audio features and metadata for a million contemporary popular music tracks, under a grant from the National Science Foundation to encourage research on algorithms that scale to commercial size. The audio features include timbre, loudness, energy, danceability, among others. Using these 
+							one million songs, we demonstrate how we can leverage on the similarity between individual songs to create a content-based recommendation system.</p>
+						<p>Choosing the right approach to model user profiles plays a big role in evaluating the quality of any recommendation system. To describe the relationship between users and songs, we first create a network of similar songs and run community detection algorithms to identify the dominant clusters that these songs belong to based on their similarity. In a human interpretation, these communities would represent the micro-genres that songs can be classified into. We will then use a subset of the Echo Nest data called the Taste Profiles to map users to these song clusters based on the songs that they already played on Last.fm.</p>
 						<h2 id='item-2'>Intellectual Property Rights</h2>
 						<p>Other than the content you own, under these Terms, Company Name and/or its licensors own all the intellectual property rights and materials contained in this Website.</p>
 						<p>You are granted limited license only for purposes of viewing the material contained on this Website.</p>
