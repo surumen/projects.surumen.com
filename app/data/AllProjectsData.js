@@ -47,15 +47,14 @@ export const AllProjectsData = [
 		title: 'Image Classification using Convolutional Neural Networks',
 		slug: 'image-classification-cnn',
 		shortdescription:
-			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
+			'Apply different performance optimization techniques on a pre-trained Convolutional Neural Network to classify 32x32 images into 10 categories',
 		status: 'Pending',
 		level: 'Beginner',
 		duration: '3h 16m',
 		rating: 3.0,
-		description: `<p>We'll dive into GraphQL, the fundamentals of GraphQL. 
-        We're only gonna use the pieces of it that we need to build in Gatsby. 
-        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
-        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>
+		description: `<p>In this project, we apply different performance optimization techniques on a pre-trained Convolutional Neural Network to classify 32x32 images into 10 categories</p>
+        <p>We focus on these three techniques; vectorization with SIMD instructions, parallelism with OpenMP, speed up calculations using Amdahl's Law, and benchmark the performance improvement 
+        achieved with each.</p>
         `
 	},
 	{
