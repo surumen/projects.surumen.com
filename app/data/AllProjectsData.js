@@ -81,7 +81,7 @@ export const AllProjectsData = [
 		title: 'Building a Music Playlist Generator',
 		slug: 'mixtape-generator',
 		shortdescription:
-			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
+			'An alternative to collaborative filtering. Using reinforcement learning to recommend songs',
 		status: 'Pending',
 		level: 'Advance',
 		duration: '2h 40m',
@@ -152,7 +152,7 @@ export const AllProjectsData = [
 		title: 'Image Classification using Convolutional Neural Networks',
 		slug: 'image-classification-cnn',
 		shortdescription:
-			'Apply different performance optimization techniques on a pre-trained Convolutional Neural Network to classify 32x32 images into 10 categories',
+			'Applying different performance optimization techniques on a pre-trained Convolutional Neural Network to classify large datasets',
 		status: 'Pending',
 		level: 'Beginner',
 		duration: '3h 16m',
