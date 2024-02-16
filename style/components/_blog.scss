@@ -1,0 +1,59 @@
+
+.article>p {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem
+}
+
+.article>h2,.article>.h2 {
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+
+.article>h2:first-child,.article>.h2:first-child {
+  margin-top: 1em
+}
+
+.article>h3,.article>.h3 {
+  margin-top: 1.6em;
+  margin-bottom: .6em;
+}
+
+.article>h4,.article>.h4 {
+  margin-top: 2em;
+}
+
+.article>img {
+  border-radius: $border-radius-2xl;
+}
+
+.article>img,.article>video {
+  margin-top: 2em;
+  margin-bottom: 2em
+}
+
+.article pre {
+  color: $code-color;
+  border-radius: var(--x-article-pre-border-radius);
+  background-color: $gray-200;
+  margin-top: 1.75em;
+  margin-bottom: 1.75em;
+  padding: 1rem;
+  overflow-x: auto
+}
+
+.article>:first-child,.article h2+*,.article .h2+*,.article h3+*,.article .h3+*,.article hr+* {
+  margin-top: 0
+}
+
+.article>hr {
+  margin-top: 3em;
+  margin-bottom: 3em
+}
+
+.article>ul {
+  padding-left: 1.5rem
+}
+
+.article>ul li {
+  padding: .25rem 0
+}
