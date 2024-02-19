@@ -1,19 +1,20 @@
 // import node module libraries
 import Head from 'next/head';
+import { Fragment } from 'react';
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import SSRProvider from 'react-bootstrap/SSRProvider';
 
 // import provider and store from redux state management.
 import { Provider } from 'react-redux'
-import { store } from 'app/store/store'
+import { store } from '@/store/store'
 
 // Styles
 import 'style/_index.scss'
 
 // import default layouts
-import DefaultLayout from 'layouts/DefaultLayout';
-import ProjectLayout from 'layouts/ProjectLayout'; //TODO: change
+import DefaultLayout from '../layouts/DefaultLayout';
+import ProjectLayout from '../layouts/ProjectLayout';
 
 
 function MyApp({ Component, pageProps }) {
@@ -27,7 +28,7 @@ function MyApp({ Component, pageProps }) {
   const Layout = Component.Layout || (router.pathname.includes('project') ? ProjectLayout : DefaultLayout)
 
   return (
-      <SSRProvider>
+      <Fragment>
         <Head>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta name="keywords" content={keywords} />
@@ -49,7 +50,7 @@ function MyApp({ Component, pageProps }) {
             <Component {...pageProps} />
           </Layout>
         </Provider>
-      </SSRProvider>
+      </Fragment>
   )
 }
 

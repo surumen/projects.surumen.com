@@ -43,8 +43,14 @@
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
+    "@types/dompurify": "^3.0.5",
+    "@types/node": "^20.11.19",
+    "@types/react": "^18.2.56",
+    "@types/underscore": "^1.11.15",
+    "@types/uuid": "^9.0.8",
     "eslint": "8.50.0",
     "eslint-config-next": "13.5.3",
-    "jquery": "^3.7.1"
+    "jquery": "^3.7.1",
+    "typescript": "^5.3.3"
   }
 }

@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 
 // import widget/custom components
-import { ProjectGridView } from 'app/widgets';
+import { ProjectGridView } from '@/widgets';
 
 export default function Home() {
 

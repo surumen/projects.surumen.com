@@ -7,9 +7,9 @@ import { InputGroup, Form, Modal } from 'react-bootstrap';
 import { Search, SendFill } from 'react-bootstrap-icons';
 
 // import sub components
-import QuickMenu from 'app/widgets/navbars/QuickMenu';
+import QuickMenu from '@/widgets/navbars/QuickMenu';
 
-import { AllProjectsData } from 'app/data/AllProjectsData';
+import { AllProjectsData } from '@/data/AllProjectsData';
 import Link from "next/link";
 
 
@@ -27,6 +27,7 @@ const NavbarTop = (props) => {
 			  || project.categories.join(' ').toLowerCase().includes(params.toLowerCase())
 			  || project.shortdescription.toLowerCase().includes(params.toLowerCase());
 		}).slice(0, 6);
+		// @ts-ignore
 		setRecords(params ? results : []);
 	}
 

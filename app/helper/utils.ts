@@ -7,14 +7,14 @@ import * as _ from 'lodash';
 /**
  * Add commas to a number
  */
- export const numberWithCommas = (x, decimal = 0) => {
+ export const numberWithCommas = (x: any, decimal: number = 0) => {
 	return x.toLocaleString('en-US', { minimumFractionDigits: decimal });
 };
 
 /**
  * Get the file extension from given file name
  */
-export const getFileExtension = (filename) => {
+export const getFileExtension = (filename: string) => {
 	const extension = filename.split('.').pop();
 	return extension;
 };
@@ -29,14 +29,14 @@ export const getRandomNo = (min = 0, max = 100) => {
 /**
  * Get a random value from the given array
  */
-export const getRandomValue = (array) => {
+export const getRandomValue = (array: any[]) => {
 	return _.sample(array);
 };
 
 /**
  * Get the color name/value based on given status
  */
-export const getStatusColor = (itemstatus) => {
+export const getStatusColor = (itemstatus: string) => {
 	let color = '';
 	switch (itemstatus) {
 		case 'In Progress':
@@ -60,7 +60,7 @@ export const getStatusColor = (itemstatus) => {
 /**
  * Get the color name/value based on given status
  */
-export const getCategoryColor = (category) => {
+export const getCategoryColor = (category: string) => {
 	let color = '';
 	switch (category) {
 		case 'Saas Services':
@@ -87,15 +87,17 @@ export const getCategoryColor = (category) => {
 };
 
 //get chunk from array
-export const chunk = (arr, chunkSize = 1, cache = []) => {
+export const chunk = (arr: any[], chunkSize = 1, cache = []) => {
 	const tmp = [...arr];
 	if (chunkSize <= 0) return cache;
-	while (tmp.length) cache.push(tmp.splice(0, chunkSize));
+	while (tmp.length) { // @ts-ignore
+		cache.push(tmp.splice(0, chunkSize));
+	}
 	return cache;
 };
 
 // function to get time value in hh:mm AM | PM format
-export const getTimeValue = (date) => {
+export const getTimeValue = (date: any) => {
 	var hours = date.getHours();
 	var minutes = date.getMinutes();
 	var ampm = hours >= 12 ? 'PM' : 'AM';
@@ -107,7 +109,7 @@ export const getTimeValue = (date) => {
 };
 
 // function to get date value in Month Name DD, YYYY format
-export const getDateValue = (date) => {
+export const getDateValue = (date: any) => {
 	const month = [
 		'Jan',
 		'Feb',
@@ -130,7 +132,7 @@ export const getDateValue = (date) => {
 };
 
 // function to generate slug or ID with slug format
-export const getSlug = (text) => {
+export const getSlug = (text: string) => {
 	text = text.toLowerCase();
 	text = text.replace(/ /g, '-').replace(/[^\w-]+/g, '');
 	return text;

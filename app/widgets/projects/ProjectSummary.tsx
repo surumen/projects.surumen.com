@@ -8,10 +8,10 @@ import { Col, Row } from 'react-bootstrap';
 import { SendFill } from 'react-bootstrap-icons';
 
 
-import { Bracket, BracketGame, BracketGenerator } from "../../brackets";
+import { Bracket, BracketGame, BracketGenerator } from '@/brackets';
 
-import { WorldCup2018 } from 'app/data/WorldCup2018';
-import { SemiFinal1, SemiFinal2 } from "../../data/world-cup-18/sf";
+import { WorldCup2018 } from '@/data/WorldCup2018';
+import { SemiFinal1, SemiFinal2 } from '@/data/world-cup-18/sf';
 
 
 const ProjectSummary = ({ item }) => {
@@ -42,6 +42,7 @@ const ProjectSummary = ({ item }) => {
 		);
 	}
 
+	// @ts-ignore
 	return (
 		<Fragment>
 			<section className='container mw-screen-xl border-bottom mx-n6 pb-6 pt-4 ps-6 pe-0'>

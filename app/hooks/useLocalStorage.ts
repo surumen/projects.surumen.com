@@ -1,7 +1,7 @@
 // import node module libraries
 import { useState, useEffect } from 'react';
 
-const getStorageValue = (key, defaultValue) => {
+const getStorageValue = (key: any, defaultValue: any) => {
   // getting stored localStorage value
   if (typeof window !== 'undefined') {
     const saved = localStorage.getItem(key);
@@ -10,7 +10,7 @@ const getStorageValue = (key, defaultValue) => {
   }
 }
 
-const useLocalStorage = (key, defaultValue) => {
+const useLocalStorage = (key: any, defaultValue: any) => {
   const [storageValue, setStorageValue] = useState(() => {
     return getStorageValue(key, defaultValue);
   });

@@ -2,7 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 // import app config file
-import { settings } from 'app.config';
+import { settings } from '../../app.config';
 
 const initialState = {
   version: settings.app.version,
@@ -13,7 +13,8 @@ export const appSlice = createSlice({
   initialState,
   reducers: {
     changeSkin: (state, action) => {
-      document.querySelector('html').setAttribute('data-theme', action.payload); 
+      // @ts-ignore
+      document.querySelector('html').setAttribute('data-theme', action.payload);
       state.skin = action.payload;
     }
   },

@@ -10,7 +10,7 @@ import { SendFill } from 'react-bootstrap-icons';
 import ProjectSummary from './ProjectSummary';
 
 // import data files
-import { LanguageColorMap } from '../../data/ColorMap';
+import { LanguageColorMap } from '@/data/ColorMap';
 
 
 const ProjectCard = ({ item, viewby }) => {

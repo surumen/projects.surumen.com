@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { useMediaQuery } from 'react-responsive';
 import { Image, Navbar, Container } from 'react-bootstrap';
 
-import useScroll from 'app/hooks/useScroll';
+import useScroll from '@/hooks/useScroll';
 
 
 const Sidebar = (props) => {
