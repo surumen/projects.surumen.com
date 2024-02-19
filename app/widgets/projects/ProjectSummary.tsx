@@ -50,7 +50,7 @@ const ProjectSummary = ({ item }) => {
 						<div className='vstack gap-6 pointer-event'>
 							<h1 className='ls-tight fw-bolder'>{item.title}</h1>
 							<div className='d-flex gap-4 flex-wrap'>
-								{item.categories.map((category, index) => {
+								{item.technologyAreas.map((category, index) => {
 									return (
 										<span key={index} className='bg-primary-light border rounded px-3 py-1 fw-semibold text-primary border-primary-200 text-xs rounded-pill'>{category}</span>
 									)

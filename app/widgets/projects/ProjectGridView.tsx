@@ -7,12 +7,13 @@ import { X } from 'react-bootstrap-icons';
 
 // import widget/custom components
 import ProjectCard from './ProjectCard';
+import { Project } from '@/types';
 
 // import data files
 import { AllProjectsData } from '@/data/AllProjectsData';
 
 const ProjectGridView = () => {
-	const [Records, setRecords] = useState(AllProjectsData.slice(0, 500));
+	const [Records, setRecords] = useState<Project[]>(AllProjectsData.slice(0, 500));
 	// @ts-ignore
 	const Categories = [...new Set(AllProjectsData.map(project => project.categories).flat())]
 
