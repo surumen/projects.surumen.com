@@ -15,7 +15,7 @@ import { AllProjectsData } from '@/data/AllProjectsData';
 const ProjectGridView = () => {
 	const [Records, setRecords] = useState<Project[]>(AllProjectsData.slice(0, 500));
 	// @ts-ignore
-	const Categories = [...new Set(AllProjectsData.map(project => project.categories).flat())]
+	const Categories = [...new Set(AllProjectsData.map(project => project.technologyAreas).flat())]
 
 	//------display filters start----------
 	const [filters, setFilters] = useState([]);
@@ -45,7 +45,7 @@ const ProjectGridView = () => {
 	};
 
 	const recordIsFiltered = (record, filters) => {
-		return filters.some(r => record.categories.includes(r));
+		return filters.some(r => record.technologyAreas.includes(r));
 	}
 
 	const filterOptions = Categories.map((category, index) => {
