@@ -26,8 +26,9 @@ const ProjectSummary = ({ item }) => {
 		setHoveredTeamId(hoveredTeamId);
 	};
 
-	const handleClick = () => {
-
+	const handleClick = (teamId, gameId) => {
+		console.log('Clicked team: ', teamId);
+		console.log('Clicked game: ', gameId);
 	};
 
 	const gameComponent = (props) => {
@@ -35,6 +36,7 @@ const ProjectSummary = ({ item }) => {
 			<BracketGame
 				{...props}
 				onHoveredTeamIdChange={onHoveredTeamChange}
+				onClickTeam={handleClick}
 				hoveredTeamId={hoveredTeamId}
 			/>
 		);

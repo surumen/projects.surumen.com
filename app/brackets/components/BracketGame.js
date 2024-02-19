@@ -31,6 +31,7 @@ const BracketGame = (props) => {
         game,
         hoveredTeamId,
         onHoveredTeamIdChange,
+        onClickTeam,
         styles,
         homeOnTop,
         topText,
@@ -99,9 +100,11 @@ const BracketGame = (props) => {
                     <Participant
                         x={0} y={12}
                         side={top}
+                        gameId={game.id}
                         teamNameStyle={teamNameStyle}
                         teamScoreStyle={teamScoreStyle}
                         onHover={onHoveredTeamIdChange}
+                        onClickTeam={onClickTeam}
                     />
                 ) : null
             }
@@ -111,9 +114,11 @@ const BracketGame = (props) => {
                     <Participant
                         x={0} y={34.5}
                         side={bottom}
+                        gameId={game.id}
                         teamNameStyle={teamNameStyle}
                         teamScoreStyle={teamScoreStyle}
                         onHover={onHoveredTeamIdChange}
+                        onClickTeam={onClickTeam}
                     />
                 ) : null
             }
@@ -200,6 +205,7 @@ BracketGame.propTypes = {
     hoveredTeamId: PropTypes.string,
 
     onHoveredTeamIdChange: PropTypes.func,
+    onClickTeam: PropTypes.func,
 
     styles: PropTypes.shape({
         backgroundColor: PropTypes.string,

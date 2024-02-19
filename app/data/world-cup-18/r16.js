@@ -8,7 +8,11 @@ export const RoundOf16_M1 = {
     'court': { '@ref': '16' },
     'sides': {
         'home': {
-            'team': { '@ref': 'FRANCE' },
+            'team': {
+                '@id': 'FRANCE',
+                'id': 'france-id',
+                'name': 'France',
+            },
             'score': { 'score': 4, 'notes': null },
             'seed': { 'sourceGame': null, 'sourcePool': { '@ref': '14' }, 'rank': 1, 'displayName': '2nd place of A' }
         },
@@ -32,7 +36,11 @@ export const RoundOf16_M2 = {
     'court': { '@ref': '16' },
     'sides': {
         'home': {
-            'team': { '@ref': 'URUGUAY' },
+            'team': {
+                '@id': 'URUGUAY',
+                'id': 'uruguay-id',
+                'name': 'Uruguay',
+            },
             'score': { 'score': 2, 'notes': null },
             'seed': { 'sourceGame': null, 'sourcePool': { '@ref': '14' }, 'rank': 1, 'displayName': '2nd place of A' }
         },
@@ -56,7 +64,11 @@ export const RoundOf16_M3 = {
     'court': { '@ref': '16' },
     'sides': {
         'home': {
-            'team': { '@ref': 'BRAZIL' },
+            'team': {
+                '@id': 'BRAZIL',
+                'id': 'brazil-id',
+                'name': 'Brazil',
+            },
             'score': { 'score': 2, 'notes': null },
             'seed': { 'sourceGame': null, 'sourcePool': { '@ref': '14' }, 'rank': 1, 'displayName': '2nd place of A' }
         },
@@ -80,7 +92,11 @@ export const RoundOf16_M4 = {
     'court': { '@ref': '16' },
     'sides': {
         'home': {
-            'team': { '@ref': 'BELGIUM' },
+            'team': {
+                '@id': 'BELGIUM',
+                'id': 'belgium-id',
+                'name': 'Belgium',
+            },
             'score': { 'score': 3, 'notes': null },
             'seed': { 'sourceGame': null, 'sourcePool': { '@ref': '14' }, 'rank': 1, 'displayName': '2nd place of A' }
         },
@@ -113,7 +129,11 @@ export const RoundOf16_M5 = {
             'seed': { 'sourceGame': null, 'sourcePool': { '@ref': '14' }, 'rank': 1, 'displayName': '2nd place of A' }
         },
         'visitor': {
-            'team': { '@ref': 'RUSSIA' },
+            'team': {
+                '@id': 'RUSSIA',
+                'id': 'russia-id',
+                'name': 'Russia',
+            },
             'score': { 'score': 4, 'notes': '(4)' },
             'seed': { 'sourceGame': null, 'sourcePool': { '@ref': '12' }, 'rank': 1, 'displayName': '3rd place of B' }
         }
@@ -128,7 +148,11 @@ export const RoundOf16_M6 = {
     'court': { '@ref': '16' },
     'sides': {
         'home': {
-            'team': { '@ref': 'CROATIA' },
+            'team': {
+                '@id': 'CROATIA',
+                'id': 'croatia-id',
+                'name': 'Croatia',
+            },
             'score': { 'score': 3, 'notes': '(1)' },
             'seed': { 'sourceGame': null, 'sourcePool': { '@ref': '14' }, 'rank': 1, 'displayName': '2nd place of A' }
         },
@@ -152,7 +176,11 @@ export const RoundOf16_M7 = {
     'court': { '@ref': '16' },
     'sides': {
         'home': {
-            'team': { '@ref': 'SWEDEN' },
+            'team': {
+                '@id': 'SWEDEN',
+                'id': 'sweden-id',
+                'name': 'Sweden',
+            },
             'score': { 'score': 1, 'notes': null },
             'seed': { 'sourceGame': null, 'sourcePool': { '@ref': '14' }, 'rank': 1, 'displayName': '2nd place of A' }
         },
@@ -185,7 +213,11 @@ export const RoundOf16_M8 = {
             'seed': { 'sourceGame': null, 'sourcePool': { '@ref': '14' }, 'rank': 1, 'displayName': '2nd place of A' }
         },
         'visitor': {
-            'team': { '@ref': 'ENGLAND' },
+            'team': {
+                '@id': 'ENGLAND',
+                'id': 'england-id',
+                'name': 'England',
+            },
             'score': { 'score': 4, 'notes': '(1)' },
             'seed': { 'sourceGame': null, 'sourcePool': { '@ref': '12' }, 'rank': 1, 'displayName': '3rd place of B' }
         }

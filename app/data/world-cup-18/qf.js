@@ -16,11 +16,7 @@ export const QuarterFinals1 = {
     'court': { '@ref': '16' },
     'sides': {
         'home': {
-            'team': {
-                '@id': 'URUGUAY',
-                'id': 'uruguay-id',
-                'name': 'Uruguay',
-            },
+            'team': { '@ref': 'URUGUAY' },
             'score': { 'score': 0, 'notes': null },
             'seed': {
                 'sourceGame': RoundOf16_M2,
@@ -49,11 +45,7 @@ export const QuarterFinals2 = {
     'court': { '@ref': '16' },
     'sides': {
         'home': {
-            'team': {
-                '@id': 'BRAZIL',
-                'id': 'brazil-id',
-                'name': 'Brazil',
-            },
+            'team': { '@ref': 'BRAZIL' },
             'score': { 'score': 1, 'notes': null },
             'seed': {
                 'sourceGame': RoundOf16_M3,
@@ -83,11 +75,7 @@ export const QuarterFinals3 = {
     'court': { '@ref': '16' },
     'sides': {
         'home': {
-            'team': {
-                '@id': 'RUSSIA',
-                'id': 'russia-id',
-                'name': 'Russia',
-            },
+            'team': { '@ref': 'RUSSIA' },
             'score': { 'score': 3, 'notes': '(3)' },
             'seed': {
                 'sourceGame': RoundOf16_M5,
@@ -118,11 +106,7 @@ export const QuarterFinals4 = {
     'court': { '@ref': '16' },
     'sides': {
         'home': {
-            'team': {
-                '@id': 'SWEDEN',
-                'id': 'sweden-id',
-                'name': 'Sweden',
-            },
+            'team': { '@ref': 'SWEDEN' },
             'score': { 'score': 0, 'notes': null },
             'seed': {
                 'sourceGame': RoundOf16_M7,

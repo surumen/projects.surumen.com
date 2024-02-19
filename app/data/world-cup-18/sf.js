@@ -18,11 +18,7 @@ export const SemiFinal1 = {
             }
         },
         'visitor': {
-            'team': {
-                '@id': 'BELGIUM',
-                'id': 'belgium-id',
-                'name': 'Belgium',
-            },
+            'team': { '@ref': 'BELGIUM' },
             'score': { 'score': 0, 'notes': null },
             'seed': {
                 'sourceGame': QuarterFinals2,
@@ -52,11 +48,7 @@ export const SemiFinal2 = {
             }
         },
         'visitor': {
-            'team': {
-                '@id': 'ENGLAND',
-                'id': 'england-id',
-                'name': 'England',
-            },
+            'team': { '@ref': 'ENGLAND' },
             'score': { 'score': 1, 'notes': null },
             'seed': {
                 'sourceGame': QuarterFinals4,

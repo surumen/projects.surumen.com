@@ -17,11 +17,7 @@ export const WorldCup2018 = {
     'sides': {
         'home': {
             'score': { 'score': 4, 'notes': null },
-            'team': {
-                '@id': 'FRANCE',
-                'id': 'france-id',
-                'name': 'France',
-            },
+            'team': { '@ref': 'FRANCE' },
             'seed': {
                 'rank': 1,
                 'displayName': 'Winner of SF1',
@@ -32,11 +28,7 @@ export const WorldCup2018 = {
 
         'visitor': {
             'score': { 'score': 2, 'notes': null },
-            'team': {
-                '@id': 'CROATIA',
-                'id': 'croatia-id',
-                'name': 'Croatia',
-            },
+            'team': { '@ref': 'CROATIA' },
             'seed': {
                 'rank': 1,
                 'displayName': 'Winner of SF2',

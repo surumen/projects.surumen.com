@@ -146,7 +146,7 @@ Bracket.defaultProps = {
 };
 
 Bracket.propTypes = {
-    GameComponent: PropTypes.object,
+    GameComponent: PropTypes.func,
     game: GameProps,
     homeOnTop: PropTypes.bool,
     gameDimensions: PropTypes.shape({

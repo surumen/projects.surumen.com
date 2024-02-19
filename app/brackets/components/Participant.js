@@ -20,12 +20,13 @@ import PropTypes from 'prop-types';
 import { ClippedRect } from './Clipped';
 
 const Participant = (props) => {
-    const { x, y, side, teamNameStyle, teamScoreStyle, onHover } = props;
+    const { x, y, side, gameId, teamNameStyle, teamScoreStyle, onHover, onClickTeam } = props;
 
     const tooltip = side.seed && side.team ? <title>{side.seed.displayName}</title> : null;
 
     return (
-        <g onMouseEnter={() => onHover(side && side.team ? side.team.id : null)} onMouseLeave={() => onHover(null)}>
+        <g onMouseEnter={() => onHover(side && side.team ? side.team.id : null)} onMouseLeave={() => onHover(null)}
+           onClick={() => onClickTeam(side && side.team ? side.team.id : null, gameId)}>
             {/* trigger mouse events on the entire block */}
             <rect x={x} y={y} height={22.5} width={200} fillOpacity={0}>
                 {tooltip}
@@ -68,9 +69,11 @@ Participant.propTypes = {
     x: PropTypes.number,
     y: PropTypes.number,
     side: SideProps,
+    gameId: PropTypes.string,
     teamNameStyle: PropTypes.object,
     teamScoreStyle: PropTypes.object,
-    onHover: PropTypes.func
+    onHover: PropTypes.func,
+    onClickTeam: PropTypes.func
 };
 
 export default Participant;

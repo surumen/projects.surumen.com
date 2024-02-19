@@ -58,8 +58,8 @@ BracketGenerator.defaultProps = {
 };
 
 BracketGenerator.propTypes = {
-    games: PropTypes.object,
-    titleComponent: PropTypes.object,
+    games: PropTypes.array,
+    titleComponent: PropTypes.func,
     style: PropTypes.string
 };
 
