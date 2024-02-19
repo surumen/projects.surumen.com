@@ -2,11 +2,11 @@ import Head from 'next/head';
 import { useEffect, Fragment } from 'react';
 
 // import widget/custom components
-import { ProjectSummary } from 'app/widgets';
+import { ProjectSummary } from '@/widgets';
 import { useRouter } from 'next/router'
 
 // import data files
-import { AllProjectsData } from 'app/data/AllProjectsData';
+import { AllProjectsData } from '@/data/AllProjectsData';
 import { Col, Row } from "react-bootstrap";
 
 const ProjectSingle = () => {

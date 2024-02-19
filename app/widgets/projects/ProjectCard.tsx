@@ -1,7 +1,7 @@
 // import node module libraries
 import React, {Fragment, useState} from 'react';
 import PropTypes from 'prop-types';
-import { Image, Offcanvas, Button, } from 'react-bootstrap';
+import { Offcanvas, Button } from 'react-bootstrap';
 
 // import bootstrap icons
 import { SendFill } from 'react-bootstrap-icons';
@@ -10,7 +10,7 @@ import { SendFill } from 'react-bootstrap-icons';
 import ProjectSummary from './ProjectSummary';
 
 // import data files
-import { LanguageColorMap } from '../../data/ColorMap';
+import { LanguageColorMap } from '@/data/ColorMap';
 
 
 const ProjectCard = ({ item, viewby }) => {
@@ -48,7 +48,7 @@ const ProjectCard = ({ item, viewby }) => {
 						<h4 className="text-heading fw-semibold mb-2">{item.title}</h4>
 
 						<div className="d-block text-sm text-muted gap-2 mb-3">
-							<span>{item.shortdescription}</span>
+							<span>{item.shortDescription}</span>
 						</div>
 						<div className="d-flex align-items-center gap-2 text-sm">
 							<span className="badge badge-lg badge-dot">

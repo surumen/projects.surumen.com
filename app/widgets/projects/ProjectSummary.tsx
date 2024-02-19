@@ -2,16 +2,15 @@
 import React, { Fragment, useState } from "react";
 import DOMPurify from 'dompurify';
 import PropTypes from 'prop-types';
-import * as _ from 'underscore';
 import * as JSOG from 'jsog';
 import { Col, Row } from 'react-bootstrap';
 import { SendFill } from 'react-bootstrap-icons';
 
 
-import { Bracket, BracketGame, BracketGenerator } from "../../brackets";
+import { Bracket, BracketGame, BracketGenerator } from '@/brackets';
 
-import { WorldCup2018 } from 'app/data/WorldCup2018';
-import { SemiFinal1, SemiFinal2 } from "../../data/world-cup-18/sf";
+import { WorldCup2018 } from '@/data/WorldCup2018';
+import { SemiFinal1, SemiFinal2 } from '@/data/world-cup-18/sf';
 
 
 const ProjectSummary = ({ item }) => {
@@ -42,6 +41,7 @@ const ProjectSummary = ({ item }) => {
 		);
 	}
 
+	// @ts-ignore
 	return (
 		<Fragment>
 			<section className='container mw-screen-xl border-bottom mx-n6 pb-6 pt-4 ps-6 pe-0'>
@@ -50,7 +50,7 @@ const ProjectSummary = ({ item }) => {
 						<div className='vstack gap-6 pointer-event'>
 							<h1 className='ls-tight fw-bolder'>{item.title}</h1>
 							<div className='d-flex gap-4 flex-wrap'>
-								{item.categories.map((category, index) => {
+								{item.technologyAreas.map((category, index) => {
 									return (
 										<span key={index} className='bg-primary-light border rounded px-3 py-1 fw-semibold text-primary border-primary-200 text-xs rounded-pill'>{category}</span>
 									)
@@ -110,11 +110,7 @@ const ProjectSummary = ({ item }) => {
 					</Row>
 					<Row>
 						<Col>
-							<BracketGenerator
-								GameComponent={gameComponent}
-								games={semiFinal}
-								homeOnTop={true}
-							/>
+							<BracketGenerator games={semiFinal} />
 						</Col>
 					</Row>
 				</section>

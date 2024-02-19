@@ -7,12 +7,14 @@ import { X } from 'react-bootstrap-icons';
 
 // import widget/custom components
 import ProjectCard from './ProjectCard';
+import { Project } from '@/types';
 
 // import data files
-import { AllProjectsData } from '../../data/AllProjectsData';
+import { AllProjectsData } from '@/data/AllProjectsData';
 
 const ProjectGridView = () => {
-	const [Records, setRecords] = useState(AllProjectsData.slice(0, 500));
+	const [Records, setRecords] = useState<Project[]>(AllProjectsData.slice(0, 500));
+	// @ts-ignore
 	const Categories = [...new Set(AllProjectsData.map(project => project.categories).flat())]
 
 	//------display filters start----------
@@ -22,13 +24,15 @@ const ProjectGridView = () => {
 		setRecords(AllProjectsData.slice(0, 500));
 	};
 
-	const addFilter = (category) => {
-		let selectedFilters = [...filters];
+	const addFilter = (category: string) => {
+		let selectedFilters: string[] = [...filters];
+		// @ts-ignore
 		if (filters.indexOf(category) === -1) {
 			selectedFilters.push(category);
 		} else {
 			selectedFilters = selectedFilters.filter(f => f !== category);
 		}
+		// @ts-ignore
 		setFilters(selectedFilters);
 		const filteredRecords = selectedFilters.length === 0 ? AllProjectsData.slice(0, 500) : AllProjectsData.filter(rec => recordIsFiltered(rec, selectedFilters)).slice(0, 500);
 		setRecords(filteredRecords);
@@ -36,6 +40,7 @@ const ProjectGridView = () => {
 	};
 
 	const isSelectedFilter = (category) => {
+		// @ts-ignore
 		return filters.indexOf(category) > -1;
 	};
 

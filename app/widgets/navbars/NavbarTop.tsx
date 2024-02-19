@@ -7,15 +7,16 @@ import { InputGroup, Form, Modal } from 'react-bootstrap';
 import { Search, SendFill } from 'react-bootstrap-icons';
 
 // import sub components
-import QuickMenu from 'app/widgets/navbars/QuickMenu';
+import QuickMenu from '@/widgets/navbars/QuickMenu';
 
-import { AllProjectsData } from 'app/data/AllProjectsData';
-import Link from "next/link";
+import { AllProjectsData } from '@/data/AllProjectsData';
+import Link from 'next/link';
+import { Project } from '@/types';
 
 
 const NavbarTop = (props) => {
 	const [open, setOpen] = useState(false);
-	const [Records, setRecords] = useState([]);
+	const [Records, setRecords] = useState<Project[]>([]);
 
 	const displayModal = () => {
 		setOpen(true);
@@ -24,9 +25,10 @@ const NavbarTop = (props) => {
 	const searchData = (params) => {
 		const results = AllProjectsData.filter((project) => {
 		  return project.title.toLowerCase().includes(params.toLowerCase())
-			  || project.categories.join(' ').toLowerCase().includes(params.toLowerCase())
-			  || project.shortdescription.toLowerCase().includes(params.toLowerCase());
+			  || project.technologyAreas.join(' ').toLowerCase().includes(params.toLowerCase())
+			  || project.shortDescription.toLowerCase().includes(params.toLowerCase());
 		}).slice(0, 6);
+		// @ts-ignore
 		setRecords(params ? results : []);
 	}
 
@@ -92,11 +94,11 @@ const NavbarTop = (props) => {
 											<div>
 												<Link target={'_blank'} href={`/project/${record.slug}`}>
 													<h6 className='progress-text mb-1 d-block'>{record.title}</h6>
-													<p className='text-muted text-truncate text-xs mw-read'>{record.shortdescription}</p>
+													<p className='text-muted text-truncate text-xs mw-read'>{record.shortDescription}</p>
 												</Link>
 											</div>
 											<div className='text-end ms-auto'>
-												<span className='badge bg-white rounded-pill text-xs text-muted border'>{record.categories[0]}</span>
+												<span className='badge bg-white rounded-pill text-xs text-muted border'>{record.technologyAreas[0]}</span>
 											</div>
 										</div>
 									</div>

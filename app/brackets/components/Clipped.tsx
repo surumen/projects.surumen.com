@@ -30,6 +30,7 @@ Clipped.propTypes = {
 export const ClippedRect = ({ x, y, width, height, children }) => {
 
     return (
+        // @ts-ignore
         <Clipped path={<rect x={x} y={y} width={width} height={height}/>}>
             {children}
         </Clipped>

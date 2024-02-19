@@ -5,7 +5,7 @@ export const makeFinals = ({ games }) => {
 
     const isInGroup = (() => {
         const gameIdHash =
-            _.reduce(games, (id, memo) => ({ ...memo, [id]: true }), {});
+            _.reduce(games, (id: any, memo) => ({ ...memo, [id]: true }), {});
 
         return (id) => (gameIdHash[id] === true);
     })();

@@ -8,14 +8,15 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Sun, MoonFill, Moon } from 'react-bootstrap-icons';
 
 // import chat actions from Redux chatSlice
-import { changeSkin } from 'app/store/appSlice'
+import { changeSkin } from '@/store/appSlice'
 
 // import required hook
-import useLocalStorage from 'app/hooks/useLocalStorage';
+import useLocalStorage from '@/hooks/useLocalStorage';
 
 const DarkLightMode = ({ className }) => {
 
     // Redux state and dispatch
+    // @ts-ignore
     const defaultSkin = useSelector((state) => state.app.skin)
     const dispatch = useDispatch()
 
@@ -25,7 +26,9 @@ const DarkLightMode = ({ className }) => {
 		getStorageValue
 	} = useLocalStorage("skin",defaultSkin);
     useEffect(() => {
+        // @ts-ignore
         document.querySelector('html').setAttribute('data-theme', getStorageValue('skin','light'));
+        // @ts-ignore
         document.querySelector('html').setAttribute('data-bs-theme', getStorageValue('skin','light'));
         dispatch(changeSkin(storageValue));
     }, [storageValue]);

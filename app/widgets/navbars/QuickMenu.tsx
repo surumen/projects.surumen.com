@@ -13,7 +13,7 @@ const QuickMenu = () => {
 
     return (
         <Fragment>
-            <DarkLightMode />
+            <DarkLightMode className='' />
         </Fragment>
     );
 }
