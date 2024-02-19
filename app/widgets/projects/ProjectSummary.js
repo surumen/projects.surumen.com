@@ -1,12 +1,44 @@
 // import node module libraries
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from "react";
 import DOMPurify from 'dompurify';
 import PropTypes from 'prop-types';
+import * as _ from 'underscore';
+import * as JSOG from 'jsog';
+import { Col, Row } from 'react-bootstrap';
 import { SendFill } from 'react-bootstrap-icons';
+
+
+import { Bracket, BracketGame, BracketGenerator } from "../../brackets";
+
+import { WorldCup2018 } from 'app/data/WorldCup2018';
+import { SemiFinal1, SemiFinal2 } from "../../data/world-cup-18/sf";
+
 
 const ProjectSummary = ({ item }) => {
 
+	const [hoveredTeamId, setHoveredTeamId] = useState(null);
 
+	const tournament = JSOG.decode(WorldCup2018);
+
+	const semiFinal = JSOG.decode([SemiFinal1, SemiFinal2]);
+
+	const onHoveredTeamChange = (hoveredTeamId) => {
+		setHoveredTeamId(hoveredTeamId);
+	};
+
+	const handleClick = () => {
+
+	};
+
+	const gameComponent = (props) => {
+		return (
+			<BracketGame
+				{...props}
+				onHoveredTeamIdChange={onHoveredTeamChange}
+				hoveredTeamId={hoveredTeamId}
+			/>
+		);
+	}
 
 	return (
 		<Fragment>
@@ -61,7 +93,30 @@ const ProjectSummary = ({ item }) => {
 				</div>
 			</section>
 
-			<div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(item.content)}}></div>
+			{item.contentType === 'blog' ? (
+				<div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(item.content)}}></div>
+			) : (
+				<section className='container mw-screen-xl mx-n6 my-6 pt-2 pb-6 ps-6 pe-0'>
+					<Row>
+						<Col>
+							<Bracket
+								game={tournament}
+								homeOnTop={true}
+								GameComponent={gameComponent}
+							/>
+						</Col>
+					</Row>
+					<Row>
+						<Col>
+							<BracketGenerator
+								GameComponent={gameComponent}
+								games={semiFinal}
+								homeOnTop={true}
+							/>
+						</Col>
+					</Row>
+				</section>
+			)}
 
 		</Fragment>
 	);
