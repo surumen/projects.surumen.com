@@ -1,14 +1,15 @@
 import { v4 as uuid } from 'uuid';
+import { Project } from '@/types';
 
-export const AllProjectsData = [
+export const AllProjectsData: Project[] = [
 	{
 		id: uuid(),
 		language: 'Python',
-		categories: ['Python', 'Recurrent Neural Networks'],
+		technologyAreas: ['Python', 'Recurrent Neural Networks'],
 		image: '/images/course/course-graphql.jpg',
 		title: 'Predictive Analysis: Fantasy Football Players Power Index',
 		slug: 'fantasy-football-power-index',
-		shortdescription:
+		shortDescription:
 			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
 		status: 'Pending',
 		level: 'Advance',
@@ -76,11 +77,11 @@ export const AllProjectsData = [
 	{
 		id: uuid(),
 		language: 'Python',
-		categories: ['Python', 'Recurrent Neural Networks'],
+		technologyAreas: ['Python', 'Recurrent Neural Networks'],
 		image: '/images/course/course-graphql.jpg',
 		title: 'Building a Music Playlist Generator',
 		slug: 'mixtape-generator',
-		shortdescription:
+		shortDescription:
 			'An alternative to collaborative filtering. Using reinforcement learning to recommend songs',
 		status: 'Pending',
 		level: 'Advance',
@@ -147,17 +148,17 @@ export const AllProjectsData = [
 	{
 		id: uuid(),
 		language: 'C++',
-		categories: ['CNN'],
+		technologyAreas: ['CNN'],
 		image: '/images/course/course-html.jpg',
 		title: 'Image Classification using Convolutional Neural Networks',
 		slug: 'image-classification-cnn',
-		shortdescription:
+		shortDescription:
 			'Applying different performance optimization techniques on a pre-trained Convolutional Neural Network to classify large datasets',
 		status: 'Pending',
 		level: 'Beginner',
 		duration: '3h 16m',
 		rating: 3.0,
-		description: `<p>In this project, we apply different performance optimization techniques on a pre-trained Convolutional Neural Network to classify 32x32 images into 10 categories</p>
+		description: `<p>In this project, we apply different performance optimization techniques on a pre-trained Convolutional Neural Network to classify 32x32 images into 10 technologyAreas</p>
         <p>We focus on these three techniques; vectorization with SIMD instructions, parallelism with OpenMP, speed up calculations using Amdahl's Law, and benchmark the performance improvement 
         achieved with each.</p>
         `,
@@ -217,11 +218,11 @@ export const AllProjectsData = [
 	{
 		id: uuid(),
 		language: 'C',
-		categories: ['Deep Learning'],
+		technologyAreas: ['Deep Learning'],
 		image: '/images/course/course-javascript.jpg',
 		title: 'Video Processing: Separating foreground and background information from a video',
 		slug: 'video-processor',
-		shortdescription:
+		shortDescription:
 			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
 		status: 'Live',
 		level: 'Advance',
@@ -287,11 +288,11 @@ export const AllProjectsData = [
 	{
 		id: uuid(),
 		language: 'Go',
-		categories: ['NodeJS'],
+		technologyAreas: ['NodeJS'],
 		image: '/images/course/course-node.jpg',
 		title: 'Mini Cryptocurrency',
 		slug: 'crypto',
-		shortdescription:
+		shortDescription:
 			'Aliquam pulvinar eros a dictur vitae diam imperdiet, ornare turpis vequet elit nec, imperdiet lectuna liquam qs.',
 		status: 'Live',
 		level: 'Intermediate',

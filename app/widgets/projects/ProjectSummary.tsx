@@ -2,7 +2,6 @@
 import React, { Fragment, useState } from "react";
 import DOMPurify from 'dompurify';
 import PropTypes from 'prop-types';
-import * as _ from 'underscore';
 import * as JSOG from 'jsog';
 import { Col, Row } from 'react-bootstrap';
 import { SendFill } from 'react-bootstrap-icons';
@@ -111,11 +110,7 @@ const ProjectSummary = ({ item }) => {
 					</Row>
 					<Row>
 						<Col>
-							<BracketGenerator
-								GameComponent={gameComponent}
-								games={semiFinal}
-								homeOnTop={true}
-							/>
+							<BracketGenerator games={semiFinal} />
 						</Col>
 					</Row>
 				</section>

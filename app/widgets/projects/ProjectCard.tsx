@@ -1,7 +1,7 @@
 // import node module libraries
 import React, {Fragment, useState} from 'react';
 import PropTypes from 'prop-types';
-import { Image, Offcanvas, Button, } from 'react-bootstrap';
+import { Offcanvas, Button } from 'react-bootstrap';
 
 // import bootstrap icons
 import { SendFill } from 'react-bootstrap-icons';
