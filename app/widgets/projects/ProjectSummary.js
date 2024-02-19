@@ -7,14 +7,15 @@ import * as JSOG from 'jsog';
 import { Col, Row } from 'react-bootstrap';
 import { SendFill } from 'react-bootstrap-icons';
 
-import { tournamentData } from 'app/data/OptionData';
-import { Bracket } from "../../brackets";
+
+import { Bracket } from '../../brackets';
+
+import { WorldCup2018 } from 'app/data/WorldCup2018';
 
 
 const ProjectSummary = ({ item }) => {
 
-	const tournament = _.findWhere(JSOG.decode(tournamentData),
-		{ id: '35b0745d-ef13-4255-8c40-c9daa95e4cc4' });
+	const tournament = JSOG.decode(WorldCup2018);
 
 	return (
 		<Fragment>

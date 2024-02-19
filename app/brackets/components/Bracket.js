@@ -15,7 +15,6 @@ import * as _ from 'underscore';
 // import widget/custom components
 import BracketGame, { GameProps } from './BracketGame';
 import winningPathLength from '../utils/winningPathLength';
-import { Fragment } from "react";
 
 
 

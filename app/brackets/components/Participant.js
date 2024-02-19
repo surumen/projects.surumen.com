@@ -8,6 +8,8 @@
  y              : Add docs
  side           : Add docs
  onHover        : Add docs
+ teamNameStyle  : Add docs
+ teamScoreStyle : Add docs
 
  */
 

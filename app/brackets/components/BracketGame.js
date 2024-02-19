@@ -167,7 +167,7 @@ export const SideProps = PropTypes.shape({
     seed: PropTypes.shape({
         displayName: PropTypes.string,
         rank: PropTypes.number,
-        sourceGame: PropTypes.object,
+        sourceGame: PropTypes.object, // GameProps
         sourcePool: PropTypes.object
     }),
     team: PropTypes.shape({
