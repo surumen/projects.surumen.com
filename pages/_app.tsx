@@ -47,7 +47,7 @@ function MyApp({ Component, pageProps }) {
         />
         <Provider store={store}>
           <Layout>
-            <Component {...pageProps} />
+            <Component {...pageProps} key={router.asPath} />
           </Layout>
         </Provider>
       </Fragment>

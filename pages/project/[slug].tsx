@@ -8,17 +8,24 @@ import { useRouter } from 'next/router'
 // import data files
 import { AllProjectsData } from '@/data/AllProjectsData';
 import { Col, Row } from "react-bootstrap";
+import { Project } from "@/types";
 
 const ProjectSingle = () => {
 
     const router = useRouter();
     const slug = router.query.slug;
 
-    const project = AllProjectsData.filter(p => p.slug === slug)[0];
+    const project: Project = AllProjectsData.filter(p => p.slug === slug)[0];
 
     useEffect(() => {
         document.body.classList.add('bg-body-tertiary');
     });
+
+    useEffect(() => {
+        if (router.query.slug != slug) {
+            router.reload();
+        }
+    }, [router, router.query.slug, slug]);
 
     return (
         <Fragment>
