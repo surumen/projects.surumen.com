@@ -135,16 +135,16 @@ BracketGame.defaultProps = {
     hoveredTeamId: null,
 
     styles: {
-        backgroundColor: '#58595e',
-        hoverBackgroundColor: '#222',
+        backgroundColor: '#6C6C79',
+        hoverBackgroundColor: '#1C232C',
 
-        scoreBackground: '#787a80',
-        winningScoreBackground: '#ff7324',
+        scoreBackground: '#99A0A8',
+        winningScoreBackground: '#0283C5',
         teamNameStyle: { fill: '#fff', fontSize: 12, textShadow: '1px 1px 1px #222' },
         teamScoreStyle: { fill: '#23252d', fontSize: 12 },
         gameNameStyle: { fill: '#999', fontSize: 10 },
         gameTimeStyle: { fill: '#999', fontSize: 10 },
-        teamSeparatorStyle: { stroke: '#444549', strokeWidth: 1 }
+        teamSeparatorStyle: { stroke: '#464D59', strokeWidth: 1 }
     },
 
     topText: ({ scheduled }) => new Date(scheduled).toLocaleDateString(),

@@ -8,9 +8,10 @@ import { Col, Row } from 'react-bootstrap';
 import { SendFill } from 'react-bootstrap-icons';
 
 
-import { Bracket, BracketGame } from '../../brackets';
+import { Bracket, BracketGame, BracketGenerator } from "../../brackets";
 
 import { WorldCup2018 } from 'app/data/WorldCup2018';
+import { SemiFinal1, SemiFinal2 } from "../../data/world-cup-18/sf";
 
 
 const ProjectSummary = ({ item }) => {
@@ -18,6 +19,8 @@ const ProjectSummary = ({ item }) => {
 	const [hoveredTeamId, setHoveredTeamId] = useState(null);
 
 	const tournament = JSOG.decode(WorldCup2018);
+
+	const semiFinal = JSOG.decode([SemiFinal1, SemiFinal2]);
 
 	const onHoveredTeamChange = (hoveredTeamId) => {
 		setHoveredTeamId(hoveredTeamId);
@@ -100,6 +103,15 @@ const ProjectSummary = ({ item }) => {
 								game={tournament}
 								homeOnTop={true}
 								GameComponent={gameComponent}
+							/>
+						</Col>
+					</Row>
+					<Row>
+						<Col>
+							<BracketGenerator
+								GameComponent={gameComponent}
+								games={semiFinal}
+								homeOnTop={true}
 							/>
 						</Col>
 					</Row>

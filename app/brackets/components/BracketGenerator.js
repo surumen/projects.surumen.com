@@ -12,6 +12,7 @@ style           : Add docs
 // import node module libraries
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import * as _ from 'underscore';
 
 // import widget/custom components
 import { makeFinals } from '../utils/makeFinals';
@@ -30,7 +31,6 @@ const BracketTitle = (titleProps) => {
 
 const BracketGenerator = (props) => {
 
-    props.titleComponent = BracketTitle;
     const { games, titleComponent, style } = props;
     const [finals, setFinals] = useState(makeFinals({ games: games }));
 
