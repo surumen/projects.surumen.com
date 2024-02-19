@@ -20,7 +20,7 @@ import winningPathLength from '../utils/winningPathLength';
 
 const Bracket = (props) => {
     const {
-        game, gameDimensions, svgPadding, roundSeparatorWidth, homeOnTop, lineInfo, children, ...rest
+        GameComponent, game, gameDimensions, svgPadding, roundSeparatorWidth, homeOnTop, lineInfo, children, ...rest
     } = props;
 
     const numRounds = winningPathLength(game);
@@ -32,6 +32,7 @@ const Bracket = (props) => {
 
     const toBracketGames = (
         {
+            GameComponent,
             game,
             homeOnTop,
             lineInfo,
@@ -48,7 +49,7 @@ const Bracket = (props) => {
 
         return [
             <g key={`${game.id}-${y}`}>
-                <BracketGame
+                <GameComponent
                     {...rest} {...gameDimensions}
                     key={game.id} homeOnTop={homeOnTop} game={game} x={x} y={y}/>
             </g>
@@ -76,6 +77,7 @@ const Bracket = (props) => {
                             .concat(
                                 toBracketGames(
                                     {
+                                        GameComponent,
                                         game: sourceGame,
                                         homeOnTop,
                                         lineInfo,
@@ -100,6 +102,7 @@ const Bracket = (props) => {
             <g>
                 {
                     toBracketGames({
+                        GameComponent,
                         game,
                         homeOnTop,
                         lineInfo,
@@ -126,6 +129,7 @@ const LineInfoProps = PropTypes.shape({
 });
 
 Bracket.defaultProps = {
+    GameComponent: BracketGame,
     hoveredTeamId: null,
     homeOnTop: true,
     gameDimensions: {
@@ -142,6 +146,7 @@ Bracket.defaultProps = {
 };
 
 Bracket.propTypes = {
+    GameComponent: PropTypes.object,
     game: GameProps,
     homeOnTop: PropTypes.bool,
     gameDimensions: PropTypes.shape({

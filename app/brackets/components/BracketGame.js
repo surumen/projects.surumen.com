@@ -197,6 +197,7 @@ export const GameProps = PropTypes.shape({
 BracketGame.propTypes = {
     game: GameProps,
     homeOnTop: PropTypes.bool,
+    hoveredTeamId: PropTypes.string,
 
     onHoveredTeamIdChange: PropTypes.func,
 
