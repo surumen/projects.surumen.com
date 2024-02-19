@@ -2,11 +2,19 @@
 import React, { Fragment } from 'react';
 import DOMPurify from 'dompurify';
 import PropTypes from 'prop-types';
+import * as _ from 'underscore';
+import * as JSOG from 'jsog';
+import { Col, Row } from 'react-bootstrap';
 import { SendFill } from 'react-bootstrap-icons';
+
+import { tournamentData } from 'app/data/OptionData';
+import { Bracket } from "../../brackets";
+
 
 const ProjectSummary = ({ item }) => {
 
-
+	const tournament = _.findWhere(JSOG.decode(tournamentData),
+		{ id: '35b0745d-ef13-4255-8c40-c9daa95e4cc4' });
 
 	return (
 		<Fragment>
@@ -61,7 +69,17 @@ const ProjectSummary = ({ item }) => {
 				</div>
 			</section>
 
-			<div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(item.content)}}></div>
+			{item.contentType === 'blog' ? (
+				<div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(item.content)}}></div>
+			) : (
+				<section className='container mw-screen-xl mx-n6 my-6 pt-2 pb-6 ps-6 pe-0'>
+					<Row>
+						<Col>
+							<Bracket game={tournament} homeOnTop={true} />
+						</Col>
+					</Row>
+				</section>
+			)}
 
 		</Fragment>
 	);
