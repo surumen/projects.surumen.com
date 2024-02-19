@@ -14,8 +14,7 @@ import { AllProjectsData } from '@/data/AllProjectsData';
 
 const ProjectGridView = () => {
 	const [Records, setRecords] = useState<Project[]>(AllProjectsData.slice(0, 500));
-	// @ts-ignore
-	const Categories = [...new Set(AllProjectsData.map(project => project.technologyAreas).flat())]
+	const Categories: string[] = Array.from(new Set(AllProjectsData.map((project: Project) => project.technologyAreas).flat()));
 
 	//------display filters start----------
 	const [filters, setFilters] = useState([]);
