@@ -133,6 +133,10 @@ const ProjectSummary = ({ project }) => {
 											return <h2 className='border-bottom'
 												id={headerName.replace(/ /g,'-').toLowerCase()}
 											>{props.children}</h2>
+										},
+										a(props) {
+											const {node, ...rest} = props;
+											return <a href={props.href} target='_blank'>{props.children}</a>
 										}
 									}}
 								>{project.content}</Markdown>
