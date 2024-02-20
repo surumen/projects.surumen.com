@@ -19,8 +19,7 @@ import { Project } from "@/types";
 import AllProjectsData from "@/data/projects/AllProjectsData";
 
 
-// @ts-ignore
-export const ProjectsContext = createContext();
+export const ProjectsContext = createContext([]);
 
 function MyProjectsApp({ Component, pageProps, projects }) {
   const router = useRouter();

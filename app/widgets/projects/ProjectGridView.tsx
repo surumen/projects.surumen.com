@@ -7,42 +7,40 @@ import { X } from "react-bootstrap-icons";
 
 // import widget/custom components
 import ProjectCard from "./ProjectCard";
-import { Project } from "@/types";
+import { Project } from '@/types';
 
 // import data files
 import { ProjectsContext } from "../../../pages/_app";
 
 const ProjectGridView = () => {
-	const projects = useContext(ProjectsContext);
-
+	const context = useContext(ProjectsContext);
 	// @ts-ignore
+	const projects: Project[] = context;
+
 	const [Records, setRecords] = useState<Project[]>(projects);
-	const Categories: string[] = Array.from(new Set(Records.map((project: Project) => project.technologyAreas).flat()));
+	const Categories: string[] = Array.from(new Set(projects.map((project: Project) => project.technologyAreas).flat()));
 
 	//------display filters start----------
-	const [filters, setFilters] = useState([]);
+	const [filters, setFilters] = useState<string[]>([]);
 	const clearFilters = () => {
 		setFilters([]);
-		setRecords(Records.slice(0, 500));
+		setRecords(projects);
 	};
 
 	const addFilter = (category: string) => {
 		let selectedFilters: string[] = [...filters];
-		// @ts-ignore
 		if (filters.indexOf(category) === -1) {
 			selectedFilters.push(category);
 		} else {
 			selectedFilters = selectedFilters.filter(f => f !== category);
 		}
-		// @ts-ignore
 		setFilters(selectedFilters);
-		const filteredRecords = selectedFilters.length === 0 ? Records.slice(0, 500) : Records.filter(rec => recordIsFiltered(rec, selectedFilters)).slice(0, 500);
+		const filteredRecords = selectedFilters.length === 0 ? projects : projects.filter(rec => recordIsFiltered(rec, selectedFilters));
 		setRecords(filteredRecords);
 
 	};
 
-	const isSelectedFilter = (category) => {
-		// @ts-ignore
+	const isSelectedFilter = (category: string) => {
 		return filters.indexOf(category) > -1;
 	};
 
@@ -69,20 +67,11 @@ const ProjectGridView = () => {
 	//------end of display filters----------
 
 	//------grid display start----------
-	const [pageNumber, setPageNumber] = useState(0);
-	const RecordsPerPage = 9;
-	const pagesVisited = pageNumber * RecordsPerPage;
-	const pageCount = Math.ceil(Records.length / RecordsPerPage);
-	const changePage = ({ selected }) => {
-		setPageNumber(selected);
-	};
-	let displayRecords = Records.slice(
-		pagesVisited,
-		pagesVisited + RecordsPerPage
-	).map((Records, index) => {
+
+	let displayRecords = Records.map((Record, index) => {
 		return (
 			<Fragment key={index}>
-				<ProjectCard item={Records} />
+				<ProjectCard item={Record} />
 			</Fragment>
 		);
 	});
@@ -97,7 +86,7 @@ const ProjectGridView = () => {
 					) : (
 						<span>No filters</span>
 					)}
-					<div onClick={clearFilters} className='align-items-center ms-auto text-sm text-muted text-primary-hover fw-semibold d-none d-md-flex' role='button'>
+					<div onClick={() => clearFilters()}  className='align-items-center ms-auto text-sm text-muted text-primary-hover fw-semibold d-none d-md-flex' role='button'>
 						<X size={16} className='me-1' /> <span>Clear filters</span>
 					</div>
 				</div>
