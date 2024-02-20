@@ -53,7 +53,7 @@ const ProjectSummary = ({ project }) => {
 
 	return (
 		<Fragment>
-			<section className='container mw-screen-xl border-bottom py-5'>
+			<section className='container mw-screen-xl border-bottom py-5 px-0'>
 				<Row className='mb-3'>
 					<Col sm={12} md={4}>
 						<div className='vstack gap-6 pointer-event mb-5 mb-md-0'>
@@ -104,7 +104,7 @@ const ProjectSummary = ({ project }) => {
 				</Row>
 			</section>
 
-			<section className='container mw-screen-xl border-bottom py-5'>
+			<section className='container mw-screen-xl py-5 px-0'>
 				{project.contentType === 'blog' ? (
 					<Row className='pt-4'>
 						<Col md={3}>
