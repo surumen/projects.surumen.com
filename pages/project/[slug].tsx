@@ -28,14 +28,10 @@ const ProjectSingle = ({project}) => {
 
     return (
         <Fragment>
-            <main className='container-fluid px-4 py-5 p-lg-6 p-xxl-8'>
-                <Row>
-                    <Col>
-                        {project ? (
-                            <ProjectSummary item={project} />
-                        ) : (<span></span>)}
-                    </Col>
-                </Row>
+            <main className='container-fluid py-5'>
+                {project ? (
+                    <ProjectSummary item={project} />
+                ) : (<span></span>)}
             </main>
         </Fragment>
     );

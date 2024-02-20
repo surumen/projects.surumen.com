@@ -26,8 +26,7 @@ const ProjectSummary = ({ item }) => {
 	};
 
 	const handleClick = (teamId, gameId) => {
-		console.log('Clicked team: ', teamId);
-		console.log('Clicked game: ', gameId);
+
 	};
 
 	const gameComponent = (props) => {
@@ -44,7 +43,7 @@ const ProjectSummary = ({ item }) => {
 	// @ts-ignore
 	return (
 		<Fragment>
-			<section className='container mw-screen-xl border-bottom mx-n6 pb-6 pt-4 ps-6 pe-0'>
+			<section className='container mw-screen-xl border-bottom py-5'>
 				<div className='row mb-3'>
 					<div className='col col-md-4'>
 						<div className='vstack gap-6 pointer-event'>
@@ -95,7 +94,7 @@ const ProjectSummary = ({ item }) => {
 				</div>
 			</section>
 
-			<section className='container mw-screen-xl mx-n6 my-6 pt-2 pb-6 ps-6 pe-0'>
+			<section className='container mw-screen-xl border-bottom py-5'>
 				{item.contentType === 'blog' ? (
 					<Row>
 						<Col md={3}>
@@ -117,7 +116,7 @@ const ProjectSummary = ({ item }) => {
 								</li>
 							</ul>
 						</Col>
-						<Col>
+						<Col md={9}>
 							<article className='article'
 									 dangerouslySetInnerHTML={{
 										 __html: item.content
