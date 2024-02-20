@@ -6,6 +6,9 @@ Firebase Authentication provides backend services, easy-to-use SDKs, and ready-m
 
 Firebase Authentication integrates tightly with other Firebase services, and it leverages industry standards like OAuth 2.0 and OpenID Connect, so it can be easily integrated with your custom backend.
 
+[![Little red riding hood](https://i.stack.imgur.com/XCRlR.png)](https://vimeo.com/3514904 "Little red riding hood - Click to Watch!")
+
+
 [Learn more about Firebase Authentication](https://firebase.google.com/docs/auth)
 
 ## Dependency Injection

@@ -48,3 +48,14 @@
 .article>ul li {
   padding: .25rem 0
 }
+
+span.linenumber {
+  display: none !important;
+}
+
+.codeStyle {
+  background-color: #f6f8fa !important;
+  & .token {
+    background: none !important;
+  }
+}

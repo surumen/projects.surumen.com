@@ -1,14 +1,13 @@
 // import node module libraries
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import Markdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import * as JSOG from 'jsog';
 import { Col, Row } from 'react-bootstrap';
 import { SendFill } from 'react-bootstrap-icons';
 
 
 import { Bracket, BracketGame } from '@/brackets';
+import MarkdownDisplay from './Markdown';
 
 import { WorldCup2018 } from '@/data/WorldCup2018';
 import { SemiFinal1, SemiFinal2 } from '@/data/world-cup-18/sf';
@@ -123,23 +122,7 @@ const ProjectSummary = ({ project }) => {
 						</Col>
 						<Col md={9}>
 							<article className='article'>
-								<Markdown
-									remarkPlugins={[remarkGfm]}
-									components={{
-										h1: 'h2',
-										h2(props) {
-											const {node, ...rest} = props;
-											const headerName = props.children ? props.children.toLocaleString() : '';
-											return <h2 className='border-bottom'
-												id={headerName.replace(/ /g,'-').toLowerCase()}
-											>{props.children}</h2>
-										},
-										a(props) {
-											const {node, ...rest} = props;
-											return <a href={props.href} target='_blank'>{props.children}</a>
-										}
-									}}
-								>{project.content}</Markdown>
+								<MarkdownDisplay content={project.content} />
 							</article>
 						</Col>
 					</Row>
