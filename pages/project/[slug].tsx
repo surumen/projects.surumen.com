@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useEffect, Fragment } from 'react';
-import dynamic from 'next/dynamic'
+import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 

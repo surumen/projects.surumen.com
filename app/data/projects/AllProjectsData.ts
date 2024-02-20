@@ -61,7 +61,7 @@ export const AllProjectsData: Project[] = [
         <p>We focus on these three techniques; vectorization with SIMD instructions, parallelism with OpenMP, speed up calculations using Amdahl's Law, and benchmark the performance improvement 
         achieved with each.</p>
         `,
-		contentType: 'blog',
+		contentType: 'app',
 		content: ``
 	},
 	{
@@ -81,7 +81,7 @@ export const AllProjectsData: Project[] = [
         We're only gonna use the pieces of it that we need to build in Gatsby. 
         We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
         We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>`,
-		contentType: 'blog',
+		contentType: 'app',
 		content: ``
 	},
 	{
@@ -101,7 +101,7 @@ export const AllProjectsData: Project[] = [
         We're only gonna use the pieces of it that we need to build in Gatsby. 
         We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
         We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>`,
-		contentType: 'blog',
+		contentType: 'app',
 		content: ``
 	},
 ];

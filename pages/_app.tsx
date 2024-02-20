@@ -1,6 +1,7 @@
 // import node module libraries
+import App, { AppContext, AppProps } from 'next/app';
 import Head from 'next/head';
-import { Fragment } from 'react';
+import { Fragment, createContext } from 'react';
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 
@@ -14,9 +15,14 @@ import 'style/_index.scss'
 // import default layouts
 import DefaultLayout from '../layouts/DefaultLayout';
 import ProjectLayout from '../layouts/ProjectLayout';
+import { Project } from "@/types";
+import AllProjectsData from "@/data/projects/AllProjectsData";
 
 
-function MyApp({ Component, pageProps }) {
+// @ts-ignore
+export const ProjectsContext = createContext();
+
+function MyProjectsApp({ Component, pageProps, projects }) {
   const router = useRouter();
   const pageURL = process.env.baseURL + router.pathname;
   const title = `Moses Surumen`;
@@ -24,7 +30,7 @@ function MyApp({ Component, pageProps }) {
   const keywords = 'Software engineer, resume, projects';
 
   // Identify the layout, which will be applied conditionally
-  const Layout = Component.Layout || (router.pathname.includes('project') ? ProjectLayout : DefaultLayout)
+  const Layout = Component.Layout || (router.pathname.includes('project') ? ProjectLayout : DefaultLayout);
 
   return (
       <Fragment>
@@ -44,13 +50,28 @@ function MyApp({ Component, pageProps }) {
               site_name: process.env.siteName,
             }}
         />
-        <Provider store={store}>
+        <Provider store={store} >
           <Layout>
-            <Component {...pageProps} />
+              <ProjectsContext.Provider value={projects}>
+                  <Component {...pageProps} />
+              </ProjectsContext.Provider>
           </Layout>
         </Provider>
       </Fragment>
   )
 }
 
-export default MyApp
+MyProjectsApp.getInitialProps = async (context: AppContext) => {
+    const ctx = await App.getInitialProps(context);
+    const projects: Project[] = [];
+    for (const project of AllProjectsData) {
+        if (project.contentType === 'blog') {
+            const { default: data } = await import(`../app/data/projects/md/${project.slug}.md`);
+            project.content = data;
+        }
+        projects.push(project);
+    }
+    return { ...ctx, projects: projects };
+};
+
+export default MyProjectsApp;

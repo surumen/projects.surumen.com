@@ -1,26 +1,29 @@
 // import node module libraries
-import React, { Fragment, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import React, { Fragment, useState, useContext } from "react";
+import { Col, Row } from "react-bootstrap";
 
 // import bootstrap icons
-import { X } from 'react-bootstrap-icons';
+import { X } from "react-bootstrap-icons";
 
 // import widget/custom components
-import ProjectCard from './ProjectCard';
-import { Project } from '@/types';
+import ProjectCard from "./ProjectCard";
+import { Project } from "@/types";
 
 // import data files
-import { AllProjectsData } from '@/data/projects/AllProjectsData';
+import { ProjectsContext } from "../../../pages/_app";
 
 const ProjectGridView = () => {
-	const [Records, setRecords] = useState<Project[]>(AllProjectsData.slice(0, 500));
-	const Categories: string[] = Array.from(new Set(AllProjectsData.map((project: Project) => project.technologyAreas).flat()));
+	const projects = useContext(ProjectsContext);
+
+	// @ts-ignore
+	const [Records, setRecords] = useState<Project[]>(projects);
+	const Categories: string[] = Array.from(new Set(Records.map((project: Project) => project.technologyAreas).flat()));
 
 	//------display filters start----------
 	const [filters, setFilters] = useState([]);
 	const clearFilters = () => {
 		setFilters([]);
-		setRecords(AllProjectsData.slice(0, 500));
+		setRecords(Records.slice(0, 500));
 	};
 
 	const addFilter = (category: string) => {
@@ -33,7 +36,7 @@ const ProjectGridView = () => {
 		}
 		// @ts-ignore
 		setFilters(selectedFilters);
-		const filteredRecords = selectedFilters.length === 0 ? AllProjectsData.slice(0, 500) : AllProjectsData.filter(rec => recordIsFiltered(rec, selectedFilters)).slice(0, 500);
+		const filteredRecords = selectedFilters.length === 0 ? Records.slice(0, 500) : Records.filter(rec => recordIsFiltered(rec, selectedFilters)).slice(0, 500);
 		setRecords(filteredRecords);
 
 	};

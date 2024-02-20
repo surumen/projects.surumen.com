@@ -2,13 +2,13 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import Markdown from 'react-markdown';
-import remarkGfm from 'remark-gfm'
+import remarkGfm from 'remark-gfm';
 import * as JSOG from 'jsog';
 import { Col, Row } from 'react-bootstrap';
 import { SendFill } from 'react-bootstrap-icons';
 
 
-import { Bracket, BracketGame, BracketGenerator } from '@/brackets';
+import { Bracket, BracketGame } from '@/brackets';
 
 import { WorldCup2018 } from '@/data/WorldCup2018';
 import { SemiFinal1, SemiFinal2 } from '@/data/world-cup-18/sf';
@@ -41,15 +41,16 @@ const ProjectSummary = ({ item }) => {
 		);
 	}
 
-	const headingsPattern = /#{1,2}.+/g;
-	const headings: string[] = Array.from(item.content.match(headingsPattern));
 	const navContent: any = [];
-	headings.forEach(header => {
-		const numHashes = (header.match(/#/g) || []).length;
-		if (numHashes > 0 && numHashes < 3) {
-			navContent.push(header.replace(/#/g,'').trim());
-		}
-	});
+	if (item.content && item.contentType === 'blog') {
+		const headings: string[] = Array.from(item.content.match(/#{1,2}.+/g));
+		headings.forEach(header => {
+			const numHashes = (header.match(/#/g) || []).length;
+			if (numHashes > 0 && numHashes < 3) {
+				navContent.push(header.replace(/#/g,'').trim());
+			}
+		});
+	}
 
 	return (
 		<Fragment>
