@@ -6,6 +6,7 @@
 
 .article>h2,.article>.h2 {
   margin-top: 2em;
+  padding-bottom: 0.6em;
   margin-bottom: 1em;
 }
 
@@ -29,16 +30,6 @@
 .article>img,.article>video {
   margin-top: 2em;
   margin-bottom: 2em
-}
-
-.article pre {
-  color: $code-color;
-  border-radius: var(--x-article-pre-border-radius);
-  background-color: $gray-200;
-  margin-top: 1.75em;
-  margin-bottom: 1.75em;
-  padding: 1rem;
-  overflow-x: auto
 }
 
 .article>:first-child,.article h2+*,.article .h2+*,.article h3+*,.article .h3+*,.article hr+* {

@@ -1,7 +1,8 @@
 // import node module libraries
-import React, { Fragment, useState } from "react";
-import DOMPurify from 'dompurify';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm'
 import * as JSOG from 'jsog';
 import { Col, Row } from 'react-bootstrap';
 import { SendFill } from 'react-bootstrap-icons';
@@ -40,7 +41,6 @@ const ProjectSummary = ({ item }) => {
 		);
 	}
 
-	// @ts-ignore
 	return (
 		<Fragment>
 			<section className='container mw-screen-xl border-bottom py-5'>
@@ -96,7 +96,7 @@ const ProjectSummary = ({ item }) => {
 
 			<section className='container mw-screen-xl border-bottom py-5'>
 				{item.contentType === 'blog' ? (
-					<Row>
+					<Row className='pt-4'>
 						<Col md={3}>
 							<ul className='nav flex-column mt-lg-6 position-lg-sticky top-lg-6'>
 								<li className='nav-item'>
@@ -117,10 +117,20 @@ const ProjectSummary = ({ item }) => {
 							</ul>
 						</Col>
 						<Col md={9}>
-							<article className='article'
-									 dangerouslySetInnerHTML={{
-										 __html: item.content
-									 }}>
+							<article className='article'>
+								<Markdown
+									remarkPlugins={[remarkGfm]}
+									components={{
+										h1: 'h2',
+										h2(props) {
+											const {node, ...rest} = props;
+											const headerName = props.children ? props.children.toLocaleString() : '';
+											return <h2 className='border-bottom'
+												id={headerName.replace(/ /g,'-').toLowerCase()}
+											>{props.children}</h2>
+										}
+									}}
+								>{item.content}</Markdown>
 							</article>
 						</Col>
 					</Row>

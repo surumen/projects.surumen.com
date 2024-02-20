@@ -3,11 +3,9 @@ import { useEffect, Fragment } from 'react';
 import dynamic from 'next/dynamic'
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
-import { Col, Row } from 'react-bootstrap';
 
 // import lib/widget/custom components
 import { getProjectBySlug, getAllProjects } from '../../lib/getProjectBySlug';
-import markdownToHtml from '../../lib/markdownToHtml';
 
 
 const ProjectSingle = ({project}) => {
@@ -43,25 +41,14 @@ ProjectSingle.propTypes = {
 
 export default ProjectSingle;
 
-type Params = {
-    params: {
-        slug: string
-    }
-}
 
 export const getStaticProps = async ({ params, previewData = {} }) => {
 
     const project = getProjectBySlug(params.slug);
-    const content =  await markdownToHtml(project.content || '')
-
-    const data = {
-        ...project,
-        content,
-    };
 
     return {
         props: {
-            project: data,
+            project: project,
             key: params.slug,
         },
         revalidate: 60,
