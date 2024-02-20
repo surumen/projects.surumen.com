@@ -1,31 +1,30 @@
 import Head from 'next/head';
 import { useEffect, Fragment } from 'react';
+import dynamic from 'next/dynamic'
+import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
+import { Col, Row } from 'react-bootstrap';
 
-// import widget/custom components
-import { ProjectSummary } from '@/widgets';
-import { useRouter } from 'next/router'
+// import lib/widget/custom components
+import { getProjectBySlug, getAllProjects } from '../../lib/getProjectBySlug';
+import markdownToHtml from '../../lib/markdownToHtml';
 
-// import data files
-import { AllProjectsData } from '@/data/AllProjectsData';
-import { Col, Row } from "react-bootstrap";
-import { Project } from "@/types";
 
-const ProjectSingle = () => {
+const ProjectSingle = ({project}) => {
 
     const router = useRouter();
-    const slug = router.query.slug;
 
-    const project: Project = AllProjectsData.filter(p => p.slug === slug)[0];
+    if (!router.isFallback && !project?.slug) {
+
+    }
 
     useEffect(() => {
         document.body.classList.add('bg-body-tertiary');
     });
 
-    useEffect(() => {
-        if (router.query.slug != slug) {
-            router.reload();
-        }
-    }, [router, router.query.slug, slug]);
+    const ProjectSummary = dynamic(() => import('@/widgets/projects/ProjectSummary'), {
+        ssr: false,
+    });
 
     return (
         <Fragment>
@@ -42,4 +41,47 @@ const ProjectSingle = () => {
     );
 }
 
+ProjectSingle.propTypes = {
+    project: PropTypes.object
+}
+
 export default ProjectSingle;
+
+type Params = {
+    params: {
+        slug: string
+    }
+}
+
+export const getStaticProps = async ({ params, previewData = {} }) => {
+
+    const project = getProjectBySlug(params.slug);
+    const content =  await markdownToHtml(project.content || '')
+
+    const data = {
+        ...project,
+        content,
+    };
+
+    return {
+        props: {
+            project: data,
+            key: params.slug,
+        },
+        revalidate: 60,
+    };
+};
+
+export async function getStaticPaths() {
+    const projects = getAllProjects();
+    return {
+        paths: projects.map((project) => {
+            return {
+                params: {
+                    slug: project.slug
+                },
+            }
+        }),
+        fallback: false,
+    }
+}

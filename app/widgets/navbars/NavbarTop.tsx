@@ -9,7 +9,7 @@ import { Search, SendFill } from 'react-bootstrap-icons';
 // import sub components
 import QuickMenu from '@/widgets/navbars/QuickMenu';
 
-import { AllProjectsData } from '@/data/AllProjectsData';
+import { AllProjectsData } from '@/data/projects/AllProjectsData';
 import Link from 'next/link';
 import { Project } from '@/types';
 

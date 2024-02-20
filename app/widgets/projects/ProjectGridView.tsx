@@ -10,7 +10,7 @@ import ProjectCard from './ProjectCard';
 import { Project } from '@/types';
 
 // import data files
-import { AllProjectsData } from '@/data/AllProjectsData';
+import { AllProjectsData } from '@/data/projects/AllProjectsData';
 
 const ProjectGridView = () => {
 	const [Records, setRecords] = useState<Project[]>(AllProjectsData.slice(0, 500));

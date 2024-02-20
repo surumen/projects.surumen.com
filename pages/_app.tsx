@@ -3,7 +3,6 @@ import Head from 'next/head';
 import { Fragment } from 'react';
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
-import SSRProvider from 'react-bootstrap/SSRProvider';
 
 // import provider and store from redux state management.
 import { Provider } from 'react-redux'
@@ -47,7 +46,7 @@ function MyApp({ Component, pageProps }) {
         />
         <Provider store={store}>
           <Layout>
-            <Component {...pageProps} key={router.asPath} />
+            <Component {...pageProps} />
           </Layout>
         </Provider>
       </Fragment>

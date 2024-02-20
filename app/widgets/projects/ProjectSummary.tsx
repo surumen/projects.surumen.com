@@ -95,26 +95,50 @@ const ProjectSummary = ({ item }) => {
 				</div>
 			</section>
 
-			{item.contentType === 'blog' ? (
-				<div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(item.content)}}></div>
-			) : (
-				<section className='container mw-screen-xl mx-n6 my-6 pt-2 pb-6 ps-6 pe-0'>
+			<section className='container mw-screen-xl mx-n6 my-6 pt-2 pb-6 ps-6 pe-0'>
+				{item.contentType === 'blog' ? (
 					<Row>
+						<Col md={3}>
+							<ul className='nav flex-column mt-lg-6 position-lg-sticky top-lg-6'>
+								<li className='nav-item'>
+									<a className='nav-link px-0' href='#introduction'>
+										Introduction
+									</a>
+								</li>
+								<li className='nav-item'>
+									<a className='nav-link px-0' href='#introduction'>
+										Introduction
+									</a>
+								</li>
+								<li className='nav-item'>
+									<a className='nav-link px-0' href='#introduction'>
+										Introduction
+									</a>
+								</li>
+							</ul>
+						</Col>
 						<Col>
-							<Bracket
-								game={tournament}
-								homeOnTop={true}
-								GameComponent={gameComponent}
-							/>
+							<article className='article'
+									 dangerouslySetInnerHTML={{
+										 __html: item.content
+									 }}>
+							</article>
 						</Col>
 					</Row>
-					<Row>
-						<Col>
-							<BracketGenerator games={semiFinal} />
-						</Col>
-					</Row>
-				</section>
-			)}
+				) : (
+					<div>
+						<Row>
+							<Col>
+								<Bracket
+									game={tournament}
+									homeOnTop={true}
+									GameComponent={gameComponent}
+								/>
+							</Col>
+						</Row>
+					</div>
+				)}
+			</section>
 
 		</Fragment>
 	);
