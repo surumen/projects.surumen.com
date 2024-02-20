@@ -41,12 +41,22 @@ const ProjectSummary = ({ item }) => {
 		);
 	}
 
+	const headingsPattern = /#{1,2}.+/g;
+	const headings: string[] = Array.from(item.content.match(headingsPattern));
+	const navContent: any = [];
+	headings.forEach(header => {
+		const numHashes = (header.match(/#/g) || []).length;
+		if (numHashes > 0 && numHashes < 3) {
+			navContent.push(header.replace(/#/g,'').trim());
+		}
+	});
+
 	return (
 		<Fragment>
 			<section className='container mw-screen-xl border-bottom py-5'>
-				<div className='row mb-3'>
-					<div className='col col-md-4'>
-						<div className='vstack gap-6 pointer-event'>
+				<Row className='mb-3'>
+					<Col sm={12} md={4}>
+						<div className='vstack gap-6 pointer-event mb-5 mb-md-0'>
 							<h1 className='ls-tight fw-bolder'>{item.title}</h1>
 							<div className='d-flex gap-4 flex-wrap'>
 								{item.technologyAreas.map((category, index) => {
@@ -57,10 +67,10 @@ const ProjectSummary = ({ item }) => {
 								}
 							</div>
 						</div>
-					</div>
+					</Col>
 
-					<div className='col col-md-6'>
-						<div className='vstack gap-4'>
+					<Col sm={12} md={6}>
+						<div className='vstack gap-4 mb-5 mb-md-0'>
 							<p className='text-muted text-xs text-uppercase'>Project Description</p>
 							<p className='article'>
 							<span
@@ -70,10 +80,10 @@ const ProjectSummary = ({ item }) => {
 							></span>
 							</p>
 						</div>
-					</div>
+					</Col>
 
-					<div className='col col-md-2'>
-						<div className='vstack gap-6'>
+					<Col sm={12} md={2}>
+						<div className='vstack gap-6 mb-5 mb-md-0'>
 							<div>
 								<p className='text-muted text-xs text-uppercase mb-2'>Completed</p>
 								<p className='article text-sm'>2022</p>
@@ -89,9 +99,9 @@ const ProjectSummary = ({ item }) => {
 							</span>
 							</div>
 						</div>
-					</div>
+					</Col>
 
-				</div>
+				</Row>
 			</section>
 
 			<section className='container mw-screen-xl border-bottom py-5'>
@@ -99,21 +109,15 @@ const ProjectSummary = ({ item }) => {
 					<Row className='pt-4'>
 						<Col md={3}>
 							<ul className='nav flex-column mt-lg-6 position-lg-sticky top-lg-6'>
-								<li className='nav-item'>
-									<a className='nav-link px-0' href='#introduction'>
-										Introduction
-									</a>
-								</li>
-								<li className='nav-item'>
-									<a className='nav-link px-0' href='#introduction'>
-										Introduction
-									</a>
-								</li>
-								<li className='nav-item'>
-									<a className='nav-link px-0' href='#introduction'>
-										Introduction
-									</a>
-								</li>
+								{navContent.map((navigation, index) => {
+									return (
+										<li key={index} className='nav-item'>
+											<a className='nav-link px-0' href={`#${navigation.replace(/ /g,'-').toLowerCase()}`}>
+												{navigation}
+											</a>
+										</li>
+									);
+								})}
 							</ul>
 						</Col>
 						<Col md={9}>
