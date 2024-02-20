@@ -28,7 +28,7 @@ const ProjectSingle = ({project}) => {
         <Fragment>
             <main className='container-fluid py-5'>
                 {project ? (
-                    <ProjectSummary item={project} />
+                    <ProjectSummary project={project} />
                 ) : (<span></span>)}
             </main>
         </Fragment>

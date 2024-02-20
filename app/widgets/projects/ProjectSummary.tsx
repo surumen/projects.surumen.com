@@ -14,7 +14,7 @@ import { WorldCup2018 } from '@/data/WorldCup2018';
 import { SemiFinal1, SemiFinal2 } from '@/data/world-cup-18/sf';
 
 
-const ProjectSummary = ({ item }) => {
+const ProjectSummary = ({ project }) => {
 
 	const [hoveredTeamId, setHoveredTeamId] = useState(null);
 
@@ -42,8 +42,8 @@ const ProjectSummary = ({ item }) => {
 	}
 
 	const navContent: any = [];
-	if (item.content && item.contentType === 'blog') {
-		const headings: string[] = Array.from(item.content.match(/#{1,2}.+/g));
+	if (project.content && project.contentType === 'blog') {
+		const headings: string[] = Array.from(project.content.match(/#{1,2}.+/g));
 		headings.forEach(header => {
 			const numHashes = (header.match(/#/g) || []).length;
 			if (numHashes > 0 && numHashes < 3) {
@@ -58,9 +58,9 @@ const ProjectSummary = ({ item }) => {
 				<Row className='mb-3'>
 					<Col sm={12} md={4}>
 						<div className='vstack gap-6 pointer-event mb-5 mb-md-0'>
-							<h1 className='ls-tight fw-bolder'>{item.title}</h1>
+							<h1 className='ls-tight fw-bolder'>{project.title}</h1>
 							<div className='d-flex gap-4 flex-wrap'>
-								{item.technologyAreas.map((category, index) => {
+								{project.technologyAreas.map((category, index) => {
 									return (
 										<span key={index} className='bg-primary-light border rounded px-3 py-1 fw-semibold text-primary border-primary-200 text-xs rounded-pill'>{category}</span>
 									)
@@ -76,7 +76,7 @@ const ProjectSummary = ({ item }) => {
 							<p className='article'>
 							<span
 								dangerouslySetInnerHTML={{
-									__html: item.description
+									__html: project.description
 								}}
 							></span>
 							</p>
@@ -106,7 +106,7 @@ const ProjectSummary = ({ item }) => {
 			</section>
 
 			<section className='container mw-screen-xl border-bottom py-5'>
-				{item.contentType === 'blog' ? (
+				{project.contentType === 'blog' ? (
 					<Row className='pt-4'>
 						<Col md={3}>
 							<ul className='nav flex-column mt-lg-6 position-lg-sticky top-lg-6'>
@@ -135,7 +135,7 @@ const ProjectSummary = ({ item }) => {
 											>{props.children}</h2>
 										}
 									}}
-								>{item.content}</Markdown>
+								>{project.content}</Markdown>
 							</article>
 						</Col>
 					</Row>
@@ -161,7 +161,7 @@ const ProjectSummary = ({ item }) => {
 
 // Typechecking With PropTypes
 ProjectSummary.propTypes = {
-	item: PropTypes.object.isRequired
+	project: PropTypes.object.isRequired
 };
 
 export default ProjectSummary;
