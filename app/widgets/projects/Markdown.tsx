@@ -1,30 +1,32 @@
 // import node module libraries
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import Markdown from 'react-markdown';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
-import tsx from 'react-syntax-highlighter/dist/cjs/languages/prism/tsx';
-import typescript from 'react-syntax-highlighter/dist/cjs/languages/prism/typescript';
-import scss from 'react-syntax-highlighter/dist/cjs/languages/prism/scss';
-import bash from 'react-syntax-highlighter/dist/cjs/languages/prism/bash';
-import markdown from 'react-syntax-highlighter/dist/cjs/languages/prism/markdown';
-import json from 'react-syntax-highlighter/dist/cjs/languages/prism/json';
+import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
+import typescript from 'react-syntax-highlighter/dist/cjs/languages/hljs/typescript';
+import bash from 'react-syntax-highlighter/dist/cjs/languages/hljs/bash';
+import markdown from 'react-syntax-highlighter/dist/cjs/languages/hljs/markdown';
+import json from 'react-syntax-highlighter/dist/cjs/languages/hljs/json';
+import python from 'react-syntax-highlighter/dist/cjs/languages/hljs/python';
+import java from 'react-syntax-highlighter/dist/cjs/languages/hljs/java';
+import javascript from 'react-syntax-highlighter/dist/cjs/languages/hljs/javascript';
 import rangeParser from 'parse-numeric-range';
-import { oneDark, prism, materialLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { github, githubGist } from 'react-syntax-highlighter/dist/cjs/styles/hljs';
 
 
-SyntaxHighlighter.registerLanguage('tsx', tsx);
 SyntaxHighlighter.registerLanguage('typescript', typescript);
-SyntaxHighlighter.registerLanguage('scss', scss);
+SyntaxHighlighter.registerLanguage('python', python);
+SyntaxHighlighter.registerLanguage('java', java);
+SyntaxHighlighter.registerLanguage('json', json);
+SyntaxHighlighter.registerLanguage('javascript', javascript);
 SyntaxHighlighter.registerLanguage('bash', bash);
 SyntaxHighlighter.registerLanguage('markdown', markdown);
 SyntaxHighlighter.registerLanguage('json', json);
 
 const MarkdownDisplay = ({ content }) => {
 
-    const syntaxTheme = prism;
+    const syntaxTheme = githubGist;
 
     const MarkdownComponents: object = {
         code({ node, inline, className, ...props }) {
