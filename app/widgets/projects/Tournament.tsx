@@ -1,20 +1,15 @@
 // import node module libraries
 import React, { Fragment, useState } from 'react';
 
-
-import { createFootballTournament } from '@/brackets/utils/createFootballTournament';
+import { constructTournamentTree } from '@/brackets/utils/createFootballTournament';
 import { Bracket, BracketGame } from '@/brackets';
-
-import { UCL_2023_TEAMS } from '@/data/champions-league/Teams';
-import { UCL_STADIUMS } from '@/data/champions-league/Stadiums';
-import { CLUB_FOOTBALL_ROUNDS } from '@/data/champions-league/Rounds';
+import { Game } from '@/types';
 
 
 const Tournament = () => {
 
     const [hoveredTeamId, setHoveredTeamId] = useState(null);
-
-    const tournament = createFootballTournament(CLUB_FOOTBALL_ROUNDS, UCL_STADIUMS);
+    const tree = constructTournamentTree() as Game;
 
     const onHoveredTeamChange = (hoveredTeamId) => {
         setHoveredTeamId(hoveredTeamId);
@@ -38,7 +33,7 @@ const Tournament = () => {
     return (
         <Fragment>
             <Bracket
-                game={tournament}
+                game={tree}
                 homeOnTop={true}
                 GameComponent={gameComponent}
             />

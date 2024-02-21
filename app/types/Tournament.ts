@@ -14,6 +14,8 @@ export interface Game {
         home: GameParticipant;
         visitor: GameParticipant;
     };
+    // temp for data creation
+    children?: any[];
 }
 
 export interface GameParticipant {
@@ -25,7 +27,7 @@ export interface GameParticipant {
 export interface TeamSeeding {
     rank: number;
     displayName: string;
-    sourceGame?: Game;
+    sourceGame?: Game | null;
 }
 
 export interface Team {
