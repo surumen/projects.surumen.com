@@ -1,44 +1,15 @@
 // import node module libraries
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import * as JSOG from 'jsog';
 import { Col, Row } from 'react-bootstrap';
 import { SendFill } from 'react-bootstrap-icons';
 
-
-import { Bracket, BracketGame } from '@/brackets';
 import MarkdownDisplay from './Markdown';
-
-import { WorldCup2018 } from '@/data/WorldCup2018';
-import { SemiFinal1, SemiFinal2 } from '@/data/world-cup-18/sf';
+import Tournament from "@/widgets/projects/Tournament";
 
 
 const ProjectSummary = ({ project }) => {
 
-	const [hoveredTeamId, setHoveredTeamId] = useState(null);
-
-	const tournament = JSOG.decode(WorldCup2018);
-
-	const semiFinal = JSOG.decode([SemiFinal1, SemiFinal2]);
-
-	const onHoveredTeamChange = (hoveredTeamId) => {
-		setHoveredTeamId(hoveredTeamId);
-	};
-
-	const handleClick = (teamId, gameId) => {
-
-	};
-
-	const gameComponent = (props) => {
-		return (
-			<BracketGame
-				{...props}
-				onHoveredTeamIdChange={onHoveredTeamChange}
-				onClickTeam={handleClick}
-				hoveredTeamId={hoveredTeamId}
-			/>
-		);
-	}
 
 	const navContent: any = [];
 	if (project.content && project.contentType === 'blog') {
@@ -130,11 +101,7 @@ const ProjectSummary = ({ project }) => {
 					<div>
 						<Row>
 							<Col>
-								<Bracket
-									game={tournament}
-									homeOnTop={true}
-									GameComponent={gameComponent}
-								/>
+								<Tournament />
 							</Col>
 						</Row>
 					</div>
