@@ -1,8 +1,6 @@
 import { v4 as uuid } from 'uuid';
-import { Court, Game } from '@/types';
-import { TOURNAMENT_ROUNDS_MAP } from "@/data/champions-league/Rounds";
+import { Game, Team } from "@/types";
 import { UCL_STADIUMS } from "@/data/champions-league/Stadiums";
-
 
 
 export const generateTournamentMap = (rounds: any) => {
@@ -12,32 +10,57 @@ export const generateTournamentMap = (rounds: any) => {
     }, {});
 }
 
-export const constructTournamentTree = (): Game => {
+export const constructTournamentTree = (roundsMap, teamsData): Game => {
     let tournamentTree;
-    const dataMap = generateTournamentMap(TOURNAMENT_ROUNDS_MAP);
-    TOURNAMENT_ROUNDS_MAP.forEach(game => {
+    const dataMap = generateTournamentMap(roundsMap);
+    roundsMap.forEach(game => {
         if (game.sourceGame === null) {
             tournamentTree = game;
             return;
         }
 
-        const parent: any = TOURNAMENT_ROUNDS_MAP[dataMap[game.sourceGame]];
+        const parent: any = roundsMap[dataMap[game.sourceGame]];
         parent.children = [...(parent.children || []), game];
     });
-    traverseTournamentTree(tournamentTree);
+    const teamsDraw = shuffleDraw(teamsData);
+    traverseTournamentTree(tournamentTree, teamsDraw);
     return tournamentTree as Game;
 }
 
-export const traverseTournamentTree = (tree: Game) => {
+export const traverseTournamentTree = (tree: Game, teamsDraw: Team[][]) => {
     if (!tree || !tree.children || tree.children.length !== 2) {
         populateInitialGameData(tree, null, null);
+
+        const matchup = teamsDraw[0];
+        tree.sides.home.team = matchup[0];
+        tree.sides.visitor.team = matchup[1];
+        teamsDraw.shift();
         return;
     }
     const left = tree.children[0];
     const right = tree.children[1];
     populateInitialGameData(tree, left, right);
-    traverseTournamentTree(left);
-    traverseTournamentTree(right);
+    traverseTournamentTree(left, teamsDraw);
+    traverseTournamentTree(right, teamsDraw);
+}
+
+export const DFS = (tree: Game, gameId: string, currentTeam: Team) => {
+    if (!tree) {
+      return tree;
+    }
+    if (gameId && currentTeam && tree.sides && tree.sides.home && tree.sides.home.seed && tree.sides.home.seed.sourceGame) {
+        if (tree.sides.home.seed.sourceGame.id === gameId) {
+              tree.sides.home.team = currentTeam;
+        }
+        DFS(tree.sides.home.seed.sourceGame, gameId, currentTeam);
+    }
+    if (gameId && currentTeam && tree.sides && tree.sides.visitor && tree.sides.visitor.seed && tree.sides.visitor.seed.sourceGame) {
+        if (tree.sides.visitor.seed.sourceGame.id === gameId) {
+            tree.sides.visitor.team = currentTeam;
+        }
+        DFS(tree.sides.visitor.seed.sourceGame, gameId, currentTeam);
+    }
+    return tree;
 }
 
 
@@ -59,4 +82,34 @@ export const populateInitialGameData = (game: Game, home: Game | null, visitor: 
             }
         }
     }
+}
+
+
+const shuffle = (array: any[]) => {
+    return array.sort(() => Math.random() - 0.5);
+};
+
+const shuffleDraw = (data: any[]) => {
+    const combinations = pairwise(data);
+    const draw: any[][] = [];
+
+    const drawnTeams: any = [];
+    combinations.forEach(combination => {
+        const firstTeam = combination[0];
+        const secondTeam = combination[1];
+
+        if (!drawnTeams.includes(firstTeam) && !drawnTeams.includes(secondTeam)) {
+            draw.push(combination)
+            drawnTeams.push(firstTeam);
+            drawnTeams.push(secondTeam);
+        }
+    });
+    return draw;
+}
+
+const pairwise = (data: any[]): any[] => {
+    return data.sort().reduce(
+        (acc, item, i, arr) => acc.concat(
+            arr.slice(i + 1).map(_item => [item, _item])
+        ), [])
 }
