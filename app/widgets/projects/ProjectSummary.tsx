@@ -1,11 +1,11 @@
 // import node module libraries
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Col, Row } from 'react-bootstrap';
 import { SendFill } from 'react-bootstrap-icons';
 
 import MarkdownDisplay from './Markdown';
-import Tournament from "@/widgets/projects/Tournament";
+import { COMPONENTS_MAP } from "@/utils/componentsMap";
 
 
 const ProjectSummary = ({ project }) => {
@@ -21,6 +21,8 @@ const ProjectSummary = ({ project }) => {
 			}
 		});
 	}
+
+	const DemoAppComponent = COMPONENTS_MAP[project.component];
 
 	return (
 		<Fragment>
@@ -101,7 +103,7 @@ const ProjectSummary = ({ project }) => {
 					<div>
 						<Row>
 							<Col>
-								<Tournament />
+								<DemoAppComponent />
 							</Col>
 						</Row>
 					</div>

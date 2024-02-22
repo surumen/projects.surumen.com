@@ -41,6 +41,7 @@ export const AllProjectsData: Project[] = [
         We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
         We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>
         `,
+		component: 'tournament',
 		contentType: 'app',
 		content: ``
 	},
@@ -61,6 +62,7 @@ export const AllProjectsData: Project[] = [
         <p>We focus on these three techniques; vectorization with SIMD instructions, parallelism with OpenMP, speed up calculations using Amdahl's Law, and benchmark the performance improvement 
         achieved with each.</p>
         `,
+		component: 'tournament',
 		contentType: 'app',
 		content: ``
 	},
@@ -82,6 +84,7 @@ export const AllProjectsData: Project[] = [
         We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
         We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>`,
 		contentType: 'app',
+		component: 'tournament',
 		content: ``
 	},
 	{
@@ -102,6 +105,7 @@ export const AllProjectsData: Project[] = [
         We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
         We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>`,
 		contentType: 'app',
+		component: 'tournament',
 		content: ``
 	},
 ];
