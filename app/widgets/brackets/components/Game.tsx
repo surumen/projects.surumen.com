@@ -32,14 +32,20 @@ const adjustName = (name) => {
     );
 }
 
-const getNames = (firstSeed, secondSeed, seeds) => {
+const getNames = (firstSeed, secondSeed, seeds, final, finalRegion1, finalRegion2) => {
     let firstName, firstNameAdjusted, secondName, secondNameAdjusted;
     if (firstSeed !== 0) {
         firstName = seeds[firstSeed];
+        if (final) {
+            firstName = seeds[finalRegion1][firstSeed];
+        }
         firstNameAdjusted = adjustName(firstName);
     }
     if (secondSeed !== 0) {
         secondName = seeds[secondSeed];
+        if (final) {
+            secondName = seeds[finalRegion2][secondSeed];
+        }
         secondNameAdjusted = adjustName(secondName);
     }
     return {firstName, firstNameAdjusted, secondName, secondNameAdjusted};
@@ -49,11 +55,11 @@ const getNamesPredicted = (final, firstSeedPredicted, secondSeedPredicted, seeds
     let ogFirstNamePredicted, firstNamePredicted, ogSecondNamePredicted, secondNamePredicted;
 
     if (final) {
-        ogFirstNamePredicted = seeds[firstSeedPredicted[0]][firstSeedPredicted[1]];
-        firstNamePredicted = adjustName(ogFirstNamePredicted);
-
-        ogSecondNamePredicted = seeds[secondSeedPredicted[0]][secondSeedPredicted[1]];
-        secondNamePredicted = adjustName(ogSecondNamePredicted);
+        // ogFirstNamePredicted = seeds[firstSeedPredicted[0]][firstSeedPredicted[1]];
+        // firstNamePredicted = adjustName(ogFirstNamePredicted);
+        //
+        // ogSecondNamePredicted = seeds[secondSeedPredicted[0]][secondSeedPredicted[1]];
+        // secondNamePredicted = adjustName(ogSecondNamePredicted);
     } else {
         ogFirstNamePredicted = seeds[firstSeedPredicted];
         firstNamePredicted = adjustName(ogFirstNamePredicted);
@@ -79,14 +85,15 @@ const summarize = (firstSeed, ogFirstName, secondSeed, ogSecondName) => {
 
 const Game = (props) => {
     const {
-        firstSeed, secondSeed, firstSeedPredicted, secondSeedPredicted, final, seeds, games, gamesPredicted
+        firstSeed, secondSeed, firstSeedPredicted, secondSeedPredicted, final, seeds, games, gamesPredicted,
+        finalRegion1, finalRegion2
     } = props;
 
     let firstName, firstNameAdjusted, secondName, secondNameAdjusted = '';
     let ogFirstNamePredicted, firstNamePredicted, ogSecondNamePredicted, secondNamePredicted = '';
 
     const allNames = getNames(
-        firstSeed, secondSeed, seeds
+        firstSeed, secondSeed, seeds, final, finalRegion1, finalRegion2
     );
     firstName = allNames.firstName;
     firstNameAdjusted = allNames.firstNameAdjusted;
@@ -141,7 +148,9 @@ Game.propTypes = {
     secondSeedPredicted: PropTypes.number,
     final: PropTypes.bool,
     games: PropTypes.array,
-    gamesPredicted: PropTypes.number
+    gamesPredicted: PropTypes.number,
+    finalRegion1: PropTypes.string,
+    finalRegion2: PropTypes.string,
 };
 
 export default Game;

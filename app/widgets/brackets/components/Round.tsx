@@ -31,7 +31,7 @@ const convertToTuples = (pairings: any[]) => {
 
 
 const Round = (props) => {
-    let { pairings, seeds, gamesPredicted, pairingsPredicted, games, final, roundNumber } = props;
+    let { pairings, seeds, gamesPredicted, pairingsPredicted, games, final, roundNumber, finalRegion1, finalRegion2 } = props;
 
     const roundGames = convertToTuples(pairings).map((element, index) => {
         return (
@@ -44,6 +44,8 @@ const Round = (props) => {
                 secondSeedPredicted={element[1]}
                 games={games[index]}
                 final={final}
+                finalRegion1={finalRegion1}
+                finalRegion2={finalRegion2}
                 key={index} />
         );
     });
@@ -65,7 +67,9 @@ Round.propTypes = {
     pairingsPredicted: PropTypes.array,
     games: PropTypes.array,
     roundNumber: PropTypes.number,
-    final: PropTypes.bool
+    final: PropTypes.bool,
+    finalRegion1: PropTypes.string,
+    finalRegion2: PropTypes.string,
 };
 
 export default Round;

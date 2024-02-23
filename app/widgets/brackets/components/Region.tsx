@@ -53,6 +53,8 @@ const Region = (props) => {
                     pairingsPredicted={userData["matchups"][0]}
                     final={true}
                     roundNumber={0}
+                    finalRegion1={'east'}
+                    finalRegion2={'west'}
                     key={0} />
             ) : (
                 <div className={type === 'right' ? 'region region-right' : 'region'}>
