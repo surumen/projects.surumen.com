@@ -62,7 +62,7 @@ export const AllProjectsData: Project[] = [
         <p>We focus on these three techniques; vectorization with SIMD instructions, parallelism with OpenMP, speed up calculations using Amdahl's Law, and benchmark the performance improvement 
         achieved with each.</p>
         `,
-		component: 'tournament',
+		component: 'regional',
 		contentType: 'app',
 		content: ``
 	},

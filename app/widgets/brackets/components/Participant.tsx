@@ -25,7 +25,7 @@ const Participant = (props) => {
     const tooltip = side.seed && side.team ? <title>{side.seed.displayName}</title> : null;
 
     return (
-        <g onMouseEnter={() => onHover(side && side.team ? side.team.id : null)} onMouseLeave={() => onHover(null)}
+        <g className='cursor-pointer' onMouseEnter={() => onHover(side && side.team ? side.team.id : null)} onMouseLeave={() => onHover(null)}
            onClick={() => onClickTeam(side && side.team ? side.team.id : null, gameId)}>
             {/* trigger mouse events on the entire block */}
             <rect x={x} y={y} height={22.5} width={200} fillOpacity={0}>
