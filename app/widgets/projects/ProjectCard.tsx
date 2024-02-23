@@ -75,7 +75,7 @@ const ProjectCard = ({ item, viewby }) => {
 				<Offcanvas.Header className="justify-content-end border-bottom">
 					<Button onClick={handleClose} className="btn d-inline-flex btn-sm btn-neutral shadow-none rounded-pill"><span>Back Home</span></Button>
 				</Offcanvas.Header>
-				<Offcanvas.Body>
+				<Offcanvas.Body className='p-0'>
 					<ProjectSummary project={item} />
 				</Offcanvas.Body>
 			</Offcanvas>

@@ -26,7 +26,7 @@ const ProjectSummary = ({ project }) => {
 
 	return (
 		<Fragment>
-			<section className='container mw-screen-xxl border-bottom py-5'>
+			<section className='container mw-screen-xxl border-bottom p-5'>
 				<Row className='mb-3'>
 					<Col sm={12} md={4}>
 						<div className='vstack gap-6 pointer-event mb-5 mb-md-0'>
@@ -77,7 +77,7 @@ const ProjectSummary = ({ project }) => {
 				</Row>
 			</section>
 
-			<section className='container mw-screen-xxl py-5'>
+			<section className={`container mw-screen-xxl py-5 ${ project.contentType === 'app' ? 'bg-light-subtle' : ''}`}>
 				{project.contentType === 'blog' ? (
 					<Row className='pt-4'>
 						<Col md={3}>
@@ -100,9 +100,9 @@ const ProjectSummary = ({ project }) => {
 						</Col>
 					</Row>
 				) : (
-					<div>
-						<Row>
-							<Col>
+					<div className='overflow-auto'>
+						<Row className='overflow-auto'>
+							<Col className='overflow-auto'>
 								<DemoAppComponent />
 							</Col>
 						</Row>

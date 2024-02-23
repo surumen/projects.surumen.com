@@ -54,7 +54,6 @@ const RegionalTournament = () => {
 
     return (
         <div className="tournament">
-            <canvas id="canvas"></canvas>
             {regions}
         </div>
     );
