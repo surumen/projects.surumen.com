@@ -2,7 +2,6 @@
     position: relative;
 }
 
-
 .region-holder {
     display: flex;
     font-size: 0.8rem;
@@ -45,7 +44,6 @@
 
 .bracket-container {
     list-style-type: none;
-    font-family: "nyt-franklin", arial, helvetica, sans-serif;
     max-width: 100%;
     overflow-x: scroll;
     display: grid;
@@ -78,15 +76,18 @@
 
 .match-container {
     display: block;
-    margin: 10px;
     position: relative;
     min-width: 160px;
-    margin-top: 20px
+    margin: 20px 10px 10px;
 }
 
 .match-container.bronze {
     margin-top: 0;
     margin-left: 10px
+}
+
+.bracket.bronze {
+    grid-column: 11;
 }
 
 .match-container.final {
@@ -95,12 +96,23 @@
 
 .match-container::before,
 .match-container::after {
-    border-color: #eee
+    border-color: $gray-300;
+}
+
+.match-container::before {
+    border-top-left-radius: $border-radius-lg;
+    border-bottom-left-radius: $border-radius-lg;
+    border-width: $border-width;
+}
+
+.match-container::after {
+    border-top-right-radius: $border-radius-lg;
+    border-bottom-right-radius: $border-radius-lg;
 }
 
 .match-container:not(.final):after {
     content: "";
-    border-width: 1px;
+    border-width: $border-width;
     position: absolute;
     display: block;
     width: 11px;
@@ -154,7 +166,7 @@
 
 .match-container:not(.bronze):before {
     content: "";
-    border-top: 1px solid #eee;
+    border-top: 1px solid $gray-300;
     position: absolute;
     width: 10px;
     left: -10px;
@@ -301,11 +313,9 @@
 .live-bug {
     display: inline-block;
     margin-right: 10px;
-    font-family: nyt-franklin, helvetica, arial, sans-serif;
     font-size: 0.6875rem;
     font-weight: 800;
     text-transform: uppercase;
-    color: #d0021b;
     letter-spacing: 1px
 }
 
@@ -325,10 +335,13 @@
 }
 
 .match {
-    background-color: #eee;
     padding: 10px 7.5px 9px 5px;
     font-size: 0.8rem;
-    min-height: 30px
+    min-height: 30px;
+    box-shadow: $box-shadow-lg;
+    border: $border-width solid $border-color;
+    border-radius: $border-radius-lg;
+    background-color: $white;
 }
 
 @media(max-width: 600px) {
@@ -354,7 +367,10 @@
 .schedule {
     position: absolute;
     top: -17px;
-    font-size: 0.8rem
+    line-height: 1.4em;
+    font-size: 0.625rem;
+    margin-left: 0.25em;
+    color: $info;
 }
 
 .round {
@@ -414,6 +430,16 @@
     display: inline-block;
     width: 19px;
     margin-right: 3px
+}
+
+.flag {
+    transform: scale(.9);
+    margin-right: 6px;
+    min-width: 17px;
+
+    img {
+        height: 12px;
+    }
 }
 
 .school-wrapper {
@@ -477,141 +503,6 @@
     }
 }
 
-h3 {
-    font-family: "nyt-franklin"
-}
-
-h3.primary {
-    color: #121212;
-    font-weight: bold;
-    font-size: 0.8rem;
-    margin: 0;
-    margin-bottom: 5px
-}
-
-.nytapp-hybrid-article h3.primary,
-.nytapp-vi-article h3.primary,
-.nytapp-vi-liveblog h3.primary,
-.live-blog-content h3.primary,
-.live-blog-post h3.primary,
-.live-blog-header h3.primary,
-#story h3.primary {
-    color: #333
-}
-
-.nytapp-hybrid-article h3.primary.default,
-.nytapp-vi-article h3.primary.default,
-.nytapp-vi-liveblog h3.primary.default,
-.live-blog-content h3.primary.default,
-.live-blog-post h3.primary.default,
-.live-blog-header h3.primary.default,
-#story h3.primary.default {
-    font-size: 14px
-}
-
-@media(min-width: 740px) {
-
-    .nytapp-hybrid-article h3.primary.default,
-    .nytapp-vi-article h3.primary.default,
-    .nytapp-vi-liveblog h3.primary.default,
-    .live-blog-content h3.primary.default,
-    .live-blog-post h3.primary.default,
-    .live-blog-header h3.primary.default,
-    #story h3.primary.default {
-        font-size: 15px
-    }
-}
-
-h3.secondary {
-    font-family: "nyt-franklin", arial, helvetica, sans-serif;
-    color: #555;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 1.1;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 0;
-    margin-top: 9px
-}
-
-@media(min-width: 1024px) {
-    h3.secondary {
-        font-size: 13px
-    }
-}
-
-h3.social {
-    font-family: "nyt-franklin", arial, helvetica, sans-serif;
-    font-size: 19px;
-    font-weight: 700;
-    margin: 0
-}
-
-h3.secondaryWithoutMargins {
-    font-family: "nyt-franklin", arial, helvetica, sans-serif;
-    color: #555;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 1.1;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    font-size: 10px;
-    margin-bottom: 0;
-    margin-top: 3px
-}
-
-@media(min-width: 1024px) {
-    h3.secondaryWithoutMargins {
-        font-size: 13px
-    }
-}
-
-h3.usesSmallerHeaderSize {
-    font-size: 12px
-}
-
-h3.tertiary {
-    font-family: "nyt-franklin", arial, helvetica, sans-serif;
-    color: #555;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 1.1;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 0;
-    margin-top: 3px;
-    text-transform: none
-}
-
-@media(min-width: 1024px) {
-    h3.tertiary {
-        font-size: 13px
-    }
-}
-
-h3.all-results {
-    margin-top: 4px
-}
-
-h3.all-results.discipline-name {
-    font-weight: 600
-}
-
-@media(max-width: 600px) {
-    h3.tertiary {
-        font-size: 8px
-    }
-
-    h3.usesSmallerHeaderSize {
-        font-size: 11px
-    }
-}
-
-@media(min-width: 1024px) {
-    h3.all-results {
-        margin-top: 3px
-    }
-}
 
 .tab {
     width: 100%;
@@ -637,20 +528,6 @@ button {
 
 .selected {
     background-color: #333
-}
-
-:root {
-    --arrows-bottom-padding: 0px;
-    --circles-bottom-padding: 34px;
-    --circles-display: none;
-    --bottom-padding: var(--arrows-bottom-padding)
-}
-
-@media(pointer: coarse) {
-    :root {
-        --bottom-padding: var(--circles-bottom-padding);
-        --circles-display: none
-    }
 }
 
 .game-container.circles {
@@ -724,5 +601,3 @@ button {
 button.active {
     opacity: 1
 }
-
-/*# sourceMappingURL=components.css.map */
