@@ -15,7 +15,7 @@ import Match from '@/widgets/brackets-advanced/Match';
 
 
 const Round = (props) => {
-    let { matches, roundOrder } = props;
+    let { matches, roundOrder, handleAdvanceTeam } = props;
 
     return (
         <ul className={`bracket bracket-${roundOrder}`}>
@@ -26,6 +26,7 @@ const Round = (props) => {
                     isFinal={match.isFinal}
                     topSeed={match.topSeed}
                     bottomSeed={match.bottomSeed}
+                    handleClickOnMatchFromParent={(winner) => handleAdvanceTeam(winner, i + 1)}
                 />
             ))}
         </ul>
@@ -55,7 +56,9 @@ Round.propTypes = {
             }),
         })
     ),
-    roundOrder: PropTypes.string
+    roundOrder: PropTypes.number,
+    isFinalRound: PropTypes.bool,
+    handleAdvanceTeam: PropTypes.func
 };
 
 export default Round;

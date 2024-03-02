@@ -140,48 +140,59 @@ export const MARCH_MADNESS_2024 = {
     ],
     rounds: [
         {
-            order: '1',
+            order: 1,
+            isFinal: false,
             matches: getInitialMatches(WEST_SEEDS)
         },
         {
-            order: '2',
+            order: 2,
+            isFinal: false,
             matches: initFutureMatches(8, false)
         },
         {
-            order: '3',
+            order: 3,
+            isFinal: false,
             matches: initFutureMatches(4, false)
         },
         {
-            order: '4',
+            order: 4,
+            isFinal: false,
             matches: initFutureMatches(2, false)
         },
         {
-            order: '5',
+            order: 5,
+            isFinal: false,
             matches: initFutureMatches(1, true)
         },
         {
-            order: '6',
+            order: 6,
+            isFinal: false,
             matches: initFutureMatches(1, false)
         },
         {
-            order: '7',
+            order: 7,
+            isFinal: true,
             matches: initFutureMatches(1, false)
         },
         {
-            order: '8',
+            order: 8,
+            isFinal: false,
             matches: initFutureMatches(2, false)
         },
         {
-            order: '9',
+            order: 9,
+            isFinal: false,
             matches: initFutureMatches(4, false)
         },
         {
-            order: '10',
+            order: 10,
+            isFinal: false,
             matches: initFutureMatches(8, false)
         },
         {
-            order: '11',
-            matches: getInitialMatches(WEST_SEEDS)
+            order: 11,
+            isFinal: false,
+            matches: getInitialMatches(WEST_SEEDS),
         },
     ]
 }

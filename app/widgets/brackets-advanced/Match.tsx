@@ -15,14 +15,15 @@ import React from 'react';
 
 
 const Match = (props) => {
-    let { scheduled, isFinal, topSeed, bottomSeed } = props;
+    let { scheduled, isFinal, topSeed, bottomSeed, handleClickOnMatchFromParent } = props;
 
     return (
         <li className='match-container'>
             <div className={`gamebox d-flex ${isFinal ? 'final' : ''} offset`}>
                 <div className='schedule'>{scheduled}</div>
                 <div className='match'>
-                    <div className={`competitor ${topSeed.name === 'TBC' ? 'pending' : ''}`}>
+                    <div onClick={() => handleClickOnMatchFromParent(topSeed)}
+                        className={`competitor ${topSeed.name === 'TBC' ? 'pending' : ''}`}>
                         <div className='competitor-container w-100 h-100'>
                             <div className='d-flex'>
                                 {topSeed.logo ? (
@@ -43,7 +44,8 @@ const Match = (props) => {
                             <span></span>
                         )}
                     </div>
-                    <div className={`competitor ${bottomSeed.name === 'TBC' ? 'pending' : ''}`}>
+                    <div onClick={() => handleClickOnMatchFromParent(bottomSeed)}
+                        className={`competitor ${bottomSeed.name === 'TBC' ? 'pending' : ''}`}>
                         <div className='competitor-container w-100 h-100'>
                             <div className='d-flex'>
                                 {bottomSeed.logo ? (
@@ -89,6 +91,7 @@ Match.propTypes = {
         isWinner: PropTypes.bool,
         score: PropTypes.string
     }),
+    handleClickOnMatchFromParent: PropTypes.func
 };
 
 export default Match;
