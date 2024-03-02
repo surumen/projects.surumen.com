@@ -335,13 +335,19 @@
 }
 
 .match {
-    padding: 10px 7.5px 9px 5px;
+    padding: 10px 0;
     font-size: 0.8rem;
     min-height: 30px;
     box-shadow: $box-shadow-lg;
     border: $border-width solid $border-color;
     border-radius: $border-radius-lg;
     background-color: $white;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 @media(max-width: 600px) {
@@ -380,14 +386,27 @@
 }
 
 .competitor {
+    padding: 0.2rem 0.5rem;
     font-weight: 300;
     display: flex;
     align-items: center;
-    justify-content: space-between
+    justify-content: space-between;
+    cursor: pointer;
+    position: relative;
+    flex-direction: row;
+    flex: 0 0 50%;
+    -webkit-box-align: center;
+    -webkit-box-pack: justify;
+    white-space: nowrap;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+    color: rgb(32, 33, 33);
+    transition: all 0.2s ease-out 0s;
 }
 
 .competitor:first-child {
-    margin-bottom: 7px
+
 }
 
 .competitor.individual {
@@ -395,8 +414,12 @@
 }
 
 .competitor-container {
-    flex-grow: 1;
-    padding-right: 4px
+    padding-right: 4px;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    flex: 1 1 0;
+    overflow: hidden;
 }
 
 .result {
@@ -427,14 +450,20 @@
 }
 
 .seed {
-    display: inline-block;
     width: 19px;
-    margin-right: 3px
+    color: $ironside-gray-600;
+    font-weight: 500;
+    font-size: 0.69em;
+    min-width: 0.7rem;
+    padding: 0px 0.25rem 0.2rem;
+    display: inline-flex;
+    align-items: flex-end;
+    -webkit-box-pack: end;
+    justify-content: flex-end;
 }
 
 .flag {
     transform: scale(.9);
-    margin-right: 6px;
     min-width: 17px;
 
     img {
@@ -448,6 +477,16 @@
 
 .winner {
     font-weight: 600
+}
+
+.winner-border {
+    top: 0;
+    height: 100%;
+    width: 2px;
+    position: absolute;
+    right: 0;
+    background-color: $primary;
+    border-radius: 2px 0 0 2px;
 }
 
 @media(min-width: 740px) {

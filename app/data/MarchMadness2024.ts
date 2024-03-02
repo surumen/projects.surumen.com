@@ -10,12 +10,12 @@ export const WEST_SEEDS = [
         logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21130.svg'
     },
     {
-        name: 'TXTECH',
+        name: 'Texas Tech',
         seed: '3',
         logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
     },
     {
-        name: 'ARK',
+        name: 'Arkansas',
         seed: '4',
         logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21353.svg'
     },
@@ -25,47 +25,47 @@ export const WEST_SEEDS = [
         logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21161.svg'
     },
     {
-        name: 'BAMA',
+        name: 'Alabama',
         seed: '6',
         logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
     },{
-        name: 'MICHST',
+        name: 'Michigan St.',
         seed: '7',
         logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
     }, {
-        name: 'BOISE',
+        name: 'Boise',
         seed: '8',
         logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
     }, {
-        name: 'MEMP',
+        name: 'Memphis',
         seed: '9',
         logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
     }, {
-        name: 'DAV',
+        name: 'Davidson',
         seed: '10',
         logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
     }, {
-        name: 'ND',
+        name: 'Notre Dame',
         seed: '11',
         logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
     }, {
-        name: 'NMEXST',
+        name: 'New Mex. St.',
         seed: '12',
         logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
     }, {
-        name: 'UVM',
+        name: 'Vermont',
         seed: '13',
         logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
     }, {
-        name: 'MONST',
+        name: 'Montana St.',
         seed: '14',
         logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
     }, {
-        name: 'CSFULL',
+        name: 'CS Fullerton',
         seed: '15',
         logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
     }, {
-        name: 'GAST',
+        name: 'Georgia St.',
         seed: '16',
         logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
     }
@@ -89,15 +89,15 @@ export const getInitialMatches = (seeds: any[]) => {
                 name: firstSeed.name,
                 logo: firstSeed.logo,
                 seed: firstSeed.seed,
-                isWinner: false,
-                score: ''
+                isWinner: true,
+                score: '98'
             },
             bottomSeed: {
                 name: secondSeed.name,
                 logo: secondSeed.logo,
                 seed: secondSeed.seed,
                 isWinner: false,
-                score: ''
+                score: '80'
             }
         });
         start = start + 1;
