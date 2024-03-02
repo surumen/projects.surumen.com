@@ -413,6 +413,14 @@
     font-size: 0.8rem
 }
 
+.competitor:not(.pending):hover, .competitor:not(.pending):active {
+    background-color: $gray-200;
+}
+
+.competitor.pending {
+    pointer-events: none;
+}
+
 .competitor-container {
     padding-right: 4px;
     display: flex;

@@ -89,15 +89,15 @@ export const getInitialMatches = (seeds: any[]) => {
                 name: firstSeed.name,
                 logo: firstSeed.logo,
                 seed: firstSeed.seed,
-                isWinner: true,
-                score: '98'
+                isWinner: false,
+                score: ''
             },
             bottomSeed: {
                 name: secondSeed.name,
                 logo: secondSeed.logo,
                 seed: secondSeed.seed,
                 isWinner: false,
-                score: '80'
+                score: ''
             }
         });
         start = start + 1;
@@ -111,7 +111,7 @@ export const initFutureMatches = (num: number, isFinal: boolean) => {
     const matches: any[] = [];
     while (num > 0) {
         matches.push({
-            scheduled: '',
+            scheduled: 'March 28',
             isFinal: isFinal,
             topSeed: {
                 name: 'TBC',

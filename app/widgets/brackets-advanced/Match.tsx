@@ -22,7 +22,7 @@ const Match = (props) => {
             <div className={`gamebox d-flex ${isFinal ? 'final' : ''} offset`}>
                 <div className='schedule'>{scheduled}</div>
                 <div className='match'>
-                    <div className='competitor'>
+                    <div className={`competitor ${topSeed.name === 'TBC' ? 'pending' : ''}`}>
                         <div className='competitor-container w-100 h-100'>
                             <div className='d-flex'>
                                 {topSeed.logo ? (
@@ -43,7 +43,7 @@ const Match = (props) => {
                             <span></span>
                         )}
                     </div>
-                    <div className='competitor'>
+                    <div className={`competitor ${bottomSeed.name === 'TBC' ? 'pending' : ''}`}>
                         <div className='competitor-container w-100 h-100'>
                             <div className='d-flex'>
                                 {bottomSeed.logo ? (
