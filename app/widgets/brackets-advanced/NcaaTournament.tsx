@@ -27,11 +27,6 @@ import Bracket11 from "@/widgets/brackets-advanced/Bracket11";
 
 const NcaaTournament = () => {
 
-    const ROUND_32 = Array.from({length: 16}, (_, i) => i + 1);
-    const ROUND_16 = Array.from({length: 8}, (_, i) => i + 1);
-    const ROUND_8 = Array.from({length: 4}, (_, i) => i + 1);
-    const ROUND_4 = Array.from({length: 2}, (_, i) => i + 1);
-
     return (
         <div className='ncaa-tournament-bracket'>
             <div className='full-bracket'>
