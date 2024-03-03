@@ -11,6 +11,7 @@ export interface Project {
     contentType: string;
     content: string;
 
+    completed?: string;
     component?: any;
     status?: string;
     level?: string;

@@ -39,13 +39,13 @@ const DarkLightMode = ({ className }) => {
     }
     return (
         <Fragment>
-            <Link onClick={changeColorMode} href='#' className='nav-item nav-link rounded-pill d-none d-lg-block'>
+            <div onClick={changeColorMode} className='nav-item nav-link rounded-pill d-none d-lg-block cursor-pointer'>
                 {storageValue === 'dark' ? (
                     <MoonFill size={18} />
                 ) : (
                     <Sun size={24} />
                 )}
-            </Link>
+            </div>
         </Fragment>
     )
 }

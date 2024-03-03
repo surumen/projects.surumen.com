@@ -1,7 +1,7 @@
-import Tournament from '@/widgets/projects/Tournament';
-import RegionalTournament from '@/widgets/projects/RegionalTournament';
+import RegionalTournament from "@/widgets/brackets-advanced/Tournament";
 
 export const COMPONENTS_MAP = {
-    tournament: Tournament,
-    regional: RegionalTournament
+    tournament: RegionalTournament,
+    regional: RegionalTournament,
+    ncaa: RegionalTournament,
 }
