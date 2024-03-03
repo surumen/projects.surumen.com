@@ -10,7 +10,6 @@
 import PropTypes from 'prop-types';
 import { Image } from 'react-bootstrap';
 import React, { Fragment } from "react";
-import { SendFill } from "react-bootstrap-icons";
 
 // import widget/custom components
 
@@ -29,7 +28,7 @@ const Match = (props) => {
                         <h6 className="text-limit text-center text-muted mb-3">Champion</h6>
                         <div className="d-flex justify-content-center align-items-center">
                             <div className="avatar-group">
-                                <Image src={champion?.logo} alt={champion?.name} className="avatar border border-2 border-body rounded-circle"/>
+                                <Image src={champion?.logo} alt={champion?.name} className="avatar rounded-circle"/>
                             </div>
                         </div> <span className="d-block h3 ls-tight fw-bold">{champion?.name}</span>
                         <p className="mt-1"><span className="text-success-600 fw-bold text-xs"><i className="fas fa-arrow-up me-1"></i>20% </span><span className="text-muted text-xs text-opacity-75">confidence</span></p>
@@ -73,7 +72,13 @@ const Match = (props) => {
                                 {topSeed.score ? (
                                     <span>{topSeed.score}</span>
                                 ) : (
-                                    <span className='text-success-600 text-xs fw-bold'>58%</span>
+                                    <span>
+                                        {topSeed.name !== 'TBC' ? (
+                                            <span className='text-success-600 text-xs fw-bold'>58%</span>
+                                        ) : (
+                                            <span className='d-none'></span>
+                                        )}
+                                    </span>
                                 )}
                             </div>
                             {topSeed.isWinner ? (
@@ -101,7 +106,13 @@ const Match = (props) => {
                                 {bottomSeed.score ? (
                                     <span>{bottomSeed.score}</span>
                                 ) : (
-                                    <span className='text-ironside-gray-300 text-xs fw-bold'>41%</span>
+                                    <span>
+                                        {bottomSeed.name !== 'TBC' ? (
+                                            <span className='text-ironside-gray-300 text-xs fw-bold'>41%</span>
+                                        ) : (
+                                            <span className='d-none'></span>
+                                        )}
+                                    </span>
                                 )}
                             </div>
                             {bottomSeed.isWinner ? (
