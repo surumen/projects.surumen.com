@@ -26,7 +26,7 @@ export const AllProjectsData: Project[] = [
 		id: uuid(),
 		language: 'Python',
 		technologyAreas: ['Python', 'Recurrent Neural Networks'],
-		title: 'March Madness Simulator - 2024 College Basketball',
+		title: 'March Madness Brackets Assistant',
 		slug: 'march-madness',
 		shortDescription:
 			'An alternative to collaborative filtering. Using reinforcement learning to recommend songs',
