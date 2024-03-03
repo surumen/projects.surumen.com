@@ -98,7 +98,7 @@ const advanceLeftBracket = (team: any, currentMatchNumber: number, currentRound:
     // clean up: remove current opponent from all the next rounds
     return updatedRounds.map(round => {
         round.matches = round.matches.map(match => {
-            if (currentMatchOpponent && round.order > currentRound) {
+            if (!isFinal && currentMatchOpponent && round.order > currentRound) {
                 if (match.topSeed.name === currentMatchOpponent.name) {
                     match.topSeed = {
                         name: 'TBC',
@@ -212,7 +212,7 @@ const advanceRightBracket = (team: any, currentMatchNumber: number, currentRound
     // clean up: remove current opponent from all the next rounds
     return updatedRounds.map(round => {
         round.matches = round.matches.map(match => {
-            if (currentMatchOpponent && round.order < currentRound) {
+            if (!isFinal && currentMatchOpponent && round.order < currentRound) {
                 if (match.topSeed.name === currentMatchOpponent.name) {
                     match.topSeed = {
                         name: 'TBC',

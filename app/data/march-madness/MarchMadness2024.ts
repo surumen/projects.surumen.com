@@ -135,12 +135,12 @@ export const MARCH_MADNESS_2024 = {
         {
             order: 5,
             isFinal: false,
-            matches: initFutureMatches(1, true)
+            matches: initFutureMatches(1, false)
         },
         {
             order: 6,
             isFinal: true,
-            matches: initFutureMatches(1, false)
+            matches: initFutureMatches(1, true)
         },
         {
             order: 7,

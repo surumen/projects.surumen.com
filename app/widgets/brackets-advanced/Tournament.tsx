@@ -49,6 +49,7 @@ const RegionalTournament = () => {
                             matches={round.matches}
                             roundOrder={round.order}
                             isFinalRound={round.isFinal}
+                            bracketPosition={round.order > (rounds.length / 2) ? 'right' : 'left'}
                             handleAdvanceTeam={(winner, matchNumber) => handleAdvanceTeam(winner, matchNumber, round.order, round.isFinal)}
                         />
                     ))}

@@ -9,66 +9,105 @@
 // import node module libraries
 import PropTypes from 'prop-types';
 import { Image } from 'react-bootstrap';
-import React from 'react';
+import React, { Fragment } from "react";
+import { SendFill } from "react-bootstrap-icons";
 
 // import widget/custom components
 
 
 const Match = (props) => {
-    let { scheduled, isFinal, topSeed, bottomSeed, handleClickOnMatchFromParent } = props;
+    let { scheduled, isFinal, topSeed, bottomSeed, bracketPosition, handleClickOnMatchFromParent } = props;
 
-    return (
-        <li className='match-container'>
-            <div className={`gamebox d-flex ${isFinal ? 'final' : ''} offset`}>
-                <div className='schedule'>{scheduled}</div>
-                <div className='match'>
-                    <div onClick={() => handleClickOnMatchFromParent(topSeed)}
-                        className={`competitor ${topSeed.name === 'TBC' ? 'pending' : ''}`}>
-                        <div className='competitor-container w-100 h-100'>
-                            <div className='d-flex'>
-                                {topSeed.logo ? (
-                                    <div className='flag'>
-                                        <Image src={topSeed.logo} alt={topSeed.name}/>
-                                    </div>
-                                ) : (
-                                    <span></span>
-                                )}
-                                <span className='seed'>{topSeed.seed}</span>
-                                <span className={`school ${topSeed.isWinner ? 'winner' : ''}`}>{topSeed.name}</span>
+    const champion = isFinal && topSeed.isChampion ? topSeed :
+        isFinal && bottomSeed.isChampion ? bottomSeed : null;
+
+    const ChampionBoxView = () => {
+        return (
+            <div className="gamebox d-flex  offset">
+                <div className="match">
+                    <div className="p-4 text-center justify-content-center">
+                        <h6 className="text-limit text-center text-muted mb-3">Champion</h6>
+                        <div className="d-flex justify-content-center align-items-center">
+                            <div className="avatar-group">
+                                <Image src={champion?.logo} alt={champion?.name} className="avatar border border-2 border-body rounded-circle"/>
                             </div>
-                        </div>
-                        <div className={`result ${topSeed.isWinner ? 'strong' : ''}`}>{topSeed.score}</div>
-                        {topSeed.isWinner ? (
-                            <div className='winner-border'></div>
-                        ) : (
-                            <span></span>
-                        )}
-                    </div>
-                    <div onClick={() => handleClickOnMatchFromParent(bottomSeed)}
-                        className={`competitor ${bottomSeed.name === 'TBC' ? 'pending' : ''}`}>
-                        <div className='competitor-container w-100 h-100'>
-                            <div className='d-flex'>
-                                {bottomSeed.logo ? (
-                                    <div className='flag'>
-                                        <Image src={bottomSeed.logo} alt={bottomSeed.name}/>
-                                    </div>
-                                ) : (
-                                    <span></span>
-                                )}
-                                <span className='seed'>{bottomSeed.seed}</span>
-                                <span className={`school ${bottomSeed.isWinner ? 'winner' : ''}`}>{bottomSeed.name}</span>
-                            </div>
-                        </div>
-                        <div className={`result ${bottomSeed.isWinner ? 'strong' : ''}`}>{bottomSeed.score}</div>
-                        {bottomSeed.isWinner ? (
-                            <div className='winner-border'></div>
-                        ) : (
-                            <span></span>
-                        )}
+                        </div> <span className="d-block h3 ls-tight fw-bold">{champion?.name}</span>
+                        <p className="mt-1"><span className="text-success text-xs"><i className="fas fa-arrow-up me-1"></i>20% </span><span className="text-muted text-xs text-opacity-75">confidence</span></p>
                     </div>
                 </div>
             </div>
-        </li>
+        );
+    };
+
+
+    return (
+        <Fragment>
+            {isFinal ? (
+                <li style={{visibility: !champion ? 'hidden' : 'inherit'}} className="match-container champion-box">
+                    <ChampionBoxView />
+                </li>
+            ) : (
+                <span></span>
+            )}
+            <li className={`match-container ${bracketPosition} ${isFinal ? 'final' : ''}`}>
+                <div className={`gamebox d-flex ${isFinal ? 'final' : ''} offset`}>
+                    <div className='schedule'>{scheduled}</div>
+                    <div className='match'>
+                        <div onClick={() => handleClickOnMatchFromParent(topSeed)}
+                             className={`competitor ${topSeed.name === 'TBC' ? 'pending' : ''}`}>
+                            <div className='competitor-container w-100 h-100'>
+                                <div className='d-flex'>
+                                    {topSeed.logo ? (
+                                        <div className='flag'>
+                                            <Image src={topSeed.logo} alt={topSeed.name}/>
+                                        </div>
+                                    ) : (
+                                        <span></span>
+                                    )}
+                                    <span className='seed'>{topSeed.seed}</span>
+                                    <span className={`school ${topSeed.isWinner ? 'winner' : ''}`}>{topSeed.name}</span>
+                                </div>
+                            </div>
+                            <div className={`result ${topSeed.isWinner ? 'strong' : ''}`}>{topSeed.score}</div>
+                            {topSeed.isWinner ? (
+                                <div className='winner-border'></div>
+                            ) : (
+                                <span></span>
+                            )}
+                        </div>
+                        <div onClick={() => handleClickOnMatchFromParent(bottomSeed)}
+                             className={`competitor ${bottomSeed.name === 'TBC' ? 'pending' : ''}`}>
+                            <div className='competitor-container w-100 h-100'>
+                                <div className='d-flex'>
+                                    {bottomSeed.logo ? (
+                                        <div className='flag'>
+                                            <Image src={bottomSeed.logo} alt={bottomSeed.name}/>
+                                        </div>
+                                    ) : (
+                                        <span></span>
+                                    )}
+                                    <span className='seed'>{bottomSeed.seed}</span>
+                                    <span className={`school ${bottomSeed.isWinner ? 'winner' : ''}`}>{bottomSeed.name}</span>
+                                </div>
+                            </div>
+                            <div className={`result ${bottomSeed.isWinner ? 'strong' : ''}`}>{bottomSeed.score}</div>
+                            {bottomSeed.isWinner ? (
+                                <div className='winner-border'></div>
+                            ) : (
+                                <span></span>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {isFinal ? (
+                <li className="match-container" style={{visibility: 'hidden'}}>
+                    <ChampionBoxView />
+                </li>
+            ) : (
+                <span></span>
+            )}
+        </Fragment>
     );
 };
 
@@ -91,6 +130,7 @@ Match.propTypes = {
         isWinner: PropTypes.bool,
         score: PropTypes.string
     }),
+    bracketPosition: PropTypes.string,
     handleClickOnMatchFromParent: PropTypes.func
 };
 

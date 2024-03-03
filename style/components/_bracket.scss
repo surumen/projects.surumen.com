@@ -90,8 +90,9 @@
     grid-column: 11;
 }
 
-.match-container.final {
-    margin-right: 0
+.match-container.champion-box::before,
+.match-container.champion-box::after {
+    border: none !important;
 }
 
 .match-container::before,
@@ -99,25 +100,52 @@
     border-color: $gray-300;
 }
 
-.match-container::before {
+.match-container:not(.final)::before {
     border-top-left-radius: $border-radius-lg;
     border-bottom-left-radius: $border-radius-lg;
     border-width: $border-width;
 }
 
-.match-container::after {
+.match-container:not(.final)::after {
     border-top-right-radius: $border-radius-lg;
     border-bottom-right-radius: $border-radius-lg;
 }
 
-.match-container:not(.final):after {
+.match-container.right::after {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.match-container:after {
     content: "";
     border-width: $border-width;
     position: absolute;
     display: block;
-    width: 11px;
-    right: -11px
+    width: 10px;
+    right: -10px
 }
+
+.match-container.final:after {
+    top: -49% !important;
+}
+
+.match-container.final:before {
+    border-radius: 0 !important;
+}
+
+.bracket-5.match-container::after {
+    border-top-right-radius: 0 !important;
+}
+
+.match-container:not(.bronze):before {
+    content: "";
+    border-top: 1px solid $gray-300;
+    position: absolute;
+    width: 10px;
+    left: -10px;
+    top: 50%
+}
+
 
 .match-container:nth-of-type(odd):after {
     border-right-style: solid;
@@ -162,15 +190,6 @@
 .bracket-11 .match-container:nth-of-type(even):before {
     border-top-style: none;
     border-bottom-style: solid
-}
-
-.match-container:not(.bronze):before {
-    content: "";
-    border-top: 1px solid $gray-300;
-    position: absolute;
-    width: 10px;
-    left: -10px;
-    top: 50%
 }
 
 .bracket-2 .match-container:nth-of-type(odd):after {
