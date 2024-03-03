@@ -3,7 +3,7 @@ import { join } from 'path';
 import matter from 'gray-matter';
 import { Project } from "@/types";
 
-import { AllProjectsData } from "@/data/projects/AllProjectsData";
+import { AllProjectsData } from "../app/data/projects/AllProjectsData";
 
 const projectsDirectory = join(process.cwd(), 'app/data/projects/md');
 

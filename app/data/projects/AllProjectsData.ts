@@ -6,7 +6,6 @@ export const AllProjectsData: Project[] = [
 		id: uuid(),
 		language: 'Python',
 		technologyAreas: ['Python', 'Recurrent Neural Networks'],
-		image: '/images/course/course-graphql.jpg',
 		title: 'Predictive Analysis: Fantasy Football Players Power Index',
 		slug: 'fantasy-football-power-index',
 		shortDescription:
@@ -27,9 +26,8 @@ export const AllProjectsData: Project[] = [
 		id: uuid(),
 		language: 'Python',
 		technologyAreas: ['Python', 'Recurrent Neural Networks'],
-		image: '/images/course/course-graphql.jpg',
 		title: 'March Madness Simulator - 2024 College Basketball',
-		slug: 'mixtape-generator',
+		slug: 'march-madness',
 		shortDescription:
 			'An alternative to collaborative filtering. Using reinforcement learning to recommend songs',
 		status: 'Pending',
