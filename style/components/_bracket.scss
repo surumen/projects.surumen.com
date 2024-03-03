@@ -106,8 +106,19 @@
     border-width: $border-width;
 }
 
-.match-container:not(.final)::after {
+.match-container.right:not(.even)::before {
+    border-bottom-left-radius: 0 !important;
+}
+
+.match-container.right:not(.odd)::before {
+    border-top-left-radius: 0 !important;
+}
+
+.match-container:not(.final):not(.even)::after {
     border-top-right-radius: $border-radius-lg;
+}
+
+.match-container:not(.final):not(.odd)::after {
     border-bottom-right-radius: $border-radius-lg;
 }
 

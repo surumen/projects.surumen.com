@@ -27,6 +27,7 @@ const Round = (props) => {
                     topSeed={match.topSeed}
                     bottomSeed={match.bottomSeed}
                     bracketPosition={bracketPosition}
+                    matchNumber={i+1}
                     handleClickOnMatchFromParent={(winner) => handleAdvanceTeam(winner, i + 1)}
                 />
             ))}

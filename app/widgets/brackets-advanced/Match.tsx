@@ -16,7 +16,7 @@ import { SendFill } from "react-bootstrap-icons";
 
 
 const Match = (props) => {
-    let { scheduled, isFinal, topSeed, bottomSeed, bracketPosition, handleClickOnMatchFromParent } = props;
+    let { scheduled, isFinal, topSeed, bottomSeed, matchNumber, bracketPosition, handleClickOnMatchFromParent } = props;
 
     const champion = isFinal && topSeed.isChampion ? topSeed :
         isFinal && bottomSeed.isChampion ? bottomSeed : null;
@@ -49,7 +49,8 @@ const Match = (props) => {
             ) : (
                 <span></span>
             )}
-            <li className={`match-container ${bracketPosition} ${isFinal ? 'final' : ''}`}>
+            <li className={`match-container ${bracketPosition} ${isFinal ? 'final' :
+                ( matchNumber & 1 ) ? 'odd' : 'even'}`}>
                 <div className={`gamebox d-flex ${isFinal ? 'final' : ''} offset`}>
                     <div className='schedule'>{scheduled}</div>
                     <div className='match'>
@@ -130,6 +131,7 @@ Match.propTypes = {
         isWinner: PropTypes.bool,
         score: PropTypes.string
     }),
+    matchNumber: PropTypes.number,
     bracketPosition: PropTypes.string,
     handleClickOnMatchFromParent: PropTypes.func
 };
