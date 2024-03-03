@@ -32,7 +32,7 @@ const Match = (props) => {
                                 <Image src={champion?.logo} alt={champion?.name} className="avatar border border-2 border-body rounded-circle"/>
                             </div>
                         </div> <span className="d-block h3 ls-tight fw-bold">{champion?.name}</span>
-                        <p className="mt-1"><span className="text-success text-xs"><i className="fas fa-arrow-up me-1"></i>20% </span><span className="text-muted text-xs text-opacity-75">confidence</span></p>
+                        <p className="mt-1"><span className="text-success-600 fw-bold text-xs"><i className="fas fa-arrow-up me-1"></i>20% </span><span className="text-muted text-xs text-opacity-75">confidence</span></p>
                     </div>
                 </div>
             </div>
@@ -69,7 +69,13 @@ const Match = (props) => {
                                     <span className={`school ${topSeed.isWinner ? 'winner' : ''}`}>{topSeed.name}</span>
                                 </div>
                             </div>
-                            <div className={`result ${topSeed.isWinner ? 'strong' : ''}`}>{topSeed.score}</div>
+                            <div className={`result ${topSeed.isWinner ? 'strong' : ''}`}>
+                                {topSeed.score ? (
+                                    <span>{topSeed.score}</span>
+                                ) : (
+                                    <span className='text-success-600 text-xs fw-bold'>58%</span>
+                                )}
+                            </div>
                             {topSeed.isWinner ? (
                                 <div className='winner-border'></div>
                             ) : (
@@ -91,7 +97,13 @@ const Match = (props) => {
                                     <span className={`school ${bottomSeed.isWinner ? 'winner' : ''}`}>{bottomSeed.name}</span>
                                 </div>
                             </div>
-                            <div className={`result ${bottomSeed.isWinner ? 'strong' : ''}`}>{bottomSeed.score}</div>
+                            <div className={`result ${bottomSeed.isWinner ? 'strong' : ''}`}>
+                                {bottomSeed.score ? (
+                                    <span>{bottomSeed.score}</span>
+                                ) : (
+                                    <span className='text-ironside-gray-300 text-xs fw-bold'>41%</span>
+                                )}
+                            </div>
                             {bottomSeed.isWinner ? (
                                 <div className='winner-border'></div>
                             ) : (

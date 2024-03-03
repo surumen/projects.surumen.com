@@ -76,22 +76,22 @@ export const EAST_SEEDS = [
     {
         name: 'Baylor',
         seed: '1',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21408.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21201.svg'
     },
     {
         name: 'Kentucky',
         seed: '2',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21130.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21357.svg'
     },
     {
         name: 'Purdue',
         seed: '3',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21199.svg'
     },
     {
         name: 'UCLA',
         seed: '4',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21353.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21341.svg'
     },
     {
         name: 'Saint Mary\'s',
@@ -133,7 +133,7 @@ export const EAST_SEEDS = [
     }, {
         name: 'Yale',
         seed: '14',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21253.svg'
     }, {
         name: 'St. Peter\'s',
         seed: '15',

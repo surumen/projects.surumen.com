@@ -14,6 +14,7 @@ export const AllProjectsData: Project[] = [
 		level: 'Advance',
 		duration: '2h 40m',
 		rating: 2.5,
+		completed: '2018',
 		description: `<p>We'll dive into GraphQL, the fundamentals of GraphQL. 
         We're only gonna use the pieces of it that we need to build in Gatsby. 
         We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
@@ -27,13 +28,14 @@ export const AllProjectsData: Project[] = [
 		language: 'Python',
 		technologyAreas: ['Python', 'Recurrent Neural Networks'],
 		title: 'March Madness Brackets Assistant',
-		slug: 'march-madness',
+		slug: 'march-madness-assistant',
 		shortDescription:
 			'An alternative to collaborative filtering. Using reinforcement learning to recommend songs',
 		status: 'Pending',
 		level: 'Advance',
 		duration: '2h 40m',
 		rating: 2.5,
+		completed: '2024',
 		description: `<p>We'll dive into GraphQL, the fundamentals of GraphQL. 
         We're only gonna use the pieces of it that we need to build in Gatsby. 
         We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 

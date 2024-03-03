@@ -59,7 +59,7 @@ const ProjectSummary = ({ project }) => {
 						<div className='vstack gap-6 mb-5 mb-md-0'>
 							<div>
 								<p className='text-muted text-xs text-uppercase mb-2'>Completed</p>
-								<p className='article text-sm'>2022</p>
+								<p className='article text-sm'>{project.completed}</p>
 							</div>
 							<div>
 								<p className='text-muted text-xs text-uppercase mb-2'>Collaborators</p>
