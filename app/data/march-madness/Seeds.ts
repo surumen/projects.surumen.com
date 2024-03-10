@@ -1,293 +1,293 @@
 export const WEST_SEEDS = [
     {
-        name: 'Gonzaga',
+        name: 'Tennessee',
         seed: '1',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21415.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21362.svg'
     },
     {
-        name: 'Duke',
+        name: 'Arizona',
         seed: '2',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21130.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21335.svg'
     },
     {
-        name: 'Texas Tech',
+        name: 'Iowa St.',
         seed: '3',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21203.svg'
     },
     {
-        name: 'Arkansas',
+        name: 'BYU',
         seed: '4',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21353.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21424.svg'
     },
     {
-        name: 'UCONN',
+        name: 'S. Carolina',
         seed: '5',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21161.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21361.svg'
     },
     {
-        name: 'Alabama',
+        name: 'Nevada',
         seed: '6',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21352.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21219.svg'
     },{
-        name: 'Michigan St.',
+        name: 'Saint Mary\'s',
         seed: '7',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21194.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21422.svg'
     }, {
-        name: 'Boise',
+        name: 'Gonzaga',
         seed: '8',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21213.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21415.svg'
     }, {
-        name: 'Memphis',
+        name: 'Texas',
         seed: '9',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21240.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21210.svg'
     }, {
-        name: 'Davidson',
+        name: 'Virginia',
         seed: '10',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21368.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21136.svg'
     }, {
-        name: 'Notre Dame',
+        name: 'Colorado',
         seed: '11',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21164.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21202.svg'
     }, {
-        name: 'New Mex. St.',
+        name: 'S. Florida',
         seed: '12',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21220.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21243.svg'
     }, {
-        name: 'Vermont',
+        name: 'UC Irvine',
         seed: '13',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21159.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21214.svg'
     }, {
-        name: 'Montana St.',
+        name: 'Oakland',
         seed: '14',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21176.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21465.svg'
     }, {
-        name: 'CS Fullerton',
+        name: 'S. Dak. St.',
         seed: '15',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21216.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/532957.svg'
     }, {
-        name: 'Georgia St.',
+        name: 'Norfolk St.',
         seed: '16',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21408.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21294.svg'
     }
 ]
 
 
 export const EAST_SEEDS = [
     {
-        name: 'Baylor',
+        name: 'UConn',
         seed: '1',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21201.svg'
-    },
-    {
-        name: 'Kentucky',
-        seed: '2',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21357.svg'
-    },
-    {
-        name: 'Purdue',
-        seed: '3',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21199.svg'
-    },
-    {
-        name: 'UCLA',
-        seed: '4',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21341.svg'
-    },
-    {
-        name: 'Saint Mary\'s',
-        seed: '5',
         logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21161.svg'
     },
     {
-        name: 'Texas',
-        seed: '6',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
-    },{
-        name: 'Murray St.',
-        seed: '7',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
-    }, {
         name: 'N. Carolina',
+        seed: '2',
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21134.svg'
+    },
+    {
+        name: 'Kansas',
+        seed: '3',
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21204.svg'
+    },
+    {
+        name: 'Illinois',
+        seed: '4',
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21190.svg'
+    },
+    {
+        name: 'Kentucky',
+        seed: '5',
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21357.svg'
+    },
+    {
+        name: 'Clemson',
+        seed: '6',
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21129.svg'
+    },{
+        name: 'Florida',
+        seed: '7',
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21355.svg'
+    }, {
+        name: 'FAU',
         seed: '8',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21407.svg'
     }, {
-        name: 'Marquette',
+        name: 'TCU',
         seed: '9',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21434.svg'
     }, {
-        name: 'San Fran.',
+        name: 'Nebraska',
         seed: '10',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21207.svg'
     }, {
-        name: 'Va. Tech',
+        name: 'Princeton',
         seed: '11',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21252.svg'
     }, {
-        name: 'Indiana',
+        name: 'Richmond',
         seed: '12',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21231.svg'
     }, {
-        name: 'Akron',
+        name: 'McNeese St.',
         seed: '13',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21377.svg'
     }, {
-        name: 'Yale',
+        name: 'E. Washington',
         seed: '14',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21253.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21173.svg'
     }, {
-        name: 'St. Peter\'s',
+        name: 'High Point',
         seed: '15',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21189.svg'
     }, {
-        name: 'Nortfolk St.',
+        name: 'Quinnipiac',
         seed: '16',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21324.svg'
     }
 ]
 
 
 export const MIDWEST_SEEDS = [
     {
-        name: 'Kansas',
+        name: 'Purdue',
         seed: '1',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21408.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21199.svg'
+    },
+    {
+        name: 'Baylor',
+        seed: '2',
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21201.svg'
+    },
+    {
+        name: 'Creighton',
+        seed: '3',
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21305.svg'
     },
     {
         name: 'Auburn',
-        seed: '2',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21130.svg'
-    },
-    {
-        name: 'Wisconsin',
-        seed: '3',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
-    },
-    {
-        name: 'Providence',
         seed: '4',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21353.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21354.svg'
     },
     {
-        name: 'Iowa',
+        name: 'Utah St.',
         seed: '5',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21161.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21224.svg'
     },
     {
-        name: 'LSU',
+        name: 'Texas Tech',
         seed: '6',
         logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
     },{
-        name: 'USC',
+        name: 'Boise St.',
         seed: '7',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21213.svg'
     }, {
-        name: 'San Diego St.',
+        name: 'Dayton',
         seed: '8',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21138.svg'
     }, {
-        name: 'Creighton',
+        name: 'Oklahoma',
         seed: '9',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21208.svg'
     }, {
-        name: 'Miami',
+        name: 'Miss. St.',
         seed: '10',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21360.svg'
     }, {
-        name: 'Iowa St.',
+        name: 'Indiana St.',
         seed: '11',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21309.svg'
     }, {
-        name: 'Richmond',
+        name: 'Grand Canyon',
         seed: '12',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/160925.svg'
     }, {
-        name: 'S. Dak. St.',
+        name: 'Vermont',
         seed: '13',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21159.svg'
     }, {
-        name: 'Colgate',
+        name: 'Toledo',
         seed: '14',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21275.svg'
     }, {
-        name: 'Jax. State',
+        name: 'Sam Houston',
         seed: '15',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21381.svg'
     }, {
-        name: 'Texas So.',
+        name: 'Grambling',
         seed: '16',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21391.svg'
     }
 ]
 
 export const SOUTH_SEEDS = [
     {
-        name: 'Arizona',
+        name: 'Houston',
         seed: '1',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21408.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21237.svg'
     },
     {
-        name: 'Villanova',
+        name: 'Marquette',
         seed: '2',
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21239.svg'
+    },
+    {
+        name: 'Duke',
+        seed: '3',
         logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21130.svg'
     },
     {
-        name: 'Tennessee',
-        seed: '3',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
-    },
-    {
-        name: 'Illinois',
+        name: 'Alabama',
         seed: '4',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21353.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21352.svg'
     },
     {
-        name: 'Houston',
+        name: 'San Diego St.',
         seed: '5',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21161.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21431.svg'
     },
     {
-        name: 'Colo. St.',
+        name: 'Wisconsin',
         seed: '6',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21200.svg'
     },{
-        name: 'Ohio St.',
+        name: 'Washington St.',
         seed: '7',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21344.svg'
     }, {
-        name: 'Seton Hall',
+        name: 'Colo. St.',
         seed: '8',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21425.svg'
     }, {
-        name: 'TCU',
+        name: 'Michigan St.',
         seed: '9',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21194.svg'
     }, {
-        name: 'Loyola Chi.',
+        name: 'Northwestern',
         seed: '10',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21196.svg'
     }, {
-        name: 'Michigan',
+        name: 'TBD',
         seed: '11',
         logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
     }, {
-        name: 'UAB',
+        name: 'Samford',
         seed: '12',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21412.svg'
     }, {
-        name: 'Chattanooga',
+        name: 'App. St.',
         seed: '13',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21364.svg'
     }, {
-        name: 'Longwood',
+        name: 'Charleston',
         seed: '14',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21367.svg'
     }, {
-        name: 'Dellaware',
+        name: 'Colgate',
         seed: '15',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21347.svg'
     }, {
-        name: 'Wright St.',
+        name: 'Little Rock',
         seed: '16',
-        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg'
+        logo: 'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21397.svg'
     }
 ]
