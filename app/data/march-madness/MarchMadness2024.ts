@@ -6,12 +6,15 @@ export const getMatchUps = (seeds: any[], start: number, end: number) => {
 }
 
 export const getInitialMatches = (topRegionSeeds: any[], bottomRegionSeeds: any[]) => {
-    let start = 0;
-    let end = topRegionSeeds.length - 1;
+    const pairingOrder = [
+        [1, 16], [8, 9], [5, 12], [4, 13], [6, 11], [3, 14], [7, 10], [2, 15]
+    ];
 
-    const matches: any[] = [];
-    while (matches.length < 8) {
-        const [firstSeed, secondSeed] = getMatchUps(topRegionSeeds, start, end);
+    const matches: any = [];
+
+    pairingOrder.forEach(pair => {
+        const firstSeed = topRegionSeeds[pair[0] - 1];
+        const secondSeed = topRegionSeeds[pair[1] - 1];
         matches.push({
             scheduled: 'March 16',
             isFinal: false,
@@ -36,13 +39,11 @@ export const getInitialMatches = (topRegionSeeds: any[], bottomRegionSeeds: any[
                 score: ''
             }
         });
-        start = start + 1;
-        end = end - 1;
-    }
-    start = 0;
-    end = topRegionSeeds.length - 1;
-    while (matches.length < 16) {
-        const [firstSeed, secondSeed] = getMatchUps(bottomRegionSeeds, start, end);
+    });
+
+    pairingOrder.forEach(pair => {
+        const firstSeed = bottomRegionSeeds[pair[0] - 1];
+        const secondSeed = bottomRegionSeeds[pair[1] - 1];
         matches.push({
             scheduled: 'March 16',
             isFinal: false,
@@ -67,9 +68,8 @@ export const getInitialMatches = (topRegionSeeds: any[], bottomRegionSeeds: any[
                 score: ''
             }
         });
-        start = start + 1;
-        end = end - 1;
-    }
+    });
+
     return matches;
 }
 
@@ -115,7 +115,7 @@ export const MARCH_MADNESS_2024 = {
         {
             order: 1,
             isFinal: false,
-            matches: getInitialMatches(WEST_SEEDS, EAST_SEEDS)
+            matches: getInitialMatches(MIDWEST_SEEDS, WEST_SEEDS)
         },
         {
             order: 2,
@@ -165,7 +165,7 @@ export const MARCH_MADNESS_2024 = {
         {
             order: 11,
             isFinal: false,
-            matches: getInitialMatches(SOUTH_SEEDS, MIDWEST_SEEDS)
+            matches: getInitialMatches(EAST_SEEDS, SOUTH_SEEDS)
         },
     ]
 }

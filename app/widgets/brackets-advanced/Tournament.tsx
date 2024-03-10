@@ -26,6 +26,7 @@ const RegionalTournament = () => {
     const { regions, rounds } = useMarchMadness();
     const dispatch = useDispatch()
 
+    console.log(rounds)
     const handleAdvanceTeam = (team: any, matchNumber: number, currentRound: number, isFinalRound: boolean) => {
         let payloadData = {team: team, matchNumber: matchNumber, currentRound: currentRound, isFinalRound: isFinalRound};
         dispatch(advanceTeam(payloadData));
