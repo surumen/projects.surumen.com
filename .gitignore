@@ -12,7 +12,7 @@
 /.next/
 /out/
 /dist/
-./next.config.js
+next.config.js
 
 # production
 /build
