@@ -217,8 +217,9 @@ $light:         $gray-50 !default;
 $dark:          $gray-900 !default;
 
 $theme-colors: (
-        "gray":                   $gray-800,
         "primary":                $primary,
+        "secondary":              $secondary,
+        "gray":                   $gray-800,
         "error":                  $error-800,
         "warning":                $warning-800,
         "success":                $success-800,

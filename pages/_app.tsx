@@ -63,13 +63,13 @@ function MyProjectsApp({ Component, pageProps, projects }) {
 MyProjectsApp.getInitialProps = async (context: AppContext) => {
     const ctx = await App.getInitialProps(context);
     const projects: Project[] = [];
-    for (const project of AllProjectsData) {
-        if (project.contentType === 'blog') {
-            const { default: data } = await import(`../app/data/projects/md/${project.slug}.md`);
-            project.content = data;
-        }
-        projects.push(project);
-    }
+    // for (const project of AllProjectsData) {
+    //     if (project.contentType === 'blog') {
+    //         const { default: data } = await import(`../app/data/projects/md/${project.slug}.md`);
+    //         project.content = data;
+    //     }
+    //     projects.push(project);
+    // }
     return { ...ctx, projects: projects };
 };
 

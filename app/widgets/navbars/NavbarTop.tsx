@@ -1,26 +1,27 @@
 // import node module libraries
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { InputGroup, Form, Modal } from 'react-bootstrap';
+import Link from 'next/link';
+import { useDispatch } from 'react-redux';
 
 // import bootstrap icons
-import { Search, SendFill, X } from "react-bootstrap-icons";
+import { InputGroup, Form, Modal } from 'react-bootstrap';
+import { Search, SendFill, X } from 'react-bootstrap-icons';
 
 // import sub components
 import QuickMenu from '@/widgets/navbars/QuickMenu';
+import useProjects from '@/hooks/useProjects';
+import { setFilter, removeFilter, clearFilters } from '@/store/projectsSlice'
 
 import { AllProjectsData } from '@/data/projects/AllProjectsData';
-import Link from 'next/link';
 import { Project } from '@/types';
 
 
 const NavbarTop = (props) => {
 	const [open, setOpen] = useState(false);
 	const [Records, setRecords] = useState<Project[]>([]);
-
-	const [Categories, setCategories] = useState([
-		'Machine Learning', 'UI/UX', 'Full Stack', 'Front-End', 'APIs', 'Cloud Development'
-	]);
+	const dispatch = useDispatch();
+	const { filters, activeFilters } = useProjects();
 
 	const displayModal = () => {
 		setOpen(true);
@@ -41,10 +42,26 @@ const NavbarTop = (props) => {
 		setRecords([]);
 	}
 
-	const filterOptions = Categories.map((category, index) => {
+	const addFilter = (category: string) => {
+		if (activeFilters.indexOf(category) === -1) {
+			dispatch(setFilter(category));
+		} else {
+			dispatch(removeFilter(category));
+		}
+	};
+
+	const isSelectedFilter = (category: string) => {
+		return activeFilters.indexOf(category) > -1;
+	};
+
+	const filterOptions = filters.map((category, index) => {
 		return (
-			<button key={index} className={`btn btn-sm btn-outline-primary rounded-pill`}>
+			<button key={index} onClick={()=> {addFilter(category)}}
+					className={`btn btn-sm rounded-pill ${isSelectedFilter(category)  ? `btn-primary` : `btn-outline-primary`}`}>
 				{category}
+				{isSelectedFilter(category) ? (
+					<X size={14} className='ms-2 me-n1' />
+				) : (<span></span>)}
 			</button>
 		);
 	});
@@ -79,12 +96,26 @@ const NavbarTop = (props) => {
 				</div>
 			</div>
 
-			<div className='hstack gap-4 scrollable-x pt-4 px-0'>
-				{filterOptions.length > 0 ? (
-					filterOptions
-				) : (
-					<span>No filters</span>
-				)}
+			<div className='row align-items-center g-6 m-0'>
+				<div className='col-sm-9'>
+					<div className='hstack gap-4 scrollable-x pt-4 px-0'>
+						{filterOptions.length > 0 ? (
+							filterOptions
+						) : (
+							<span>No filters</span>
+						)}
+					</div>
+				</div>
+				<div className='col-sm-3'>
+					<div className='hstack justify-content-end gap-2'>
+						<button onClick={()=> {dispatch(clearFilters())}}
+								disabled={activeFilters.length === 0}
+								className={`btn btn-sm btn-outline-light border-gray-200 bg-light-hover text-primary-hover shadow-none rounded-pill`}>
+							<span className='pe-2'><X size={16} /></span>
+							<span>Clear Filters</span>
+						</button>
+					</div>
+				</div>
 			</div>
 
 			<Modal

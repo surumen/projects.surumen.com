@@ -9,6 +9,13 @@
   }
 }
 
+// Outline buttons
+@each $color, $value in $theme-colors {
+  .btn-outline-#{$color} {
+    @include button-outline-variant($value);
+  }
+}
+
 // Neutral button variant
 .btn-neutral {
   @include button-variant(
