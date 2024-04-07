@@ -6,8 +6,8 @@
 
 // White/Grays/Black colors
 $white:    #FFF !default;
-$gray-50:  #F7F7F8 !default;
-$gray-100: #F1F2F4 !default;
+$gray-50:  #F7F7F7 !default;
+$gray-100: #F0F0F0 !default;
 $gray-200: #E0E3E6 !default;
 $gray-300: #CDD1D6 !default;
 $gray-400: #99A0A8 !default;
@@ -193,7 +193,7 @@ $purple-800: #6921A5 !default;
 $purple-900: #561C84 !default;
 
 // Base colors TODO: change
-$blue:    #0099FF !default;
+$blue:    #377dff !default;
 $indigo:  #5C60F5 !default;
 $purple:  #8957FF !default;
 $pink:    #FF579A !default;
@@ -207,7 +207,7 @@ $teal:    #22DDDD !default;
 $cyan:    #00D4FF !default;
 
 // Theme colors
-$primary:       $primary-800 !default;
+$primary:       $blue !default;
 $secondary:     $gray-800 !default;
 $success:       $green-800 !default;
 $info:          $cyan-800 !default;
@@ -218,7 +218,7 @@ $dark:          $gray-900 !default;
 
 $theme-colors: (
         "gray":                   $gray-800,
-        "primary":                $primary-700,
+        "primary":                $primary,
         "error":                  $error-800,
         "warning":                $warning-800,
         "success":                $success-800,

@@ -1,10 +1,10 @@
 // import node module libraries
-import { Fragment, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { InputGroup, Form, Modal } from 'react-bootstrap';
 
 // import bootstrap icons
-import { Search, SendFill } from 'react-bootstrap-icons';
+import { Search, SendFill, X } from "react-bootstrap-icons";
 
 // import sub components
 import QuickMenu from '@/widgets/navbars/QuickMenu';
@@ -17,6 +17,10 @@ import { Project } from '@/types';
 const NavbarTop = (props) => {
 	const [open, setOpen] = useState(false);
 	const [Records, setRecords] = useState<Project[]>([]);
+
+	const [Categories, setCategories] = useState([
+		'Machine Learning', 'UI/UX', 'Full Stack', 'Front-End', 'APIs', 'Cloud Development'
+	]);
 
 	const displayModal = () => {
 		setOpen(true);
@@ -37,32 +41,50 @@ const NavbarTop = (props) => {
 		setRecords([]);
 	}
 
+	const filterOptions = Categories.map((category, index) => {
+		return (
+			<button key={index} className={`btn btn-sm btn-outline-primary rounded-pill`}>
+				{category}
+			</button>
+		);
+	});
+
 	return (
-        <Fragment>
-			{props.search ? (
-				<Fragment>
-					<Form className='flex-none'>
-						<InputGroup
-							className='input-group input-group-sm input-group-inline w-rem-64 rounded-pill shadow-none'>
-							<InputGroup.Text className='input-group-text rounded-start-pill'>
-								<Search size={16} className='me-2'/>
-							</InputGroup.Text>
-							<Form.Control onClick={() => displayModal()}
-										  type='search'
-										  className='form-control ps-0 rounded-end-pill'
-										  placeholder='Search Projects...'
-							/>
-						</InputGroup>
-					</Form>
-					<div className='d-flex align-items-center gap-4 px-4 scrollable-x'>
-						<div className='d-flex gap-2 text-xs'>
-							<span className='text-heading fw-semibold'>Last updated:</span> <span className='text-muted'>June 24th, 2023</span>
+		<div className='d-none d-lg-block border-bottom p-5 pb-4'>
+			<div className='d-none d-lg-flex'>
+				{props.search ? (
+					<Fragment>
+						<Form className='flex-none'>
+							<InputGroup
+								className='input-group input-group-sm input-group-inline bg-body-secondary ps-2 w-rem-80 h-rem-10 rounded-pill shadow-none'>
+								<InputGroup.Text className='input-group-text rounded-start-pill bg-transparent border-0'>
+									<Search size={12} className='me-2'/>
+								</InputGroup.Text>
+								<Form.Control onClick={() => displayModal()}
+											  type='search'
+											  className='form-control rounded-end-pill bg-transparent border-0'
+											  placeholder='Search projects, skills, interests...'
+								/>
+							</InputGroup>
+						</Form>
+						<div className='d-flex d-none align-items-center gap-4 px-4 scrollable-x'>
+							<div className='d-flex gap-2 text-xs'>
+								<span className='text-heading fw-semibold'>Last updated:</span> <span className='text-muted'>June 24th, 2023</span>
+							</div>
 						</div>
-					</div>
-				</Fragment>
-			) : (<Fragment></Fragment>)}
-			<div className='hstack flex-fill justify-content-end flex-nowrap gap-6 ms-auto px-6 px-xxl-8'>
-				<QuickMenu/>
+					</Fragment>
+				) : (<Fragment></Fragment>)}
+				<div className='hstack flex-fill justify-content-end flex-nowrap gap-6 ms-auto px-6 px-xxl-8'>
+					<QuickMenu/>
+				</div>
+			</div>
+
+			<div className='hstack gap-4 scrollable-x pt-4 px-0'>
+				{filterOptions.length > 0 ? (
+					filterOptions
+				) : (
+					<span>No filters</span>
+				)}
 			</div>
 
 			<Modal
@@ -75,12 +97,12 @@ const NavbarTop = (props) => {
 					<div className='vstack gap-6'>
 						<Form className='d-flex flex-wrap gap-1 gap-sm-2'>
 							<Form.Control autoFocus={true}
-								type='search'
-								className='form-control rounded shadow-none'
-								placeholder='Search projects, skills, interests ...'
-							    onChange={(e) => {
-									searchData(e.target.value);
-							  	}}
+										  type='search'
+										  className='form-control rounded shadow-none'
+										  placeholder='Search projects, skills, interests ...'
+										  onChange={(e) => {
+											  searchData(e.target.value);
+										  }}
 							/>
 						</Form>
 						<div className='vstack gap-10'>
@@ -108,7 +130,7 @@ const NavbarTop = (props) => {
 					</div>
 				</Modal.Body>
 			</Modal>
-		</Fragment>
+		</div>
     );
 };
 

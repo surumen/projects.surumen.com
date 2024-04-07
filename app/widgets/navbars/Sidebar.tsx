@@ -7,6 +7,8 @@ import { Image, Navbar, Container } from 'react-bootstrap';
 
 import useScroll from '@/hooks/useScroll';
 
+import LogoIcon from '@/widgets/icons/LogoIcon'
+
 
 const Sidebar = (props) => {
 	const location = useRouter();
@@ -17,8 +19,7 @@ const Sidebar = (props) => {
 		<Fragment>
 			<Container className={`container-fluid justify-content-center align-content-center px-3 ${props.className}`}>
 				<Navbar.Brand href="/" className="navbar-brand d-flex justify-content-center py-lg-1 mb-lg-5">
-					<Image src={props.className ? '/images/icons/logo-light.svg' : '/images/icons/logo-dark.svg'} alt="" className='h-rem-8 h-rem-md-16 logo-dark' />
-					<Image src="/images/icons/logo-light.svg" alt="" className='h-rem-8 h-rem-md-16 logo-light' />
+					<LogoIcon primary={'#377dff'} dark={'#1c232c'} />
 				</Navbar.Brand>
 
 				<div className='collapse navbar-collapse overflow-hidden py-5'>

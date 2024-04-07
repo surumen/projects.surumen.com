@@ -79,17 +79,7 @@ const ProjectGridView = () => {
 
 	return (
 		<Fragment>
-			<main className='container-fluid px-3 py-5 p-lg-6 p-xxl-8'>
-				<div className='d-flex gap-4 scrollable-x pb-3 px-3 border-bottom'>
-					{filterOptions.length > 0 ? (
-						filterOptions
-					) : (
-						<span>No filters</span>
-					)}
-					<div onClick={() => clearFilters()}  className='align-items-center ms-auto text-sm text-muted text-primary-hover fw-semibold d-none d-md-flex' role='button'>
-						<X size={16} className='me-1' /> <span>Clear filters</span>
-					</div>
-				</div>
+			<main className='container-fluid px-3 py-5 p-lg-6 pt-lg-0'>
 				<Row>
 					<Col>
 						{displayRecords.length > 0 ? (
