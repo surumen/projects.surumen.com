@@ -44,7 +44,7 @@ export const AllProjectsData: Project[] = [
         `,
 		contentType: 'blog',
 		content: ``
-	},
+	}
 ];
 
 export default AllProjectsData;

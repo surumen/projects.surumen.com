@@ -66,7 +66,7 @@ MyProjectsApp.getInitialProps = async (context: AppContext) => {
     for (const project of AllProjectsData) {
         if (project.contentType === 'blog') {
             const { default: data } = await import(`../app/data/projects/md/${project.slug}.md`);
-            // project.content = data;
+            //project.content = data;
         }
         projects.push(project);
     }
