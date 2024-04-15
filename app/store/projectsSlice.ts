@@ -12,6 +12,8 @@ const initialState = {
     previewedProject: null,
     filters: Array.from(new Set(AllProjectsData.map((project: Project) => project.technologyAreas).flat())),
     activeFilters: [],
+    languages: Array.from(new Set(AllProjectsData.map((project: Project) => project.language).flat())),
+    search: ''
 };
 
 export const projectsSlice = createSlice({
@@ -21,9 +23,18 @@ export const projectsSlice = createSlice({
         preview: (state, action) => {
             state.previewedProject = action.payload
         },
-        setFilter: (state, action) => {
-            // @ts-ignore
+        addFilter: (state: any, action: any) => {
             state.activeFilters = [...state.activeFilters, action.payload];
+        },
+        applyFilter: (state: any, action: any) => {
+            if (state.activeFilters.indexOf(action.payload) === -1) {
+                state.activeFilters = [...state.activeFilters, action.payload];
+            } else {
+                state.activeFilters = state.activeFilters.filter(filter => filter !== action.payload);
+            }
+        },
+        setSearch: (state, action) => {
+            state.search = action.payload;
         },
         removeFilter: (state, action) => {
             state.activeFilters = state.activeFilters.filter(filter => filter !== action.payload);
@@ -35,9 +46,11 @@ export const projectsSlice = createSlice({
 })
 
 export const {
-    setFilter,
+    applyFilter,
+    addFilter,
     removeFilter,
-    clearFilters
+    clearFilters,
+    setSearch
 } = projectsSlice.actions
 
 export default projectsSlice.reducer

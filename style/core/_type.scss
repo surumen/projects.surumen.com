@@ -11,6 +11,10 @@
   text-transform: $surtitle-text-transform;
 }
 
+.surtitle-sm {
+  font-size: $surtitle-font-size-sm !important;
+}
+
 // Muted links 
 a.text-muted:hover {
   color: var(--#{$prefix}primary);
