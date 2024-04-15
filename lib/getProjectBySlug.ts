@@ -14,22 +14,22 @@ export function getProjectsSlugs() {
 
 
 export function getProjectBySlug(slug: string) {
+    return AllProjectsData.filter(p => p.slug === slug)[0];
+}
+
+export function getProjectBlogBySlug(slug: string) {
     const realSlug = slug.replace(/\.md$/, '')
     const fullPath = join(projectsDirectory, `${realSlug}.md`)
     const fileContents = fs.readFileSync(fullPath, 'utf8')
     const { data, content } = matter(fileContents);
 
-    let project: Project = AllProjectsData.filter(p => p.slug === realSlug)[0];
-
-    // project.slug = realSlug;
-    // project.content = content;
-
-    return project;
+    return content;
 }
 
 export function getAllProjects(): Project[] {
-    const slugs = getProjectsSlugs();
-    return slugs
-        .map((slug) => getProjectBySlug(slug));
+    // const slugs = getProjectsSlugs();
+    // return slugs
+    //     .map((slug) => getProjectBySlug(slug));
+    return AllProjectsData;
 }
 

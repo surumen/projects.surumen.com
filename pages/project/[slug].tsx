@@ -5,10 +5,11 @@ import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 
 // import lib/widget/custom components
-import { getProjectBySlug, getAllProjects } from '../../lib/getProjectBySlug';
+import { getProjectBySlug, getAllProjects, getProjectBlogBySlug } from '../../lib/getProjectBySlug';
+import { Project } from "@/types";
 
 
-const ProjectSingle = ({project}) => {
+const ProjectSingle = ({project, blog}) => {
 
     const router = useRouter();
 
@@ -28,7 +29,7 @@ const ProjectSingle = ({project}) => {
         <Fragment>
             <main className='container-fluid py-5'>
                 {project ? (
-                    <ProjectSummary project={project} />
+                    <ProjectSummary project={project} blog={blog} />
                 ) : (<span></span>)}
             </main>
         </Fragment>
@@ -36,7 +37,8 @@ const ProjectSingle = ({project}) => {
 }
 
 ProjectSingle.propTypes = {
-    project: PropTypes.object
+    project: PropTypes.object,
+    blog: PropTypes.string
 }
 
 export default ProjectSingle;
@@ -44,11 +46,16 @@ export default ProjectSingle;
 
 export const getStaticProps = async ({ params, previewData = {} }) => {
 
-    const project = getProjectBySlug(params.slug);
+    const project: Project = getProjectBySlug(params.slug);
+    let blog = '';
+    if (project.contentType === 'blog') {
+        blog = getProjectBlogBySlug(params.slug);
+    }
 
     return {
         props: {
             project: project,
+            blog: blog,
             key: params.slug,
         },
         revalidate: 60,
