@@ -1,7 +1,6 @@
 // import node module libraries
-import React, { forwardRef, Fragment, useRef, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
@@ -30,8 +29,26 @@ const NavbarTop = (props) => {
 	const dispatch = useDispatch();
 
 	const [showSearchDropdown, setShowSearchDropdown] = useState(false);
-	const searchInputRef = useRef(null);
-	const searchDropdownRef = useRef(null);
+	const searchInputRef = useRef<HTMLInputElement>(null);
+	const searchDropdownRef = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		const handleClickOutside = (event: any) => {
+			if (
+				showSearchDropdown &&
+				searchDropdownRef.current &&
+				!searchDropdownRef.current.contains(event.target) &&
+				searchInputRef.current !== event.target
+			) {
+				setShowSearchDropdown(false);
+			}
+		};
+
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, [showSearchDropdown]);
 
 	const isSelectedFilter = (category: string) => {
 		return activeFilters.indexOf(category) > -1;
@@ -99,7 +116,6 @@ const NavbarTop = (props) => {
 		);
 	}
 
-
 	const ProjectLanguagesOptions = () => {
 		return (
 			<Fragment>
@@ -128,7 +144,6 @@ const NavbarTop = (props) => {
 	const SearchDropdownMenu = () => {
 		return (
 			<Dropdown.Menu
-				ref={searchDropdownRef}
 				className='dropdown-menu dropdown-menu-start px-2 pt-3 mt-2 mw-100'
 				show={hasMounted && isDesktop && showSearchDropdown}
 				style={{minWidth: '20rem'}}
@@ -154,7 +169,7 @@ const NavbarTop = (props) => {
 		<div className='d-none d-lg-block border-bottom p-5 pb-4'>
 			<div className='d-none d-lg-flex'>
 				{props.search ? (
-					<div className='dropdown'>
+					<div className='dropdown' ref={searchDropdownRef}>
 						<Form className='flex-none'>
 							<InputGroup
 								className='input-group input-group-sm input-group-inline bg-body-secondary ps-2 w-rem-80 h-rem-10 rounded-pill shadow-none'>
