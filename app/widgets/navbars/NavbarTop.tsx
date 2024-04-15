@@ -23,6 +23,7 @@ const NavbarTop = (props) => {
 
 	const hasMounted = useMounted();
 	const isDesktop = useMediaQuery({ query: '(min-width: 1224px)' });
+	const isMobile = useMediaQuery({ maxWidth: 767 });
 	const isLaptop = useMediaQuery({ query: '(min-width: 1024px)' });
 
 	const { projects, languages, filters, activeFilters, search } = useProjects();
@@ -144,8 +145,8 @@ const NavbarTop = (props) => {
 	const SearchDropdownMenu = () => {
 		return (
 			<Dropdown.Menu
-				className='dropdown-menu dropdown-menu-start px-2 pt-3 mt-2 mw-100'
-				show={hasMounted && isDesktop && showSearchDropdown}
+				className='px-2 pt-3 mt-2 mw-100'
+				show={hasMounted && !isMobile && showSearchDropdown}
 				style={{minWidth: '20rem'}}
 			>
 				{searchResults.length > 0 && !search ? (

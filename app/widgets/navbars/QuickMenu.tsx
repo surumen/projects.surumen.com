@@ -16,8 +16,8 @@ import useLocalStorage from '@/hooks/useLocalStorage';
 
 const QuickMenu = () => {
 
-    const defaultSkin = useSelector((state: any) => state.app.skin)
-    const dispatch = useDispatch()
+    const defaultSkin = useSelector((state: any) => state.app.skin);
+    const dispatch = useDispatch();
 
     const isDesktop = useMediaQuery({ query: '(min-width: 1224px)' });
 

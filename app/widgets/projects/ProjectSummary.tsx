@@ -8,12 +8,12 @@ import MarkdownDisplay from './Markdown';
 import { COMPONENTS_MAP } from "@/utils/componentsMap";
 
 
-const ProjectSummary = ({ project }) => {
+const ProjectSummary = ({ project, blog }) => {
 
 
 	const navContent: any = [];
-	if (project.content && project.contentType === 'blog') {
-		const headings: string[] = Array.from(project.content.match(/#{1,2}.+/g));
+	if (blog && project.contentType === 'blog') {
+		const headings: string[] = Array.from(blog.match(/#{1,2}.+/g));
 		headings.forEach(header => {
 			const numHashes = (header.match(/#/g) || []).length;
 			if (numHashes > 0 && numHashes < 3) {
@@ -95,7 +95,7 @@ const ProjectSummary = ({ project }) => {
 						</Col>
 						<Col md={9}>
 							<article className='article'>
-								<MarkdownDisplay content={project.content} />
+								<MarkdownDisplay content={blog} />
 							</article>
 						</Col>
 					</Row>
@@ -117,7 +117,8 @@ const ProjectSummary = ({ project }) => {
 
 // Typechecking With PropTypes
 ProjectSummary.propTypes = {
-	project: PropTypes.object.isRequired
+	project: PropTypes.object.isRequired,
+	blog: PropTypes.string
 };
 
 export default ProjectSummary;

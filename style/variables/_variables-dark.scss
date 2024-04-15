@@ -11,3 +11,24 @@ $btn-neutral-active-color:          $gray-700 !default;
 
 
 $gray-100:                          $gray-900 !default;
+
+
+
+// Dark dropdowns
+$dropdown-color:               $gray-300;
+$dropdown-bg:                  $gray-800;
+$dropdown-border-color:        $dropdown-border-color;
+$dropdown-box-shadow:          null;
+$dropdown-divider-bg:          $dropdown-divider-bg;
+$dropdown-box-shadow:          null;
+$dropdown-link-color:          $gray-300;
+$dropdown-link-hover-color:    $white;
+$dropdown-link-hover-bg:       rgba($white, .15);
+$dropdown-link-active-color:   $dropdown-link-active-color;
+$dropdown-link-active-bg:      $dropdown-link-active-bg;
+$dropdown-link-disabled-color: $gray-500;
+$dropdown-header-color:        $gray-500;
+
+
+// Surtitle
+$surtitle-color:              $gray-300;
