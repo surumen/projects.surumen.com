@@ -194,6 +194,16 @@ $utilities: map-merge($utilities, (
       "current": currentColor
     )
   ),
+  "bg-soft-colors": (
+    property: background-color,
+    class: bg-soft,
+    values: $theme-soft-colors
+  ),
+  "soft-colors": (
+    property: color,
+    class: text-soft,
+    values: $theme-soft-colors
+  ),
   "bg-opacity": map-merge(
     map-get($utilities, "bg-opacity"),
     ( 

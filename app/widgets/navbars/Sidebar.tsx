@@ -25,13 +25,13 @@ const Sidebar = (props) => {
 				<div className='collapse navbar-collapse overflow-hidden py-5'>
 					<h1
 						style={{transform: 'rotate(270deg)', transformOrigin: 'center', marginTop: '3rem'}}
-						className='display-4 font-display fw-bolder text-gray-200'>
+						className='display-4 font-display fw-bolder text-body-secondary opacity-25'>
 						2024
 					</h1>
 					<div className='nav-divider-step mt-auto'></div>
 					<h1
 						style={{transform: 'rotate(270deg)', transformOrigin: 'center', marginBottom: '2rem'}}
-						className='display-4 font-display fw-bolder text-gray-200'>
+						className='display-4 font-display fw-bolder text-body-secondary opacity-25'>
 						2015
 					</h1>
 				</div>

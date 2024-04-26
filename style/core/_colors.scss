@@ -4,302 +4,117 @@
 // 01. System Colors
 // -----------------------------------------
 
+// Base colors
+$blue:        #0061FE !default;
+$blue-night:  #3984FF !default;  // use in dark mode
+$coconut:     #F7F5F2 !default;
+$graphite:    #1E1919 !default;
+$green:       #2d7a02 !default;
+
+
+// Accent colors
+$ocean:     #007891 !default;
+$crimson:   #9B0032 !default;
+$rust:      #BE4B0A !default;
+$canopy:    #0F503C !default;
+$navy:      #283750 !default;
+$plum:      #78286E !default;
+$magenta:   #CD2F7B !default;
+$gold:      #9B6400 !default;
+
+$zen:       #14C8EB !default;
+$sunset:    #FA551E !default;
+$tangerine: #FF8C19 !default;
+$lime:      #B4DC19 !default;
+$cloud:     #B4C8E1 !default;
+$orchid:    #C8AFF0 !default;
+$pink:      #FFAFA5 !default;
+$banana:    #FAD24B !default;
+
+
+
 // White/Grays/Black colors
-$white:    #FFF !default;
-$gray-50:  #F7F7F7 !default;
-$gray-100: #F0F0F0 !default;
-$gray-200: #E0E3E6 !default;
-$gray-300: #CDD1D6 !default;
-$gray-400: #99A0A8 !default;
-$gray-500: #636C79 !default;
-$gray-600: #464D59 !default;
-$gray-700: #2F3641 !default; // Used for text color
-$gray-800: #1C232C !default; // Used for headings color
-$gray-900: #0D1017 !default;
-$black:    #000 !default;
-
-// Primary
-$primary-50:  #EFF8FE !default;
-$primary-100: #DFF1FD !default;
-$primary-200: #B9E5FC !default;
-$primary-300: #7DD2FB !default;
-$primary-400: #38BCF7 !default;
-$primary-500: #069CDF !default;
-$primary-600: #0283C5 !default;
-$primary-700: #0368A0 !default;
-$primary-800: #075884 !default;
-$primary-900: #0C496C !default;
-
-// Warning
-$warning-50:  #FEF9EA !default;
-$warning-100: #FEF2C7 !default;
-$warning-200: #FEE68A !default;
-$warning-300: #FDD14D !default;
-$warning-400: #FCB823 !default;
-$warning-500: #F6970A !default;
-$warning-600: #DB7005 !default;
-$warning-700: #B54D09 !default;
-$warning-800: #933C0E !default;
-$warning-900: #79320E !default;
+$white:    #FFFFFF !default;
+$gray-02:  #FAF9F7 !default;
+$gray-03:  #F7F5F2 !default;  // coconut
+$gray-04:  #F5F2EE !default;
+$gray-05:  #F2EEE8 !default;
+$gray-06:  #EEE9E2 !default;
+$gray-07:  #E8E4DC !default;
+$gray-08:  #D9D4CC !default;
+$gray-09:  #C2BDB6 !default;
+$gray-10:  #A8A49E !default;
+$gray-11:  #8E8B87 !default;
+$gray-12:  #777471 !default;
+$gray-13:  #54514F !default;
+$gray-14:  #393736 !default;
+$gray-15:  #2B2929 !default;
+$gray-16:  #242121 !default;
+$gray-17:  #201D1D !default;
+$gray-18:  #1E1919 !default;  // graphite
+$gray-19:  #161313 !default;
+$black:    #000000 !default;
 
 
-// Success
-$success-50:  #EFFCF2 !default;
-$success-100: #D8F9E1 !default;
-$success-200: #ACF0C0 !default;
-$success-300: #7BE79C !default;
-$success-400: #40D86E !default;
-$success-500: #26BF56 !default;
-$success-600: #25A244 !default;
-$success-700: #077F2E !default;
-$success-800: #00601A !default;
-$success-900: #10451D !default;
-
-// Error
-$error-50:  #FEF1F1 !default;
-$error-100: #FFE5E3 !default;
-$error-200: #FFCACA !default;
-$error-300: #FDA1A1 !default;
-$error-400: #F86F6E !default;
-$error-500: #EB4143 !default;
-$error-600: #D92625 !default;
-$error-700: #B51D1D !default;
-$error-800: #971A1B !default;
-$error-900: #7C1A1D !default;
 
 // -----------------------------------------
-// 02. Additional Colors
+// 02. Theme Colors
 // -----------------------------------------
 
-// Charcoal gray
-$charcoal-gray-50:  #F9FAFC !default;
-$charcoal-gray-100: #F2F5F8 !default;
-$charcoal-gray-200: #E4E8EE !default;
-$charcoal-gray-300: #CED5DE !default;
-$charcoal-gray-400: #98A3B4 !default;
-$charcoal-gray-500: #687386 !default;
-$charcoal-gray-600: #495566 !default;
-$charcoal-gray-700: #354153 !default;
-$charcoal-gray-800: #1F2939 !default;
-$charcoal-gray-900: #0F1728 !default;
-
-// Ironside gray
-$ironside-gray-50:  #F8F9F9 !default;
-$ironside-gray-100: #F3F4F4 !default;
-$ironside-gray-200: #E5E5E5 !default;
-$ironside-gray-300: #D4D3D3 !default;
-$ironside-gray-400: #A5A2A1 !default;
-$ironside-gray-500: #74716F !default;
-$ironside-gray-600: #53514F !default;
-$ironside-gray-700: #403E3D !default;
-$ironside-gray-800: #252424 !default;
-$ironside-gray-900: #181716 !default;
-
-// Dark orange
-$dark-orange-50:  #FFF7EF !default;
-$dark-orange-100: #FEEBD5 !default;
-$dark-orange-200: #FED8AA !default;
-$dark-orange-300: #FCBC79 !default;
-$dark-orange-400: #FA984B !default;
-$dark-orange-500: #F27128 !default;
-$dark-orange-600: #DB4F16 !default;
-$dark-orange-700: #B73813 !default;
-$dark-orange-800: #962E15 !default;
-$dark-orange-900: #7C2916 !default;
-
-// Orange
-$orange-50:  #FFFAF0 !default;
-$orange-100: #FEEACD !default;
-$orange-200: #FEDEAE !default;
-$orange-300: #FEC57C !default;
-$orange-400: #FD9B28 !default;
-$orange-500: #FD8508 !default;
-$orange-600: #EC7308 !default;
-$orange-700: #C65506 !default;
-$orange-800: #C04705 !default;
-$orange-900: #AF2F05 !default;
-
-// Green - light
-$green-light-50:  #D8F89D !default;
-$green-light-100: #D8F89D !default;
-$green-light-200: #D8F89D !default;
-$green-light-300: #BDF164 !default;
-$green-light-400: #A2E435 !default;
-$green-light-500: #83CA16 !default;
-$green-light-600: #64A20D !default;
-$green-light-700: #4D7B0F !default;
-$green-light-800: #3F6112 !default;
-$green-light-900: #355114 !default;
-
-// Green
-$green-50:  #EFFCF3 !default;
-$green-100: #DBFBE6 !default;
-$green-200: #BAF6CF !default;
-$green-300: #86EEAB !default;
-$green-400: #4ADC7F !default;
-$green-500: #22C35D !default;
-$green-600: #16A24A !default;
-$green-700: #157F3D !default;
-$green-800: #166434 !default;
-$green-900: #14522D !default;
-
-
-// Teal
-$teal-50:  #EFFCF9 !default;
-$teal-100: #CBFAF0 !default;
-$teal-200: #99F5E3 !default;
-$teal-300: #5EE9D3 !default;
-$teal-400: #2DD3BE !default;
-$teal-500: #14B7A6 !default;
-$teal-600: #0D9387 !default;
-$teal-700: #0F756D !default;
-$teal-800: #115D58 !default;
-$teal-900: #134D49 !default;
-
-// Cyan
-$cyan-50:  #EBFDFE !default;
-$cyan-100: #CEF9FD !default;
-$cyan-200: #A5F2FB !default;
-$cyan-300: #66E6F7 !default;
-$cyan-400: #22D2ED !default;
-$cyan-500: #06B5D3 !default;
-$cyan-600: #0890B0 !default;
-$cyan-700: #0E738F !default;
-$cyan-800: #155C73 !default;
-$cyan-900: #164E62 !default;
-
-// Red
-$red-50:  #FEF0F1 !default;
-$red-100: #FDE2E4 !default;
-$red-200: #FDCCD2 !default;
-$red-300: #FCA4AE !default;
-$red-400: #F97084 !default;
-$red-500: #F23F5D !default;
-$red-600: #DF1D48 !default;
-$red-700: #BC123C !default;
-$red-800: #9C1238 !default;
-$red-900: #871337 !default;
-
-// Purple
-$purple-50:  #F9F4FE !default;
-$purple-100: #F2E7FE !default;
-$purple-200: #E8D4FE !default;
-$purple-300: #D7B3FD !default;
-$purple-400: #BE83FA !default;
-$purple-500: #A754F5 !default;
-$purple-600: #9233E8 !default;
-$purple-700: #7D22CC !default;
-$purple-800: #6921A5 !default;
-$purple-900: #561C84 !default;
-
-// Base colors TODO: change
-$blue:    #377dff !default;
-$indigo:  #5C60F5 !default;
-$purple:  #8957FF !default;
-$pink:    #FF579A !default;
-$magenta: #EE33FF !default;
-$red:     #FF3366 !default;
-$orange:  #FF8C00 !default;
-$yellow:  #FFBB00 !default;
-$lime:    #84cc16 !default;
-$green:   #00CC88 !default;
-$teal:    #22DDDD !default;
-$cyan:    #00D4FF !default;
-
-// Theme colors
 $primary:       $blue !default;
-$secondary:     $gray-800 !default;
-$success:       $green-800 !default;
-$info:          $cyan-800 !default;
-$warning:       $dark-orange-800 !default;
-$danger:        $red-800 !default;
-$light:         $gray-50 !default;
-$dark:          $gray-900 !default;
+$secondary:     $gray-14 !default;
+$success:       $green !default;
+$info:          $ocean !default;
+$warning:       $gold !default;
+$danger:        $crimson !default;
+$light:         $coconut !default;
+$dark:          $gray-19 !default;
+
 
 $theme-colors: (
-        "primary":                $primary,
-        "secondary":              $secondary,
-        "gray":                   $gray-800,
-        "error":                  $error-800,
-        "warning":                $warning-800,
-        "success":                $success-800,
-        "charcoal-gray":          $charcoal-gray-800,
-        "ironside-gray":          $ironside-gray-800,
-        "dark-orange":            $dark-orange-800,
-        "orange":                 $orange-800,
-        "green":                  $green-800,
-        "teal":                   $teal-800,
-        "cyan":                   $cyan-800,
-        "purple":                 $purple-800,
-        "red":                    $red-800,
+    "primary":    $primary,
+    "secondary":  $secondary,
+    "success":    $success,
+    "info":       $info,
+    "warning":    $warning,
+    "danger":     $danger,
+    "light":      $light,
+    "dark":       $dark
+);
 
-        "gray-light":             $gray-50,
-        "primary-light":          $primary-50,
-        "error-light":            $error-50,
-        "warning-light":          $warning-50,
-        "success-light":          $success-50,
-        "charcoal-gray-light":    $charcoal-gray-50,
-        "ironside-gray-light":    $ironside-gray-50,
-        "dark-orange-light":      $dark-orange-50,
-        "green-light":            $green-50,
-        "teal-light":             $teal-50,
-        "cyan-light":             $cyan-50,
-        "purple-light":           $purple-50,
-        "red-light":              $red-50,
 
-        "gray-100":             $gray-100,
-        "primary-100":          $primary-100,
-        "error-100":            $error-100,
-        "warning-100":          $warning-100,
-        "success-100":          $success-100,
-        "charcoal-gray-100":    $charcoal-gray-100,
-        "ironside-gray-100":    $ironside-gray-100,
-        "dark-orange-100":      $dark-orange-100,
-        "green-100":            $green-100,
-        "teal-100":             $teal-100,
-        "cyan-100":             $cyan-100,
-        "purple-100":           $purple-100,
-        "red-100":              $red-100,
 
-        "gray-200":             $gray-200,
-        "primary-200":          $primary-200,
-        "error-200":            $error-200,
-        "warning-200":          $warning-200,
-        "success-200":          $success-200,
-        "charcoal-gray-200":    $charcoal-gray-200,
-        "ironside-gray-200":    $ironside-gray-200,
-        "dark-orange-200":      $dark-orange-200,
-        "green-200":            $green-200,
-        "teal-200":             $teal-200,
-        "cyan-200":             $cyan-200,
-        "purple-200":           $purple-200,
-        "red-200":              $red-200,
+// Soft colors
+$primary-soft:                                              rgba($primary, .1);
+$secondary-soft:                                            rgba($secondary, .1);
+$success-soft:                                              rgba($success, .1);
+$info-soft:                                                 rgba($info, .1);
+$warning-soft:                                              rgba($warning, .1);
+$danger-soft:                                               rgba($danger, .1);
+$light-soft:                                                rgba($light, .1);
+$dark-soft:                                                 rgba($dark, .1);
 
-        "gray-300":             $gray-300,
-        "primary-300":          $primary-300,
-        "error-300":            $error-300,
-        "warning-300":          $warning-300,
-        "success-300":          $success-300,
-        "charcoal-gray-300":    $charcoal-gray-300,
-        "ironside-gray-300":    $ironside-gray-300,
-        "dark-orange-300":      $dark-orange-300,
-        "green-300":            $green-300,
-        "teal-300":             $teal-300,
-        "cyan-300":             $cyan-300,
-        "purple-300":           $purple-300,
-        "red-300":              $red-300,
+$theme-soft-colors: (
+    "primary":    $primary-soft,
+    "secondary":  $secondary-soft,
+    "success":    $success-soft,
+    "info":       $info-soft,
+    "warning":    $warning-soft,
+    "danger":     $danger-soft,
+    "light":      $light-soft,
+    "dark":       $dark-soft
+) !default;
 
-        "gray-600":             $gray-600,
-        "primary-600":          $primary-600,
-        "error-600":            $error-600,
-        "warning-600":          $warning-600,
-        "success-600":          $success-600,
-        "charcoal-gray-600":    $charcoal-gray-600,
-        "ironside-gray-600":    $ironside-gray-600,
-        "dark-orange-600":      $dark-orange-600,
-        "green-600":            $green-600,
-        "teal-600":             $teal-600,
-        "cyan-600":             $cyan-600,
-        "purple-600":           $purple-600,
-        "red-600":              $red-600,
+
+// Bootstrap overrides
+$grays: (
+      "100": $gray-03,
+      "200": $gray-05,
+      "300": $gray-07,
+      "400": $gray-09,
+      "500": $gray-11,
+      "600": $gray-13,
+      "700": $gray-15,
+      "800": $gray-17,
+      "900": $gray-19
 ) !default;

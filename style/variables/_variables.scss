@@ -50,15 +50,15 @@ $bg-tint-level:            15% !default;
 // Settings for the `<body>` element.
 
 $body-bg:     $white !default;
-$body-color:  $gray-800 !default;
+$body-color:  $gray-19 !default;
 
 $body-secondary-color:      rgba($body-color, .75) !default;
-$body-secondary-bg:         $gray-100 !default;
+$body-secondary-bg:         $coconut !default;
 
 $body-tertiary-color:       rgba($body-color, .5) !default;
-$body-tertiary-bg:          $gray-50 !default;
+$body-tertiary-bg:          $coconut !default;
 
-$body-emphasis-color:       $gray-900 !default;
+$body-emphasis-color:       $gray-19 !default;
 
 // Spacing
 //
@@ -129,7 +129,7 @@ $screen-widths: (
 
 // Border
 $border-width:                1px !default;
-$border-color:                $gray-200 !default;
+$border-color:                $coconut !default;
 
 // Border radius
 $border-radius-sm:            .25rem !default;
@@ -319,7 +319,7 @@ $headings-font-family:        null !default;
 $headings-font-style:         null !default;
 $headings-font-weight:        $font-weight-bold !default;
 $headings-line-height:        1.3 !default;
-$headings-color:              $gray-900 !default;
+$headings-color:              $gray-19 !default;
 
 $large-headings-font-weight:  $headings-font-weight !default;
 $small-headings-font-weight:  $font-weight-bold !default;
@@ -348,14 +348,14 @@ $small-font-size:             .875em !default;
 
 $sub-sup-font-size:           .75em !default;
 
-$text-muted:                  $gray-600 !default;
+$text-muted:                  $gray-08 !default;
 $text-muted-hover:            shade-color($text-muted, 15%) !default;
 
 $initialism-font-size:        $small-font-size !default;
 
 $blockquote-margin-y:         $spacer !default;
 $blockquote-font-size:        $font-size-base * 1.25 !default;
-$blockquote-footer-color:     $gray-600 !default;
+$blockquote-footer-color:     $gray-08 !default;
 $blockquote-footer-font-size: $small-font-size !default;
 
 $hr-opacity:                  .10 !default;
@@ -376,7 +376,7 @@ $mark-bg:                     #fcf8e3 !default;
 
 
 // Surtitle
-$surtitle-color:              $gray-700 !default;
+$surtitle-color:              $gray-15 !default;
 $surtitle-font-size:          .75rem !default;
 $surtitle-font-size-sm:       .65625rem !default;
 $surtitle-font-weight:        $font-weight-semibold !default;
@@ -415,7 +415,7 @@ $table-th-font-size:            .675rem !default;
 $table-th-text-transform:       uppercase !default;
 $table-th-letter-spacing:       0.025em !default;
 $table-th-bg:                   transparent !default;
-$table-th-color:                $gray-700 !default;
+$table-th-color:                $gray-15 !default;
 // wpx-end
 
 // $table-striped-color:         $table-color !default;
@@ -423,10 +423,10 @@ $table-striped-bg-factor:     .03 !default;
 // $table-striped-bg:            rgba(var(--#{$prefix}emphasis-color-rgb), $table-striped-bg-factor) !default;
 
 // $table-active-bg-factor:        .8 !default;
-// $table-active-bg:               rgba($gray-100, $table-active-bg-factor) !default;
+// $table-active-bg:               rgba($gray-02, $table-active-bg-factor) !default;
 
 // $table-hover-bg-factor:         .8 !default;
-// $table-hover-bg:                rgba($gray-100, $table-hover-bg-factor) !default;
+// $table-hover-bg:                rgba($gray-02, $table-hover-bg-factor) !default;
 
 // wpx-add
 $table-spaced-row-border-radius: var(--#{$prefix}border-radius) !default;
@@ -505,14 +505,14 @@ $btn-square-size-xs:                2.046875rem !default;
 
 // Neutral button
 $btn-neutral-bg:                    $white !default;
-$btn-neutral-color:                 $gray-700 !default;
-$btn-neutral-border-color:          $gray-300 !default;
-$btn-neutral-hover-bg:              $gray-100 !default;
-$btn-neutral-hover-border-color:    $gray-200 !default;
-$btn-neutral-hover-color:           $gray-700 !default;
-$btn-neutral-active-bg:             $gray-200 !default;
-$btn-neutral-active-border-color:   $gray-300 !default;
-$btn-neutral-active-color:          $gray-700 !default;
+$btn-neutral-color:                 $gray-15 !default;
+$btn-neutral-border-color:          $gray-10 !default;
+$btn-neutral-hover-bg:              $gray-02 !default;
+$btn-neutral-hover-border-color:    $coconut !default;
+$btn-neutral-hover-color:           $gray-15 !default;
+$btn-neutral-active-bg:             $coconut !default;
+$btn-neutral-active-border-color:   $gray-10 !default;
+$btn-neutral-active-color:          $gray-15 !default;
 
 
 // Forms
@@ -525,7 +525,7 @@ $input-focus-border-color:           var(--#{$prefix}primary) !default;
 $input-focus-width:                  $input-btn-focus-width !default;
 $input-focus-box-shadow:             $input-btn-focus-box-shadow !default;
 
-$input-muted-bg:                     tint-color($gray-200, 30%) !default;
+$input-muted-bg:                     tint-color($coconut, 30%) !default;
 $input-muted-focus-bg:               tint-color($input-muted-bg, 15%) !default;
 
 $input-alt-bg:                       var(--#{$prefix}body-bg) !default;
@@ -613,7 +613,7 @@ $breadcrumb-padding-x:              0;
 $breadcrumb-item-padding-x:         .375rem;
 $breadcrumb-margin-bottom:          0;
 $breadcrumb-bg:                     null;
-$breadcrumb-divider-color:          $gray-400;
+$breadcrumb-divider-color:          $gray-10;
 $breadcrumb-active-color:           $headings-color;
 $breadcrumb-divider:                quote("/");
 $breadcrumb-divider-flipped:        $breadcrumb-divider;
@@ -684,7 +684,7 @@ $dropdown-padding-y:                .5rem !default;
 $dropdown-spacer:                   .125rem !default;
 $dropdown-bg:                       $white !default;
 $dropdown-border-width:             1px !default;
-$dropdown-border-color:             lighten($gray-200, 3%) !default;
+$dropdown-border-color:             lighten($coconut, 3%) !default;
 $dropdown-border-radius:            $border-radius-xl !default;
 $dropdown-border-width:             $border-width !default;
 $dropdown-divider-bg:               tint-color($dropdown-border-color, 10%) !default;
@@ -692,9 +692,9 @@ $dropdown-divider-margin-y:         $dropdown-padding-y !default;
 $dropdown-box-shadow:               $box-shadow-2xl !default;
 $dropdown-font-size:                $font-size-sm !default;
 
-$dropdown-secondary-bg:             $gray-100 !default;
+$dropdown-secondary-bg:             $gray-02 !default;
 
-$dropdown-heading-color:            $gray-900 !default;
+$dropdown-heading-color:            $gray-19 !default;
 $dropdown-heading-font-size:        $font-size-base !default;
 $dropdown-heading-font-weight:      $font-weight-semibold !default;
 $dropdown-heading-focus-color:      $primary !default;
@@ -702,10 +702,10 @@ $dropdown-heading-focus-color:      $primary !default;
 $dropdown-helper-color:             $text-muted !default;
 
 $dropdown-link-border-radius:       $border-radius !default;
-$dropdown-link-color:               $gray-900 !default;
+$dropdown-link-color:               $gray-19 !default;
 $dropdown-link-bg:                  $white !default;
-$dropdown-link-hover-color:         $gray-900 !default;
-$dropdown-link-hover-bg:            $gray-100 !default;
+$dropdown-link-hover-color:         $gray-19 !default;
+$dropdown-link-hover-bg:            $gray-02 !default;
 $dropdown-link-active-color:        $primary !default;
 $dropdown-link-active-bg:           transparent !default;
 
@@ -759,7 +759,7 @@ $modal-header-border-color:         var(--#{$prefix}border-color) !default;
 $modal-fade-transform:             translate(0, 15px) scale(0.95) !default;
 $modal-transition:                  all $transition-base-duration ease-out !default;
 
-$modal-backdrop-bg:                 rgba($gray-900, .25);
+$modal-backdrop-bg:                 rgba($gray-19, .25);
 $modal-backdrop-opacity:            1;
 
 // Navs
@@ -789,10 +789,10 @@ $navbar-light-disabled-color:           rgba(var(--#{$prefix}emphasis-color-rgb)
 
 // start wpx
 $navbar-light-nav-link-bg:              transparent !default;
-$navbar-light-nav-link-hover-bg:        $gray-200 !default;
-$navbar-light-nav-link-active-bg:       $gray-200 !default;
+$navbar-light-nav-link-hover-bg:        $coconut !default;
+$navbar-light-nav-link-active-bg:       $coconut !default;
 
-$navbar-light-icon-color:               $gray-800 !default;
+$navbar-light-icon-color:               $gray-19 !default;
 $navbar-light-caret-bg:                 str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 16 16' fill='#{$navbar-light-color}' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E"), "#", "%23") !default;
 $navbar-light-collapse-border-color:    rgba($dark, .10) !default;
 // end wpx
@@ -808,7 +808,7 @@ $navbar-dark-nav-link-bg:               transparent !default;
 $navbar-dark-nav-link-hover-bg:         rgba(255, 255, 255, .1) !default;
 $navbar-dark-nav-link-active-bg:        rgba(255, 255, 255, .1) !default;
 
-$navbar-dark-icon-color:                $gray-100 !default;
+$navbar-dark-icon-color:                $gray-02 !default;
 $navbar-dark-caret-bg:                  str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 16 16' fill='#{$navbar-dark-color}' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E"), "#", "%23") !default;
 $navbar-dark-collapse-border-color:     rgba($white, .25) !default;
 
@@ -820,19 +820,19 @@ $navbar-toggler-font-size:          $font-size-lg !default;
 $navbar-toggler-icon-width:         1.25em !default;
 $navbar-toggler-icon-height:        1.25em !default;
 
-$navbar-light-toggler-color:        $gray-600 !default;
+$navbar-light-toggler-color:        $gray-08 !default;
 $navbar-light-toggler-bg:           transparent !default;
 $navbar-light-toggler-icon-bg:      str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='#{$navbar-light-toggler-color}' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"), "#", "%23") !default;
 $navbar-light-toggler-border-color: transparent !default;
 $navbar-light-toggler-focus-color:  transparent !default;
-$navbar-light-toggler-focus-bg:     $gray-100 !default;
+$navbar-light-toggler-focus-bg:     $gray-02 !default;
 
-$navbar-dark-toggler-color:         $gray-200 !default;
-$navbar-dark-toggler-bg:             transparent !default;
+$navbar-dark-toggler-color:         $coconut !default;
+$navbar-dark-toggler-bg:            transparent !default;
 $navbar-dark-toggler-icon-bg:       str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='#{$navbar-dark-toggler-color}' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"), "#", "%23") !default;
 $navbar-dark-toggler-border-color:  transparent !default;
 $navbar-dark-toggler-focus-color:   transparent !default;
-$navbar-dark-toggler-focus-bg:      $gray-100 !default;
+$navbar-dark-toggler-focus-bg:      $gray-02 !default;
 
 // Vertical navbar
 
@@ -887,7 +887,7 @@ $pagination-tabs-active-border-color:   var(--#{$prefix}primary) !default;
 
 // Bullet pagination
 
-$pagination-bullet-bg:              $gray-500 !default;
+$pagination-bullet-bg:              $coconut !default;
 $pagination-bullet-active-bg:       $primary !default;
 
 // Popovers

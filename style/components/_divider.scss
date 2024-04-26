@@ -2,7 +2,7 @@
   &::after {
     position: absolute;
     top: 33%;
-    border-left: $border-width solid $border-color;
+    border-left: $border-width solid transparent;
     content: "";
     bottom: 27%;
     left: 50%;

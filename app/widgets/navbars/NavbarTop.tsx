@@ -84,7 +84,7 @@ const NavbarTop = (props) => {
 			<Fragment>
 				<div className='surtitle surtitle-sm px-3 py-2 d-flex align-items-center'>Recent Searches</div>
 				<div className='dropdown-item bg-transparent text-wrap d-flex gap-2'>
-					<button type='button' className='btn btn-xs text-xs bg-primary bg-opacity-75 text-bg-primary rounded-pill shadow-none bg-opacity-100-hover text-white-hover'>
+					<button type='button' className='btn btn-xs text-xs btn-info rounded-pill shadow-none'>
 						Machine learning
 						<Search size={18} className='ps-2' />
 					</button>
@@ -209,7 +209,7 @@ const NavbarTop = (props) => {
 					<div className='hstack justify-content-end gap-2'>
 						<button onClick={()=> {dispatch(clearFilters())}}
 								disabled={activeFilters.length === 0}
-								className={`btn btn-sm btn-outline-light border-gray-200 bg-light-hover text-primary-hover shadow-none rounded-pill`}>
+								className={`btn btn-sm btn-light shadow-none rounded-pill`}>
 							<span className='pe-2'><X size={16} /></span>
 							<span>Clear Filters</span>
 						</button>
