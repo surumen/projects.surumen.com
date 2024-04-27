@@ -57,12 +57,22 @@ $black:    #000000 !default;
 
 
 
+$gray-100:  $gray-03 !default;
+$gray-200:  $gray-05 !default;
+$gray-300:  $gray-07 !default;
+$gray-400:  $gray-09 !default;
+$gray-500:  $gray-11 !default;
+$gray-600:  $gray-13 !default;
+$gray-700:  $gray-15 !default;
+$gray-800:  $gray-17 !default;
+$gray-900:  $gray-19 !default;
+
 // -----------------------------------------
 // 02. Theme Colors
 // -----------------------------------------
 
 $primary:       $blue !default;
-$secondary:     $gray-14 !default;
+$secondary:     $gray-700 !default;
 $success:       $green !default;
 $info:          $ocean !default;
 $warning:       $gold !default;
