@@ -21,7 +21,7 @@ export const AllProjectsData: Project[] = [
         We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
         We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>
         `,
-		component: 'tournament',
+		component: 'ncaa',
 		contentType: 'app',
 		content: ``
 	},
@@ -44,7 +44,7 @@ export const AllProjectsData: Project[] = [
         We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
         We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>
         `,
-		contentType: 'app',
+		contentType: 'demo',
 		content: ``
 	},
 	{
@@ -66,7 +66,7 @@ export const AllProjectsData: Project[] = [
         We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
         We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>
         `,
-		contentType: 'app',
+		contentType: 'demo',
 		content: ``
 	}
 ];

@@ -22,7 +22,7 @@ const ProjectSummary = ({ project, blog }) => {
 		});
 	}
 
-	const DemoAppComponent = COMPONENTS_MAP[project.component];
+	const DemoAppComponent = project.contentType !== 'blog' ? COMPONENTS_MAP[project.component] : null;
 
 	return (
 		<Fragment>
@@ -99,14 +99,22 @@ const ProjectSummary = ({ project, blog }) => {
 							</article>
 						</Col>
 					</Row>
-				) : (
-					<div className='overflow-auto'>
-						<Row className='overflow-auto'>
-							<Col className='overflow-auto'>
-								<DemoAppComponent />
-							</Col>
-						</Row>
-					</div>
+				) : ( project.contentType === 'app' ? (
+						<div className='overflow-auto'>
+							<Row className='overflow-auto'>
+								<Col className='overflow-auto'>
+									<DemoAppComponent />
+								</Col>
+							</Row>
+						</div>
+					) : (
+						<div className='overflow-auto'>
+							<Row className='overflow-auto'>
+								<Col className='overflow-auto'>
+								</Col>
+							</Row>
+						</div>
+					)
 				)}
 			</section>
 
