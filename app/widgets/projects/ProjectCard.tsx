@@ -13,7 +13,7 @@ import ProjectSummary from './ProjectSummary';
 import { LanguageColorMap } from '@/data/ColorMap';
 
 
-const ProjectCard = ({ item, viewby }) => {
+const ProjectCard = ({ project, viewby }) => {
 	const [show, setShow] = useState(false);
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
@@ -45,14 +45,14 @@ const ProjectCard = ({ item, viewby }) => {
 					flex-fill
 					">
 
-						<h4 className="text-heading fw-semibold mb-2">{item.title}</h4>
+						<h4 className="text-heading fw-semibold mb-2">{project.title}</h4>
 
 						<div className="d-block text-sm text-muted gap-2 mb-3">
-							<span>{item.shortDescription}</span>
+							<span>{project.shortDescription}</span>
 						</div>
 						<div className="d-flex align-items-center gap-2 text-sm">
 							<span className="badge badge-lg badge-dot">
-								<i style={{ backgroundColor: getLanguageScheme(item.language)}}></i>{item.language}
+								<i style={{ backgroundColor: getLanguageScheme(project.frameworks[0])}}></i>{project.frameworks[0]}
 							</span>
 						</div>
 
@@ -76,7 +76,7 @@ const ProjectCard = ({ item, viewby }) => {
 					<Button onClick={handleClose} className="btn d-inline-flex btn-sm btn-neutral shadow-none rounded-pill"><span>Back Home</span></Button>
 				</Offcanvas.Header>
 				<Offcanvas.Body className='p-0'>
-					<ProjectSummary project={item} />
+					<ProjectSummary project={project} />
 				</Offcanvas.Body>
 			</Offcanvas>
 		</Fragment>
@@ -91,7 +91,7 @@ ProjectCard.defaultProps = {
 
 // Typechecking With PropTypes
 ProjectCard.propTypes = {
-	item: PropTypes.object.isRequired,
+	project: PropTypes.object.isRequired,
 	free: PropTypes.bool,
 	viewby: PropTypes.string
 };

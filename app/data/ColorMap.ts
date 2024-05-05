@@ -1,7 +1,7 @@
 export const LanguageColorMap = [
     {
         color: 'Python',
-        scheme: '#3572A5'
+        scheme: '#9B6400'
     },
     {
         color: 'Java',
@@ -12,12 +12,12 @@ export const LanguageColorMap = [
         scheme: '#f1e05a'
     },
     {
-        color: 'TypeScript',
-        scheme: '#3178c6'
+        color: 'Typescript',
+        scheme: '#007891'
     },
     {
         color: 'React',
-        scheme: '#3178c6'
+        scheme: '#14C8EB'
     },
     {
         color: 'Angular',
@@ -26,6 +26,10 @@ export const LanguageColorMap = [
     {
         color: 'Vue',
         scheme: '#41b883'
+    },
+    {
+        color: 'Next.js',
+        scheme: '#B4DC19'
     },
     {
         color: 'C',

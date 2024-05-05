@@ -12,7 +12,7 @@ const initialState = {
     previewedProject: null,
     filters: Array.from(new Set(AllProjectsData.map((project: Project) => project.technologyAreas).flat())),
     activeFilters: [],
-    languages: Array.from(new Set(AllProjectsData.map((project: Project) => project.language).flat())),
+    languages: Array.from(new Set(AllProjectsData.map((project: Project) => project.languages).flat())),
     search: ''
 };
 

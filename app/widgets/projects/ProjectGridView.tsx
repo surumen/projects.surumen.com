@@ -19,7 +19,7 @@ const ProjectGridView = () => {
 
 	let displayRecords = filteredRecords.map((project, index) => {
 		return (
-			<ProjectCard key={index} item={project} />
+			<ProjectCard key={index} project={project} />
 		);
 	});
 

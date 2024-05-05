@@ -1,7 +1,8 @@
 
 export interface Project {
     id: string;
-    language: string;
+    languages: string[];
+    frameworks: string[];
     technologyAreas: string[];
     title: string;
     shortTitle?: string;
