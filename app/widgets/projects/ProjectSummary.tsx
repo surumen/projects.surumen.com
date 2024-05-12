@@ -100,13 +100,11 @@ const ProjectSummary = ({ project, blog }) => {
 						</Col>
 					</Row>
 				) : ( project.contentType === 'app' ? (
-						<div className='overflow-auto'>
-							<Row className='overflow-auto'>
-								<Col className='overflow-auto'>
-									<DemoAppComponent />
-								</Col>
-							</Row>
-						</div>
+						<Row>
+							<Col>
+								<DemoAppComponent />
+							</Col>
+						</Row>
 					) : (
 						<div className='overflow-auto'>
 							<Row className='overflow-auto'>

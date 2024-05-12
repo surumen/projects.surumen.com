@@ -16,6 +16,8 @@ import ReactQuillEditor from './editor/ReactQuillEditor';
 // import widget/custom components from advance-table folder
 import Pagination from './advance-table/Pagination';
 
+// import widget/custom components from live-chart folder
+import RacingBarChart from '@/widgets/charts/BarChart';
 
 export {
    ProjectCard,
@@ -26,4 +28,5 @@ export {
    HighlightCode,
    Pagination,
    ReactQuillEditor,
+   RacingBarChart
 };

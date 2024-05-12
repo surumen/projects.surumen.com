@@ -44,7 +44,8 @@ export const AllProjectsData: Project[] = [
         We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
         We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>
         `,
-		contentType: 'demo',
+		contentType: 'app',
+		component: 'fpl',
 		content: ``
 	},
 	{
