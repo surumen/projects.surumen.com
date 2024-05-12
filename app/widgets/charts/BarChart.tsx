@@ -231,7 +231,8 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale}) => {
             .duration(tickDuration)
             .ease(d3.easeLinear)
             .attr('x', (entry: any) => x(entry.value) + 5)
-            .attr('y', (entry: any) => y(entry.rank) + ((y(1) - y(0)) / 2) + 1);
+            .attr('y', (entry: any) => y(entry.rank) + ((y(1) - y(0)) / 2) + 1)
+            .text((entry: any) => d3.format(',.0f')(entry.lastValue))
 
         valueLabels
             .exit()
