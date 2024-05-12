@@ -32,6 +32,10 @@ export const LanguageColorMap = [
         scheme: '#B4DC19'
     },
     {
+        color: 'D3.js',
+        scheme: '#f47754'
+    },
+    {
         color: 'C',
         scheme: '#555555'
     },
