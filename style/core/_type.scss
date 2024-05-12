@@ -11,6 +11,25 @@
   text-transform: $surtitle-text-transform;
 }
 
+.text-muted-charts {
+  color: $text-muted !important;
+
+  & .timeText {
+    fill: $secondary !important;
+    font-weight: $font-weight-bolder;
+    opacity: 0.25 !important;
+    text-anchor: end;
+    font-size: $h1-font-size;
+  }
+}
+
+.live-charts {
+  .tick text {
+    fill: $gray-13 !important;
+    color: $gray-13 !important;
+  }
+}
+
 .surtitle-sm {
   font-size: $surtitle-font-size-sm !important;
 }
