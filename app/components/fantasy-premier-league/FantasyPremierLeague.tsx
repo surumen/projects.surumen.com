@@ -4,6 +4,8 @@ import { ParseResult } from 'papaparse';
 import { usePapaParse } from 'react-papaparse';
 import { RacingBarChart } from '@/widgets';
 import { timeParse } from "d3";
+import * as d3 from "d3";
+import { groupDataByFirstColumn } from "@/helper/reshapeData";
 
 
 const FantasyPremierLeague = () => {
@@ -13,13 +15,21 @@ const FantasyPremierLeague = () => {
     const [isLoading, setLoading] = useState(true);
     const [topN, setTopN] = useState<number>(10);
     const { readRemoteFile } = usePapaParse();
+    const colorScale = d3.scaleOrdinal(d3.schemeTableau10);
+
+    const stackOverflow: string = 'https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/stackoverflow.csv';
+    const co2emissions: string = 'https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/co2.csv';
+    const covid19: string = 'https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/covid19-data.csv';
 
     useEffect(() => {
-        readRemoteFile('https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/stackoverflow.csv', {
+        readRemoteFile(covid19, {
             header: true,
             download: true,
             skipEmptyLines: true,
             complete: (results: ParseResult<any>) => {
+                if (Object.keys(results.data[0]).length === 3) {
+                    results.data = groupDataByFirstColumn(results.data)
+                }
                 const columnNames = Object.keys(results.data[0]).slice(1, );
                 const timeIndex = Object.keys(results.data[0])[0];
                 results.data.forEach((d: any) => {
@@ -40,7 +50,7 @@ const FantasyPremierLeague = () => {
 
     return (
         <div className='px-4'>
-            <RacingBarChart topN={topN} data={data} tickDuration={tickDuration} />
+            <RacingBarChart topN={topN} data={data} tickDuration={tickDuration} colorScale={colorScale} />
         </div>
     )
 };
