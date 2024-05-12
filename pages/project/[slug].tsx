@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 // import lib/widget/custom components
 import { getProjectBySlug, getAllProjects, getProjectBlogBySlug } from '../../lib/getProjectBySlug';
 import { Project } from "@/types";
+import { NextSeo } from "next-seo";
 
 
 const ProjectSingle = ({project, blog}) => {
@@ -27,6 +28,15 @@ const ProjectSingle = ({project, blog}) => {
 
     return (
         <Fragment>
+            <NextSeo
+                title={project.title}
+                description={project.description}
+                openGraph={{
+                    title: project.title,
+                    description: project.description,
+                    site_name: process.env.siteName,
+                }}
+            />
             <main className='container-fluid py-5'>
                 {project ? (
                     <ProjectSummary project={project} blog={blog} />

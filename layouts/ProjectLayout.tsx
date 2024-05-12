@@ -13,13 +13,8 @@ const ProjectLayout = (props) => {
                     className={'bg-charcoal-gray-600 py-2 py-md-1'}
                 />
             </nav>
-            <div className='flex-lg-fill overflow-x-auto vstack vh-lg-100 position-relative'>
-                <div className='d-none d-lg-flex py-3 bg-light border-bottom'>
-                    <NavbarTop search={false}/>
-                </div>
-                <div className='flex-fill overflow-y-lg-auto scrollbar overflow-x-hidden bg-body'>
-                    {props.children}
-                </div>
+            <div className='vstack vh-lg-100 bg-body flex-lg-fill overflow-x-auto position-relative'>
+                {props.children}
             </div>
         </div>
     );

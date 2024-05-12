@@ -33,7 +33,7 @@ export const AllProjectsData: Project[] = [
 		title: 'Data Visualization with D3 and Next.js',
 		slug: 'data-visualization-d3-next-js',
 		shortDescription:
-			'Creating interactive dashboards and data visualizations with D3.JS and Next.JS.',
+			'Creating interactive dashboards and data visualizations with D3.js and Next.js.',
 		status: 'Pending',
 		level: 'Advanced',
 		duration: '2h 40m',

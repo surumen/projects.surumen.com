@@ -27,6 +27,14 @@ const getColors = (columnNames: string[], colorScale: any) => {
     return colors;
 }
 
+const capitalize = (s: string): string => {
+    const parts = s.split(' ').map(p => {
+        return p.length > 2 ? p[0].toUpperCase() + p.slice(1).toLowerCase() : p.toLowerCase();
+    });
+
+    return parts.join(' ');
+}
+
 
 const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
     const svgRef: MutableRefObject<any> = useRef();
@@ -98,7 +106,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         .attr('x', (entry: any) => x(entry.value) - 8)
         .attr('y', (entry: any) => y(entry.rank) + ((y(1) - y(0)) / 2) + 1)
         .style('text-anchor', 'end')
-        .html((entry: any) => entry.name);
+        .html((entry: any) => capitalize(entry.name));
 
     svg.selectAll('text.valueLabel')
         .data(rowData, (entry: any) => entry.name)

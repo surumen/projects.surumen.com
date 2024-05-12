@@ -25,7 +25,8 @@ const FantasyPremierLeague = () => {
     const Year: string = '%Y';
     const monthYear: string = '%B, %Y';
 
-    const dataUrl = stackOverflow;
+    const dataUrl = co2emissions;
+    const dateFormat = Year;
 
     useEffect(() => {
         readRemoteFile(dataUrl, {
@@ -61,7 +62,7 @@ const FantasyPremierLeague = () => {
                 data={data}
                 tickDuration={tickDuration}
                 colorScale={colorScale}
-                dateFormat={monthYear}
+                dateFormat={dateFormat}
             />
         </div>
     )
