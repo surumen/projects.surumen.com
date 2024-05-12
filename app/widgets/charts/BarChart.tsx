@@ -5,13 +5,14 @@ import * as d3 from 'd3';
 import useInterval from '@/hooks/useInterval';
 
 
-const getRowData = (data: any[], columNames: any, rowIndex: number) => {
-    const row = rowIndex < data.length - 1 ? data[rowIndex] : data[0];
+const getRowData = (data: any[], columNames: any, rowIndex: number, topN: number): [any, any[]] => {
+
+    const row = data[rowIndex];
     let newData = columNames.map((name) => {
         return {name: name, value: row[name]}
     });
-    newData = newData.sort((a, b) => b.value - a.value);
-    newData.forEach((d: any, i) => {
+    newData = newData.sort((a, b) => b.value - a.value).slice(0, topN);
+    newData.forEach((d, i) => {
         d.rank = i;
         d.lastValue = (rowIndex > 0) ? data[rowIndex - 1][d.name] : d.value;
     });
@@ -27,7 +28,7 @@ const getColors = (columnNames: string[], colorScale: any) => {
 }
 
 
-const RacingBarChart = ({data, topN, tickDuration, colorScale}) => {
+const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
     const svgRef: MutableRefObject<any> = useRef();
     const wrapperRef: MutableRefObject<any> = useRef();
     const timelineRef: MutableRefObject<any> = useRef();
@@ -38,7 +39,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale}) => {
     const [timeIndex, setTimeIndex] = useState<string>(Object.keys(data[0])[0]);
 
     // Draw initial frame
-    const [initialTime, initialRowData] = getRowData(data, columnNames, 0);
+    const [initialTime, initialRowData] = getRowData(data, columnNames, 0, topN);
     const [rowData, setRowData] = useState<any>(initialRowData);
     const [time, setTime] = useState<any>(initialTime);
 
@@ -71,18 +72,15 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale}) => {
         .scale(x)
         .ticks(5)
         .tickSize(-(dimensions.height - dimensions.marginTop - dimensions.marginBottom))
-        .tickSizeInner(0)
+        //.tickSizeInner(0)
         .tickSizeOuter(0)
-        .tickFormat(d => d3.format(',')(d));
+        .tickFormat(d => d3.format(',.0f')(d));
 
 
     const svg = d3.select(svgRef.current)
         .attr('width', dimensions.width)
         .attr('height', dimensions.height);
 
-    const timelineSvg = d3.select(timelineRef.current)
-        .attr('width', dimensions.width)
-        .attr('height', 50);
 
     svg.append('g')
         .attr('class', 'axis xAxis')
@@ -122,18 +120,24 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale}) => {
         .attr('y', (entry: any) => y(entry.rank) + ((y(1) - y(0)) / 2) + 1)
         .text((entry: any) => d3.format(',.0f')(entry.lastValue));
 
-    svg.selectAll('.tick').selectAll('line').remove();
 
-    timelineSvg.append('g')
-        .attr('class', 'axis tAxis')
-        .attr('transform', `translate(0, 20)`)
-        .call(timeAxis);
+    const timelineSvg = d3.select(timelineRef.current)
+        .attr('width', dimensions.width)
+        .attr('height', 50);
 
-    timelineSvg.append('rect')
-        .attr('class', 'progressBar')
+
+    const progressWidth = useMemo(() => t(time), [t, time]);
+
+    timelineSvg
+        .select('rect.progressBar')
         .attr('transform', `translate(${0}, 20)`)
         .attr('height', 2)
-        .attr('width', 0);
+        .attr('width', progressWidth)
+
+    timelineSvg
+        .select('.tAxis')
+        .attr('transform', `translate(0, 20)`)
+        .call(timeAxis);
 
 
     // will be called initially and on every data change
@@ -175,13 +179,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale}) => {
             .attr('width', (entry: any) => x(entry.value) - x(0))
             .attr('y', (entry: any) => y(entry.rank) + barPadding / 2);
 
-        bars.exit()
-            .transition()
-            .duration(tickDuration)
-            .ease(d3.easeLinear)
-            .attr('width', (entry: any) => x(entry.value) - x(0))
-            .attr('y', d => y(topN + 1) + barPadding / 2)
-            .remove();
+        bars.exit().remove();
 
         // update labels
         const labels = svg.selectAll('.label').data(rowData, (entry: any) => entry.name);
@@ -203,12 +201,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale}) => {
             .attr('x', (entry: any) => x(entry.value) - 8)
             .attr('y', (entry: any) => y(entry.rank) + ((y(1) - y(0)) / 2) + 1);
 
-        labels.exit()
-            .transition()
-            .duration(tickDuration)
-            .ease(d3.easeLinear)
-            .attr('x', (entry: any) => x(entry.value) - 8)
-            .attr('y', (entry: any) => y(topN + 1)).remove();
+        labels.exit().remove();
 
         // update value labels
 
@@ -234,13 +227,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale}) => {
             .attr('y', (entry: any) => y(entry.rank) + ((y(1) - y(0)) / 2) + 1)
             .text((entry: any) => d3.format(',.0f')(entry.lastValue))
 
-        valueLabels
-            .exit()
-            .transition()
-            .duration(tickDuration)
-            .ease(d3.easeLinear)
-            .attr('x', (entry: any) => x(entry.value) + 5)
-            .attr('y', (entry: any) => y(topN + 1)).remove();
+        valueLabels.exit().remove();
 
         // update time label and progress bar
         d3.select('.progressBar')
@@ -249,17 +236,18 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale}) => {
             .ease(d3.easeLinear)
             .attr('width', t(time));
 
+        timelineSvg
+            .select('.tAxis')
+            .attr('transform', `translate(0, 20)`)
+            .call(timeAxis);
 
-        svg.selectAll('.timeText').remove();
-
-        svg.append('text')
-            .attr('class', 'timeText text-muted')
+        svg.select('.timeText')
             .attr('x', dimensions.width - dimensions.marginRight)
             .attr('y', dimensions.height - dimensions.marginBottom - 5)
             .style('text-anchor', 'end')
             .style('font-weight', 'bold')
             .style('font-size', '29.48px')
-            .html(d3.timeFormat('%B, %Y')(time))
+            .html(d3.timeFormat(dateFormat)(time))
 
     }, [iteration, barPadding, colors, rowData, svg, t, tickDuration, time, topN, x, xAxis, y, dimensions.width, dimensions.marginRight, dimensions.height, dimensions.marginBottom]);
 
@@ -270,16 +258,21 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale}) => {
             if (iteration == data.length) {
                 setIteration(0);
             }
-            const [time, nextRowData] = getRowData(data, columnNames, iteration);
-            setRowData(nextRowData);
+            const [time, nextRowData] = getRowData(data, columnNames, iteration, topN);
+            setRowData(nextRowData.slice(0, topN));
             setTime(time);
         }
     }, iteration < data.length ? tickDuration : null);
 
     return (
         <div ref={wrapperRef}>
-            <svg ref={svgRef}></svg>
-            <svg ref={timelineRef}></svg>
+            <svg ref={svgRef}>
+                <text className='timeText h2 text-muted'></text>
+            </svg>
+            <svg ref={timelineRef}>
+                <rect className='progressBar'></rect>
+                <g className='axis tAxis'></g>
+            </svg>
         </div>
     )
 };

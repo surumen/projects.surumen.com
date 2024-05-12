@@ -5,7 +5,7 @@ import { usePapaParse } from 'react-papaparse';
 import { RacingBarChart } from '@/widgets';
 import { timeParse } from 'd3';
 import * as d3 from 'd3';
-import { groupDataByFirstColumn } from '@/helper/reshapeData';
+import { groupDataByFirstColumn, reshapeData } from "@/helper/reshapeData";
 
 
 const FantasyPremierLeague = () => {
@@ -19,7 +19,7 @@ const FantasyPremierLeague = () => {
 
     const stackOverflow: string = 'https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/stackoverflow.csv';
     const co2emissions: string = 'https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/co2.csv';
-    const covid19: string = 'https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/covid19-data.csv';
+    const co2emissionsTotal: string = 'https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv';
 
     useEffect(() => {
         readRemoteFile(co2emissions, {
@@ -50,7 +50,13 @@ const FantasyPremierLeague = () => {
 
     return (
         <div className='px-4'>
-            <RacingBarChart topN={topN} data={data} tickDuration={tickDuration} colorScale={colorScale} />
+            <RacingBarChart
+                topN={topN}
+                data={data}
+                tickDuration={tickDuration}
+                colorScale={colorScale}
+                dateFormat={'%Y'}
+            />
         </div>
     )
 };
