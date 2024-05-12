@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import { ParseResult } from 'papaparse';
 import { usePapaParse } from 'react-papaparse';
 import { RacingBarChart } from '@/widgets';
-import { timeParse } from "d3";
-import * as d3 from "d3";
-import { groupDataByFirstColumn } from "@/helper/reshapeData";
+import { timeParse } from 'd3';
+import * as d3 from 'd3';
+import { groupDataByFirstColumn } from '@/helper/reshapeData';
 
 
 const FantasyPremierLeague = () => {
@@ -22,7 +22,7 @@ const FantasyPremierLeague = () => {
     const covid19: string = 'https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/covid19-data.csv';
 
     useEffect(() => {
-        readRemoteFile(covid19, {
+        readRemoteFile(co2emissions, {
             header: true,
             download: true,
             skipEmptyLines: true,
