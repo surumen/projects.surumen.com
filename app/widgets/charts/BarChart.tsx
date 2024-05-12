@@ -153,7 +153,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         // update bars
         const bars = svg.selectAll('.bar').data(rowData, (entry: any) => entry.name);
 
-        bars.enter().append('rect')
+        bars.enter().select('rect')
             .attr('class', 'bar')
             .attr('x', x(0) + 1)
             .attr('width', (entry: any) => x(entry.value) - x(0))
@@ -178,7 +178,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         // update labels
         const labels = svg.selectAll('.label').data(rowData, (entry: any) => entry.name);
 
-        labels.enter().append('text')
+        labels.enter().select('text')
             .attr('class', 'label')
             .attr('x', (entry: any) => x(entry.value) - 8)
             .attr('y', entry => y(topN + 1) + ((y(1) - y(0)) / 2))
@@ -203,7 +203,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
 
         valueLabels
             .enter()
-            .append('text')
+            .select('text')
             .attr('class', 'valueLabel')
             .attr('x', (entry: any) => x(entry.value) + 5)
             .attr('y', (entry: any) => y(topN + 1))
