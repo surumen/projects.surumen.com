@@ -10,7 +10,7 @@ import { groupDataByFirstColumn, reshapeData } from "@/helper/reshapeData";
 
 const FantasyPremierLeague = () => {
 
-    const [data, setData] = useState<any>(null);
+    const [data, setData] = useState<any[]>([]);
     const [tickDuration, setTickDuration] = useState<number>(500);
     const [isLoading, setLoading] = useState(true);
     const [topN, setTopN] = useState<number>(10);
@@ -21,8 +21,14 @@ const FantasyPremierLeague = () => {
     const co2emissions: string = 'https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/co2.csv';
     const co2emissionsTotal: string = 'https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv';
 
+    const monthDayYear: string = '%B %d, %Y';
+    const Year: string = '%Y';
+    const monthYear: string = '%B, %Y';
+
+    const dataUrl = stackOverflow;
+
     useEffect(() => {
-        readRemoteFile(co2emissions, {
+        readRemoteFile(dataUrl, {
             header: true,
             download: true,
             skipEmptyLines: true,
@@ -44,7 +50,7 @@ const FantasyPremierLeague = () => {
                 setLoading(false);
             }
         });
-    });
+    }, [dataUrl, readRemoteFile]);
 
     if (isLoading) return <p>Loading...</p>
 
@@ -55,7 +61,7 @@ const FantasyPremierLeague = () => {
                 data={data}
                 tickDuration={tickDuration}
                 colorScale={colorScale}
-                dateFormat={'%Y'}
+                dateFormat={monthYear}
             />
         </div>
     )

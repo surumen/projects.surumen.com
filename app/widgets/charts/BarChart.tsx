@@ -53,26 +53,23 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
 
     const t: any = d3.scaleTime()
         .domain([startDate, endDate])
-        .range([dimensions.marginLeft, dimensions.width - dimensions.marginRight]);
+        .range([dimensions.marginLeft + dimensions.marginTimeAxis, dimensions.width - dimensions.marginRight]);
 
     const timeAxis: any = d3.axisBottom(t)
-        .ticks(5)
-        .scale(t);
+        .ticks(5);
 
     const endValue: any = d3.max(rowData, (entry: any) => entry.value);
     const x = d3.scaleLinear()
         .domain([0, endValue])
-        .range([dimensions.marginLeft, dimensions.width - dimensions.marginRight]);
+        .range([dimensions.marginLeft + dimensions.marginTimeAxis, dimensions.width - dimensions.marginRight]);
 
     const y = d3.scaleLinear()
         .domain([topN, 0])
         .range([dimensions.height - dimensions.marginBottom, dimensions.marginTop]);
 
     const xAxis: any = d3.axisTop(x)
-        .scale(x)
         .ticks(5)
         .tickSize(-(dimensions.height - dimensions.marginTop - dimensions.marginBottom))
-        //.tickSizeInner(0)
         .tickSizeOuter(0)
         .tickFormat(d => d3.format(',.0f')(d));
 
@@ -82,12 +79,15 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         .attr('height', dimensions.height);
 
 
-    svg.append('g')
+    svg.select('.xAxis')
         .attr('class', 'axis xAxis')
         .attr('transform', `translate(0, ${dimensions.marginTop})`)
         .call(xAxis)
         .selectAll('.tick line')
-        .classed('origin', d => d === 0);
+        .classed('origin', d => d === 0)
+        .transition()
+        .duration(tickDuration)
+        .ease(d3.easeLinear);
 
     svg.selectAll('rect.bar')
         .data(rowData, (entry: any) => entry.name)
@@ -125,14 +125,11 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         .attr('width', dimensions.width)
         .attr('height', 50);
 
-
-    const progressWidth = useMemo(() => t(time), [t, time]);
-
     timelineSvg
-        .select('rect.progressBar')
-        .attr('transform', `translate(${0}, 20)`)
+        .select('rect')
+        .attr('transform', `translate(${dimensions.marginLeft + dimensions.marginTimeAxis}, 20)`)
         .attr('height', 2)
-        .attr('width', progressWidth)
+        .attr('width', 0);
 
     timelineSvg
         .select('.tAxis')
@@ -146,15 +143,12 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         const endValue: any = d3.max(rowData, (entry: any) => entry.value);
         x.domain([0, endValue]);
 
-        // Remove existing elements from the DOM
-        svg.selectAll('.xAxis').remove();
-
         svg.select('.xAxis')
             .transition()
             .duration(tickDuration)
             .ease(d3.easeLinear)
+            .attr('transform', `translate(0, ${dimensions.marginTop})`)
             .call(xAxis);
-        svg.selectAll('.tick').selectAll('line').remove();
 
         // update bars
         const bars = svg.selectAll('.bar').data(rowData, (entry: any) => entry.name);
@@ -234,7 +228,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
             .transition()
             .duration(tickDuration)
             .ease(d3.easeLinear)
-            .attr('width', t(time));
+            .attr('width', t(time) - dimensions.marginTimeAxis - dimensions.marginLeft);
 
         timelineSvg
             .select('.tAxis')
@@ -244,12 +238,12 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         svg.select('.timeText')
             .attr('x', dimensions.width - dimensions.marginRight)
             .attr('y', dimensions.height - dimensions.marginBottom - 5)
-            .style('text-anchor', 'end')
-            .style('font-weight', 'bold')
-            .style('font-size', '29.48px')
             .html(d3.timeFormat(dateFormat)(time))
+            .transition()
+            .duration(tickDuration)
+            .ease(d3.easeLinear)
 
-    }, [iteration, barPadding, colors, rowData, svg, t, tickDuration, time, topN, x, xAxis, y, dimensions.width, dimensions.marginRight, dimensions.height, dimensions.marginBottom]);
+    }, [iteration, barPadding, colors, rowData, svg, t, tickDuration, time, topN, x, xAxis, y, dimensions, timelineSvg, timeAxis, dateFormat]);
 
 
     useInterval(() => {
@@ -265,9 +259,10 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
     }, iteration < data.length ? tickDuration : null);
 
     return (
-        <div ref={wrapperRef}>
-            <svg ref={svgRef}>
-                <text className='timeText h2 text-muted'></text>
+        <div className='live-charts' ref={wrapperRef}>
+            <svg ref={svgRef} className='text-muted-charts'>
+                <g className='axis xAxis text-muted-charts'></g>
+                <text className='timeText'></text>
             </svg>
             <svg ref={timelineRef}>
                 <rect className='progressBar'></rect>
