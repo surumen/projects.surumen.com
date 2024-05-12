@@ -11,15 +11,14 @@ const getRowData = (data: any[], columNames: any, rowIndex: number) => {
         return {name: name, value: row[name]}
     });
     newData = newData.sort((a, b) => b.value - a.value);
-    newData.forEach((d, i) => {
+    newData.forEach((d: any, i) => {
         d.rank = i;
         d.lastValue = (rowIndex > 0) ? data[rowIndex - 1][d.name] : d.value;
     });
     return [row[Object.keys(row)[0]], newData]
 }
 
-const getColors = (columnNames: string[]) => {
-    const colorScale = d3.scaleOrdinal(d3.schemeTableau10);
+const getColors = (columnNames: string[], colorScale: any) => {
     const colors = {};
     columnNames.forEach((name: any, i: any) => {
         colors[name] = colorScale(i)
@@ -28,7 +27,7 @@ const getColors = (columnNames: string[]) => {
 }
 
 
-const RacingBarChart = ({data, topN, tickDuration}) => {
+const RacingBarChart = ({data, topN, tickDuration, colorScale}) => {
     const svgRef: MutableRefObject<any> = useRef();
     const wrapperRef: MutableRefObject<any> = useRef();
     const timelineRef: MutableRefObject<any> = useRef();
@@ -49,8 +48,7 @@ const RacingBarChart = ({data, topN, tickDuration}) => {
     const barPadding = (dimensions.height - (dimensions.marginBottom + dimensions.marginTop)) / (10 * 5);
 
     // initialize color scheme set
-    const colors = useMemo(() => getColors(columnNames), [columnNames]);
-
+    const colors = useMemo(() => getColors(columnNames, colorScale), [columnNames, colorScale]);
 
     const t: any = d3.scaleTime()
         .domain([startDate, endDate])
@@ -73,6 +71,8 @@ const RacingBarChart = ({data, topN, tickDuration}) => {
         .scale(x)
         .ticks(5)
         .tickSize(-(dimensions.height - dimensions.marginTop - dimensions.marginBottom))
+        .tickSizeInner(0)
+        .tickSizeOuter(0)
         .tickFormat(d => d3.format(',')(d));
 
 
@@ -141,6 +141,10 @@ const RacingBarChart = ({data, topN, tickDuration}) => {
         // update xAxis with new domain
         const endValue: any = d3.max(rowData, (entry: any) => entry.value);
         x.domain([0, endValue]);
+
+        // Remove existing elements from the DOM
+        svg.selectAll('.xAxis').remove();
+
         svg.select('.xAxis')
             .transition()
             .duration(tickDuration)
@@ -246,12 +250,15 @@ const RacingBarChart = ({data, topN, tickDuration}) => {
 
 
         svg.selectAll('.timeText').remove();
+
         svg.append('text')
-            .attr('class', 'timeText')
+            .attr('class', 'timeText text-muted')
             .attr('x', dimensions.width - dimensions.marginRight)
             .attr('y', dimensions.height - dimensions.marginBottom - 5)
             .style('text-anchor', 'end')
-            .html(d3.timeFormat('%B %d, %Y')(time))
+            .style('font-weight', 'bold')
+            .style('font-size', '29.48px')
+            .html(d3.timeFormat('%B, %Y')(time))
 
     }, [iteration, barPadding, colors, rowData, svg, t, tickDuration, time, topN, x, xAxis, y, dimensions.width, dimensions.marginRight, dimensions.height, dimensions.marginBottom]);
 
