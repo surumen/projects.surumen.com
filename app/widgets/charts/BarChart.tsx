@@ -78,17 +78,6 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         .attr('width', dimensions.width)
         .attr('height', dimensions.height);
 
-
-    svg.select('.xAxis')
-        .attr('class', 'axis xAxis')
-        .attr('transform', `translate(0, ${dimensions.marginTop})`)
-        .call(xAxis)
-        .selectAll('.tick line')
-        .classed('origin', d => d === 0)
-        .transition()
-        .duration(tickDuration)
-        .ease(d3.easeLinear);
-
     svg.selectAll('rect.bar')
         .data(rowData, (entry: any) => entry.name)
         .enter()
