@@ -257,14 +257,16 @@ const RacingBarChart = ({data, topN, tickDuration}) => {
 
 
     useInterval(() => {
-        setIteration(iteration + 1);
-        if (iteration == data.length) {
-            setIteration(0);
+        if (iteration < data.length - 1) {
+            setIteration(iteration + 1);
+            if (iteration == data.length) {
+                setIteration(0);
+            }
+            const [time, nextRowData] = getRowData(data, columnNames, iteration);
+            setRowData(nextRowData);
+            setTime(time);
         }
-        const [time, nextRowData] = getRowData(data, columnNames, iteration);
-        setRowData(nextRowData);
-        setTime(time);
-    }, tickDuration);
+    }, iteration < data.length ? tickDuration : null);
 
     return (
         <div ref={wrapperRef}>
