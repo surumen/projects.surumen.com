@@ -57,6 +57,27 @@ export const AllProjectsData: Project[] = [
 		hasWriteUp: false,
 		content: ``
 	},
+	{
+		id: uuid(),
+		languages: ['Typescript'],
+		frameworks: ['OpenCV'],
+		technologyAreas: ['OpenCV', 'Python'],
+		title: 'Video Annotation with OpenCV+',
+		slug: 'video-annotation-with-opencv',
+		shortDescription:
+			'Coming soon.',
+		status: 'Pending',
+		level: 'Advanced',
+		duration: '2h 40m',
+		rating: 2.5,
+		completed: '2024',
+		description: `<p>Coming soon</p>
+        `,
+		contentType: 'app',
+		component: 'fpl',
+		hasWriteUp: false,
+		content: ``
+	},
 ];
 
 export default AllProjectsData;

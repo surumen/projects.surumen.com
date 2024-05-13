@@ -51,4 +51,8 @@ export const LanguageColorMap = [
         color: 'Machine Learning',
         scheme: '#007891'
     },
+    {
+        color: 'OpenCV',
+        scheme: '#9B6400'
+    },
 ];
