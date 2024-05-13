@@ -43,8 +43,8 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
     const dimensions = useWindowSize();
     const [iteration, setIteration] = useState<number>(0);
 
-    const [columnNames, setColumnNames] = useState<string[]>(Object.keys(data[0]).slice(1, ));
-    const [timeIndex, setTimeIndex] = useState<string>(Object.keys(data[0])[0]);
+    const columnNames = useMemo(() => Object.keys(data[0]).slice(1, ), [data]);
+    const timeIndex = useMemo(() => Object.keys(data[0])[0], [data]);
 
     // Draw initial frame
     const [initialTime, initialRowData] = getRowData(data, columnNames, 0, topN);
