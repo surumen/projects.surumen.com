@@ -39,7 +39,7 @@ const ProjectSingle = ({project, blog}) => {
             />
             <main className='container-fluid py-5'>
                 {project ? (
-                    <ProjectSummary project={project} blog={blog} />
+                    <ProjectSummary project={project} blog={blog} isPreview={false} />
                 ) : (<span></span>)}
             </main>
         </Fragment>

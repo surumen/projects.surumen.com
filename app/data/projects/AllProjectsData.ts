@@ -23,6 +23,7 @@ export const AllProjectsData: Project[] = [
         `,
 		component: 'ncaa',
 		contentType: 'app',
+		hasWriteUp: true,
 		content: ``
 	},
 	{
@@ -39,13 +40,18 @@ export const AllProjectsData: Project[] = [
 		duration: '2h 40m',
 		rating: 2.5,
 		completed: '2024',
-		description: `<p>We'll dive into GraphQL, the fundamentals of GraphQL. 
-        We're only gonna use the pieces of it that we need to build in Gatsby. 
-        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
-        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>
+		description: `<p>Effective data visualization is a crucial part of any data-driven application.
+		It helps users to easily make sense of complex data in a visual format with effective interactions.
+		</p>
+		<p>
+		<b>Data Driven Documents</b> JS aka <a target='_blank' rel='noreferrer' href='https://d3js.org/'>D3.js</a> provides powerful visualization components, and a data-driven
+		approach to DOM manipulation. When you combine this with Next.js virtual DOM and component-based architecture,
+		you can write more concise and readable code, and share logic across components with ease.
+		</p>
         `,
 		contentType: 'app',
 		component: 'fpl',
+		hasWriteUp: false,
 		content: ``
 	},
 	{
@@ -68,6 +74,7 @@ export const AllProjectsData: Project[] = [
         We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>
         `,
 		contentType: 'demo',
+		hasWriteUp: false,
 		content: ``
 	}
 ];

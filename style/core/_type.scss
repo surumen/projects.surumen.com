@@ -28,6 +28,9 @@
     fill: $gray-13 !important;
     color: $gray-13 !important;
   }
+  .tick line {
+    stroke: $border-color !important;
+  }
 }
 
 .surtitle-sm {

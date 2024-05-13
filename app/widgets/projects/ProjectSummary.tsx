@@ -8,7 +8,7 @@ import MarkdownDisplay from './Markdown';
 import { COMPONENTS_MAP } from "@/utils/componentsMap";
 
 
-const ProjectSummary = ({ project, blog }) => {
+const ProjectSummary = ({ project, blog, isPreview }) => {
 
 
 	const navContent: any = [];
@@ -26,15 +26,15 @@ const ProjectSummary = ({ project, blog }) => {
 
 	return (
 		<Fragment>
-			<section className='container mw-screen-xxl border-bottom p-5'>
-				<Row className='mb-3'>
-					<Col sm={12} md={4}>
-						<div className='vstack gap-6 pointer-event mb-5 mb-md-0'>
+			<section className={`container mw-screen-xxl p-5 ${isPreview ? '' : 'mt-5'}`}>
+				<Row className={`mb-3 ${isPreview ? '' : 'py-5'}`}>
+					<Col className='d-flex' sm={12} md={4}>
+						<div className='vstack justify-content-between gap-6 pointer-event mb-5 mb-md-0'>
 							<h1 className='ls-tight fw-bolder'>{project.title}</h1>
 							<div className='d-flex gap-4 flex-wrap'>
-								{project.technologyAreas.map((category, index) => {
+								{project.technologyAreas.slice(0, 2).map((category, index) => {
 									return (
-										<span key={index} className='bg-primary-light border rounded px-3 py-1 fw-semibold text-primary border-primary-200 text-xs rounded-pill'>{category}</span>
+										<span key={index} className='bg-body-tertiary border rounded px-3 py-1 text-sm rounded-pill'>{category}</span>
 									)
 								})
 								}
@@ -66,10 +66,18 @@ const ProjectSummary = ({ project, blog }) => {
 								<p className='article text-sm'>Individual Project</p>
 							</div>
 							<div>
-							<span role='button' className='btn btn-sm bg-primary-600 text-bg-primary shadow-none rounded-pill'>
-								<span className='me-2'>View Live</span>
-								<SendFill size={12} className='mb-1' />
-							</span>
+								{ isPreview && project.hasWriteUp ? (
+										<a target={'_blank'} href={`/project/${project.slug}`} className='btn btn-sm bg-primary-600 text-bg-primary shadow-none rounded-pill'>
+											<span className='me-2'>View Project</span>
+											<SendFill size={12} className='mb-1' />
+										</a>
+								) : ( isPreview ? (
+										<button disabled={true} className='btn btn-sm bg-primary-600 text-bg-primary shadow-none rounded-pill'>
+											<span className='me-2'>Coming Soon</span>
+											<SendFill size={12} className='mb-1' />
+										</button>
+									) : (<span></span>)
+								)}
 							</div>
 						</div>
 					</Col>
@@ -77,7 +85,7 @@ const ProjectSummary = ({ project, blog }) => {
 				</Row>
 			</section>
 
-			<section className={`container mw-screen-xxl py-5 ${ project.contentType === 'app' ? 'bg-body-tertiary' : ''}`}>
+			<section className={`container border rounded mw-screen-xxl py-5 ${project.contentType === 'app' ? 'bg-body-tertiary' : ''}`}>
 				{project.contentType === 'blog' ? (
 					<Row className='pt-4'>
 						<Col md={3}>
@@ -124,7 +132,8 @@ const ProjectSummary = ({ project, blog }) => {
 // Typechecking With PropTypes
 ProjectSummary.propTypes = {
 	project: PropTypes.object.isRequired,
-	blog: PropTypes.string
+	blog: PropTypes.string,
+	isPreview: PropTypes.bool
 };
 
 export default ProjectSummary;

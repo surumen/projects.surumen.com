@@ -11,6 +11,7 @@ export interface Project {
     description: string;
     contentType: string;
     content: string;
+    hasWriteUp: boolean;
 
     completed?: string;
     component?: any;
