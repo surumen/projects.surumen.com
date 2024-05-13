@@ -22,8 +22,7 @@ const FantasyPremierLeague = () => {
     const colorScale = d3.scaleOrdinal(d3.schemeTableau10);
 
     const stackOverflow: string = 'https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/stackoverflow.csv';
-    const co2emissions: string = 'https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/co2.csv';
-    const co2emissionsTotal: string = 'https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv';
+    const co2emissions: string = 'https://raw.githubusercontent.com/surumen/football-video-analysis/main/owid-co2-data.csv';
 
     const monthDayYear: string = '%B %d, %Y';
     const Year: string = '%Y';
@@ -40,24 +39,21 @@ const FantasyPremierLeague = () => {
             download: true,
             skipEmptyLines: true,
             complete: (results: ParseResult<any>) => {
-                if (Object.keys(results.data[0]).length === 3) {
-                    results.data = groupDataByFirstColumn(results.data)
-                }
+                results.data = reshapeData(results.data, 0, 1, 3)
                 const columnNames = Object.keys(results.data[0]).slice(1, );
                 const timeIndex = Object.keys(results.data[0])[0];
                 results.data.forEach((d: any) => {
                     // first column : YYYY-MM-DD
-                    const parseTime = timeParse('%Y-%m-%d');
+                    const parseTime = timeParse(dateFormat);
                     d[timeIndex] = parseTime(d[timeIndex]);
                     // convert other columns to numbers
                     columnNames.forEach((k: any) => d[k] = Number(d[k]))
-
                 });
                 setData(results.data);
                 setLoading(false);
             }
         });
-    }, [dataUrl, readRemoteFile]);
+    }, [dataUrl, dateFormat, readRemoteFile]);
 
     if (isLoading) return <p>Loading...</p>
 
