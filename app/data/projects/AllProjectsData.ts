@@ -16,14 +16,17 @@ export const AllProjectsData: Project[] = [
 		duration: '2h 40m',
 		rating: 2.5,
 		completed: '2024',
-		description: `<p>We'll dive into GraphQL, the fundamentals of GraphQL. 
-        We're only gonna use the pieces of it that we need to build in Gatsby. 
-        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
-        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>
+		description: `<p>If you are a basketball fan, or just relish the competition with your friends, 
+		you're likely to spend quite some time every spring strategizing, and trying to crunch some complicated data 
+		(unless if you don't mind losing a few bucks and coming last in your bracket).</p>
+		<p>&nbsp;&nbsp;</p>
+		<p>The odds of predicting a perfect bracket are an astronomical 1 in 9,223,372 billion.
+		That said, with the available data every year, it is still possible to somewhat predict a decent number of games 
+		based on each team's season statistics.</p>
         `,
 		component: 'ncaa',
 		contentType: 'app',
-		hasWriteUp: true,
+		hasWriteUp: false,
 		content: ``
 	},
 	{
@@ -54,29 +57,6 @@ export const AllProjectsData: Project[] = [
 		hasWriteUp: false,
 		content: ``
 	},
-	{
-		id: uuid(),
-		languages: ['Python'],
-		frameworks: ['Python'],
-		technologyAreas: ['Python', 'Angular'],
-		title: 'Patents Analytics: Explore Focus Areas for Innovation based on Publicly Available Data',
-		slug: 'patent-analytics',
-		shortDescription:
-			'Segment and track player performances, and identify squad depth players in different leagues.',
-		status: 'Pending',
-		level: 'Advanced',
-		duration: '2h 40m',
-		rating: 2.5,
-		completed: '2018',
-		description: `<p>We'll dive into GraphQL, the fundamentals of GraphQL. 
-        We're only gonna use the pieces of it that we need to build in Gatsby. 
-        We're not gonna be doing a deep dive into what GraphQL is or the language specifics. 
-        We're also gonna get into MDX. MDX is a way to write React components in your markdown.</p>
-        `,
-		contentType: 'demo',
-		hasWriteUp: false,
-		content: ``
-	}
 ];
 
 export default AllProjectsData;
