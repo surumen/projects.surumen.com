@@ -103,7 +103,7 @@
 
     .match-container::before,
     .match-container::after {
-        border-color: $coconut;
+        border-color: rgba(0, 120, 145, .2) !important;
     }
 
     .match-container:not(.final)::before {

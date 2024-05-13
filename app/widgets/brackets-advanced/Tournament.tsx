@@ -17,17 +17,21 @@ import Round from '@/widgets/brackets-advanced/Round';
 
 // import bracket actions from Redux marchMadnessSlice
 import { advanceTeam } from '@/store/marchMadnessBracketSlice';
-import { Col, Row } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 
 
 const RegionalTournament = () => {
 
-    const { regions, rounds } = useMarchMadness();
-    const dispatch = useDispatch()
+    const { regions, rounds, predictions } = useMarchMadness();
+    const dispatch = useDispatch();
 
     const handleAdvanceTeam = (team: any, matchNumber: number, currentRound: number, isFinalRound: boolean) => {
         let payloadData = {team: team, matchNumber: matchNumber, currentRound: currentRound, isFinalRound: isFinalRound};
         dispatch(advanceTeam(payloadData));
+    }
+
+    if (!regions || !rounds) {
+        console.log('Is still Loading')
     }
 
     return (

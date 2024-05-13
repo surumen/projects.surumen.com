@@ -45,14 +45,20 @@ Round.propTypes = {
             topSeed: PropTypes.shape({
                 name: PropTypes.string,
                 logo: PropTypes.string,
-                seed: PropTypes.string,
+                seed: PropTypes.oneOfType([
+                    PropTypes.string,
+                    PropTypes.number
+                ]),
                 isWinner: PropTypes.bool,
                 score: PropTypes.string
             }),
             bottomSeed: PropTypes.shape({
                 name: PropTypes.string,
                 logo: PropTypes.string,
-                seed: PropTypes.string,
+                seed: PropTypes.oneOfType([
+                    PropTypes.string,
+                    PropTypes.number
+                ]),
                 isWinner: PropTypes.bool,
                 score: PropTypes.string
             }),

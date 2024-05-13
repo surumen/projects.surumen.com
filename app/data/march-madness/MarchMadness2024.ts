@@ -115,7 +115,7 @@ export const MARCH_MADNESS_2024 = {
         {
             order: 1,
             isFinal: false,
-            matches: getInitialMatches(MIDWEST_SEEDS, EAST_SEEDS)
+            matches: getInitialMatches(EAST_SEEDS, WEST_SEEDS)
         },
         {
             order: 2,
@@ -165,7 +165,7 @@ export const MARCH_MADNESS_2024 = {
         {
             order: 11,
             isFinal: false,
-            matches: getInitialMatches(WEST_SEEDS, SOUTH_SEEDS)
+            matches: getInitialMatches(SOUTH_SEEDS, MIDWEST_SEEDS)
         },
     ]
 }
