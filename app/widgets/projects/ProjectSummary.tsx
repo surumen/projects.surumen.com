@@ -34,7 +34,7 @@ const ProjectSummary = ({ project, blog, isPreview }) => {
 							<div className='d-flex gap-4 flex-wrap'>
 								{project.technologyAreas.slice(0, 2).map((category, index) => {
 									return (
-										<span key={index} className='bg-body-tertiary border rounded px-3 py-1 text-sm rounded-pill'>{category}</span>
+										<span key={index} className='btn btn-xs btn-neutral px-3 py-1 rounded-pill disabled'>{category}</span>
 									)
 								})
 								}
@@ -72,7 +72,7 @@ const ProjectSummary = ({ project, blog, isPreview }) => {
 											<SendFill size={12} className='mb-1' />
 										</a>
 								) : ( isPreview ? (
-										<button disabled={true} className='btn btn-sm bg-primary-600 text-bg-primary shadow-none rounded-pill'>
+										<button disabled={true} className='btn btn-sm bg-primary-600 border-0 text-bg-primary shadow-none rounded-pill'>
 											<span className='me-2'>Coming Soon</span>
 											<SendFill size={12} className='mb-1' />
 										</button>

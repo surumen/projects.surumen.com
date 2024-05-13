@@ -47,4 +47,8 @@ export const LanguageColorMap = [
         color: 'Go',
         scheme: '#00ADD8'
     },
+    {
+        color: 'Machine Learning',
+        scheme: '#007891'
+    },
 ];

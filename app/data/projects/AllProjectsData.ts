@@ -5,8 +5,8 @@ export const AllProjectsData: Project[] = [
 	{
 		id: uuid(),
 		languages: ['Typescript', 'Python'],
-		frameworks: ['Next.js', 'Python'],
-		technologyAreas: ['Python', 'Recurrent Neural Networks', 'Next.js'],
+		frameworks: ['Machine Learning', 'Python'],
+		technologyAreas: ['Recurrent Neural Networks', 'Feature Selection', 'Next.js', 'Python'],
 		title: 'March Madness Brackets Assistant',
 		slug: 'march-madness-assistant',
 		shortDescription:
@@ -33,7 +33,7 @@ export const AllProjectsData: Project[] = [
 		id: uuid(),
 		languages: ['Typescript'],
 		frameworks: ['D3.js', 'Next.js'],
-		technologyAreas: ['Next.js', 'D3.js'],
+		technologyAreas: ['D3.js', 'Next.js'],
 		title: 'Data Visualization with D3 and Next.js',
 		slug: 'data-visualization-d3-next-js',
 		shortDescription:
