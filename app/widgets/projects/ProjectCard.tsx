@@ -24,14 +24,14 @@ const ProjectCard = ({ project, viewby }) => {
 
 	const ListStackView = () => {
 		return (
-			<div className="vstack gap-2 mx-n3">
+			<div className='vstack gap-2 mx-n3'>
 				<div onClick={() => handleShow()}
-					 className="
+					 className='
 					 position-relative
 					 d-flex align-items-center
 					 px-3 py-0 rounded-3
 					 bg-body-secondary-hover
-					 cursor-pointer">
+					 cursor-pointer'>
 
 					<div className='flex-none'>
 						<div className='icon icon-shape rounded-circle flex-none text-base bg-body-secondary text-bg-body-secondary'>
@@ -39,19 +39,19 @@ const ProjectCard = ({ project, viewby }) => {
 						</div>
 					</div>
 
-					<div className="
+					<div className='
 					ms-3 ms-md-4 py-6
 					border-bottom border-dotted border-top-0 border-start-0 border-end-0
 					flex-fill
-					">
+					'>
 
-						<h4 className="text-heading fw-semibold mb-2">{project.title}</h4>
+						<h4 className='text-heading fw-semibold mb-2'>{project.title}</h4>
 
-						<div className="d-block text-sm text-muted gap-2 mb-3">
+						<div className='d-block text-sm text-muted gap-2 mb-3'>
 							<span>{project.shortDescription}</span>
 						</div>
-						<div className="d-flex align-items-center gap-2 text-sm">
-							<span className="badge badge-lg badge-dot">
+						<div className='d-flex align-items-center gap-2 text-sm'>
+							<span className='badge badge-lg badge-dot'>
 								<i style={{ backgroundColor: getLanguageScheme(project.frameworks[0])}}></i>{project.frameworks[0]}
 							</span>
 						</div>
@@ -68,12 +68,13 @@ const ProjectCard = ({ project, viewby }) => {
 		<Fragment>
 			<ListStackView />
 			<Offcanvas show={show}
+					   className={'w-92 border-0'}
 					   onHide={handleClose}
-					   placement="end"
-					   name="end"
-					   style={{ width: '92vw', border: 'none'}}>
-				<Offcanvas.Header className="justify-content-end border-bottom">
-					<Button onClick={handleClose} className="btn d-inline-flex btn-sm btn-neutral shadow-none rounded-pill"><span>Back Home</span></Button>
+					   placement='end'
+					   name='end'
+			>
+				<Offcanvas.Header className='justify-content-end border-bottom'>
+					<Button onClick={handleClose} className='btn d-inline-flex btn-sm btn-neutral shadow-none rounded-pill'><span>Back Home</span></Button>
 				</Offcanvas.Header>
 				<Offcanvas.Body>
 					<ProjectSummary project={project} isPreview={true} />

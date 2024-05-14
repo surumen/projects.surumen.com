@@ -1,77 +1,121 @@
-/*
- * The Typekit service used to deliver this font or fonts for use on websites
- * is provided by Adobe and is subject to these Terms of Use
- * http://www.adobe.com/products/eulas/tou_typekit. For font license
- * information, see the list below.
- *
- * aktiv-grotesk:
- *   - http://typekit.com/eulas/000000000000000077359d4f
- *   - http://typekit.com/eulas/000000000000000077359d51
- *   - http://typekit.com/eulas/000000000000000077359d55
- *   - http://typekit.com/eulas/000000000000000077359d58
- *   - http://typekit.com/eulas/000000000000000077359d5e
- *   - http://typekit.com/eulas/000000000000000077359d5f
- *
- * © 2009-2024 Adobe Systems Incorporated. All Rights Reserved.
- */
-/*{"last_published":"2022-02-15 20:52:45 UTC"}*/
 
-@import url("https://p.typekit.net/p.css?s=1&k=nht1tny&ht=tk&f=14032.14033.14034.14035.14038.14039&a=38260522&app=typekit&e=css");
-
+// Google Sans
 @font-face {
-  font-family: "aktiv-grotesk";
-  src: url("https://use.typekit.net/af/ab3e12/000000000000000077359d4f/30/l?primer=f592e0a4b9356877842506ce344308576437e4f677d7c9b78ca2162e6cad991a&fvd=n4&v=3") format("woff2"), url("https://use.typekit.net/af/ab3e12/000000000000000077359d4f/30/d?primer=f592e0a4b9356877842506ce344308576437e4f677d7c9b78ca2162e6cad991a&fvd=n4&v=3") format("woff"), url("https://use.typekit.net/af/ab3e12/000000000000000077359d4f/30/a?primer=f592e0a4b9356877842506ce344308576437e4f677d7c9b78ca2162e6cad991a&fvd=n4&v=3") format("opentype");
-  font-display: auto;
+  font-family: 'Google Sans';
   font-style: normal;
-  font-weight: 400;
-  font-stretch: normal;
+  font-weight: normal;
+  font-display: swap;
+  src: local('Google Sans Regular'), url('#{$path-to-fonts}/google/GoogleSans-Regular.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: "aktiv-grotesk";
-  src: url("https://use.typekit.net/af/951aca/000000000000000077359d51/30/l?primer=f592e0a4b9356877842506ce344308576437e4f677d7c9b78ca2162e6cad991a&fvd=i4&v=3") format("woff2"), url("https://use.typekit.net/af/951aca/000000000000000077359d51/30/d?primer=f592e0a4b9356877842506ce344308576437e4f677d7c9b78ca2162e6cad991a&fvd=i4&v=3") format("woff"), url("https://use.typekit.net/af/951aca/000000000000000077359d51/30/a?primer=f592e0a4b9356877842506ce344308576437e4f677d7c9b78ca2162e6cad991a&fvd=i4&v=3") format("opentype");
-  font-display: auto;
+  font-family: 'Google Sans';
   font-style: italic;
-  font-weight: 400;
-  font-stretch: normal;
+  font-weight: normal;
+  font-display: swap;
+  src: local('Google Sans Italic'), url('#{$path-to-fonts}/google/GoogleSans-Italic.ttf') format('truetype');
+}
+
+
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Google Sans Medium'), url('#{$path-to-fonts}/google/GoogleSans-Medium.ttf') format('truetype');
+}
+
+
+@font-face {
+  font-family: 'Google Sans';
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Google Sans Medium Italic'), url('#{$path-to-fonts}/google/GoogleSans-MediumItalic.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: "aktiv-grotesk";
-  src: url("https://use.typekit.net/af/a798a9/000000000000000077359d55/30/l?primer=f592e0a4b9356877842506ce344308576437e4f677d7c9b78ca2162e6cad991a&fvd=n7&v=3") format("woff2"), url("https://use.typekit.net/af/a798a9/000000000000000077359d55/30/d?primer=f592e0a4b9356877842506ce344308576437e4f677d7c9b78ca2162e6cad991a&fvd=n7&v=3") format("woff"), url("https://use.typekit.net/af/a798a9/000000000000000077359d55/30/a?primer=f592e0a4b9356877842506ce344308576437e4f677d7c9b78ca2162e6cad991a&fvd=n7&v=3") format("opentype");
-  font-display: auto;
+  font-family: 'Google Sans';
   font-style: normal;
   font-weight: 700;
-  font-stretch: normal;
+  font-display: swap;
+  src: local('Google Sans Bold'), url('#{$path-to-fonts}/google/GoogleSans-Bold.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: "aktiv-grotesk";
-  src: url("https://use.typekit.net/af/8e3d9f/000000000000000077359d58/30/l?primer=f592e0a4b9356877842506ce344308576437e4f677d7c9b78ca2162e6cad991a&fvd=i7&v=3") format("woff2"), url("https://use.typekit.net/af/8e3d9f/000000000000000077359d58/30/d?primer=f592e0a4b9356877842506ce344308576437e4f677d7c9b78ca2162e6cad991a&fvd=i7&v=3") format("woff"), url("https://use.typekit.net/af/8e3d9f/000000000000000077359d58/30/a?primer=f592e0a4b9356877842506ce344308576437e4f677d7c9b78ca2162e6cad991a&fvd=i7&v=3") format("opentype");
-  font-display: auto;
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: local('Google Sans Bold'), url('#{$path-to-fonts}/google/GoogleSans-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: local('Google Sans Bold'), url('#{$path-to-fonts}/google/GoogleSans-Bold.ttf') format('truetype');
+}
+
+
+@font-face {
+  font-family: 'Google Sans';
   font-style: italic;
   font-weight: 700;
-  font-stretch: normal;
+  font-display: swap;
+  src: local('Google Sans Bold Italic'), url('#{$path-to-fonts}/google/GoogleSans-BoldItalic.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: "aktiv-grotesk";
-  src: url("https://use.typekit.net/af/c11a71/000000000000000077359d5e/30/l?primer=f592e0a4b9356877842506ce344308576437e4f677d7c9b78ca2162e6cad991a&fvd=n5&v=3") format("woff2"), url("https://use.typekit.net/af/c11a71/000000000000000077359d5e/30/d?primer=f592e0a4b9356877842506ce344308576437e4f677d7c9b78ca2162e6cad991a&fvd=n5&v=3") format("woff"), url("https://use.typekit.net/af/c11a71/000000000000000077359d5e/30/a?primer=f592e0a4b9356877842506ce344308576437e4f677d7c9b78ca2162e6cad991a&fvd=n5&v=3") format("opentype");
-  font-display: auto;
-  font-style: normal;
-  font-weight: 500;
-  font-stretch: normal;
-}
-
-@font-face {
-  font-family: "aktiv-grotesk";
-  src: url("https://use.typekit.net/af/939926/000000000000000077359d5f/30/l?primer=f592e0a4b9356877842506ce344308576437e4f677d7c9b78ca2162e6cad991a&fvd=i5&v=3") format("woff2"), url("https://use.typekit.net/af/939926/000000000000000077359d5f/30/d?primer=f592e0a4b9356877842506ce344308576437e4f677d7c9b78ca2162e6cad991a&fvd=i5&v=3") format("woff"), url("https://use.typekit.net/af/939926/000000000000000077359d5f/30/a?primer=f592e0a4b9356877842506ce344308576437e4f677d7c9b78ca2162e6cad991a&fvd=i5&v=3") format("opentype");
-  font-display: auto;
+  font-family: 'Google Sans';
   font-style: italic;
-  font-weight: 500;
-  font-stretch: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: local('Google Sans Bold Italic'), url('#{$path-to-fonts}/google/GoogleSans-BoldItalic.ttf') format('truetype');
 }
 
-.tk-aktiv-grotesk {
-  font-family: "aktiv-grotesk", sans-serif;
+@font-face {
+  font-family: 'Google Sans';
+  font-style: italic;
+  font-weight: 900;
+  font-display: swap;
+  src: local('Google Sans Bold Italic'), url('#{$path-to-fonts}/google/GoogleSans-BoldItalic.ttf') format('truetype');
 }
+
+// Segoe UI
+
+@font-face {
+  font-family: 'Segoe UI';
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+  src: local('Segoe UI Regular'), url('#{$path-to-fonts}/segoe-ui/Segoe-UI.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Segoe UI';
+  font-style: italic;
+  font-weight: normal;
+  font-display: swap;
+  src: local('Segoe UI Italic'), url('#{$path-to-fonts}/segoe-ui/Segoe-UI-Italic.woff') format('woff');
+}
+
+
+@font-face {
+  font-family: 'Segoe UI';
+  font-style: normal;
+  font-weight: bold;
+  font-display: swap;
+  src: local('Segoe UI Bold'), url('#{$path-to-fonts}/segoe-ui/Segoe-UI-Bold.woff') format('woff');
+}
+
+
+@font-face {
+  font-family: 'Segoe UI';
+  font-style: italic;
+  font-weight: bold;
+  font-display: swap;
+  src: local('Segoe UI Bold Italic'), url('#{$path-to-fonts}/segoe-ui/Segoe-UI-Bold-Italic.woff') format('woff');
+}
+

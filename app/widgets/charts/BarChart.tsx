@@ -40,8 +40,19 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
     const svgRef: MutableRefObject<any> = useRef();
     const wrapperRef: MutableRefObject<any> = useRef();
     const timelineRef: MutableRefObject<any> = useRef();
-    const dimensions = useWindowSize();
+    const windowDimensions = useWindowSize();
     const [iteration, setIteration] = useState<number>(0);
+
+    const dimensions: any = {
+        height: windowDimensions.height,
+        width: wrapperRef?.current?.offsetWidth,
+        marginTop: 20,
+        marginLeft: 52,
+        marginRight: 80,
+        marginBottom: 0,
+        marginTimeAxis: 30,
+        valueLabelAdjust: 20
+    };
 
     const columnNames = useMemo(() => Object.keys(data[0]).slice(1, ), [data]);
     const timeIndex = useMemo(() => Object.keys(data[0])[0], [data]);
@@ -91,10 +102,11 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         .enter()
         .append('rect')
         .attr('class', 'bar')
-        .attr('x', x(0) + 1)
-        .attr('width', (entry: any) => x(entry.value) - x(0))
+        .attr('x', x(0) + dimensions.marginLeft)
+        .attr('width', (entry: any) => x(entry.value) - x(0) - dimensions.marginLeft + dimensions.valueLabelAdjust)
         .attr('y', (entry: any) => y(entry.rank) + barPadding / 2)
         .attr('height', y(1) - y(0) - barPadding)
+        //.attr('transform', `translate(${dimensions.marginLeft}, 0)`)
         .style('fill', (entry: any) => colors[entry.name]);
 
 
@@ -102,8 +114,9 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         .data(rowData, (entry: any) => entry.name)
         .enter()
         .append('text')
-        .attr('class', 'label')
-        .attr('x', (entry: any) => x(entry.value) - 8)
+        .attr('class', 'label text-sm')
+        //.attr('x', (entry: any) => dimensions.marginLeft)
+        .attr('x', x(0) + dimensions.marginLeft - 5)
         .attr('y', (entry: any) => y(entry.rank) + ((y(1) - y(0)) / 2) + 1)
         .style('text-anchor', 'end')
         .html((entry: any) => capitalize(entry.name));
@@ -112,8 +125,8 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         .data(rowData, (entry: any) => entry.name)
         .enter()
         .append('text')
-        .attr('class', 'valueLabel')
-        .attr('x', (entry: any) => x(entry.value) + 5)
+        .attr('class', 'valueLabel text-sm')
+        .attr('x', (entry: any) => x(entry.value) + dimensions.marginLeft)
         .attr('y', (entry: any) => y(entry.rank) + ((y(1) - y(0)) / 2) + 1)
         .text((entry: any) => d3.format(',.0f')(entry.lastValue));
 
@@ -124,13 +137,13 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
 
     timelineSvg
         .select('rect')
-        .attr('transform', `translate(${dimensions.marginLeft + dimensions.marginTimeAxis}, 20)`)
+        .attr('transform', `translate(${dimensions.marginLeft + dimensions.marginTimeAxis}, 0)`)
         .attr('height', 2)
         .attr('width', 0);
 
     timelineSvg
         .select('.tAxis')
-        .attr('transform', `translate(0, 20)`)
+        //.attr('transform', `translate(0, 20)`)
         .call(timeAxis);
 
 
@@ -144,7 +157,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
             .transition()
             .duration(tickDuration)
             .ease(d3.easeLinear)
-            .attr('transform', `translate(0, ${dimensions.marginTop})`)
+            .attr('transform', `translate(${dimensions.marginLeft}, ${dimensions.marginTop})`)
             .call(xAxis);
 
         // update bars
@@ -153,7 +166,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         bars.enter().select('rect')
             .attr('class', 'bar')
             .attr('x', x(0) + 1)
-            .attr('width', (entry: any) => x(entry.value) - x(0))
+            .attr('width', (entry: any) => x(entry.value) - x(0) - dimensions.marginLeft + dimensions.valueLabelAdjust)
             //enter from out of screen
             .attr('y', d => y(topN + 1))
             .attr('height', y(1) - y(0) - barPadding)
@@ -167,7 +180,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         bars.transition()
             .duration(tickDuration)
             .ease(d3.easeLinear)
-            .attr('width', (entry: any) => x(entry.value) - x(0))
+            .attr('width', (entry: any) => x(entry.value) - x(0) - dimensions.marginLeft + dimensions.valueLabelAdjust)
             .attr('y', (entry: any) => y(entry.rank) + barPadding / 2);
 
         bars.exit().remove();
@@ -176,8 +189,8 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         const labels = svg.selectAll('.label').data(rowData, (entry: any) => entry.name);
 
         labels.enter().select('text')
-            .attr('class', 'label')
-            .attr('x', (entry: any) => x(entry.value) - 8)
+            .attr('class', 'label text-sm')
+            //.attr('x', (entry: any) => ps)
             .attr('y', entry => y(topN + 1) + ((y(1) - y(0)) / 2))
             .style('text-anchor', 'end')
             .html((entry: any) => entry.name)
@@ -189,7 +202,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         labels.transition()
             .duration(tickDuration)
             .ease(d3.easeLinear)
-            .attr('x', (entry: any) => x(entry.value) - 8)
+            //.attr('x', (entry: any) => x(entry.value) - 8)
             .attr('y', (entry: any) => y(entry.rank) + ((y(1) - y(0)) / 2) + 1);
 
         labels.exit().remove();
@@ -201,8 +214,8 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         valueLabels
             .enter()
             .select('text')
-            .attr('class', 'valueLabel')
-            .attr('x', (entry: any) => x(entry.value) + 5)
+            .attr('class', 'valueLabel text-sm')
+            .attr('x', (entry: any) => x(entry.value) + dimensions.marginLeft - dimensions.valueLabelAdjust)
             .attr('y', (entry: any) => y(topN + 1))
             .text((entry: any) => d3.format(',.0f')(entry.lastValue))
             .transition()
@@ -214,27 +227,30 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
             .transition()
             .duration(tickDuration)
             .ease(d3.easeLinear)
-            .attr('x', (entry: any) => x(entry.value) + 5)
+            .attr('x', (entry: any) => x(entry.value) + dimensions.marginLeft - dimensions.valueLabelAdjust)
             .attr('y', (entry: any) => y(entry.rank) + ((y(1) - y(0)) / 2) + 1)
             .text((entry: any) => d3.format(',.0f')(entry.lastValue))
 
         valueLabels.exit().remove();
 
         // update time label and progress bar
-        d3.select('.progressBar')
+        timelineSvg.select('.progressBar')
+            .attr('x', dimensions.marginLeft)
             .transition()
             .duration(tickDuration)
             .ease(d3.easeLinear)
-            .attr('width', t(time) - dimensions.marginTimeAxis - dimensions.marginLeft);
+            .attr('width', t(time) - dimensions.marginTimeAxis - dimensions.marginLeft)
+            //.attr('x', dimensions.marginLeft)
 
         timelineSvg
             .select('.tAxis')
-            .attr('transform', `translate(0, 20)`)
+            .attr('transform', `translate(${dimensions.marginLeft}, 0)`)
             .call(timeAxis);
 
         svg.select('.timeText')
             .attr('x', dimensions.width - dimensions.marginRight)
-            .attr('y', dimensions.height - dimensions.marginBottom - 5)
+            .attr('y', dimensions.height - dimensions.marginBottom - 40)
+            .attr('transform', `translate(${dimensions.marginLeft}, 0)`)
             .html(d3.timeFormat(dateFormat)(time))
             .transition()
             .duration(tickDuration)
@@ -259,7 +275,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         <div className='live-charts' ref={wrapperRef}>
             <svg ref={svgRef} className='text-muted-charts'>
                 <g className='axis xAxis text-muted-charts'></g>
-                <text className='timeText'></text>
+                <text className='timeText display-5 font-display fw-bolder'></text>
             </svg>
             <svg ref={timelineRef}>
                 <rect className='progressBar'></rect>

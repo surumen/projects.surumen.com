@@ -26,7 +26,7 @@ const ProjectSummary = ({ project, blog, isPreview }) => {
 
 	return (
 		<Fragment>
-			<section className={`container mw-screen-xxl p-5 ${isPreview ? '' : 'mt-5'}`}>
+			<section className={`container mw-screen-xxl ${isPreview ? '' : 'p-5 mt-5'}`}>
 				<Row className={`mb-3 ${isPreview ? '' : 'py-5'}`}>
 					<Col className='d-flex' sm={12} md={4}>
 						<div className='vstack justify-content-between gap-6 pointer-event mb-5 mb-md-0'>
