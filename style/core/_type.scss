@@ -12,22 +12,16 @@
 }
 
 .text-muted-charts {
-  color: $text-muted !important;
 
   & .timeText {
-    fill: $secondary !important;
     opacity: 0.25 !important;
     text-anchor: end;
   }
 }
 
 .live-charts {
-  .tick text {
-    fill: $gray-13 !important;
-    color: $gray-13 !important;
-  }
   .tick line {
-    stroke: $border-color !important;
+    stroke: var(--x-border-color) !important;
   }
 }
 

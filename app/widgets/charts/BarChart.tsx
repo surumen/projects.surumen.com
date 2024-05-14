@@ -45,7 +45,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
 
     const dimensions: any = {
         height: windowDimensions.height,
-        width: wrapperRef?.current?.offsetWidth,
+        width: Math.abs(wrapperRef?.current?.offsetWidth),
         marginTop: 20,
         marginLeft: 52,
         marginRight: 80,
@@ -103,7 +103,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         .append('rect')
         .attr('class', 'bar')
         .attr('x', x(0) + dimensions.marginLeft)
-        .attr('width', (entry: any) => x(entry.value) - x(0) - dimensions.marginLeft + dimensions.valueLabelAdjust)
+        .attr('width', (entry: any) => Math.max(0, x(entry.value) - x(0) - dimensions.marginLeft + dimensions.valueLabelAdjust))
         .attr('y', (entry: any) => y(entry.rank) + barPadding / 2)
         .attr('height', y(1) - y(0) - barPadding)
         //.attr('transform', `translate(${dimensions.marginLeft}, 0)`)
@@ -138,7 +138,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
     timelineSvg
         .select('rect')
         .attr('transform', `translate(${dimensions.marginLeft + dimensions.marginTimeAxis}, 0)`)
-        .attr('height', 2)
+        .attr('height', 4)
         .attr('width', 0);
 
     timelineSvg
@@ -166,7 +166,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         bars.enter().select('rect')
             .attr('class', 'bar')
             .attr('x', x(0) + 1)
-            .attr('width', (entry: any) => x(entry.value) - x(0) - dimensions.marginLeft + dimensions.valueLabelAdjust)
+            .attr('width', (entry: any) => Math.max(0, x(entry.value) - x(0) - dimensions.marginLeft + dimensions.valueLabelAdjust))
             //enter from out of screen
             .attr('y', d => y(topN + 1))
             .attr('height', y(1) - y(0) - barPadding)
@@ -180,7 +180,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         bars.transition()
             .duration(tickDuration)
             .ease(d3.easeLinear)
-            .attr('width', (entry: any) => x(entry.value) - x(0) - dimensions.marginLeft + dimensions.valueLabelAdjust)
+            .attr('width', (entry: any) => Math.max(0, x(entry.value) - x(0) - dimensions.marginLeft + dimensions.valueLabelAdjust))
             .attr('y', (entry: any) => y(entry.rank) + barPadding / 2);
 
         bars.exit().remove();
@@ -239,7 +239,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
             .transition()
             .duration(tickDuration)
             .ease(d3.easeLinear)
-            .attr('width', t(time) - dimensions.marginTimeAxis - dimensions.marginLeft)
+            .attr('width', Math.max(0, t(time) - dimensions.marginTimeAxis - dimensions.marginLeft))
             //.attr('x', dimensions.marginLeft)
 
         timelineSvg
@@ -273,7 +273,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
 
     return (
         <div className='live-charts' ref={wrapperRef}>
-            <svg ref={svgRef} className='text-muted-charts'>
+            <svg ref={svgRef} className='text-muted-charts' fill='var(--x-body-color)'>
                 <g className='axis xAxis text-muted-charts'></g>
                 <text className='timeText display-5 font-display fw-bolder'></text>
             </svg>
