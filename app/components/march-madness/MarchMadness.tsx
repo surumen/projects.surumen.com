@@ -30,8 +30,8 @@ const MarchMadness = () => {
     return (
         <div className='svg-wrapper' ref={wrapperRef}>
             <div className='d-flex'>
-                <Bracket game={tournament} bracketDimensions={bracketDimensions} alignment={'left'} homeOnTop={true}/>
-                <Bracket game={tournament} bracketDimensions={bracketDimensions} alignment={'right'} homeOnTop={true}/>
+                <Bracket game={tournament} bracketDimensions={bracketDimensions} alignment={'left'} displayRounds={true} homeOnTop={true}/>
+                <Bracket game={tournament} bracketDimensions={bracketDimensions} alignment={'right'} displayRounds={true} homeOnTop={true}/>
             </div>
             <div className='d-flex'>
                 <Bracket game={tournament} bracketDimensions={bracketDimensions} alignment={'left'} homeOnTop={true}/>

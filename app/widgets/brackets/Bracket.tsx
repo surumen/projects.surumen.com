@@ -89,36 +89,51 @@ toBracketGames.propTypes = {
 
 
 const Bracket = (props) => {
-    let { game, alignment, homeOnTop, gameDimensions, bracketDimensions, svgPadding, roundSeparatorWidth, lineInfo } = props;
+    let { game, alignment, homeOnTop, displayRounds, gameDimensions, bracketDimensions, svgPadding, roundSeparatorWidth, lineInfo } = props;
     const numRounds = winningPathLength(game);
     const isMobile = useMediaQuery({ maxWidth: 767 });
 
+    const roundsLabelsOffset = 60;
+
     const svgDimensions =  {
-        height: (gameDimensions.height * Math.pow(2, numRounds - 1)),
+        height: (gameDimensions.height * Math.pow(2, numRounds - 1)) + roundsLabelsOffset,
         width: bracketDimensions?.width || !isMobile ? bracketDimensions.width : (numRounds * (gameDimensions.width + roundSeparatorWidth)) + svgPadding * 2
     };
 
     gameDimensions.width = (bracketDimensions?.width / numRounds) - roundSeparatorWidth;
 
-
     return (
         <svg {...svgDimensions} fill='var(--x-body-color)'>
-            {
-                toBracketGames({
-                    game,
-                    alignment,
-                    gameDimensions,
-                    roundSeparatorWidth,
-                    round: numRounds,
-                    homeOnTop,
-                    lineInfo,
-                    // svgPadding away from the right
-                    x: alignment === 'left' ? svgDimensions.width  - roundSeparatorWidth - gameDimensions.width : 0,
-                    // vertically centered first game
-                    y: (svgDimensions.height / 2) - gameDimensions.height / 2,
-                    isMobile
-                })
-            }
+            { displayRounds ? (
+                <foreignObject x={0} y={0} width={svgDimensions.width} height={roundsLabelsOffset}>
+                    <ul className={`nav nav-segment border bg-body p-0 nav-fill ${alignment === 'left' ? 'rounded-top-start rounded-bottom-start border-end-0' : 'rounded-top-end rounded-bottom-end'}`}>
+                        {[...Array(numRounds + 1)].map((round, i) => (
+                            <li key={i} className={`nav-link border-radius-0 justify-content-center align-items-center px-3 py-1 text-center ${alignment === 'left' ? '' : `order-${numRounds - i}`}`}>
+                                <div className='surtitle fw-semibold text-info'>Round {i + 1}</div>
+                                <div className='text-xxs fw-light text-opacity-75 text-muted'>March 16-20</div>
+                            </li>
+                        ))}
+                    </ul>
+                </foreignObject>
+            ) : (<g></g>)}
+            <g transform={`translate(0, ${roundsLabelsOffset / 2})`}>
+                {
+                    toBracketGames({
+                        game,
+                        alignment,
+                        gameDimensions,
+                        roundSeparatorWidth,
+                        round: numRounds,
+                        homeOnTop,
+                        lineInfo,
+                        // svgPadding away from the right
+                        x: alignment === 'left' ? svgDimensions.width  - roundSeparatorWidth - gameDimensions.width : 0,
+                        // vertically centered first game
+                        y: (svgDimensions.height / 2) - gameDimensions.height / 2,
+                        isMobile
+                    })
+                }
+            </g>
         </svg>
     )
 };
@@ -129,6 +144,7 @@ const Bracket = (props) => {
 Bracket.propTypes = {
     game: gameProps,
     homeOnTop: PropTypes.bool,
+    displayRounds: PropTypes.bool,
     gameDimensions: PropTypes.shape({
         height: PropTypes.number,
         width: PropTypes.number
@@ -146,6 +162,7 @@ Bracket.propTypes = {
 // Specifies the default values for props
 Bracket.defaultProps = {
     homeOnTop: true,
+    displayRounds: false,
     gameDimensions: {
         height: 120,
         width: 160

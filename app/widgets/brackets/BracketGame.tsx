@@ -39,7 +39,7 @@ export const BracketGame = (props) => {
 
                 <div className='match border border-primary-hover rounded'>
                     {/* home team or top seed */}
-                    <div className='competitor bg-light-hover'>
+                    <div className='competitor'>
                         <div className='competitor-container w-100 h-100'>
 
                             <div className='d-flex'>
@@ -56,7 +56,7 @@ export const BracketGame = (props) => {
                     </div>
 
                     {/* visiting team or bottom seed */}
-                    <div className='competitor bg-light-hover'>
+                    <div className='competitor'>
                         <div className='competitor-container w-100 h-100'>
 
                             <div className='d-flex'>
