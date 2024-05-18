@@ -93,30 +93,21 @@ const Bracket = (props) => {
     const numRounds = winningPathLength(game);
     const isMobile = useMediaQuery({ maxWidth: 767 });
 
-    const roundsLabelsOffset = 60;
+    const roundsLabelsOffset = 20;
 
     const svgDimensions =  {
         height: (gameDimensions.height * Math.pow(2, numRounds - 1)) + roundsLabelsOffset,
         width: bracketDimensions?.width || !isMobile ? bracketDimensions.width : (numRounds * (gameDimensions.width + roundSeparatorWidth)) + svgPadding * 2
     };
 
-    gameDimensions.width = (bracketDimensions?.width / numRounds) - roundSeparatorWidth;
+    gameDimensions = {
+        height: gameDimensions.height,
+        width: (bracketDimensions?.width / numRounds) - roundSeparatorWidth
+    }
 
     return (
         <svg {...svgDimensions} fill='var(--x-body-color)'>
-            { displayRounds ? (
-                <foreignObject x={0} y={0} width={svgDimensions.width} height={roundsLabelsOffset}>
-                    <ul className={`nav nav-segment border bg-body p-0 nav-fill ${alignment === 'left' ? 'rounded-top-start rounded-bottom-start border-end-0' : 'rounded-top-end rounded-bottom-end'}`}>
-                        {[...Array(numRounds + 1)].map((round, i) => (
-                            <li key={i} className={`nav-link border-radius-0 justify-content-center align-items-center px-3 py-1 text-center ${alignment === 'left' ? '' : `order-${numRounds - i}`}`}>
-                                <div className='surtitle fw-semibold text-info'>Round {i + 1}</div>
-                                <div className='text-xxs fw-light text-opacity-75 text-muted'>March 16-20</div>
-                            </li>
-                        ))}
-                    </ul>
-                </foreignObject>
-            ) : (<g></g>)}
-            <g transform={`translate(0, ${roundsLabelsOffset / 2})`}>
+            <g>
                 {
                     toBracketGames({
                         game,
