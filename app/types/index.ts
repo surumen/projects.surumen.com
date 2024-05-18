@@ -17,5 +17,5 @@ export type {
     Team,
     Score,
     Court,
-    TournamentRound
+    TournamentRound,
 }

@@ -5,7 +5,7 @@ import { usePapaParse } from 'react-papaparse';
 import { RacingBarChart } from '@/widgets';
 import { timeParse } from 'd3';
 import * as d3 from 'd3';
-import { groupDataByFirstColumn, reshapeData } from "@/helper/reshapeData";
+import { groupDataByFirstColumn, reshapeData } from "@/helpers/reshapeData";
 
 // import bootstrap icons
 import { Col, Row } from 'react-bootstrap';
@@ -78,7 +78,7 @@ const FantasyPremierLeague = () => {
             </Row>
             <Row>
                 <Col>
-                    <div className='px-4'>
+                    <div className='px-0 px-lg-4'>
                         <RacingBarChart
                             topN={topN}
                             data={data}

@@ -13,7 +13,7 @@ import { useDispatch } from 'react-redux';
 
 // import widget/custom components
 import useMarchMadness from '@/hooks/useMarchMadness';
-import Round from '@/widgets/brackets-advanced/Round';
+import { Round } from '@/widgets';
 
 // import bracket actions from Redux marchMadnessSlice
 import { advanceTeam } from '@/store/marchMadnessBracketSlice';

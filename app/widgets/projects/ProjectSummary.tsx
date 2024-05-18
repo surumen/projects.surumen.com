@@ -5,7 +5,7 @@ import { Col, Row } from 'react-bootstrap';
 import { SendFill } from 'react-bootstrap-icons';
 
 import MarkdownDisplay from './Markdown';
-import { COMPONENTS_MAP } from "@/utils/componentsMap";
+import { COMPONENTS_MAP } from '@/helpers';
 
 
 const ProjectSummary = ({ project, blog, isPreview }) => {
@@ -26,15 +26,15 @@ const ProjectSummary = ({ project, blog, isPreview }) => {
 
 	return (
 		<Fragment>
-			<section className={`container mw-screen-xxl ${isPreview ? '' : 'p-5 mt-5'}`}>
-				<Row className={`mb-3 ${isPreview ? '' : 'py-5'}`}>
+			<section className={`container mw-screen-xxl ${isPreview ? 'pb-5' : 'p-5 mt-5'}`}>
+				<Row className={`mb-3 ${isPreview ? 'pb-5' : 'py-5'}`}>
 					<Col className='d-flex' sm={12} md={4}>
 						<div className='vstack justify-content-between gap-6 pointer-event mb-5 mb-md-0'>
 							<h1 className='ls-tight fw-bolder'>{project.title}</h1>
 							<div className='d-flex gap-4 flex-wrap'>
 								{project.technologyAreas.slice(0, 2).map((category, index) => {
 									return (
-										<span key={index} className='btn btn-xs btn-neutral px-3 py-1 rounded-pill disabled'>{category}</span>
+										<span key={index} className='btn btn-xs btn-outline px-3 py-1 rounded-pill disabled'>{category}</span>
 									)
 								})
 								}

@@ -19,6 +19,9 @@ import Pagination from './advance-table/Pagination';
 // import widget/custom components from live-chart folder
 import RacingBarChart from '@/widgets/charts/BarChart';
 
+// import widget/custom components from brackets folder
+import Round from '@/widgets/brackets-advanced/Round';
+
 export {
    ProjectCard,
    ProjectGridView,
@@ -28,5 +31,6 @@ export {
    HighlightCode,
    Pagination,
    ReactQuillEditor,
-   RacingBarChart
+   RacingBarChart,
+   Round
 };

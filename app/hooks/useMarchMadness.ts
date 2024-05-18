@@ -2,7 +2,6 @@
 import { useSelector } from 'react-redux'
 import { useEffect, useState } from "react";
 import { ParseResult } from "papaparse";
-import { reshapeData } from "@/helper/reshapeData";
 import { timeParse } from "d3";
 import { readRemoteFile } from "react-papaparse";
 

@@ -12,13 +12,14 @@ import { changeSkin } from '@/store/appSlice'
 
 // import required hook
 import useLocalStorage from '@/hooks/useLocalStorage';
+import useMounted from "@/hooks/useMounted";
 
 
 const QuickMenu = () => {
 
     const defaultSkin = useSelector((state: any) => state.app.skin);
     const dispatch = useDispatch();
-
+    const hasMounted = useMounted();
     const isDesktop = useMediaQuery({ query: '(min-width: 1224px)' });
 
     const {
@@ -27,17 +28,20 @@ const QuickMenu = () => {
         getStorageValue
     } = useLocalStorage('skin', defaultSkin);
     useEffect(() => {
-        // @ts-ignore
-        document.querySelector('html').setAttribute('data-theme', getStorageValue('skin','light'));
-        // @ts-ignore
-        document.querySelector('html').setAttribute('data-bs-theme', getStorageValue('skin','light'));
-        dispatch(changeSkin(storageValue));
-    }, [storageValue]);
+        const element = document.querySelector('html');
+        if (element != null) {
+            element.setAttribute('data-theme', getStorageValue('skin','light'));
+            element.setAttribute('data-bs-theme', getStorageValue('skin','light'));
+            dispatch(changeSkin(storageValue));
+        }
+    }, [dispatch, getStorageValue, storageValue]);
 
     const changeColorMode = () => {
         setStorageValue(storageValue === 'light' ? 'dark' : 'light');
         dispatch(changeSkin(storageValue));
     }
+
+    if(!hasMounted) return null;
 
     return (
         <Fragment>
