@@ -34,7 +34,7 @@ const ProjectSummary = ({ project, blog, isPreview }) => {
 							<div className='d-flex gap-4 flex-wrap'>
 								{project.technologyAreas.slice(0, 2).map((category, index) => {
 									return (
-										<span key={index} className='btn btn-xs btn-outline px-3 py-1 rounded-pill disabled'>{category}</span>
+										<span key={index} className='btn btn-xs btn-outline-warning px-3 py-1 rounded-pill disabled'>{category}</span>
 									)
 								})
 								}
