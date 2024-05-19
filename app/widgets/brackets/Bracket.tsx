@@ -13,6 +13,7 @@ const toBracketGames = (props) => {
     const { width: gameWidth, height: gameHeight } = gameDimensions;
     const ySep = gameHeight * Math.pow(2, round - 2);
 
+    if (!game) return null;
 
     return [
         <g key={`${game.id}-${y}`}>
@@ -30,13 +31,6 @@ const toBracketGames = (props) => {
                     // we put visitor teams on the bottom
                     const isTop = side === Side.HOME ? homeOnTop : !homeOnTop;
                     const multiplier = isTop ? -1 : 1;
-
-                    // const pathInfo = [
-                    //     `M${alignment === 'left' ? x - lineInfo.separation : x + gameWidth + roundSeparatorWidth - lineInfo.xOffset - lineInfo.separation} ${y + (gameHeight) / 2 + lineInfo.yOffset + multiplier * lineInfo.homeVisitorSpread}`,
-                    //     `H${alignment === 'left' ? x - lineInfo.xOffset : x + gameWidth + roundSeparatorWidth - lineInfo.xOffset / 2}`,
-                    //     `V${y + (gameHeight) / 2 + lineInfo.yOffset + ((ySep / 2) * multiplier)}`,
-                    //     `H${alignment === 'left' ? x - roundSeparatorWidth + lineInfo.separation : x + (gameWidth * 2) + roundSeparatorWidth + lineInfo.separation}`
-                    // ];
 
                     const pathInfoLeft = [
                         `M${x - lineInfo.separation} ${y + gameHeight / 2 + lineInfo.yOffset + multiplier * lineInfo.homeVisitorSpread}`,

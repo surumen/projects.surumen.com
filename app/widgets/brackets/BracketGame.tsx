@@ -4,9 +4,7 @@ import PropTypes from "prop-types";
 import * as _ from 'underscore';
 
 import { Game, Side } from "@/types/Brackets";
-import { RectClipped } from "@/widgets/brackets/Clipped";
 import { Image } from "react-bootstrap";
-import { CheckCircleFill } from "react-bootstrap-icons";
 
 
 export const BracketGame = (props) => {
@@ -37,34 +35,29 @@ export const BracketGame = (props) => {
                 {/* game time */}
                 <div className='schedule'>{topText(game)}</div>
 
-                <div className='match border border-primary-hover rounded'>
+                <div className={`match border ${top.team.name !== 'TBC' || bottom.team.name !== 'TBC' ? 'border-primary-hover' : ''} rounded`}>
                     {/* home team or top seed */}
-                    <div className='competitor'>
+                    <div className={`competitor ${top.team.name !== 'TBC' ? 'competitor-hover' : ''}`}>
                         <div className='competitor-container w-100 h-100'>
 
                             <div className='d-flex'>
-                                <div className='flag'>
-                                    <Image src={'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21161.svg'} alt='' className='avatar avatar-xs me-1'/>
-                                </div>
-                                <span className='seed'>{Math.floor(Math.random() * (16 - 1 + 1) + 1)}</span>
-                                <span className='team-name text-truncate'>{top.team ? top.team.name : (top.seed ? top.seed.displayName : null)}</span>
+                                {top.team.name !== 'TBC' ? (<div className='flag'><Image src={top.team.logo} alt='' className='avatar avatar-xs me-1'/></div>) : (<span></span>)}
+                                {top.team.name !== 'TBC' ? (<span className='seed'>{top.seed.rank}</span>) : (<span></span>)}
+                                <span className={`team-name text-truncate ${top.team.name === 'TBC' ? 'ms-3' : ''}`}>{top.team ? top.team.name : (top.seed ? top.seed.displayName : null)}</span>
                             </div>
                         </div>
                         <div className='result'>
-                            <span className='badge bg-success bg-opacity-25 text-success'>{top.score ? top.score.score : null}%</span>
+                            {top.team.name !== 'TBC' ? (<span className='badge bg-success bg-opacity-25 text-success'>{top.score ? top.score.score : null}%</span>) : (<span></span>)}
                         </div>
                     </div>
 
                     {/* visiting team or bottom seed */}
-                    <div className='competitor'>
+                    <div className={`competitor ${bottom.team.name !== 'TBC' ? 'competitor-hover' : ''}`}>
                         <div className='competitor-container w-100 h-100'>
-
                             <div className='d-flex'>
-                                <div className='flag'>
-                                    <Image src={'https://sports.cbsimg.net/fly/images/ncaa/logos/team/21161.svg'} alt='' className='avatar avatar-xs me-1'/>
-                                </div>
-                                <span className='seed'>{Math.floor(Math.random() * (16 - 1 + 1) + 1)}</span>
-                                <span className='team-name text-truncate'>{bottom.team ? bottom.team.name : (bottom.seed ? bottom.seed.displayName : null)}</span>
+                                {bottom.team.name !== 'TBC' ? (<div className='flag'><Image src={bottom.team.logo} alt='' className='avatar avatar-xs me-1'/></div>) : (<span></span>)}
+                                {bottom.team.name !== 'TBC' ? (<span className='seed'>{bottom.seed.rank}</span>) : (<span></span>)}
+                                <span className={`team-name text-truncate ${bottom.team.name === 'TBC' ? 'ms-3' : ''}`}>{bottom.team ? bottom.team.name : (bottom.seed ? bottom.seed.displayName : null)}</span>
                             </div>
                         </div>
                     </div>

@@ -97,7 +97,7 @@
 
         }
 
-        .competitor:hover {
+        .competitor-hover:hover {
             background-color: rgba(var(--#{$prefix}tertiary-bg-rgb), var(--#{$prefix}bg-opacity));
         }
     }

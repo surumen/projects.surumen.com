@@ -14,11 +14,17 @@ import Bracket from '@/widgets/brackets/Bracket';
 import { WorldCup2018, SemiFinal1, SemiFinal2 } from './worldCup';
 import { useMediaQuery } from "react-responsive";
 import { winningPathLength } from "@/utils/winningPathLength";
-import { isVisible } from "dom-helpers";
+import { createBracket } from "@/utils/makeBrackets";
+import { EAST_SEEDS, MIDWEST_SEEDS, SOUTH_SEEDS, WEST_SEEDS } from "@/data/march-madness/Seeds";
 
 
 
 const MarchMadness = () => {
+
+    const eastBracket =  useMemo(() => createBracket(EAST_SEEDS), []);
+    const westBracket =  useMemo(() => createBracket(WEST_SEEDS), []);
+    const midWestBracket =  useMemo(() => createBracket(MIDWEST_SEEDS), []);
+    const southBracket =  useMemo(() => createBracket(SOUTH_SEEDS), []);
 
     const { height } = useWindowSize();
     const wrapperRef: MutableRefObject<any> = useRef();
@@ -161,12 +167,12 @@ const MarchMadness = () => {
             {refVisible ? (
                 <Fragment>
                     <div className='d-flex'>
-                        <Bracket game={tournament} numRounds={numRounds} bracketDimensions={bracketDimensions} roundSeparatorWidth={roundSeparatorWidth} alignment={'left'} />
-                        <Bracket game={tournament} numRounds={numRounds} bracketDimensions={bracketDimensions} roundSeparatorWidth={roundSeparatorWidth} alignment={'right'} />
+                        <Bracket game={eastBracket} numRounds={numRounds} bracketDimensions={bracketDimensions} roundSeparatorWidth={roundSeparatorWidth} alignment={'left'} />
+                        <Bracket game={southBracket} numRounds={numRounds} bracketDimensions={bracketDimensions} roundSeparatorWidth={roundSeparatorWidth} alignment={'right'} />
                     </div>
                     <div className='d-flex'>
-                        <Bracket game={tournament} numRounds={numRounds} bracketDimensions={bracketDimensions} roundSeparatorWidth={roundSeparatorWidth} alignment={'left'} />
-                        <Bracket game={tournament} numRounds={numRounds} bracketDimensions={bracketDimensions} roundSeparatorWidth={roundSeparatorWidth} alignment={'right'} />
+                        <Bracket game={westBracket} numRounds={numRounds} bracketDimensions={bracketDimensions} roundSeparatorWidth={roundSeparatorWidth} alignment={'left'} />
+                        <Bracket game={midWestBracket} numRounds={numRounds} bracketDimensions={bracketDimensions} roundSeparatorWidth={roundSeparatorWidth} alignment={'right'} />
                     </div>
                 </Fragment>
             ) : (<span></span>)}

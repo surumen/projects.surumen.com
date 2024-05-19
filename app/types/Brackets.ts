@@ -4,28 +4,29 @@ export enum Side {
     VISITOR = 'visitor'
 }
 
-export type ID = string;
-
 export interface SideInfo {
     score?: {
-        score: number;
+        score: number | null;
+        penalties?: number;
+        winProbability?: number;
     };
 
     seed?: {
-        displayName: string;
-        rank: number;
-        sourceGame: Game;
-        sourcePool: object;
+        displayName?: string;
+        rank?: number;
+        sourceGame?: Game;
+        sourcePool?: any;
     };
 
     team?: {
-        id: ID;
+        id: string;
         name: string;
+        logo?: string;
     }
 }
 
 export interface Game {
-    id: ID;
+    id: string;
     // the game name
     name: string;
     // optional: the label for the game within the bracket, e.g. Gold Finals, Silver Semi-Finals
