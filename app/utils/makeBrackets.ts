@@ -6,38 +6,18 @@ const SEEDS_PAIRING_ORDER = [
     [1, 16], [8, 9], [5, 12], [4, 13], [6, 11], [3, 14], [7, 10], [2, 15]
 ];
 
-const setSourceGame = (game: Game, sourceGame: Game) => {
-    // home
-    game.sides.home.seed = {
-        ...game.sides.home.seed,
-        sourceGame: sourceGame
-    }
-
-    // visitor
-    game.sides.visitor.seed = {
-        ...game.sides.visitor.seed,
-        sourceGame: sourceGame
-    }
-}
-
 const setHomeSourceGame = (game: Game, sourceGame: Game) => {
-    game.sides.home.seed = {
-        ...game.sides.home.seed,
+    game.sides.home = {
+        ...game.sides.home,
         sourceGame: sourceGame
     }
 }
 
 const setVisitorSourceGame = (game: Game, sourceGame: Game) => {
-    game.sides.visitor.seed = {
-        ...game.sides.visitor.seed,
+    game.sides.visitor = {
+        ...game.sides.visitor,
         sourceGame: sourceGame
     }
-}
-
-const setSourceGames = (games: Game[], sourceGame: Game) => {
-  games.forEach(game => {
-      setSourceGame(game, sourceGame);
-  })
 }
 
 
@@ -154,28 +134,16 @@ export const createGame = (
         scheduled: scheduled ? scheduled : new Date().getTime(),
         sides: {
             [Side.HOME]: {
-                team: {
-                    id: uuid(),
-                    name: home.name,
-                    logo: home.logo
-                },
-                seed: {
-                    rank: home.seed,
-                    // sourceGame: null, // initial games will not have one,
-                    displayName: home.displayName ? home.displayName : home.name
-                }
+                id: uuid(),
+                name: home.name,
+                logo: home.logo,
+                seed: home.seed,
             },
             [Side.VISITOR]: {
-                team: {
-                    id: uuid(),
-                    name: visitor.name,
-                    logo: visitor.logo
-                },
-                seed: {
-                    rank: visitor.seed,
-                    // sourceGame: null, // initial games will not have one,
-                    displayName: visitor.displayName ? visitor.displayName : visitor.name
-                }
+                id: uuid(),
+                name: visitor.name,
+                logo: visitor.logo,
+                seed: visitor.seed,
             },
         }
 

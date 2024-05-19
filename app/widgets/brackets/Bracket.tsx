@@ -2,7 +2,6 @@
 import PropTypes from "prop-types";
 import * as _ from 'underscore';
 import { BracketGame, gameProps } from "@/widgets/brackets/BracketGame";
-import { winningPathLength } from "@/utils/winningPathLength";
 import { Side } from "@/types/Brackets";
 import { useMediaQuery } from "react-responsive";
 import { useMemo } from "react";
@@ -25,9 +24,9 @@ const toBracketGames = (props) => {
         _.chain(game.sides)
             .map((sideInfo, side: Side) => ({ ...sideInfo, side }))
             // filter to the teams that come from winning other games
-            .filter(({ seed }) => seed && seed.sourceGame !== null && seed.rank === 1)
+            .filter(({ sourceGame }) => sourceGame !== null)
             .map(
-                ({ seed: { sourceGame }, side }) => {
+                ({ sourceGame, side }) => {
                     // we put visitor teams on the bottom
                     const isTop = side === Side.HOME ? homeOnTop : !homeOnTop;
                     const multiplier = isTop ? -1 : 1;

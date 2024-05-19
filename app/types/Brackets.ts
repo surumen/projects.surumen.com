@@ -5,24 +5,16 @@ export enum Side {
 }
 
 export interface SideInfo {
+    id: string;
+    name: string;
+    logo?: string;
+    seed?: number;
+    sourceGame?: Game;
     score?: {
-        score: number | null;
+        score: number;
         penalties?: number;
         winProbability?: number;
     };
-
-    seed?: {
-        displayName?: string;
-        rank?: number;
-        sourceGame?: Game;
-        sourcePool?: any;
-    };
-
-    team?: {
-        id: string;
-        name: string;
-        logo?: string;
-    }
 }
 
 export interface Game {
@@ -33,14 +25,6 @@ export interface Game {
     bracketLabel?: string;
     // the unix timestamp of the game-will be transformed to a human-readable time using momentjs
     scheduled: number;
-
-    court?: {
-        name: string;
-        venue: {
-            name: string
-        }
-    };
-
     sides: {
         [side in Side]: SideInfo
     };

@@ -1,8 +1,6 @@
 // import node module libraries
 import { forwardRef, Fragment, MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
-import * as _ from 'underscore';
-import * as JSOG from 'jsog';
+import Link from 'next/link';
 
 // import bootstrap icons
 import { Dropdown } from 'react-bootstrap';
@@ -11,7 +9,6 @@ import { ChevronDown } from 'react-bootstrap-icons';
 import useWindowSize from '@/hooks/useWindowSize';
 import Bracket from '@/widgets/brackets/Bracket';
 
-import { WorldCup2018, SemiFinal1, SemiFinal2 } from './worldCup';
 import { useMediaQuery } from "react-responsive";
 import { winningPathLength } from "@/utils/winningPathLength";
 import { createBracket } from "@/utils/makeBrackets";
@@ -32,8 +29,8 @@ const MarchMadness = () => {
     const isMobile = useMediaQuery({ maxWidth: 767 });
 
     const [bracketDimensions, setBracketDimensions] = useState<any>({width: 160, height: height})
-    const tournament = useMemo(() => JSOG.decode(WorldCup2018), []);
-    const numRounds = useMemo(() => winningPathLength(tournament), [tournament]);
+
+    const numRounds = useMemo(() => winningPathLength(eastBracket), [eastBracket]);
 
     const roundSeparatorWidth = 24 / 8;
 

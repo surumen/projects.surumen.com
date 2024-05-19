@@ -13,8 +13,9 @@ export const winningPathLength = (game: Game, visited: { [ id: string ]: true } 
                     Math,
                     _.map(
                         game.sides,
-                        ({ seed }) => (seed && seed.sourceGame && seed.rank == 1) ?
-                            winningPathLength(seed.sourceGame, visited) : 0
+                        ({sourceGame}) => {
+                            return sourceGame ? winningPathLength(sourceGame, visited) : 0;
+                        }
                     )
                 ) :
                 0

@@ -3,7 +3,7 @@ import { winningPathLength } from "@/utils/winningPathLength";
 import { Game } from "@/types/Brackets";
 
 
-export const makeFinals = ({ games }: { games: Game[] }): Array<{ game: Game, height: number }> => {
+export const makeFinals = (games: Game[]): Array<{ game: Game, height: number }> => {
     const isInGroup = (() => {
         const gameIdHash: { [id: string]: true } =
             _.reduce(
@@ -29,7 +29,7 @@ export const makeFinals = ({ games }: { games: Game[] }): Array<{ game: Game, he
                     isInGroup(id) &&
                     _.any(
                         sides,
-                        (seed: any) => seed && seed.sourceGame && seed.rank === 1 && seed.sourceGame.id === game.id
+                        (sourceGame: any) => sourceGame && sourceGame.id === game.id
                     )
                 )
             )

@@ -1,5 +1,5 @@
 // import node module libraries
-import React, { useMemo } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import * as _ from 'underscore';
 
@@ -35,29 +35,29 @@ export const BracketGame = (props) => {
                 {/* game time */}
                 <div className='schedule'>{topText(game)}</div>
 
-                <div className={`match border ${top.team.name !== 'TBC' || bottom.team.name !== 'TBC' ? 'border-primary-hover' : ''} rounded`}>
+                <div className={`match border ${top.name !== 'TBC' || bottom.name !== 'TBC' ? 'border-primary-hover' : ''} rounded`}>
                     {/* home team or top seed */}
-                    <div className={`competitor ${top.team.name !== 'TBC' ? 'competitor-hover' : ''}`}>
+                    <div className={`competitor ${top.name !== 'TBC' ? 'competitor-hover' : ''}`}>
                         <div className='competitor-container w-100 h-100'>
 
                             <div className='d-flex'>
-                                {top.team.name !== 'TBC' ? (<div className='flag'><Image src={top.team.logo} alt='' className='avatar avatar-xs me-1'/></div>) : (<span></span>)}
-                                {top.team.name !== 'TBC' ? (<span className='seed'>{top.seed.rank}</span>) : (<span></span>)}
-                                <span className={`team-name text-truncate ${top.team.name === 'TBC' ? 'ms-3' : 'me-1'}`}>{top.team ? top.team.name : (top.seed ? top.seed.displayName : null)}</span>
+                                {top.name !== 'TBC' ? (<div className='flag'><Image src={top.logo} alt='' className='avatar avatar-xs me-1'/></div>) : (<span></span>)}
+                                {top.name !== 'TBC' ? (<span className='seed'>{top.seed}</span>) : (<span></span>)}
+                                <span className={`team-name text-truncate ${top.name === 'TBC' ? 'ms-3' : 'me-1'}`}>{top.name}</span>
                             </div>
                         </div>
                         <div className='result'>
-                            {top.team.name !== 'TBC' ? (<span className='badge bg-success bg-opacity-25 text-success'>{top.score ? top.score.score : null}%</span>) : (<span></span>)}
+                            {top.name !== 'TBC' ? (<span className='badge bg-success bg-opacity-25 text-success'>{top.score ? top.score.score : null}%</span>) : (<span></span>)}
                         </div>
                     </div>
 
                     {/* visiting team or bottom seed */}
-                    <div className={`competitor ${bottom.team.name !== 'TBC' ? 'competitor-hover' : ''}`}>
+                    <div className={`competitor ${bottom.name !== 'TBC' ? 'competitor-hover' : ''}`}>
                         <div className='competitor-container w-100 h-100'>
                             <div className='d-flex'>
-                                {bottom.team.name !== 'TBC' ? (<div className='flag'><Image src={bottom.team.logo} alt='' className='avatar avatar-xs me-1'/></div>) : (<span></span>)}
-                                {bottom.team.name !== 'TBC' ? (<span className='seed'>{bottom.seed.rank}</span>) : (<span></span>)}
-                                <span className={`team-name text-truncate ${bottom.team.name === 'TBC' ? 'ms-3' : 'me-1'}`}>{bottom.team ? bottom.team.name : (bottom.seed ? bottom.seed.displayName : null)}</span>
+                                {bottom.name !== 'TBC' ? (<div className='flag'><Image src={bottom.logo} alt='' className='avatar avatar-xs me-1'/></div>) : (<span></span>)}
+                                {bottom.name !== 'TBC' ? (<span className='seed'>{bottom.seed}</span>) : (<span></span>)}
+                                <span className={`team-name text-truncate ${bottom.name === 'TBC' ? 'ms-3' : 'me-1'}`}>{bottom.name}</span>
                             </div>
                         </div>
                         <div className='result'></div>
