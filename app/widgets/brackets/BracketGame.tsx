@@ -43,7 +43,7 @@ export const BracketGame = (props) => {
                             <div className='d-flex'>
                                 {top.team.name !== 'TBC' ? (<div className='flag'><Image src={top.team.logo} alt='' className='avatar avatar-xs me-1'/></div>) : (<span></span>)}
                                 {top.team.name !== 'TBC' ? (<span className='seed'>{top.seed.rank}</span>) : (<span></span>)}
-                                <span className={`team-name text-truncate ${top.team.name === 'TBC' ? 'ms-3' : ''}`}>{top.team ? top.team.name : (top.seed ? top.seed.displayName : null)}</span>
+                                <span className={`team-name text-truncate ${top.team.name === 'TBC' ? 'ms-3' : 'me-1'}`}>{top.team ? top.team.name : (top.seed ? top.seed.displayName : null)}</span>
                             </div>
                         </div>
                         <div className='result'>
@@ -57,9 +57,10 @@ export const BracketGame = (props) => {
                             <div className='d-flex'>
                                 {bottom.team.name !== 'TBC' ? (<div className='flag'><Image src={bottom.team.logo} alt='' className='avatar avatar-xs me-1'/></div>) : (<span></span>)}
                                 {bottom.team.name !== 'TBC' ? (<span className='seed'>{bottom.seed.rank}</span>) : (<span></span>)}
-                                <span className={`team-name text-truncate ${bottom.team.name === 'TBC' ? 'ms-3' : ''}`}>{bottom.team ? bottom.team.name : (bottom.seed ? bottom.seed.displayName : null)}</span>
+                                <span className={`team-name text-truncate ${bottom.team.name === 'TBC' ? 'ms-3' : 'me-1'}`}>{bottom.team ? bottom.team.name : (bottom.seed ? bottom.seed.displayName : null)}</span>
                             </div>
                         </div>
+                        <div className='result'></div>
                     </div>
                 </div>
 
