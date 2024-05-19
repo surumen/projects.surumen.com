@@ -1,5 +1,5 @@
 // import node module libraries
-import { forwardRef, MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
+import { forwardRef, Fragment, MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import * as _ from 'underscore';
 import * as JSOG from 'jsog';
@@ -13,20 +13,23 @@ import Bracket from '@/widgets/brackets/Bracket';
 
 import { WorldCup2018, SemiFinal1, SemiFinal2 } from './worldCup';
 import { useMediaQuery } from "react-responsive";
+import { winningPathLength } from "@/utils/winningPathLength";
+import { isVisible } from "dom-helpers";
 
 
-const tournament = JSOG.decode(SemiFinal2);
 
 const MarchMadness = () => {
 
     const { height } = useWindowSize();
     const wrapperRef: MutableRefObject<any> = useRef();
+    const [refVisible, setRefVisible] = useState(false);
     const isMobile = useMediaQuery({ maxWidth: 767 });
 
-    const bracketDimensions: any = {
-        width: isMobile ? Math.abs(wrapperRef?.current?.offsetWidth) : Math.abs(wrapperRef?.current?.offsetWidth) / 2,
-        height: height
-    }
+    const [bracketDimensions, setBracketDimensions] = useState<any>({width: 160, height: height})
+    const tournament = useMemo(() => JSOG.decode(WorldCup2018), []);
+    const numRounds = useMemo(() => winningPathLength(tournament), [tournament]);
+
+    const roundSeparatorWidth = 24 / 8;
 
     const rounds = useMemo(() => ['Round 1', 'Round 2', 'Sweet 16', 'Elite 8'], []);
     const years = useMemo(() => [2024, 2023, 2022, 2021], []);
@@ -35,6 +38,19 @@ const MarchMadness = () => {
     ], []);
     const [activeYear, setActiveYear] = useState<number>(2024);
     const [activeModel, setActiveModel] = useState<string>(mlModels[0]);
+
+
+    useEffect(() => {
+        if (!refVisible) {
+            return
+        }
+        setBracketDimensions({
+            width: isMobile ? wrapperRef.current.offsetWidth : Math.abs(wrapperRef.current.offsetWidth) / 2,
+            height: height
+        });
+        setRefVisible(true);
+    }, [height, isMobile, refVisible])
+
 
     const ToggleYear: any = forwardRef((props: any, ref: any) => (
         <Link
@@ -59,7 +75,7 @@ const MarchMadness = () => {
     };
 
     return (
-        <div className='svg-wrapper' ref={wrapperRef}>
+        <div className='svg-wrapper' ref={el => { wrapperRef.current = el; setRefVisible(!!el); }}>
             <div>
                 <div className='row align-items-center g-6 mt-0'>
                     <div className='col-sm-6 mt-0'>
@@ -142,14 +158,18 @@ const MarchMadness = () => {
                     ))}
                 </ul>
             </div>
-            <div className='d-flex'>
-                <Bracket game={tournament} bracketDimensions={bracketDimensions} alignment={'left'} />
-                <Bracket game={tournament} bracketDimensions={bracketDimensions} alignment={'right'} />
-            </div>
-            <div className='d-flex'>
-                <Bracket game={tournament} bracketDimensions={bracketDimensions} alignment={'left'} />
-                <Bracket game={tournament} bracketDimensions={bracketDimensions} alignment={'right'} />
-            </div>
+            {refVisible ? (
+                <Fragment>
+                    <div className='d-flex'>
+                        <Bracket game={tournament} numRounds={numRounds} bracketDimensions={bracketDimensions} roundSeparatorWidth={roundSeparatorWidth} alignment={'left'} />
+                        <Bracket game={tournament} numRounds={numRounds} bracketDimensions={bracketDimensions} roundSeparatorWidth={roundSeparatorWidth} alignment={'right'} />
+                    </div>
+                    <div className='d-flex'>
+                        <Bracket game={tournament} numRounds={numRounds} bracketDimensions={bracketDimensions} roundSeparatorWidth={roundSeparatorWidth} alignment={'left'} />
+                        <Bracket game={tournament} numRounds={numRounds} bracketDimensions={bracketDimensions} roundSeparatorWidth={roundSeparatorWidth} alignment={'right'} />
+                    </div>
+                </Fragment>
+            ) : (<span></span>)}
         </div>
     )
 };

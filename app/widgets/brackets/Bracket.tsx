@@ -5,12 +5,14 @@ import { BracketGame, gameProps } from "@/widgets/brackets/BracketGame";
 import { winningPathLength } from "@/utils/winningPathLength";
 import { Side } from "@/types/Brackets";
 import { useMediaQuery } from "react-responsive";
+import { useMemo } from "react";
 
 
 const toBracketGames = (props) => {
-    const { game, x, y, alignment, gameDimensions, roundSeparatorWidth, round, lineInfo, homeOnTop, isMobile } = props;
+    let { game, x, y, alignment, gameDimensions, roundSeparatorWidth, round, lineInfo, homeOnTop, isMobile } = props;
     const { width: gameWidth, height: gameHeight } = gameDimensions;
     const ySep = gameHeight * Math.pow(2, round - 2);
+
 
     return [
         <g key={`${game.id}-${y}`}>
@@ -29,12 +31,29 @@ const toBracketGames = (props) => {
                     const isTop = side === Side.HOME ? homeOnTop : !homeOnTop;
                     const multiplier = isTop ? -1 : 1;
 
-                    const pathInfo = [
-                        `M${alignment === 'left' ? x - lineInfo.separation : x + gameWidth + roundSeparatorWidth - lineInfo.xOffset - lineInfo.separation} ${y + (gameHeight) / 2 + lineInfo.yOffset + multiplier * lineInfo.homeVisitorSpread}`,
-                        `H${alignment === 'left' ? x - lineInfo.xOffset : x + gameWidth + roundSeparatorWidth - lineInfo.xOffset / 2}`,
-                        `V${y + (gameHeight) / 2 + lineInfo.yOffset + ((ySep / 2) * multiplier)}`,
-                        `H${alignment === 'left' ? x - roundSeparatorWidth + lineInfo.separation : x + (gameWidth * 2) + roundSeparatorWidth + lineInfo.separation}`
+                    // const pathInfo = [
+                    //     `M${alignment === 'left' ? x - lineInfo.separation : x + gameWidth + roundSeparatorWidth - lineInfo.xOffset - lineInfo.separation} ${y + (gameHeight) / 2 + lineInfo.yOffset + multiplier * lineInfo.homeVisitorSpread}`,
+                    //     `H${alignment === 'left' ? x - lineInfo.xOffset : x + gameWidth + roundSeparatorWidth - lineInfo.xOffset / 2}`,
+                    //     `V${y + (gameHeight) / 2 + lineInfo.yOffset + ((ySep / 2) * multiplier)}`,
+                    //     `H${alignment === 'left' ? x - roundSeparatorWidth + lineInfo.separation : x + (gameWidth * 2) + roundSeparatorWidth + lineInfo.separation}`
+                    // ];
+
+                    const pathInfoLeft = [
+                        `M${x - lineInfo.separation} ${y + gameHeight / 2 + lineInfo.yOffset + multiplier * lineInfo.homeVisitorSpread}`,
+                        `H${x - (roundSeparatorWidth)}`,
+                        `V${y + gameHeight / 2 + lineInfo.yOffset + ((ySep / 2) * multiplier)}`,
+                        `H${x - (roundSeparatorWidth * 2) - lineInfo.separation}`
                     ];
+
+                    const pathInfoRight = [
+                        // To the right of match container
+                        `M${x + gameWidth - roundSeparatorWidth} ${y + gameHeight / 2 + lineInfo.yOffset + multiplier * lineInfo.homeVisitorSpread}`,
+                        `H${x + gameWidth}`,
+                        `V${y + gameHeight / 2 + lineInfo.yOffset + ((ySep / 2) * multiplier)}`,
+                        `H${x + gameWidth + roundSeparatorWidth - lineInfo.separation}`
+                    ];
+
+                    const pathInfo = alignment === 'left' ? pathInfoLeft : pathInfoRight;
 
                     return [
                         <path key={`${game.id}-${side}-${y}-path`} d={pathInfo.join(' ')} fill="transparent" stroke="var(--x-info)" opacity={.25}/>
@@ -48,8 +67,8 @@ const toBracketGames = (props) => {
                                     lineInfo,
                                     gameDimensions,
                                     roundSeparatorWidth,
-                                    x: alignment === 'left' ? x - gameWidth - roundSeparatorWidth :
-                                        x + roundSeparatorWidth + gameWidth,
+                                    x: alignment === 'left' ? Math.abs(x - gameWidth - roundSeparatorWidth) :
+                                        Math.abs(x + roundSeparatorWidth + gameWidth),
                                     y: y + ((ySep / 2) * multiplier),
                                     round: round - 1,
                                     isMobile
@@ -87,23 +106,29 @@ toBracketGames.propTypes = {
     isMobile: PropTypes.bool
 }
 
+toBracketGames.defaultProps = {
+    x: 0,
+}
+
 
 const Bracket = (props) => {
-    let { game, alignment, homeOnTop, displayRounds, gameDimensions, bracketDimensions, svgPadding, roundSeparatorWidth, lineInfo } = props;
-    const numRounds = winningPathLength(game);
+    let { game, numRounds, alignment, homeOnTop, defaultGameDimensions, bracketDimensions, svgPadding, roundSeparatorWidth, lineInfo } = props;
     const isMobile = useMediaQuery({ maxWidth: 767 });
 
     const roundsLabelsOffset = 20;
 
+    const gameDimensions= useMemo(() => {
+        return {
+            height: defaultGameDimensions.height,
+            width: (bracketDimensions?.width / numRounds) - roundSeparatorWidth
+        }
+    }, [bracketDimensions, defaultGameDimensions, numRounds, roundSeparatorWidth]);
+
     const svgDimensions =  {
         height: (gameDimensions.height * Math.pow(2, numRounds - 1)) + roundsLabelsOffset,
-        width: bracketDimensions?.width || !isMobile ? bracketDimensions.width : (numRounds * (gameDimensions.width + roundSeparatorWidth)) + svgPadding * 2
+        width: bracketDimensions?.width || !isMobile ? bracketDimensions.width : ((numRounds * (gameDimensions.width + roundSeparatorWidth)) + svgPadding * 2)
     };
 
-    gameDimensions = {
-        height: gameDimensions.height,
-        width: (bracketDimensions?.width / numRounds) - roundSeparatorWidth
-    }
 
     return (
         <svg {...svgDimensions} fill='var(--x-body-color)'>
@@ -134,9 +159,10 @@ const Bracket = (props) => {
 // Typechecking With PropTypes
 Bracket.propTypes = {
     game: gameProps,
+    numRounds: PropTypes.number,
     homeOnTop: PropTypes.bool,
     displayRounds: PropTypes.bool,
-    gameDimensions: PropTypes.shape({
+    defaultGameDimensions: PropTypes.shape({
         height: PropTypes.number,
         width: PropTypes.number
     }),
@@ -153,8 +179,7 @@ Bracket.propTypes = {
 // Specifies the default values for props
 Bracket.defaultProps = {
     homeOnTop: true,
-    displayRounds: false,
-    gameDimensions: {
+    defaultGameDimensions: {
         height: 120,
         width: 160
     },
@@ -164,7 +189,7 @@ Bracket.defaultProps = {
     lineInfo: {
         yOffset: -6,
         xOffset: 6,
-        separation: 0,
+        separation: 6,
         homeVisitorSpread: 0
     }
 };
