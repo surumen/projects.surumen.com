@@ -30,7 +30,7 @@ const initialState: any = {
     },
 };
 
-export const matchMadnessSlice = createSlice({
+export const marchMadnessSlice = createSlice({
     name: 'marchMadness',
     initialState,
     reducers: {
@@ -55,6 +55,6 @@ export const matchMadnessSlice = createSlice({
     },
 })
 
-export const { advanceTeam } = matchMadnessSlice.actions
+export const { advanceTeam } = marchMadnessSlice.actions
 
-export default matchMadnessSlice.reducer
+export default marchMadnessSlice.reducer
