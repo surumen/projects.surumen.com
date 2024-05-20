@@ -27,18 +27,21 @@ export const createBracket = (seeds: any[], numRounds: number = 3) => {
     const round4Game = createGame(
         {name: 'TBC', seed: 1},
         {name: 'TBC', seed: 1},
-        `Elite 8`
+        4,
+        `Elite 8`,
     );
 
     // Sweet 16
     const round3Game1 = createGame(
         {name: 'TBC', seed: 1},
         {name: 'TBC', seed: 1},
+        3,
         `Sweet 16`
     );
     const round3Game2 = createGame(
         {name: 'TBC', seed: 1},
         {name: 'TBC', seed: 1},
+        3,
         `Sweet 16`
     );
 
@@ -46,24 +49,28 @@ export const createBracket = (seeds: any[], numRounds: number = 3) => {
     const round2Game1 = createGame(
         {name: 'TBC', seed: 1},
         {name: 'TBC', seed: 1},
+        2,
         `Round 2`
     );
 
     const round2Game2 = createGame(
         {name: 'TBC', seed: 1},
         {name: 'TBC', seed: 1},
+        2,
         `Round 2`
     );
 
     const round2Game3 = createGame(
         {name: 'TBC', seed: 1},
         {name: 'TBC', seed: 1},
+        2,
         `Round 2`
     );
 
     const round2Game4 = createGame(
         {name: 'TBC', seed: 1},
         {name: 'TBC', seed: 1},
+        2,
         `Round 2`
     );
     const round2Games = [
@@ -73,7 +80,7 @@ export const createBracket = (seeds: any[], numRounds: number = 3) => {
 
     let j = 0
     pairings.forEach((pair, i) => {
-        const pairGame = createGame(pair.home, pair.visitor, 'Round 1');
+        const pairGame = createGame(pair.home, pair.visitor, 1, 'Round 1');
         if (i % 2 === 0 || i === 0) {
             setHomeSourceGame(
                 round2Games[j],
@@ -125,13 +132,16 @@ export const getPairings = (seeds: any[]) => {
 export const createGame = (
     home: {name: string, seed: number, displayName?: string, logo?: string},
     visitor: {name: string, seed: number, displayName?: string, logo?: string},
+    round: number,
     name?: string,
     scheduled?: number
 ): Game => {
     return {
         id: uuid(),
-        name: name ? name : 'Round 1',
+        name: name ? name : `Round ${round}`,
         scheduled: scheduled ? scheduled : new Date().getTime(),
+        bracketLabel: name,
+        round: round,
         sides: {
             [Side.HOME]: {
                 id: uuid(),

@@ -4,6 +4,8 @@ export enum Side {
     VISITOR = 'visitor'
 }
 
+export const TBC: string = 'TBC';
+
 export interface SideInfo {
     id: string;
     name: string;
@@ -26,6 +28,7 @@ export interface Game {
     bracketLabel?: string;
     // the unix timestamp of the game-will be transformed to a human-readable time using momentjs
     scheduled: number;
+    round: number;
     sides: {
         [side in Side]: SideInfo
     };

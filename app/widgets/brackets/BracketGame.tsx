@@ -39,7 +39,7 @@ export const BracketGame = (props) => {
                 <div className={`match border ${top.name !== 'TBC' || bottom.name !== 'TBC' ? 'border-primary-hover' : ''} rounded`}>
                     {/* home team or top seed */}
                     <div className={`competitor ${top.name !== 'TBC' ? 'competitor-hover' : ''} ${top.score?.isWinner ? 'bg-light fw-bold' : ''}`}
-                         onClick={() => onAdvanceTeam(top, game)}>
+                         onClick={() => onAdvanceTeam(top, bottom, game)}>
                         <div className='competitor-container w-100 h-100'>
 
                             <div className='d-flex'>
@@ -55,7 +55,7 @@ export const BracketGame = (props) => {
 
                     {/* visiting team or bottom seed */}
                     <div className={`competitor ${bottom.name !== 'TBC' ? 'competitor-hover' : ''} ${bottom.score?.isWinner ? 'bg-light fw-bold' : ''}`}
-                         onClick={() => onAdvanceTeam(bottom, game)}>
+                         onClick={() => onAdvanceTeam(bottom, top, game)}>
                         <div className='competitor-container w-100 h-100'>
                             <div className='d-flex'>
                                 {bottom.name !== 'TBC' ? (<div className='flag'><Image src={bottom.logo} alt='' className='avatar avatar-xs me-1'/></div>) : (<span></span>)}

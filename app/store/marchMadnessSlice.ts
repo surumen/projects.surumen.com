@@ -37,16 +37,16 @@ export const marchMadnessSlice = createSlice({
         advanceTeam: (state, action) => {
             switch (action.payload.label) {
                 case 'east':
-                    state.regions.east = updateGameWinner(action.payload.team, action.payload.game, state.regions.east);
+                    state.regions.east = updateGameWinner(action.payload.winner, action.payload.loser, action.payload.game, state.regions.east);
                     break
                 case 'west':
-                    state.regions.west = updateGameWinner(action.payload.team, action.payload.game, state.regions.west);
+                    state.regions.west = updateGameWinner(action.payload.winner, action.payload.loser, action.payload.game, state.regions.west);
                     break
                 case 'south':
-                    state.regions.south = updateGameWinner(action.payload.team, action.payload.game, state.regions.south);
+                    state.regions.south = updateGameWinner(action.payload.winner, action.payload.loser, action.payload.game, state.regions.south);
                     break
                 default:
-                    state.regions.midWest = updateGameWinner(action.payload.team, action.payload.game, state.regions.midWest);
+                    state.regions.midWest = updateGameWinner(action.payload.winner, action.payload.loser, action.payload.game, state.regions.midWest);
             }
         },
         resetBracket: (state, action) => {

@@ -73,8 +73,8 @@ const MarchMadness = () => {
         setActiveModel(model);
     };
 
-    const handleAdvanceTeam = (team: SideInfo, game: Game, label: 'east' | 'west' | 'south' | 'midwest') => {
-        let payloadData = {team: team, game: game, label: label};
+    const handleAdvanceTeam = (winner: SideInfo, loser: SideInfo, game: Game, label: 'east' | 'west' | 'south' | 'midwest') => {
+        let payloadData = {winner: winner, loser: loser, game: game, label: label};
         dispatch(advanceTeam(payloadData));
     }
 
@@ -171,7 +171,7 @@ const MarchMadness = () => {
                             bracketDimensions={bracketDimensions}
                             roundSeparatorWidth={roundSeparatorWidth}
                             alignment={'left'}
-                            onAdvanceTeam={(team, game) => handleAdvanceTeam(team, game, 'east')}
+                            onAdvanceTeam={(winner, loser, game) => handleAdvanceTeam(winner, loser, game, 'east')}
                         />
                         <Bracket
                             game={southBracket}
@@ -179,7 +179,7 @@ const MarchMadness = () => {
                             bracketDimensions={bracketDimensions}
                             roundSeparatorWidth={roundSeparatorWidth}
                             alignment={'right'}
-                            onAdvanceTeam={(team, game) => handleAdvanceTeam(team, game, 'south')}
+                            onAdvanceTeam={(winner, loser, game) => handleAdvanceTeam(winner, loser, game, 'south')}
                         />
                     </div>
                     <div className='d-flex'>
@@ -189,7 +189,7 @@ const MarchMadness = () => {
                             bracketDimensions={bracketDimensions}
                             roundSeparatorWidth={roundSeparatorWidth}
                             alignment={'left'}
-                            onAdvanceTeam={(team, game) => handleAdvanceTeam(team, game, 'west')}
+                            onAdvanceTeam={(winner, loser, game) => handleAdvanceTeam(winner, loser, game, 'west')}
                         />
                         <Bracket
                             game={midWestBracket}
@@ -197,7 +197,7 @@ const MarchMadness = () => {
                             bracketDimensions={bracketDimensions}
                             roundSeparatorWidth={roundSeparatorWidth}
                             alignment={'right'}
-                            onAdvanceTeam={(team, game) => handleAdvanceTeam(team, game, 'midwest')}
+                            onAdvanceTeam={(winner, loser, game) => handleAdvanceTeam(winner, loser, game, 'midwest')}
                         />
                     </div>
                 </Fragment>
