@@ -8,7 +8,7 @@ import { useMemo } from "react";
 
 
 const toBracketGames = (props) => {
-    let { game, x, y, alignment, gameDimensions, roundSeparatorWidth, round, lineInfo, homeOnTop, isMobile } = props;
+    let { game, x, y, alignment, gameDimensions, roundSeparatorWidth, round, lineInfo, homeOnTop, onAdvanceTeam, isMobile } = props;
     const { width: gameWidth, height: gameHeight } = gameDimensions;
     const ySep = gameHeight * Math.pow(2, round - 2);
 
@@ -18,7 +18,7 @@ const toBracketGames = (props) => {
         <g key={`${game.id}-${y}`}>
             <BracketGame
                 {...gameDimensions}
-                key={game.id} homeOnTop={homeOnTop} game={game} x={x} y={y}/>
+                key={game.id} homeOnTop={homeOnTop} game={game} x={x} y={y} onAdvanceTeam={onAdvanceTeam} />
         </g>
     ].concat(
         _.chain(game.sides)
@@ -64,6 +64,7 @@ const toBracketGames = (props) => {
                                         Math.abs(x + roundSeparatorWidth + gameWidth),
                                     y: y + ((ySep / 2) * multiplier),
                                     round: round - 1,
+                                    onAdvanceTeam,
                                     isMobile
                                 }
                             )
@@ -96,7 +97,8 @@ toBracketGames.propTypes = {
     homeOnTop: PropTypes.bool,
     lineInfo: lineInfoProps,
     alignment: PropTypes.oneOf(['left', 'right']),
-    isMobile: PropTypes.bool
+    isMobile: PropTypes.bool,
+    onAdvanceTeam: PropTypes.func,
 }
 
 toBracketGames.defaultProps = {
@@ -105,7 +107,7 @@ toBracketGames.defaultProps = {
 
 
 const Bracket = (props) => {
-    let { game, numRounds, alignment, homeOnTop, defaultGameDimensions, bracketDimensions, svgPadding, roundSeparatorWidth, lineInfo } = props;
+    let { game, numRounds, alignment, homeOnTop, defaultGameDimensions, bracketDimensions, svgPadding, roundSeparatorWidth, lineInfo, onAdvanceTeam } = props;
     const isMobile = useMediaQuery({ maxWidth: 767 });
 
     const roundsLabelsOffset = 20;
@@ -139,6 +141,7 @@ const Bracket = (props) => {
                         x: alignment === 'left' ? svgDimensions.width  - roundSeparatorWidth - gameDimensions.width : 0,
                         // vertically centered first game
                         y: (svgDimensions.height / 2) - gameDimensions.height / 2,
+                        onAdvanceTeam,
                         isMobile
                     })
                 }
@@ -167,6 +170,7 @@ Bracket.propTypes = {
     roundSeparatorWidth: PropTypes.number,
     lineInfo: lineInfoProps,
     alignment: PropTypes.oneOf(['left', 'right']),
+    onAdvanceTeam: PropTypes.func
 }
 
 // Specifies the default values for props

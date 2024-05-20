@@ -11,7 +11,8 @@ export interface SideInfo {
     seed?: number;
     sourceGame?: Game;
     score?: {
-        score: number;
+        score?: number;
+        isWinner?: boolean;
         penalties?: number;
         winProbability?: number;
     };

@@ -12,11 +12,12 @@ export const BracketGame = (props) => {
         game,
         x,
         y,
-        hoveredTeamId,
-        onHoveredTeamIdChange,
         homeOnTop,
         topText,
-        bottomText
+        bottomText,
+        onAdvanceTeam,
+        hoveredTeamId,
+        onHoveredTeamIdChange
     } = props;
 
     const { sides } = game;
@@ -37,7 +38,8 @@ export const BracketGame = (props) => {
 
                 <div className={`match border ${top.name !== 'TBC' || bottom.name !== 'TBC' ? 'border-primary-hover' : ''} rounded`}>
                     {/* home team or top seed */}
-                    <div className={`competitor ${top.name !== 'TBC' ? 'competitor-hover' : ''}`}>
+                    <div className={`competitor ${top.name !== 'TBC' ? 'competitor-hover' : ''} ${top.score?.isWinner ? 'bg-light fw-bold' : ''}`}
+                         onClick={() => onAdvanceTeam(top, game)}>
                         <div className='competitor-container w-100 h-100'>
 
                             <div className='d-flex'>
@@ -52,7 +54,8 @@ export const BracketGame = (props) => {
                     </div>
 
                     {/* visiting team or bottom seed */}
-                    <div className={`competitor ${bottom.name !== 'TBC' ? 'competitor-hover' : ''}`}>
+                    <div className={`competitor ${bottom.name !== 'TBC' ? 'competitor-hover' : ''} ${bottom.score?.isWinner ? 'bg-light fw-bold' : ''}`}
+                         onClick={() => onAdvanceTeam(bottom, game)}>
                         <div className='competitor-container w-100 h-100'>
                             <div className='d-flex'>
                                 {bottom.name !== 'TBC' ? (<div className='flag'><Image src={bottom.logo} alt='' className='avatar avatar-xs me-1'/></div>) : (<span></span>)}
@@ -93,9 +96,10 @@ BracketGame.propTypes = {
     x: PropTypes.number,
     y: PropTypes.number,
     homeOnTop: PropTypes.bool,
-    hoveredTeamId: PropTypes.string,
     topText: PropTypes.func,
     bottomText: PropTypes.func,
+    hoveredTeamId: PropTypes.string,
+    onAdvanceTeam: PropTypes.func,
     onHoveredTeamIdChange: PropTypes.func,
 
 }

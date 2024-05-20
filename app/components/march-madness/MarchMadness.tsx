@@ -13,15 +13,17 @@ import { useMediaQuery } from "react-responsive";
 import { winningPathLength } from "@/utils/winningPathLength";
 import { createBracket } from "@/utils/makeBrackets";
 import { EAST_SEEDS, MIDWEST_SEEDS, SOUTH_SEEDS, WEST_SEEDS } from "@/data/march-madness/Seeds";
+import { advanceTeam } from "@/utils/advanceTeam";
+import { Game, SideInfo } from "@/types/Brackets";
 
 
 
 const MarchMadness = () => {
 
-    const eastBracket =  useMemo(() => createBracket(EAST_SEEDS), []);
-    const westBracket =  useMemo(() => createBracket(WEST_SEEDS), []);
-    const midWestBracket =  useMemo(() => createBracket(MIDWEST_SEEDS), []);
-    const southBracket =  useMemo(() => createBracket(SOUTH_SEEDS), []);
+    const [eastBracket, setEastBracket] = useState(createBracket(EAST_SEEDS));
+    const [westBracket, setWestBracket] = useState(createBracket(WEST_SEEDS));
+    const [midWestBracket, setMidWestBracket] = useState(createBracket(MIDWEST_SEEDS));
+    const [southBracket, setSouthBracket] = useState(createBracket(SOUTH_SEEDS));
 
     const { height } = useWindowSize();
     const wrapperRef: MutableRefObject<any> = useRef();
@@ -76,6 +78,23 @@ const MarchMadness = () => {
     const handleModelFilter = (model: string) => {
         setActiveModel(model);
     };
+
+    const handleAdvanceTeam = (team: SideInfo, game: Game, bracket: Game, label: 'east' | 'west' | 'south' | 'midwest') => {
+        const updatedBracket = advanceTeam(team, game, bracket);
+        switch (label) {
+            case 'east':
+                setEastBracket(updatedBracket);
+                break
+            case 'west':
+                setWestBracket(updatedBracket);
+                break
+            case 'south':
+                setSouthBracket(updatedBracket);
+                break
+            default:
+                setMidWestBracket(updatedBracket)
+        }
+    }
 
     return (
         <div className='svg-wrapper' ref={el => { wrapperRef.current = el; setRefVisible(!!el); }}>
@@ -164,12 +183,40 @@ const MarchMadness = () => {
             {refVisible ? (
                 <Fragment>
                     <div className='d-flex'>
-                        <Bracket game={eastBracket} numRounds={numRounds} bracketDimensions={bracketDimensions} roundSeparatorWidth={roundSeparatorWidth} alignment={'left'} />
-                        <Bracket game={southBracket} numRounds={numRounds} bracketDimensions={bracketDimensions} roundSeparatorWidth={roundSeparatorWidth} alignment={'right'} />
+                        <Bracket
+                            game={eastBracket}
+                            numRounds={numRounds}
+                            bracketDimensions={bracketDimensions}
+                            roundSeparatorWidth={roundSeparatorWidth}
+                            alignment={'left'}
+                            onAdvanceTeam={(team, game) => handleAdvanceTeam(team, game, eastBracket, 'east')}
+                        />
+                        <Bracket
+                            game={southBracket}
+                            numRounds={numRounds}
+                            bracketDimensions={bracketDimensions}
+                            roundSeparatorWidth={roundSeparatorWidth}
+                            alignment={'right'}
+                            onAdvanceTeam={(team, game) => handleAdvanceTeam(team, game, southBracket, 'south')}
+                        />
                     </div>
                     <div className='d-flex'>
-                        <Bracket game={westBracket} numRounds={numRounds} bracketDimensions={bracketDimensions} roundSeparatorWidth={roundSeparatorWidth} alignment={'left'} />
-                        <Bracket game={midWestBracket} numRounds={numRounds} bracketDimensions={bracketDimensions} roundSeparatorWidth={roundSeparatorWidth} alignment={'right'} />
+                        <Bracket
+                            game={westBracket}
+                            numRounds={numRounds}
+                            bracketDimensions={bracketDimensions}
+                            roundSeparatorWidth={roundSeparatorWidth}
+                            alignment={'left'}
+                            onAdvanceTeam={(team, game) => handleAdvanceTeam(team, game, westBracket, 'west')}
+                        />
+                        <Bracket
+                            game={midWestBracket}
+                            numRounds={numRounds}
+                            bracketDimensions={bracketDimensions}
+                            roundSeparatorWidth={roundSeparatorWidth}
+                            alignment={'right'}
+                            onAdvanceTeam={(team, game) => handleAdvanceTeam(team, game, midWestBracket, 'midwest')}
+                        />
                     </div>
                 </Fragment>
             ) : (<span></span>)}
