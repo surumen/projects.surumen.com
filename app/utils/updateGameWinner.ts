@@ -1,7 +1,7 @@
 import { Game, SideInfo } from '@/types/Brackets';
 
 
-export const advanceTeam = (team: SideInfo, game: Game, bracket: Game): Game => {
+export const updateGameWinner = (team: SideInfo, game: Game, bracket: Game): Game => {
     return updateSourceGame(game, team, bracket);
 }
 

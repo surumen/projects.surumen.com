@@ -1,6 +1,7 @@
 // import node module libraries
-import { forwardRef, Fragment, MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
+import { forwardRef, Fragment, MutableRefObject, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useDispatch } from 'react-redux';
 
 // import bootstrap icons
 import { Dropdown } from 'react-bootstrap';
@@ -9,21 +10,17 @@ import { ChevronDown } from 'react-bootstrap-icons';
 import useWindowSize from '@/hooks/useWindowSize';
 import Bracket from '@/widgets/brackets/Bracket';
 
-import { useMediaQuery } from "react-responsive";
-import { winningPathLength } from "@/utils/winningPathLength";
-import { createBracket } from "@/utils/makeBrackets";
-import { EAST_SEEDS, MIDWEST_SEEDS, SOUTH_SEEDS, WEST_SEEDS } from "@/data/march-madness/Seeds";
-import { advanceTeam } from "@/utils/advanceTeam";
-import { Game, SideInfo } from "@/types/Brackets";
+import { useMediaQuery } from 'react-responsive';
+import { Game, SideInfo } from '@/types/Brackets';
+import useMarchMadness from '@/hooks/useMarchMadness';
+import { advanceTeam } from '@/store/marchMadnessSlice';
 
 
 
 const MarchMadness = () => {
 
-    const [eastBracket, setEastBracket] = useState(createBracket(EAST_SEEDS));
-    const [westBracket, setWestBracket] = useState(createBracket(WEST_SEEDS));
-    const [midWestBracket, setMidWestBracket] = useState(createBracket(MIDWEST_SEEDS));
-    const [southBracket, setSouthBracket] = useState(createBracket(SOUTH_SEEDS));
+    const { eastBracket, westBracket, midWestBracket, southBracket, numRounds, roundLabels, predictions } = useMarchMadness();
+    const dispatch = useDispatch();
 
     const { height } = useWindowSize();
     const wrapperRef: MutableRefObject<any> = useRef();
@@ -32,11 +29,8 @@ const MarchMadness = () => {
 
     const [bracketDimensions, setBracketDimensions] = useState<any>({width: 160, height: height})
 
-    const numRounds = useMemo(() => winningPathLength(eastBracket), [eastBracket]);
-
     const roundSeparatorWidth = 24 / 8;
 
-    const rounds = useMemo(() => ['Round 1', 'Round 2', 'Sweet 16', 'Elite 8'], []);
     const years = useMemo(() => [2024, 2023, 2022, 2021], []);
     const mlModels = useMemo(() => [
         'Logistic Regression', 'Recurrent Neural Network'
@@ -79,21 +73,9 @@ const MarchMadness = () => {
         setActiveModel(model);
     };
 
-    const handleAdvanceTeam = (team: SideInfo, game: Game, bracket: Game, label: 'east' | 'west' | 'south' | 'midwest') => {
-        const updatedBracket = advanceTeam(team, game, bracket);
-        switch (label) {
-            case 'east':
-                setEastBracket(updatedBracket);
-                break
-            case 'west':
-                setWestBracket(updatedBracket);
-                break
-            case 'south':
-                setSouthBracket(updatedBracket);
-                break
-            default:
-                setMidWestBracket(updatedBracket)
-        }
+    const handleAdvanceTeam = (team: SideInfo, game: Game, label: 'east' | 'west' | 'south' | 'midwest') => {
+        let payloadData = {team: team, game: game, label: label};
+        dispatch(advanceTeam(payloadData));
     }
 
     return (
@@ -113,14 +95,14 @@ const MarchMadness = () => {
                                         <ChevronDown size={8} className='text-xs me-1'/>
                                     </button>
                                 </Dropdown.Toggle>
-                                <Dropdown.Menu as="ul">
+                                <Dropdown.Menu as='ul'>
                                     {years.map((item, index) => {
                                         return (
                                             <Dropdown.Item eventKey={index}
-                                                           as="li" bsPrefix=" " key={index}
+                                                           as='li' bsPrefix=' ' key={index}
                                                            onClick={() => handleYearFilter(item)}
                                             >
-                                                <Link href="#" className={`dropdown-item ${activeYear === item ? 'active' : ' '}`}>
+                                                <Link href='#' className={`dropdown-item ${activeYear === item ? 'active' : ' '}`}>
                                                     {item}
                                                 </Link>
                                             </Dropdown.Item>
@@ -144,10 +126,10 @@ const MarchMadness = () => {
                                             <ChevronDown size={8} className='text-xs me-1'/>
                                         </button>
                                     </Dropdown.Toggle>
-                                    <Dropdown.Menu as="ul">
+                                    <Dropdown.Menu as='ul'>
                                         {mlModels.map((item, index) => {
                                             return (
-                                                <Dropdown.Item eventKey={index} as="li" bsPrefix=" " key={index} onClick={() => handleModelFilter(item)}>
+                                                <Dropdown.Item eventKey={index} as='li' bsPrefix=' ' key={index} onClick={() => handleModelFilter(item)}>
                                                     <Link href='#' className={`dropdown-item ${activeModel === item ? 'active' : ' '}`}>
                                                         {item}
                                                     </Link>
@@ -162,17 +144,17 @@ const MarchMadness = () => {
                 </div>
                 <hr className='my-6'/>
                 <ul className={`bg-body d-none d-md-flex nav nav-segment border p-0 nav-fill rounded-top-start rounded-bottom-start rounded-top-end rounded-bottom-end`}>
-                    {rounds.slice(0, rounds.length - 1).map((round, i) => (
+                    {roundLabels.slice(0, roundLabels.length - 1).map((round, i) => (
                         <li key={i} className={`nav-link border-radius-0 justify-content-center align-items-center px-3 py-1 text-center`}>
                             <div className='surtitle fw-semibold text-info'>{round}</div>
                             <div className='text-xxs fw-light text-opacity-75 text-muted'>March 16-20</div>
                         </li>
                     ))}
                     <li className={`nav-link w-25 border-radius-0 justify-content-center align-items-center px-3 py-1 text-center`}>
-                        <div className='surtitle fw-semibold text-info'>{rounds[rounds.length - 1]}</div>
+                        <div className='surtitle fw-semibold text-info'>{roundLabels[roundLabels.length - 1]}</div>
                         <div className='text-xxs fw-light text-opacity-75 text-muted'>March 16-20</div>
                     </li>
-                    {rounds.slice(0, rounds.length - 1).reverse().map((round, i) => (
+                    {roundLabels.slice(0, roundLabels.length - 1).reverse().map((round, i) => (
                         <li key={i} className={`nav-link border-radius-0 justify-content-center align-items-center px-3 py-1 text-center`}>
                             <div className='surtitle fw-semibold text-info'>{round}</div>
                             <div className='text-xxs fw-light text-opacity-75 text-muted'>March 16-20</div>
@@ -189,7 +171,7 @@ const MarchMadness = () => {
                             bracketDimensions={bracketDimensions}
                             roundSeparatorWidth={roundSeparatorWidth}
                             alignment={'left'}
-                            onAdvanceTeam={(team, game) => handleAdvanceTeam(team, game, eastBracket, 'east')}
+                            onAdvanceTeam={(team, game) => handleAdvanceTeam(team, game, 'east')}
                         />
                         <Bracket
                             game={southBracket}
@@ -197,7 +179,7 @@ const MarchMadness = () => {
                             bracketDimensions={bracketDimensions}
                             roundSeparatorWidth={roundSeparatorWidth}
                             alignment={'right'}
-                            onAdvanceTeam={(team, game) => handleAdvanceTeam(team, game, southBracket, 'south')}
+                            onAdvanceTeam={(team, game) => handleAdvanceTeam(team, game, 'south')}
                         />
                     </div>
                     <div className='d-flex'>
@@ -207,7 +189,7 @@ const MarchMadness = () => {
                             bracketDimensions={bracketDimensions}
                             roundSeparatorWidth={roundSeparatorWidth}
                             alignment={'left'}
-                            onAdvanceTeam={(team, game) => handleAdvanceTeam(team, game, westBracket, 'west')}
+                            onAdvanceTeam={(team, game) => handleAdvanceTeam(team, game, 'west')}
                         />
                         <Bracket
                             game={midWestBracket}
@@ -215,7 +197,7 @@ const MarchMadness = () => {
                             bracketDimensions={bracketDimensions}
                             roundSeparatorWidth={roundSeparatorWidth}
                             alignment={'right'}
-                            onAdvanceTeam={(team, game) => handleAdvanceTeam(team, game, midWestBracket, 'midwest')}
+                            onAdvanceTeam={(team, game) => handleAdvanceTeam(team, game, 'midwest')}
                         />
                     </div>
                 </Fragment>

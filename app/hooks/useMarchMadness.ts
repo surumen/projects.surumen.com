@@ -10,6 +10,13 @@ const useMarchMadness = () => {
     const rounds = useSelector((state: any) => state.matchMadness.rounds);
     const [predictions, setPredictions] = useState<any[]>([]);
 
+    const eastBracket = useSelector((state: any) => state.marchMadness.regions.east);
+    const westBracket = useSelector((state: any) => state.marchMadness.regions.west);
+    const midWestBracket = useSelector((state: any) => state.marchMadness.regions.midWest);
+    const southBracket = useSelector((state: any) => state.marchMadness.regions.south);
+    const numRounds = useSelector((state: any) => state.marchMadness.rounds.numRounds);
+    const roundLabels = useSelector((state: any) => state.marchMadness.rounds.labels);
+
     const predictionsUrl: string = 'https://raw.githubusercontent.com/surumen/college-basketball/main/Data/predictions/predictions_2024.csv';
 
     useEffect(() => {
@@ -26,7 +33,13 @@ const useMarchMadness = () => {
     return {
         regions,
         rounds,
-        predictions
+        predictions,
+        eastBracket,
+        westBracket,
+        midWestBracket,
+        southBracket,
+        numRounds,
+        roundLabels
     };
 };
 
