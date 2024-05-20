@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { Game, Side } from '@/types/Brackets';
+import { Game, Side, TBC } from "@/types/Brackets";
 
 
 const SEEDS_PAIRING_ORDER = [
@@ -25,51 +25,51 @@ export const createBracket = (seeds: any[], numRounds: number = 3) => {
     const pairings: any[] = getPairings(seeds);
 
     const round4Game = createGame(
-        {name: 'TBC', seed: 1},
-        {name: 'TBC', seed: 1},
+        {name: TBC, seed: 1},
+        {name: TBC, seed: 1},
         4,
         `Elite 8`,
     );
 
     // Sweet 16
     const round3Game1 = createGame(
-        {name: 'TBC', seed: 1},
-        {name: 'TBC', seed: 1},
+        {name: TBC, seed: 1},
+        {name: TBC, seed: 1},
         3,
         `Sweet 16`
     );
     const round3Game2 = createGame(
-        {name: 'TBC', seed: 1},
-        {name: 'TBC', seed: 1},
+        {name: TBC, seed: 1},
+        {name: TBC, seed: 1},
         3,
         `Sweet 16`
     );
 
     // Round 2
     const round2Game1 = createGame(
-        {name: 'TBC', seed: 1},
-        {name: 'TBC', seed: 1},
+        {name: TBC, seed: 1},
+        {name: TBC, seed: 1},
         2,
         `Round 2`
     );
 
     const round2Game2 = createGame(
-        {name: 'TBC', seed: 1},
-        {name: 'TBC', seed: 1},
+        {name: TBC, seed: 1},
+        {name: TBC, seed: 1},
         2,
         `Round 2`
     );
 
     const round2Game3 = createGame(
-        {name: 'TBC', seed: 1},
-        {name: 'TBC', seed: 1},
+        {name: TBC, seed: 1},
+        {name: TBC, seed: 1},
         2,
         `Round 2`
     );
 
     const round2Game4 = createGame(
-        {name: 'TBC', seed: 1},
-        {name: 'TBC', seed: 1},
+        {name: TBC, seed: 1},
+        {name: TBC, seed: 1},
         2,
         `Round 2`
     );
