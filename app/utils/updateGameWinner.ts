@@ -2,13 +2,100 @@ import { v4 as uuid } from 'uuid';
 import { Game, SideInfo, TBC } from "@/types/Brackets";
 
 
-export const updateGameWinner = (winner: SideInfo, loser: SideInfo, game: Game, bracket: Game): Game => {
-    const updateLoser: Game  = removeLoserFromAdvancedRounds(loser, game.round, bracket);
-    return updateSourceGame(game, winner, loser, updateLoser);
+export const updateGameWinner = (winner: SideInfo, loser: SideInfo, game: Game, bracket: Game, label: 'east' | 'west' | 'south' | 'midwest' | 'final'): Game => {
+    const updatedGame: Game  = removeLoserFromAdvancedRounds(loser, game.round, bracket);
+    return updateSourceGame(game, winner, updatedGame);
+}
+
+export const advanceToFinalFour = (winner: SideInfo, loser: SideInfo, game: Game, bracket: Game, label: 'east' | 'west' | 'south' | 'midwest' | 'final') => {
+    const updatedGame: Game  = removeLoserFromAdvancedRounds(loser, game.round, bracket);
+    switch (label) {
+        case "east":
+            if (updatedGame.sides.home.sourceGame) {
+                updatedGame.sides.home.sourceGame.sides.home = {
+                    ...updatedGame.sides.home.sourceGame?.sides.home,
+                    id: winner.id,
+                    name: winner.name,
+                    logo: winner.logo,
+                    seed: winner.seed
+                }
+            }
+            break
+        case "west":
+            if (updatedGame.sides.home.sourceGame) {
+                updatedGame.sides.home.sourceGame.sides.visitor = {
+                    ...updatedGame.sides.home.sourceGame?.sides.visitor,
+                    id: winner.id,
+                    name: winner.name,
+                    logo: winner.logo,
+                    seed: winner.seed
+                }
+            }
+            break
+        case "south":
+            if (updatedGame.sides.visitor.sourceGame) {
+                updatedGame.sides.visitor.sourceGame.sides.home = {
+                    ...game.sides.visitor.sourceGame?.sides.home,
+                    id: winner.id,
+                    name: winner.name,
+                    logo: winner.logo,
+                    seed: winner.seed
+                }
+            }
+            break
+        case "midwest":
+            if (updatedGame.sides.visitor.sourceGame) {
+                updatedGame.sides.visitor.sourceGame.sides.visitor = {
+                    ...game.sides.visitor.sourceGame?.sides.visitor,
+                    id: winner.id,
+                    name: winner.name,
+                    logo: winner.logo,
+                    seed: winner.seed
+                }
+            }
+            break
+        case "final":
+            updatedGame.winner = {
+                ...updatedGame.winner,
+                id: winner.id,
+                name: winner.name,
+                logo: winner.logo,
+                seed: winner.seed
+            }
+            break
+        default:
+            break
+    }
+    return updatedGame;
+}
+
+export const advanceToFinal = (winner: SideInfo, bracket: Game, label: 'east' | 'west' | 'south' | 'midwest') => {
+  switch (label) {
+      case "east" || "west":
+          bracket.sides.home = {
+              ...bracket.sides.home,
+              id: winner.id,
+              name: winner.name,
+              logo: winner.logo,
+              seed: winner.seed
+          }
+          break
+      case "south" || "midwest":
+          bracket.sides.visitor = {
+              ...bracket.sides.visitor,
+              id: winner.id,
+              name: winner.name,
+              logo: winner.logo,
+              seed: winner.seed
+          }
+          break
+      default:
+          break
+  }
 }
 
 
-const updateSourceGame = (game: Game, winner: SideInfo, loser: SideInfo, bracket: Game) => {
+const updateSourceGame = (game: Game, winner: SideInfo, bracket: Game) => {
     // TODO: enhance
 
     const homeSourceGame = bracket.sides.home.sourceGame;
@@ -35,10 +122,10 @@ const updateSourceGame = (game: Game, winner: SideInfo, loser: SideInfo, bracket
     }
 
     if (bracket.sides.home.sourceGame) {
-        updateSourceGame(game, winner, loser, bracket.sides.home.sourceGame);
+        updateSourceGame(game, winner, bracket.sides.home.sourceGame);
     }
     if (bracket.sides.visitor.sourceGame) {
-        updateSourceGame(game, winner, loser, bracket.sides.visitor.sourceGame);
+        updateSourceGame(game, winner, bracket.sides.visitor.sourceGame);
     }
     return bracket;
 }

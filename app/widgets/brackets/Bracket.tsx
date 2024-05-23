@@ -34,6 +34,7 @@ const finalFourBracket = (props) => {
             <BracketGame
                 {...gameDimensions}
                 game={finalFourGame1}
+                key={`${finalFourGame1.id}-${y}`}
                 x={x1}
                 y={y}
                 onAdvanceTeam={onAdvanceTeam}
@@ -45,6 +46,7 @@ const finalFourBracket = (props) => {
             <BracketGame
                 {...gameDimensions}
                 game={game}
+                key={`${game.id}-${y}`}
                 x={x2}
                 y={y}
                 onAdvanceTeam={onAdvanceTeam}
@@ -56,6 +58,7 @@ const finalFourBracket = (props) => {
             <BracketGame
                 {...gameDimensions}
                 game={finalFourGame2}
+                key={`${finalFourGame2.id}-${y}`}
                 x={x3}
                 y={y}
                 onAdvanceTeam={onAdvanceTeam}

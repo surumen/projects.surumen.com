@@ -32,4 +32,5 @@ export interface Game {
     sides: {
         [side in Side]: SideInfo
     };
+    winner?: SideInfo
 }

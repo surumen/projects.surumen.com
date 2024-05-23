@@ -56,7 +56,7 @@ const toBracketGames = (props) => {
                     return [
                         sourceGame ? (
                             <path key={`${game.id}-${side}-${y}-path`} d={pathInfo.join(' ')} fill="transparent" stroke="var(--x-info)" opacity={.25}/>
-                        ) : (<g></g>)
+                        ) : (<g key={`${game.id}-${side}-${y}-path`}></g>)
                     ]
                         .concat(
                             toBracketGames(

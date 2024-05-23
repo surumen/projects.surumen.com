@@ -73,7 +73,7 @@ const MarchMadness = () => {
         setActiveModel(model);
     };
 
-    const handleAdvanceTeam = (winner: SideInfo, loser: SideInfo, game: Game, label: 'east' | 'west' | 'south' | 'midwest') => {
+    const handleAdvanceTeam = (winner: SideInfo, loser: SideInfo, game: Game, label: 'east' | 'west' | 'south' | 'midwest' | 'final') => {
         let payloadData = {winner: winner, loser: loser, game: game, label: label};
         dispatch(advanceTeam(payloadData));
     }
@@ -189,7 +189,7 @@ const MarchMadness = () => {
                             numRounds={2}
                             bracketDimensions={{width: width, height: height}}
                             roundSeparatorWidth={roundSeparatorWidth}
-                            onAdvanceTeam={(winner, loser, game) => handleAdvanceTeam(winner, loser, game, 'south')}
+                            onAdvanceTeam={(winner, loser, game) => handleAdvanceTeam(winner, loser, game, 'final')}
                         />
                     </div>
                     <div className='d-flex'>
