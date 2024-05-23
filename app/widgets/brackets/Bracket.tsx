@@ -14,15 +14,16 @@ const finalFourBracket = (props) => {
     const finalFourGame2 = game.sides.visitor.sourceGame;
 
     const y = (bracketDimensions.height / 2) - gameDimensions.height / 2;
+    const y2 = (bracketDimensions.height / 2) - gameDimensions.height;
     const x1 = (bracketDimensions.width / 2) - (gameDimensions.width * 1.5) - roundSeparatorWidth;
-    const x2 = (bracketDimensions.width / 2) - (gameDimensions.width * 0.5);
+    const x2 = ((bracketDimensions.width) / 2) - (gameDimensions.width);
     const x3 = (bracketDimensions.width / 2) + (gameDimensions.width * 0.5) + roundSeparatorWidth;
 
 
     const p1startPointX = x1 + gameDimensions.width;
     const p1endPointX = x2;
 
-    const p2startPointX = x2 + gameDimensions.width;
+    const p2startPointX = x2 + (gameDimensions.width * 2);
     const p2endPointX = x3;
 
     const startPointY = bracketDimensions.height / 2 + lineInfo.yOffset;
@@ -48,8 +49,9 @@ const finalFourBracket = (props) => {
                 game={game}
                 key={`${game.id}-${y}`}
                 x={x2}
-                y={y}
+                y={y2}
                 onAdvanceTeam={onAdvanceTeam}
+                isFinal={true}
             />
             <path
                 d={`M ${p2startPointX} ${startPointY} L ${p2endPointX} ${startPointY}`}
@@ -107,7 +109,7 @@ const Bracket = (props) => {
 
 
     return (
-        <svg {...svgDimensions} fill='var(--x-body-color)'>
+        <svg {...svgDimensions} fill='var(--x-body-color)' className={isFinal ? 'overflow-visible' : ''}>
             <g>
                 { isFinal ? (
                     finalFourBracket({

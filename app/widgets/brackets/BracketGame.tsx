@@ -12,6 +12,7 @@ export const BracketGame = (props) => {
         game,
         x,
         y,
+        isFinal,
         homeOnTop,
         topText,
         bottomText,
@@ -26,26 +27,26 @@ export const BracketGame = (props) => {
 
 
     const gameSvgDimensions = {
-        width: 160,
-        height: 120
+        width: isFinal ? 320: 160,
+        height: isFinal ? 240: 120
     }
 
     return (
         <foreignObject x={x} y={y} width={gameSvgDimensions.width} height={gameSvgDimensions.height}>
             <div className='gamebox offset'>
                 {/* game time */}
-                <div className='schedule'>{topText(game)}</div>
+                <div className='schedule'>{bottomText(game)}</div>
 
                 <div className={`match border ${top.name !== 'TBC' || bottom.name !== 'TBC' ? 'border-primary-hover' : ''} rounded`}>
                     {/* home team or top seed */}
                     <div className={`competitor ${top.name !== 'TBC' ? 'competitor-hover' : ''} ${top.score?.isWinner ? 'bg-light fw-bold' : ''}`}
                          onClick={() => onAdvanceTeam(top, bottom, game)}>
-                        <div className='competitor-container w-100 h-100'>
+                        <div className={`competitor-container w-100 h-100 ${top.name === 'TBC' ? 'bg-body-tertiary' : ''}`}>
 
                             <div className='d-flex'>
                                 {top.name !== 'TBC' ? (<div className='flag'><Image src={top.logo} alt='' className='avatar avatar-xs me-1'/></div>) : (<span></span>)}
                                 {top.name !== 'TBC' ? (<span className='seed'>{top.seed}</span>) : (<span></span>)}
-                                <span className={`team-name text-truncate ${top.name === 'TBC' ? 'ms-3' : 'me-1'}`}>{top.name}</span>
+                                <span className={`team-name text-truncate ${top.name === 'TBC' ? 'ms-3 invisible' : 'me-1'}`}>{top.name}</span>
                             </div>
                         </div>
                         <div className='result'>
@@ -56,11 +57,11 @@ export const BracketGame = (props) => {
                     {/* visiting team or bottom seed */}
                     <div className={`competitor ${bottom.name !== 'TBC' ? 'competitor-hover' : ''} ${bottom.score?.isWinner ? 'bg-light fw-bold' : ''}`}
                          onClick={() => onAdvanceTeam(bottom, top, game)}>
-                        <div className='competitor-container w-100 h-100'>
+                        <div className={`competitor-container w-100 h-100 ${bottom.name === 'TBC' ? 'bg-body-tertiary' : ''}`}>
                             <div className='d-flex'>
                                 {bottom.name !== 'TBC' ? (<div className='flag'><Image src={bottom.logo} alt='' className='avatar avatar-xs me-1'/></div>) : (<span></span>)}
                                 {bottom.name !== 'TBC' ? (<span className='seed'>{bottom.seed}</span>) : (<span></span>)}
-                                <span className={`team-name text-truncate ${bottom.name === 'TBC' ? 'ms-3' : 'me-1'}`}>{bottom.name}</span>
+                                <span className={`team-name text-truncate ${bottom.name === 'TBC' ? 'ms-3 invisible' : 'me-1'}`}>{bottom.name}</span>
                             </div>
                         </div>
                         <div className='result'></div>
@@ -95,6 +96,7 @@ BracketGame.propTypes = {
     game: gameProps,
     x: PropTypes.number,
     y: PropTypes.number,
+    isFinal: PropTypes.bool,
     homeOnTop: PropTypes.bool,
     topText: PropTypes.func,
     bottomText: PropTypes.func,
@@ -106,9 +108,10 @@ BracketGame.propTypes = {
 
 // Specifies the default values for props
 BracketGame.defaultProps = {
+    isFinal: false,
     homeOnTop: true,
     topText: ({ scheduled }: Game) => new Date(scheduled).toLocaleDateString(),
-    bottomText: ({ name, bracketLabel }: Game) => _.compact([ name, bracketLabel ]).join(' - ')
+    bottomText: ({ name, bracketLabel }: Game) => name ? name : bracketLabel
 };
 
 export default BracketGame;
