@@ -1,7 +1,7 @@
 // import node module libraries
 import { createSlice } from '@reduxjs/toolkit'
 
-import { createBracket } from "@/utils/makeBrackets";
+import { createBracket, createFinalFour } from "@/utils/makeBrackets";
 import { winningPathLength } from "@/utils/winningPathLength";
 
 // import data files
@@ -14,7 +14,7 @@ export interface AdvanceTeamProps {
     team: SideInfo,
     game: Game,
     bracket: Game,
-    label: 'east' | 'west' | 'south' | 'midwest'
+    label: 'east' | 'west' | 'south' | 'midwest' | 'final'
 }
 
 const initialState: any = {
@@ -28,6 +28,7 @@ const initialState: any = {
         numRounds: winningPathLength(createBracket(EAST_SEEDS)),
         labels: ['Round 1', 'Round 2', 'Sweet 16', 'Elite 8']
     },
+    finalFour: createFinalFour()
 };
 
 export const marchMadnessSlice = createSlice({

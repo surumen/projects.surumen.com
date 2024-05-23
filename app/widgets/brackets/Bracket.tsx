@@ -1,113 +1,91 @@
 // import node module libraries
 import PropTypes from "prop-types";
-import * as _ from 'underscore';
 import { BracketGame, gameProps } from "@/widgets/brackets/BracketGame";
-import { Side } from "@/types/Brackets";
 import { useMediaQuery } from "react-responsive";
-import { useMemo } from "react";
+import { Fragment, useMemo } from "react";
+import toBracketGames, { lineInfoProps } from "@/widgets/brackets/toBracketGames";
 
 
-const toBracketGames = (props) => {
-    let { game, x, y, alignment, gameDimensions, roundSeparatorWidth, round, lineInfo, homeOnTop, onAdvanceTeam, isMobile } = props;
-    const { width: gameWidth, height: gameHeight } = gameDimensions;
-    const ySep = gameHeight * Math.pow(2, round - 2);
 
-    if (!game) return null;
+const finalFourBracket = (props) => {
+    let { game, bracketDimensions, gameDimensions, roundSeparatorWidth, lineInfo, onAdvanceTeam, isMobile } = props;
 
-    return [
-        <g key={`${game.id}-${y}`}>
+    const finalFourGame1 = game.sides.home.sourceGame;
+    const finalFourGame2 = game.sides.visitor.sourceGame;
+
+    const y = (bracketDimensions.height / 2) - gameDimensions.height / 2;
+    const x1 = (bracketDimensions.width / 2) - (gameDimensions.width * 1.5) - roundSeparatorWidth;
+    const x2 = (bracketDimensions.width / 2) - (gameDimensions.width * 0.5);
+    const x3 = (bracketDimensions.width / 2) + (gameDimensions.width * 0.5) + roundSeparatorWidth;
+
+
+    const p1startPointX = x1 + gameDimensions.width;
+    const p1endPointX = x2;
+
+    const p2startPointX = x2 + gameDimensions.width;
+    const p2endPointX = x3;
+
+    const startPointY = bracketDimensions.height / 2 + lineInfo.yOffset;
+
+
+
+    return (
+        <g>
             <BracketGame
                 {...gameDimensions}
-                key={game.id} homeOnTop={homeOnTop} game={game} x={x} y={y} onAdvanceTeam={onAdvanceTeam} />
+                game={finalFourGame1}
+                x={x1}
+                y={y}
+                onAdvanceTeam={onAdvanceTeam}
+            />
+            <path
+                d={`M ${p1startPointX} ${startPointY} L ${p1endPointX} ${startPointY}`}
+                fill='transparent' stroke='var(--x-info)' opacity={.25}
+            />
+            <BracketGame
+                {...gameDimensions}
+                game={game}
+                x={x2}
+                y={y}
+                onAdvanceTeam={onAdvanceTeam}
+            />
+            <path
+                d={`M ${p2startPointX} ${startPointY} L ${p2endPointX} ${startPointY}`}
+                fill='transparent' stroke='var(--x-info)' opacity={.25}
+            />
+            <BracketGame
+                {...gameDimensions}
+                game={finalFourGame2}
+                x={x3}
+                y={y}
+                onAdvanceTeam={onAdvanceTeam}
+            />
         </g>
-    ].concat(
-        _.chain(game.sides)
-            .map((sideInfo, side: Side) => ({ ...sideInfo, side }))
-            // filter to the teams that come from winning other games
-            .filter(({ sourceGame }) => sourceGame !== null)
-            .map(
-                ({ sourceGame, side }) => {
-                    // we put visitor teams on the bottom
-                    const isTop = side === Side.HOME ? homeOnTop : !homeOnTop;
-                    const multiplier = isTop ? -1 : 1;
+    )
 
-                    const pathInfoLeft = [
-                        `M${x - lineInfo.separation} ${y + gameHeight / 2 + lineInfo.yOffset + multiplier * lineInfo.homeVisitorSpread}`,
-                        `H${x - (roundSeparatorWidth)}`,
-                        `V${y + gameHeight / 2 + lineInfo.yOffset + ((ySep / 2) * multiplier)}`,
-                        `H${x - (roundSeparatorWidth * 2) - lineInfo.separation}`
-                    ];
-
-                    const pathInfoRight = [
-                        // To the right of match container
-                        `M${x + gameWidth - roundSeparatorWidth} ${y + gameHeight / 2 + lineInfo.yOffset + multiplier * lineInfo.homeVisitorSpread}`,
-                        `H${x + gameWidth}`,
-                        `V${y + gameHeight / 2 + lineInfo.yOffset + ((ySep / 2) * multiplier)}`,
-                        `H${x + gameWidth + roundSeparatorWidth - lineInfo.separation}`
-                    ];
-
-                    const pathInfo = alignment === 'left' ? pathInfoLeft : pathInfoRight;
-
-                    return [
-                        <path key={`${game.id}-${side}-${y}-path`} d={pathInfo.join(' ')} fill="transparent" stroke="var(--x-info)" opacity={.25}/>
-                    ]
-                        .concat(
-                            toBracketGames(
-                                {
-                                    game: sourceGame,
-                                    alignment,
-                                    homeOnTop,
-                                    lineInfo,
-                                    gameDimensions,
-                                    roundSeparatorWidth,
-                                    x: alignment === 'left' ? Math.abs(x - gameWidth - roundSeparatorWidth) :
-                                        Math.abs(x + roundSeparatorWidth + gameWidth),
-                                    y: y + ((ySep / 2) * multiplier),
-                                    round: round - 1,
-                                    onAdvanceTeam,
-                                    isMobile
-                                }
-                            )
-                        );
-                }
-            )
-            .flatten(true)
-            .value()
-    );
 }
 
-
-const lineInfoProps = PropTypes.shape({
-    yOffset: PropTypes.number,
-    xOffset: PropTypes.number,
-    separation: PropTypes.number,
-    homeVisitorSpread: PropTypes.number
-});
-
-toBracketGames.propTypes = {
+finalFourBracket.propTypes = {
     game: gameProps,
-    x: PropTypes.number,
-    y: PropTypes.number,
     gameDimensions: PropTypes.shape({
         height: PropTypes.number,
         width: PropTypes.number
     }),
+    bracketDimensions: PropTypes.shape({
+        height: PropTypes.number,
+        width: PropTypes.number
+    }),
+    svgPadding: PropTypes.number,
     roundSeparatorWidth: PropTypes.number,
-    round: PropTypes.number,
-    homeOnTop: PropTypes.bool,
     lineInfo: lineInfoProps,
-    alignment: PropTypes.oneOf(['left', 'right']),
-    isMobile: PropTypes.bool,
     onAdvanceTeam: PropTypes.func,
+    isMobile: PropTypes.bool
 }
 
-toBracketGames.defaultProps = {
-    x: 0,
-}
 
 
 const Bracket = (props) => {
-    let { game, numRounds, alignment, homeOnTop, defaultGameDimensions, bracketDimensions, svgPadding, roundSeparatorWidth, lineInfo, onAdvanceTeam } = props;
+    let { game, numRounds, alignment, isFinal, homeOnTop, defaultGameDimensions, bracketDimensions, svgPadding, roundSeparatorWidth, lineInfo, onAdvanceTeam } = props;
     const isMobile = useMediaQuery({ maxWidth: 767 });
 
     const roundsLabelsOffset = 20;
@@ -120,7 +98,7 @@ const Bracket = (props) => {
     }, [bracketDimensions, defaultGameDimensions, numRounds, roundSeparatorWidth]);
 
     const svgDimensions =  {
-        height: (gameDimensions.height * Math.pow(2, numRounds - 1)) + roundsLabelsOffset,
+        height: isFinal && !isMobile ? 120 : (gameDimensions.height * Math.pow(2, numRounds - 1)) + roundsLabelsOffset,
         width: bracketDimensions?.width || !isMobile ? bracketDimensions.width : ((numRounds * (gameDimensions.width + roundSeparatorWidth)) + svgPadding * 2)
     };
 
@@ -128,7 +106,17 @@ const Bracket = (props) => {
     return (
         <svg {...svgDimensions} fill='var(--x-body-color)'>
             <g>
-                {
+                { isFinal ? (
+                    finalFourBracket({
+                        game,
+                        bracketDimensions: svgDimensions,
+                        gameDimensions: {width: 160, height: gameDimensions.height},
+                        roundSeparatorWidth: 160,
+                        lineInfo,
+                        onAdvanceTeam,
+                        isMobile
+                    })
+                ) : (
                     toBracketGames({
                         game,
                         alignment,
@@ -144,6 +132,7 @@ const Bracket = (props) => {
                         onAdvanceTeam,
                         isMobile
                     })
+                    )
                 }
             </g>
         </svg>
@@ -156,6 +145,7 @@ const Bracket = (props) => {
 Bracket.propTypes = {
     game: gameProps,
     numRounds: PropTypes.number,
+    isFinal: PropTypes.bool,
     homeOnTop: PropTypes.bool,
     displayRounds: PropTypes.bool,
     defaultGameDimensions: PropTypes.shape({
@@ -175,6 +165,7 @@ Bracket.propTypes = {
 
 // Specifies the default values for props
 Bracket.defaultProps = {
+    isFinal: false,
     homeOnTop: true,
     defaultGameDimensions: {
         height: 120,

@@ -106,6 +106,7 @@ BracketGame.propTypes = {
 
 // Specifies the default values for props
 BracketGame.defaultProps = {
+    homeOnTop: true,
     topText: ({ scheduled }: Game) => new Date(scheduled).toLocaleDateString(),
     bottomText: ({ name, bracketLabel }: Game) => _.compact([ name, bracketLabel ]).join(' - ')
 };

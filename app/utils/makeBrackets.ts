@@ -20,6 +20,32 @@ const setVisitorSourceGame = (game: Game, sourceGame: Game) => {
     }
 }
 
+export const createFinalFour = () => {
+    const finalFourGame1 = createGame(
+        {name: TBC, seed: 1},
+        {name: TBC, seed: 1},
+        5,
+        `Final Four`,
+    );
+
+    const finalFourGame2 = createGame(
+        {name: TBC, seed: 1},
+        {name: TBC, seed: 1},
+        5,
+        `Final Four`,
+    );
+
+    const final = createGame(
+        {name: TBC, seed: 1},
+        {name: TBC, seed: 1},
+        6,
+        `Final`,
+    );
+    final.sides.home.sourceGame = finalFourGame1;
+    final.sides.visitor.sourceGame = finalFourGame2;
+    return final;
+}
+
 
 export const createBracket = (seeds: any[], numRounds: number = 3) => {
     const pairings: any[] = getPairings(seeds);

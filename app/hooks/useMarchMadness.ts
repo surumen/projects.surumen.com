@@ -14,6 +14,8 @@ const useMarchMadness = () => {
     const westBracket = useSelector((state: any) => state.marchMadness.regions.west);
     const midWestBracket = useSelector((state: any) => state.marchMadness.regions.midWest);
     const southBracket = useSelector((state: any) => state.marchMadness.regions.south);
+    const finalFour = useSelector((state: any) => state.marchMadness.finalFour);
+
     const numRounds = useSelector((state: any) => state.marchMadness.rounds.numRounds);
     const roundLabels = useSelector((state: any) => state.marchMadness.rounds.labels);
 
@@ -38,6 +40,7 @@ const useMarchMadness = () => {
         westBracket,
         midWestBracket,
         southBracket,
+        finalFour,
         numRounds,
         roundLabels
     };

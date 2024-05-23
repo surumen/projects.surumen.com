@@ -19,10 +19,10 @@ import { advanceTeam } from '@/store/marchMadnessSlice';
 
 const MarchMadness = () => {
 
-    const { eastBracket, westBracket, midWestBracket, southBracket, numRounds, roundLabels, predictions } = useMarchMadness();
+    const { eastBracket, westBracket, midWestBracket, southBracket, finalFour, numRounds, roundLabels, predictions } = useMarchMadness();
     const dispatch = useDispatch();
 
-    const { height } = useWindowSize();
+    const { height, width } = useWindowSize();
     const wrapperRef: MutableRefObject<any> = useRef();
     const [refVisible, setRefVisible] = useState(false);
     const isMobile = useMediaQuery({ maxWidth: 767 });
@@ -179,6 +179,16 @@ const MarchMadness = () => {
                             bracketDimensions={bracketDimensions}
                             roundSeparatorWidth={roundSeparatorWidth}
                             alignment={'right'}
+                            onAdvanceTeam={(winner, loser, game) => handleAdvanceTeam(winner, loser, game, 'south')}
+                        />
+                    </div>
+                    <div>
+                        <Bracket
+                            game={finalFour}
+                            isFinal={true}
+                            numRounds={2}
+                            bracketDimensions={{width: width, height: height}}
+                            roundSeparatorWidth={roundSeparatorWidth}
                             onAdvanceTeam={(winner, loser, game) => handleAdvanceTeam(winner, loser, game, 'south')}
                         />
                     </div>
