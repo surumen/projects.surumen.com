@@ -85,7 +85,7 @@ const ProjectSummary = ({ project, blog, isPreview }) => {
 				</Row>
 			</section>
 
-			<section className={`container border rounded mw-screen-xxl py-5 ${project.contentType === 'app' ? 'bg-body-tertiary' : ''}`}>
+			<section className={`container border rounded mw-screen-xxl py-5 ${project.contentType === 'app' ? 'bg-body-secondary' : ''}`}>
 				{project.contentType === 'blog' ? (
 					<Row className='pt-4'>
 						<Col md={3}>

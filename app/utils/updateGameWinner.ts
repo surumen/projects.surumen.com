@@ -1,8 +1,9 @@
 import { v4 as uuid } from 'uuid';
 import { Game, SideInfo, TBC } from "@/types/Brackets";
+import { lab } from "d3";
 
 
-export const updateGameWinner = (winner: SideInfo, loser: SideInfo, game: Game, bracket: Game, label: 'east' | 'west' | 'south' | 'midwest' | 'final'): Game => {
+export const updateGameWinner = (winner: SideInfo, loser: SideInfo, game: Game, bracket: Game, label: 'east' | 'west' | 'south' | 'midwest' | 'finalFour'): Game => {
     const updatedGame: Game  = removeLoserFromAdvancedRounds(loser, game.round, bracket);
     return updateSourceGame(game, winner, updatedGame);
 }
@@ -54,24 +55,21 @@ export const advanceToFinalFour = (winner: SideInfo, loser: SideInfo, game: Game
                 }
             }
             break
-        case "final":
-            updatedGame.winner = {
-                ...updatedGame.winner,
-                id: winner.id,
-                name: winner.name,
-                logo: winner.logo,
-                seed: winner.seed
-            }
-            break
         default:
             break
     }
     return updatedGame;
 }
 
-export const advanceToFinal = (winner: SideInfo, bracket: Game, label: 'east' | 'west' | 'south' | 'midwest') => {
-  switch (label) {
-      case "east" || "west":
+export const advanceToFinal = (winner: SideInfo, game: Game, bracket: Game) => {
+      if (game.id === bracket.id) {
+          bracket.winner = {
+              id: winner.id,
+              name: winner.name,
+              logo: winner.logo,
+              seed: winner.seed
+          }
+      } else if (bracket.sides.home.sourceGame?.id === game.id) {
           bracket.sides.home = {
               ...bracket.sides.home,
               id: winner.id,
@@ -79,8 +77,8 @@ export const advanceToFinal = (winner: SideInfo, bracket: Game, label: 'east' | 
               logo: winner.logo,
               seed: winner.seed
           }
-          break
-      case "south" || "midwest":
+          bracket.winner = {id: TBC, name: TBC };
+      } else if (bracket.sides.visitor.sourceGame?.id === game.id) {
           bracket.sides.visitor = {
               ...bracket.sides.visitor,
               id: winner.id,
@@ -88,11 +86,12 @@ export const advanceToFinal = (winner: SideInfo, bracket: Game, label: 'east' | 
               logo: winner.logo,
               seed: winner.seed
           }
-          break
-      default:
-          break
-  }
-}
+          bracket.winner = {id: TBC, name: TBC };
+      } else {
+          bracket.winner = {id: TBC, name: TBC };
+      }
+      return bracket;
+    }
 
 
 const updateSourceGame = (game: Game, winner: SideInfo, bracket: Game) => {

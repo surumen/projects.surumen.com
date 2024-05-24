@@ -89,7 +89,7 @@ const MarchMadness = () => {
                                     as={ToggleYear}
                                     id='toggle-data-year'
                                 >
-                                    <button className='btn btn-sm btn-outline-secondary bg-light-hover text-primary-hover flex-none d-flex align-items-center gap-2 p-1'>
+                                    <button className='btn btn-sm btn-tertiary text-warning text-opacity-75-hover flex-none d-flex align-items-center gap-2 p-1'>
                                         <span className='ms-2'>Year:</span>
                                         <span className='ms-2'>{activeYear}</span>
                                         <ChevronDown size={8} className='text-xs me-1'/>
@@ -102,7 +102,7 @@ const MarchMadness = () => {
                                                            as='li' bsPrefix=' ' key={index}
                                                            onClick={() => handleYearFilter(item)}
                                             >
-                                                <Link href='#' className={`dropdown-item ${activeYear === item ? 'active' : ' '}`}>
+                                                <Link href='#' className={`dropdown-item ${activeYear === item ? 'active text-warning' : 'text-muted'}`}>
                                                     {item}
                                                 </Link>
                                             </Dropdown.Item>
@@ -120,7 +120,7 @@ const MarchMadness = () => {
                                         as={ToggleYear}
                                         id='toggle-model'
                                     >
-                                        <button className='btn btn-sm btn-outline-secondary bg-light-hover text-primary-hover flex-none d-flex align-items-center gap-2 p-1'>
+                                        <button className='btn btn-sm btn-tertiary text-warning text-opacity-75-hover flex-none d-flex align-items-center gap-2 p-1'>
                                             <span className='ms-2'>Model:</span>
                                             <span className='ms-2'>{activeModel}</span>
                                             <ChevronDown size={8} className='text-xs me-1'/>
@@ -130,7 +130,7 @@ const MarchMadness = () => {
                                         {mlModels.map((item, index) => {
                                             return (
                                                 <Dropdown.Item eventKey={index} as='li' bsPrefix=' ' key={index} onClick={() => handleModelFilter(item)}>
-                                                    <Link href='#' className={`dropdown-item ${activeModel === item ? 'active' : ' '}`}>
+                                                    <Link href='#' className={`dropdown-item ${activeModel === item ? 'active text-warning' : 'text-muted'}`}>
                                                         {item}
                                                     </Link>
                                                 </Dropdown.Item>

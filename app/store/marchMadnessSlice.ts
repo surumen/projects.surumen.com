@@ -7,7 +7,7 @@ import { winningPathLength } from "@/utils/winningPathLength";
 // import data files
 import { EAST_SEEDS, MIDWEST_SEEDS, SOUTH_SEEDS, WEST_SEEDS } from '@/data/march-madness/Seeds';
 import { Game, SideInfo } from '@/types/Brackets';
-import { advanceToFinalFour, updateGameWinner } from "@/utils/updateGameWinner";
+import { advanceToFinal, advanceToFinalFour, updateGameWinner } from "@/utils/updateGameWinner";
 
 
 export interface AdvanceTeamProps {
@@ -62,16 +62,7 @@ export const marchMadnessSlice = createSlice({
                     }
                     break
                 default:
-                    state.finalFour = updateGameWinner(action.payload.winner, action.payload.loser, action.payload.game, state.finalFour, 'final');
-                    state.finalFour = {
-                        ...state.finalFour,
-                        winner: {
-                            id: action.payload.winner.id,
-                            name: action.payload.winner.name,
-                            logo: action.payload.winner.logo,
-                            seed: action.payload.winner.seed
-                        }
-                    }
+                    state.finalFour = advanceToFinal(action.payload.winner, action.payload.game, state.finalFour);
             }
         },
         resetBracket: (state, action) => {

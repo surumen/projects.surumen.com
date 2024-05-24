@@ -39,6 +39,7 @@ const finalFourBracket = (props) => {
                 x={x1}
                 y={y}
                 onAdvanceTeam={onAdvanceTeam}
+                isFinalFour={true}
             />
             <path
                 d={`M ${p1startPointX} ${startPointY} L ${p1endPointX} ${startPointY}`}
@@ -49,7 +50,7 @@ const finalFourBracket = (props) => {
                 game={game}
                 key={`${game.id}-${y}`}
                 x={x2}
-                y={y2}
+                y={y}
                 onAdvanceTeam={onAdvanceTeam}
                 isFinal={true}
             />
@@ -64,6 +65,7 @@ const finalFourBracket = (props) => {
                 x={x3}
                 y={y}
                 onAdvanceTeam={onAdvanceTeam}
+                isFinalFour={true}
             />
         </g>
     )

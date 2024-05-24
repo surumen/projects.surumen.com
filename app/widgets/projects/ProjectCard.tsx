@@ -34,7 +34,7 @@ const ProjectCard = ({ project, viewby }) => {
 					 cursor-pointer'>
 
 					<div className='flex-none'>
-						<div className='icon icon-shape rounded-circle flex-none text-base bg-body-secondary text-bg-body-secondary'>
+						<div className='icon icon-shape rounded-circle flex-none text-base bg-body-tertiary text-bg-body-secondary'>
 							<SendFill size={16} />
 						</div>
 					</div>
