@@ -6,7 +6,8 @@ import { settings } from '../../app.config';
 
 const initialState = {
   version: settings.app.version,
-  skin: settings.theme.skin
+  skin: settings.theme.skin,
+  acceptedCookies: false,
 }
 export const appSlice = createSlice({
   name: 'app',
@@ -16,10 +17,16 @@ export const appSlice = createSlice({
       // @ts-ignore
       document.querySelector('html').setAttribute('data-theme', action.payload);
       state.skin = action.payload;
+    },
+    acceptCookies: (state, action) => {
+      state.acceptedCookies = true;
     }
   },
 })
 
-export const { changeSkin } = appSlice.actions
+export const {
+  changeSkin,
+  acceptCookies
+} = appSlice.actions
 
 export default appSlice.reducer
