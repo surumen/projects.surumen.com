@@ -82,16 +82,15 @@ const MarchMadness = () => {
         <div className='svg-wrapper' ref={el => { wrapperRef.current = el; setRefVisible(!!el); }}>
             <div>
                 <div className='row align-items-center g-6 mt-0'>
-                    <div className='col-sm-6 mt-0'>
+                    <div className='col-3 mt-0'>
                         <div className='d-flex gap-2'>
                             <Dropdown>
                                 <Dropdown.Toggle
                                     as={ToggleYear}
                                     id='toggle-data-year'
                                 >
-                                    <button className='btn btn-sm btn-tertiary text-warning text-opacity-75-hover flex-none d-flex align-items-center gap-2 p-1'>
-                                        <span className='ms-2'>Year:</span>
-                                        <span className='ms-2'>{activeYear}</span>
+                                    <button className='btn btn-xs btn-outline-info opacity-75 rounded-pill d-flex align-items-center gap-2'>
+                                        <span className='mx-2'>{activeYear}</span>
                                         <ChevronDown size={8} className='text-xs me-1'/>
                                     </button>
                                 </Dropdown.Toggle>
@@ -102,7 +101,7 @@ const MarchMadness = () => {
                                                            as='li' bsPrefix=' ' key={index}
                                                            onClick={() => handleYearFilter(item)}
                                             >
-                                                <Link href='#' className={`dropdown-item ${activeYear === item ? 'active text-warning' : 'text-muted'}`}>
+                                                <Link href='#' className={`dropdown-item ${activeYear === item ? 'active text-info' : 'text-muted'}`}>
                                                     {item}
                                                 </Link>
                                             </Dropdown.Item>
@@ -112,33 +111,21 @@ const MarchMadness = () => {
                             </Dropdown>
                         </div>
                     </div>
-                    <div className='col-sm-6 mt-0'>
-                        <div className='hstack justify-content-end gap-2'>
-                            <div className='d-flex align-items-center justify-content-end gap-2'>
-                                <Dropdown>
-                                    <Dropdown.Toggle
-                                        as={ToggleYear}
-                                        id='toggle-model'
-                                    >
-                                        <button className='btn btn-sm btn-tertiary text-warning text-opacity-75-hover flex-none d-flex align-items-center gap-2 p-1'>
-                                            <span className='ms-2'>Model:</span>
-                                            <span className='ms-2'>{activeModel}</span>
-                                            <ChevronDown size={8} className='text-xs me-1'/>
-                                        </button>
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu as='ul'>
-                                        {mlModels.map((item, index) => {
-                                            return (
-                                                <Dropdown.Item eventKey={index} as='li' bsPrefix=' ' key={index} onClick={() => handleModelFilter(item)}>
-                                                    <Link href='#' className={`dropdown-item ${activeModel === item ? 'active text-warning' : 'text-muted'}`}>
-                                                        {item}
-                                                    </Link>
-                                                </Dropdown.Item>
-                                            );
-                                        })}
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </div>
+                    <div className='col-6 mt-0'>
+                        <div className='d-flex align-items-end justify-content-center'>
+                            <span className='fs-3 fw-bolder text-opacity-50 text-info'>2024 NCAA Tournament Bracket</span>
+                        </div>
+                    </div>
+                    <div className='col-3 mt-0'>
+                        <div className='d-flex align-items-center justify-content-end'>
+                            <ul className='nav nav-segment bg-body rounded-pill shadow-none p-0'>
+                                <li className='nav-item'>
+                                    <span className='nav-link bg-info-subtle text-xs text-info rounded-pill px-5'>Editing</span>
+                                </li>
+                                <li className='nav-item'>
+                                    <span className='nav-link text-xs text-muted rounded-pill px-5'>Viewing</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>

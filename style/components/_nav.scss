@@ -22,3 +22,24 @@
     border-top-width: 0;
   }
 }
+
+
+// Segment
+.nav-segment {
+  position: relative;
+  padding: $nav-segment-padding-y $nav-segment-padding-x;
+
+  @include border-radius($border-radius);
+
+  &:not(.nav-fill) {
+    display: inline-flex;
+  }
+
+  .nav-link {
+    padding: $nav-segment-link-padding-y $nav-segment-link-padding-x;
+    color: $nav-link-color;
+    @include border-radius($border-radius);
+
+  }
+
+}

@@ -772,6 +772,11 @@ $nav-link-padding-x:                1rem !default;
 $nav-link-font-size:                $font-size-sm !default;
 $nav-link-font-weight:              $font-weight-semibold !default;
 $nav-link-color:                    var(--#{$prefix}body-color) !default;
+$nav-link-padding-x:                1rem !default;
+$nav-segment-padding-y:             .25rem !default;
+$nav-segment-padding-x:             $nav-segment-padding-y !default;
+$nav-segment-link-padding-y:        $input-btn-padding-y-sm !default;
+$nav-segment-link-padding-x:        .8125rem !default;
 
 // Navbar
 
