@@ -277,7 +277,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
                 <g className='axis xAxis text-muted-charts'></g>
                 <text className='timeText display-5 font-display fw-bolder'></text>
             </svg>
-            <svg ref={timelineRef}>
+            <svg ref={timelineRef} fill='var(--x-body-color)'>
                 <rect className='progressBar'></rect>
                 <g className='axis tAxis'></g>
             </svg>
