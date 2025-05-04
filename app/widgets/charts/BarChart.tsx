@@ -70,17 +70,22 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
     // initialize color scheme set
     const colors = useMemo(() => getColors(columnNames, colorScale), [columnNames, colorScale]);
 
-    const t: any = d3.scaleTime()
-        .domain([startDate, endDate])
-        .range([dimensions.marginLeft + dimensions.marginTimeAxis, dimensions.width - dimensions.marginRight]);
+    const isTime = data[0][timeIndex] instanceof Date; // MODIFIED
 
-    const timeAxis: any = d3.axisBottom(t)
-        .ticks(5);
+    const t = isTime
+        ? d3.scaleTime().domain([startDate, endDate])
+        : d3.scaleLinear().domain([+startDate, +endDate]);
+
+    t.range([dimensions.marginLeft + dimensions.marginTimeAxis, dimensions.width - dimensions.marginRight]);
+
+    const timeAxis: any = isTime
+        ? d3.axisBottom(t).ticks(5)
+        : d3.axisBottom(t).tickFormat(d3.format('d')).ticks(data.length);
 
     const endValue: any = d3.max(rowData, (entry: any) => entry.value);
     const x = d3.scaleLinear()
         .domain([0, endValue])
-        .range([dimensions.marginLeft + dimensions.marginTimeAxis, dimensions.width - dimensions.marginRight]);
+        .range([dimensions.marginLeft + dimensions.marginTimeAxis, dimensions.width - (dimensions.marginRight * 2)]);
 
     const y = d3.scaleLinear()
         .domain([topN, 0])
@@ -251,12 +256,12 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
             .attr('x', dimensions.width - dimensions.marginRight)
             .attr('y', dimensions.height - dimensions.marginBottom - 40)
             .attr('transform', `translate(${dimensions.marginLeft}, 0)`)
-            .html(d3.timeFormat(dateFormat)(time))
+            .html(isTime ? d3.timeFormat(dateFormat)(time) : `GW${time}`) // MODIFIED
             .transition()
             .duration(tickDuration)
-            .ease(d3.easeLinear)
+            .ease(d3.easeLinear);
 
-    }, [iteration, barPadding, colors, rowData, svg, t, tickDuration, time, topN, x, xAxis, y, dimensions, timelineSvg, timeAxis, dateFormat]);
+    }, [iteration, barPadding, colors, rowData, svg, t, tickDuration, time, topN, x, xAxis, y, dimensions, timelineSvg, timeAxis, dateFormat, isTime]);
 
 
     useInterval(() => {

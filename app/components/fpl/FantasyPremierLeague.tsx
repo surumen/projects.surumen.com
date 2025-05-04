@@ -1,78 +1,65 @@
 // import node module libraries
 import React, { Fragment, useEffect, useState } from "react";
-import { useDispatch } from 'react-redux';
-import { timeParse } from 'd3';
 import * as d3 from 'd3';
-import { ParseResult } from 'papaparse';
-import { usePapaParse } from 'react-papaparse';
 
 // import bootstrap icons
 import { Col, Row } from 'react-bootstrap';
-import { ArrowRepeat, CaretRight, Play, PlayCircle, PlayCircleFill } from "react-bootstrap-icons";
+import { ArrowRepeat, CaretRight } from "react-bootstrap-icons";
 
 import { RacingBarChart } from '@/widgets';
-import { reshapeData } from "@/helpers/reshapeData";
 import useFPL from '@/hooks/useFPL';
 import { useAppDispatch } from '@/store/hooks';
-import { fetchLeagueData, fetchManagerData } from '@/store/fplSlice';
-
+import {
+    fetchLeagueData,
+    fetchManagerData,
+    fetchAllManagerHistories
+} from '@/store/fplSlice';
+import { reshapeFPLHistory } from '@/utils';
 
 const FantasyPremierLeague = () => {
+    const [data, setData] = useState<any[]>([]);
+    const [tickDuration, setTickDuration] = useState<number>(1500);
+    const [topN, setTopN] = useState<number>(10);
+    const [isReady, setIsReady] = useState<boolean>(false);
+
+    const colorScale = d3.scaleOrdinal(d3.schemeTableau10);
     const dataSetTitle: string = 'Fantasy Premier League Standings';
     const leagueId: number = 392661;
     const managerId: number = 6888211;
 
     const dispatch = useAppDispatch();
-    const { league, standings, managerInfo, managerHistory, managerTransfers, loading } = useFPL();
+    const {
+        standings,
+        allManagerHistories,
+        loading
+    } = useFPL();
 
     useEffect(() => {
         dispatch(fetchLeagueData(leagueId));
         dispatch(fetchManagerData(managerId));
     }, [dispatch, leagueId, managerId]);
 
-    console.log('League: ', league)
-    console.log('Standings: ', standings)
-    console.log('ManagerInfo: ', managerInfo)
-    console.log('ManagerHistory: ', managerHistory)
-    console.log('ManagerTransfers: ', managerTransfers)
-
-    const [data, setData] = useState<any[]>([]);
-    const [tickDuration, setTickDuration] = useState<number>(500);
-    const [isLoading, setLoading] = useState(true);
-    const [topN, setTopN] = useState<number>(10);
-    const { readRemoteFile } = usePapaParse();
-    const colorScale = d3.scaleOrdinal(d3.schemeTableau10);
-
-    const co2emissions: string = 'https://raw.githubusercontent.com/surumen/football-video-analysis/main/owid-co2-data.csv';
-
-    const Year: string = '%Y';
-
-    const dataUrl = co2emissions;
-    const dateFormat = Year;
+    useEffect(() => {
+        if (standings.length > 0) {
+            dispatch(fetchAllManagerHistories(standings));
+        }
+    }, [dispatch, standings]);
 
     useEffect(() => {
-        readRemoteFile(dataUrl, {
-            header: true,
-            download: true,
-            skipEmptyLines: true,
-            complete: (results: ParseResult<any>) => {
-                results.data = reshapeData(results.data, 0, 1, 3)
-                const columnNames = Object.keys(results.data[0]).slice(1, );
-                const timeIndex = Object.keys(results.data[0])[0];
-                results.data.forEach((d: any) => {
-                    // first column : YYYY-MM-DD
-                    const parseTime = timeParse(dateFormat);
-                    d[timeIndex] = parseTime(d[timeIndex]);
-                    // convert other columns to numbers
-                    columnNames.forEach((k: any) => d[k] = Number(d[k]))
-                });
-                setData(results.data);
-                setLoading(false);
+        if (!loading && Array.isArray(allManagerHistories) && allManagerHistories.length > 0) {
+            const reshaped = reshapeFPLHistory(allManagerHistories);
+            if (Array.isArray(reshaped) && reshaped.length > 0) {
+                setData(reshaped);
+                setIsReady(true);
             }
-        });
-    }, [dataUrl, dateFormat, readRemoteFile]);
+        }
+    }, [loading, allManagerHistories]);
 
-    if (isLoading) return <p>Loading...</p>
+    const dateFormat = '%Y'; // Or "%B %Y", or "GW%d" if using events
+
+    if (!isReady) {
+        return <p className="text-center mt-4">Loading chart data...</p>;
+    }
 
     return (
         <Fragment>
@@ -107,7 +94,7 @@ const FantasyPremierLeague = () => {
                 </Col>
             </Row>
         </Fragment>
-    )
+    );
 };
 
 export default FantasyPremierLeague;

@@ -7,6 +7,7 @@ const useFPL = () => {
     const managerInfo = useSelector((state: any) => state.fpl.managerInfo);
     const managerHistory = useSelector((state: any) => state.fpl.managerHistory);
     const managerTransfers = useSelector((state: any) => state.fpl.managerTransfers);
+    const allManagerHistories = useSelector((state: any) => state.fpl.allManagerHistories);
     const loading = useSelector((state: any) => state.fpl.loading);
     const error = useSelector((state: any) => state.fpl.error);
 
@@ -17,6 +18,7 @@ const useFPL = () => {
         managerInfo,
         managerHistory,
         managerTransfers,
+        allManagerHistories,
         loading,
         error
     };
