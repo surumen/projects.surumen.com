@@ -8,6 +8,9 @@ import {
     Court,
     TournamentRound
 } from './Tournament';
+import {
+    Player
+} from './Player';
 
 export type {
     Project,
@@ -18,4 +21,5 @@ export type {
     Score,
     Court,
     TournamentRound,
+    Player
 }

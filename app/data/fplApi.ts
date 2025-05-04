@@ -41,6 +41,12 @@ apiClient.interceptors.request.use(async (config) => {
     return config;
 });
 
+export const getAllPlayers = () =>
+    apiClient.get(`/players`).then(res => res.data);
+
+export const getPlayerById = (playerId: number) =>
+    apiClient.get(`/players/${playerId}`).then(res => res.data);
+
 export const getLeague = (leagueId: number) =>
     apiClient.get(`/leagues/${leagueId}`).then(res => res.data);
 
@@ -52,6 +58,10 @@ export const getLeagueEntry = (leagueId: number, entryId: number) =>
 
 export const getManagerInfo = (managerId: number) =>
     apiClient.get(`/managers/${managerId}`).then(res => res.data);
+
+export const getManagerTeam = (managerId: number, gameweek: number) =>
+    apiClient.get(`/managers/${managerId}/team?gameweek=${gameweek}`)
+        .then(res => res.data);
 
 export const getManagerHistory = (managerId: number) =>
     apiClient.get(`/managers/${managerId}/history`).then(res => res.data);

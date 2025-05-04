@@ -4,6 +4,27 @@ import { Project } from '@/types';
 export const AllProjectsData: Project[] = [
 	{
 		id: uuid(),
+		languages: ['Typescript'],
+		frameworks: ['OpenCV'],
+		technologyAreas: ['OpenCV', 'Python'],
+		title: 'Fantasy Manager Assistant',
+		slug: 'fantasy-manager-assistant',
+		shortDescription:
+			'Coming soon.',
+		status: 'Pending',
+		level: 'Advanced',
+		duration: '2h 40m',
+		rating: 2.5,
+		completed: '2024',
+		description: `<p>Coming soon</p>
+        `,
+		contentType: 'app',
+		component: 'fplAssistant',
+		hasWriteUp: false,
+		content: ``
+	},
+	{
+		id: uuid(),
 		languages: ['Typescript', 'Python'],
 		frameworks: ['Machine Learning', 'Python'],
 		technologyAreas: ['Recurrent Neural Networks', 'Feature Selection', 'Next.js', 'Python'],
@@ -51,27 +72,6 @@ export const AllProjectsData: Project[] = [
 		approach to DOM manipulation. When you combine this with Next.js virtual DOM and component-based architecture,
 		you can write more concise and readable code, and share logic across components with ease.
 		</p>
-        `,
-		contentType: 'app',
-		component: 'fpl',
-		hasWriteUp: false,
-		content: ``
-	},
-	{
-		id: uuid(),
-		languages: ['Typescript'],
-		frameworks: ['OpenCV'],
-		technologyAreas: ['OpenCV', 'Python'],
-		title: 'Video Annotation with OpenCV+',
-		slug: 'video-annotation-with-opencv',
-		shortDescription:
-			'Coming soon.',
-		status: 'Pending',
-		level: 'Advanced',
-		duration: '2h 40m',
-		rating: 2.5,
-		completed: '2024',
-		description: `<p>Coming soon</p>
         `,
 		contentType: 'app',
 		component: 'fpl',

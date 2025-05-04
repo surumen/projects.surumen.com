@@ -22,6 +22,9 @@ import RacingBarChart from '@/widgets/charts/BarChart';
 // import widget/custom components from brackets folder
 import Round from '@/widgets/brackets-advanced/Round';
 
+// import widget/custom components from football folder
+import PitchView from '@/widgets/football/PitchView';
+
 export {
    ProjectCard,
    ProjectGridView,
@@ -32,5 +35,6 @@ export {
    Pagination,
    ReactQuillEditor,
    RacingBarChart,
-   Round
+   Round,
+   PitchView
 };

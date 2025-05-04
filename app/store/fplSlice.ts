@@ -4,9 +4,11 @@ import {
     getLeagueStandings,
     getManagerHistory,
     getManagerInfo,
-    getManagerTransfers
-} from '@/helpers/fplApi';
-
+    getManagerTeam,
+    getManagerTransfers,
+    getPlayerById
+} from '@/data/fplApi';
+import type { Player } from '@/types/Player';
 
 interface ManagerHistoryEntry {
     managerName: string;
@@ -25,11 +27,12 @@ interface FPLState {
     managerInfo: any;
     managerHistory: any;
     managerTransfers: any[];
+    managerTeam: any;
     allManagerHistories: ManagerHistoryEntry[];
+    allPlayers: Player[];
     loading: boolean;
     error: string | null | undefined;
 }
-
 
 const initialState: FPLState = {
     league: null,
@@ -38,11 +41,12 @@ const initialState: FPLState = {
     managerInfo: null,
     managerHistory: null,
     managerTransfers: [],
+    managerTeam: null,
     allManagerHistories: [],
+    allPlayers: [],
     loading: false,
     error: null,
 };
-
 
 export const fetchLeagueData = createAsyncThunk('fpl/fetchLeagueData', async (leagueId: number) => {
     const league = await getLeague(leagueId);
@@ -59,6 +63,22 @@ export const fetchManagerData = createAsyncThunk('fpl/fetchManagerData', async (
     return { managerInfo, managerHistory, managerTransfers };
 });
 
+export const fetchManagerTeam = createAsyncThunk(
+    'fpl/fetchManagerTeam',
+    async ({ managerId, gameweek }: { managerId: number, gameweek: number }, thunkAPI) => {
+        const team = await getManagerTeam(managerId, gameweek);
+        const picks = team.picks;
+
+        const uniquePlayerIds: number[] = [...new Set<number>(picks.map(p => p.element))];
+        const players = await Promise.all(uniquePlayerIds.map((id) => getPlayerById(id)));
+
+        // Add to state using a reducer
+        thunkAPI.dispatch(setAllPlayers(players));
+
+        return team;
+    }
+);
+
 export const fetchAllManagerHistories = createAsyncThunk(
     'fpl/fetchAllManagerHistories',
     async (standings: any[]) => {
@@ -68,20 +88,22 @@ export const fetchAllManagerHistories = createAsyncThunk(
                 return {
                     managerName: manager.entry_name,
                     entryId: manager.entry,
-                    history: history.current // or reshape here if preferred
+                    history: history.current
                 };
             })
         );
-
-        return results; // Array of { managerName, entryId, history }
+        return results;
     }
 );
-
 
 const fplSlice = createSlice({
     name: 'fpl',
     initialState,
-    reducers: {},
+    reducers: {
+        setAllPlayers: (state, action) => {
+            state.allPlayers = action.payload;
+        }
+    },
     extraReducers: builder => {
         builder
             .addCase(fetchLeagueData.pending, state => {
@@ -122,8 +144,22 @@ const fplSlice = createSlice({
             .addCase(fetchAllManagerHistories.rejected, (state, action) => {
                 state.loading = false;
                 state.error = 'Failed to fetch manager histories';
+            })
+            .addCase(fetchManagerTeam.pending, state => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchManagerTeam.fulfilled, (state, action) => {
+                state.managerTeam = action.payload;
+                state.loading = false;
+            })
+            .addCase(fetchManagerTeam.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
             });
     },
 });
+
+export const { setAllPlayers } = fplSlice.actions;
 
 export default fplSlice.reducer;
