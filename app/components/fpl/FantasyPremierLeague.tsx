@@ -1,18 +1,40 @@
 // import node module libraries
 import React, { Fragment, useEffect, useState } from "react";
-import { ParseResult } from 'papaparse';
-import { usePapaParse } from 'react-papaparse';
-import { RacingBarChart } from '@/widgets';
+import { useDispatch } from 'react-redux';
 import { timeParse } from 'd3';
 import * as d3 from 'd3';
-import { groupDataByFirstColumn, reshapeData } from "@/helpers/reshapeData";
+import { ParseResult } from 'papaparse';
+import { usePapaParse } from 'react-papaparse';
 
 // import bootstrap icons
 import { Col, Row } from 'react-bootstrap';
 import { ArrowRepeat, CaretRight, Play, PlayCircle, PlayCircleFill } from "react-bootstrap-icons";
 
+import { RacingBarChart } from '@/widgets';
+import { reshapeData } from "@/helpers/reshapeData";
+import useFPL from '@/hooks/useFPL';
+import { useAppDispatch } from '@/store/hooks';
+import { fetchLeagueData, fetchManagerData } from '@/store/fplSlice';
+
 
 const FantasyPremierLeague = () => {
+    const dataSetTitle: string = 'Fantasy Premier League Standings';
+    const leagueId: number = 392661;
+    const managerId: number = 6888211;
+
+    const dispatch = useAppDispatch();
+    const { league, standings, managerInfo, managerHistory, managerTransfers, loading } = useFPL();
+
+    useEffect(() => {
+        dispatch(fetchLeagueData(leagueId));
+        dispatch(fetchManagerData(managerId));
+    }, [dispatch, leagueId, managerId]);
+
+    console.log('League: ', league)
+    console.log('Standings: ', standings)
+    console.log('ManagerInfo: ', managerInfo)
+    console.log('ManagerHistory: ', managerHistory)
+    console.log('ManagerTransfers: ', managerTransfers)
 
     const [data, setData] = useState<any[]>([]);
     const [tickDuration, setTickDuration] = useState<number>(500);
@@ -21,17 +43,12 @@ const FantasyPremierLeague = () => {
     const { readRemoteFile } = usePapaParse();
     const colorScale = d3.scaleOrdinal(d3.schemeTableau10);
 
-    const stackOverflow: string = 'https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/stackoverflow.csv';
     const co2emissions: string = 'https://raw.githubusercontent.com/surumen/football-video-analysis/main/owid-co2-data.csv';
 
-    const monthDayYear: string = '%B %d, %Y';
     const Year: string = '%Y';
-    const monthYear: string = '%B, %Y';
 
     const dataUrl = co2emissions;
     const dateFormat = Year;
-
-    const dataSetTitle: string = 'Global CO₂ Emissions'
 
     useEffect(() => {
         readRemoteFile(dataUrl, {

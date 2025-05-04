@@ -120,10 +120,10 @@ const MarchMadness = () => {
                         <div className='d-flex align-items-center justify-content-end'>
                             <ul className='nav nav-segment bg-body rounded-pill shadow-none p-0'>
                                 <li className='nav-item'>
-                                    <span className='nav-link bg-info-subtle text-xs text-info rounded-pill px-5'>Editing</span>
+                                    <span className='nav-link bg-info-subtle text-xs text-info rounded-pill px-5'>Predicted</span>
                                 </li>
                                 <li className='nav-item'>
-                                    <span className='nav-link text-xs text-muted rounded-pill px-5'>Viewing</span>
+                                    <span className='nav-link text-xs text-muted rounded-pill px-5'>Actual</span>
                                 </li>
                             </ul>
                         </div>

@@ -6,8 +6,8 @@ import { timeParse } from "d3";
 import { readRemoteFile } from "react-papaparse";
 
 const useMarchMadness = () => {
-    const regions = useSelector((state: any) => state.matchMadness.regions);
-    const rounds = useSelector((state: any) => state.matchMadness.rounds);
+    const regions = useSelector((state: any) => state.marchMadness.regions);
+    const rounds = useSelector((state: any) => state.marchMadness.rounds);
     const [predictions, setPredictions] = useState<any[]>([]);
 
     const eastBracket = useSelector((state: any) => state.marchMadness.regions.east);
