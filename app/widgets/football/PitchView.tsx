@@ -7,7 +7,7 @@ interface PitchViewProps {
     players: PremierLeaguePlayer[];
 }
 
-const pitchBackground: string = 'https://fantasy.premierleague.com/static/media/pitch-default.dab51b01.svg'
+const pitchBackground: string = '/images/svg/pitch.svg'
 
 const PitchView: React.FC<PitchViewProps> = ({ players }) => {
     const startingPlayers = players.slice(0, 11);
@@ -45,6 +45,8 @@ const PitchView: React.FC<PitchViewProps> = ({ players }) => {
         </div>
     );
 
+    const aspectRatio = (1790 / 2232) * 100;
+
     return (
         <div className="w-100 position-relative">
             <div
@@ -63,19 +65,19 @@ const PitchView: React.FC<PitchViewProps> = ({ players }) => {
                         backgroundImage: `url("${pitchBackground}")`,
                         backgroundRepeat: 'no-repeat',
                         backgroundPosition: 'top center',
-                        backgroundSize: 'cover',
+                        backgroundSize:  'contain',
                         opacity: 0.9,
                         zIndex: 0,
                     }}
                 />
-                <div style={{ position: 'absolute', top: '5%', left: 0, right: 0, zIndex: 1 }}>
+                <div className="px-3" style={{ position: 'absolute', top: '-2.5%', left: 0, right: 0, zIndex: 1 }}>
                     {goalkeeper && renderRow([goalkeeper], 'GK')}
                     {renderRow(defenders, 'DEF')}
                     {renderRow(midfielders, 'MID')}
                     {renderRow(forwards, 'FWD')}
                 </div>
             </div>
-            <div style={{ marginTop: '-10%' }}>
+            <div className="px-3" style={{ marginTop: '-18%' }}>
                 {renderRow(substitutes, 'SUB', 18)}
             </div>
         </div>
