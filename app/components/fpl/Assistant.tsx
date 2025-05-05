@@ -61,11 +61,11 @@ const Assistant = () => {
         })
         .filter(Boolean) as PremierLeaguePlayer[];
 
-    const handleYearFilter = (year: number) => {
+    const handleGameweekFilter = (year: number) => {
         setActiveGameweek(year);
     };
 
-    const ToggleYear: any = forwardRef((props: any, ref: any) => (
+    const ToggleGameweek: any = forwardRef((props: any, ref: any) => (
         <Link
             href='#'
             ref={ref}
@@ -77,7 +77,7 @@ const Assistant = () => {
             {props.children}
         </Link>
     ));
-    ToggleYear.displayName = 'ToggleFilter';
+    ToggleGameweek.displayName = 'ToggleFilter';
 
     return (
         <div>
@@ -86,7 +86,7 @@ const Assistant = () => {
                     <div className='d-flex gap-2'>
                         <Dropdown>
                             <Dropdown.Toggle
-                                as={ToggleYear}
+                                as={ToggleGameweek}
                                 id='toggle-data-year'
                             >
                                 <button className='btn btn-xs btn-outline-info opacity-75 rounded-pill d-flex align-items-center gap-2'>
@@ -99,7 +99,7 @@ const Assistant = () => {
                                     return (
                                         <Dropdown.Item eventKey={index}
                                                        as='li' bsPrefix=' ' key={index}
-                                                       onClick={() => handleYearFilter(item)}
+                                                       onClick={() => handleGameweekFilter(item)}
                                         >
                                             <Link href='#' className={`dropdown-item ${activeGameweek === item ? 'active text-info' : 'text-muted'}`}>
                                                 GW {item}
@@ -120,10 +120,10 @@ const Assistant = () => {
                     <div className='d-flex align-items-center justify-content-end'>
                         <ul className='nav nav-segment bg-body rounded-pill shadow-none p-0'>
                             <li className='nav-item'>
-                                <span className='nav-link bg-info-subtle text-xs text-info rounded-pill px-5'>Predicted</span>
+                                <span className='nav-link bg-info-subtle text-xs text-info rounded-pill px-5'>Current</span>
                             </li>
                             <li className='nav-item'>
-                                <span className='nav-link text-xs text-muted rounded-pill px-5'>Actual</span>
+                                <span className='nav-link text-xs text-muted rounded-pill px-5'>Upcoming</span>
                             </li>
                         </ul>
                     </div>
