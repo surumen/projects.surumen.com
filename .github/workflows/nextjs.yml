@@ -28,6 +28,12 @@ jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
+
+    env:
+      NEXT_PUBLIC_FPL_USERNAME: ${{ secrets.FPL_USERNAME }}
+      NEXT_PUBLIC_FPL_PASSWORD: ${{ secrets.FPL_PASSWORD }}
+      NEXT_PUBLIC_FPL_API_URL: ${{ secrets.FPL_API_URL }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
