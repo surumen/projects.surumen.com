@@ -38,7 +38,7 @@ const PitchView: React.FC<PitchViewProps> = ({ players }) => {
                             </div>
                         </div>
                         <div className="card-footer text-center border-0 rounded-bottom p-1 bg-secondary">
-                            <p className="mb-0 text-xs text-light fw-bold">{player.web_name}</p>
+                            <p className="mb-0 text-xs text-light fw-semibold">{player.web_name}</p>
                         </div>
                     </div>
                 </div>
