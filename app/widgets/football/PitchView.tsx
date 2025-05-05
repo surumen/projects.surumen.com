@@ -7,7 +7,6 @@ interface PitchViewProps {
     players: PremierLeaguePlayer[];
 }
 
-const defaultShirt: string = 'https://fantasy.premierleague.com/dist/img/shirts/standard/shirt_1-220.webp';
 const pitchBackground: string = 'https://fantasy.premierleague.com/static/media/pitch-default.dab51b01.svg'
 
 const PitchView: React.FC<PitchViewProps> = ({ players }) => {
