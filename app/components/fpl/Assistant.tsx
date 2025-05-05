@@ -44,11 +44,19 @@ const Assistant = () => {
 
     return (
         <Row className="justify-content-center mt-4">
-            <Col xs={12} md={10} lg={8}>
-                <div className="text-center mb-4">
-                    <h4 className="fw-bold text-muted">Your Gameweek {gameweek} Team</h4>
-                </div>
-                <PitchView players={playersOnPitch} />
+            <Col xs={12}>
+                <Row>
+                    <Col xs={12}>
+                        <div className="text-center mb-4">
+                            <h4 className="fw-bold text-muted">Your Gameweek {gameweek} Team</h4>
+                        </div>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs={12} md={6}>
+                        <PitchView players={playersOnPitch} />
+                    </Col>
+                </Row>
             </Col>
         </Row>
     );

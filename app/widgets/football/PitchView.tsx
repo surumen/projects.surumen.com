@@ -1,7 +1,7 @@
 import React from 'react';
+import { Image } from 'react-bootstrap';
+import { ArrowUpCircleFill, InfoCircle } from 'react-bootstrap-icons';
 import { Player } from '@/types/Player';
-
-import { ArrowUpCircleFill, ChevronDown, InfoCircle } from 'react-bootstrap-icons';
 
 interface PitchViewProps {
     players: Player[];
@@ -19,24 +19,24 @@ const PitchView: React.FC<PitchViewProps> = ({ players }) => {
     const forwards = startingPlayers.filter(p => p.element_type === 4);
 
     const renderRow = (group: Player[], rowLabel: string) => (
-        <div className="row justify-content-center mt-3 text-center">
+        <div className="row justify-content-center mt-3 text-center gx-1">
             {group.map((player) => (
-                <div key={player.id} className="col-auto">
-                    <div className="card bg-transparent border-0 rounded position-relative" style={{ width: '120px' }}>
-                        <div className="card-body rounded bg-transparent">
-                            <img
+                <div key={player.id} className="col-auto px-1" style={{ flex: '0 0 auto', maxWidth: '20%' }}>
+                    <div className="card bg-transparent border-0 rounded position-relative w-100">
+                        <div className="card-body rounded bg-transparent p-0">
+                            <Image
                                 src={defaultShirt}
-                                className="card-img-top"
+                                className="card-img-top img-fluid w-50"
                                 alt={`${player.web_name} shirt`}
                             />
-                            <div className="group-item rounded-top d-flex flex-column p-2 position-absolute top-0 start-0 w-100 h-100 bg-secondary bg-opacity-10">
+                            <div className="group-item rounded-top d-flex flex-column p-1 position-absolute top-0 start-0 w-100 h-100 bg-secondary bg-opacity-10">
                                 <div className="d-flex justify-content-between">
-                                    <ArrowUpCircleFill size={12} className='text-danger me-1'/>
-                                    <InfoCircle size={12} className='text-white me-1'/>
+                                    <ArrowUpCircleFill size={12} className='text-danger me-1' />
+                                    <InfoCircle size={12} className='text-white me-1' />
                                 </div>
                             </div>
                         </div>
-                        <div className="card-footer text-center border-0 rounded-bottom p-2 bg-secondary bg-opacity-75">
+                        <div className="card-footer text-center border-0 rounded-bottom p-1 bg-secondary bg-opacity-75">
                             <p className="mb-0 text-xs text-light fw-bold">{player.web_name}</p>
                         </div>
                     </div>
@@ -47,13 +47,14 @@ const PitchView: React.FC<PitchViewProps> = ({ players }) => {
 
     return (
         <div
-            className="container py-4"
+            className="w-100"
             style={{
                 backgroundImage: 'url("https://fantasy.premierleague.com/static/media/pitch-default.dab51b01.svg")',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'top center',
                 backgroundSize: 'cover',
-                borderRadius: '8px'
+                borderRadius: '8px',
+                padding: '1rem'
             }}
         >
             {goalkeeper && renderRow([goalkeeper], 'GK')}
