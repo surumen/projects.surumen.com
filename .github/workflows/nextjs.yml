@@ -29,6 +29,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    environment: prod
+
     env:
       NEXT_PUBLIC_FPL_USERNAME: ${{ secrets.FPL_USERNAME }}
       NEXT_PUBLIC_FPL_PASSWORD: ${{ secrets.FPL_PASSWORD }}
