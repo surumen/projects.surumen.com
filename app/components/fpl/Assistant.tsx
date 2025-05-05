@@ -5,9 +5,10 @@ import {
     fetchManagerData,
     fetchManagerTeam,
 } from '@/store/fplSlice';
+import { premierLeagueTeams } from '@/data/premier-league/Teams';
 import useFPL from '@/hooks/useFPL';
 import { PitchView } from '@/widgets';
-import { Player } from '@/types/Player';
+import { PremierLeaguePlayer } from '@/types/PremierLeaguePlayer';
 
 const Assistant = () => {
     const dispatch = useAppDispatch();
@@ -38,9 +39,24 @@ const Assistant = () => {
         return <p className="text-center mt-4">Waiting for team and player data...</p>;
     }
 
-    const playersOnPitch: Player[] = managerTeam.picks
-        .map((pick: any) => allPlayers.find((p: Player) => p.id === pick.element))
-        .filter(Boolean); // remove any nulls
+    const playersOnPitch: PremierLeaguePlayer[] = managerTeam.picks
+        .map((pick: any) => {
+            const player = allPlayers.find((p: PremierLeaguePlayer) => p.id === pick.element);
+            if (!player) return null;
+
+            const teamData = premierLeagueTeams.find(team => team.id === player.team);
+            const kit = teamData
+                ? player.element_type === 1
+                    ? teamData.goalkeeper_kit
+                    : teamData.kit
+                : undefined;
+
+            return {
+                ...player,
+                kit
+            };
+        })
+        .filter(Boolean) as PremierLeaguePlayer[];
 
     return (
         <Row className="justify-content-center mt-4">

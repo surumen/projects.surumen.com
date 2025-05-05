@@ -8,9 +8,8 @@ import {
     Court,
     TournamentRound
 } from './Tournament';
-import {
-    Player
-} from './Player';
+import { PremierLeaguePlayer } from './PremierLeaguePlayer';
+import { PremierLeagueTeam } from './PremierLeagueTeam';
 
 export type {
     Project,
@@ -21,5 +20,6 @@ export type {
     Score,
     Court,
     TournamentRound,
-    Player
+    PremierLeaguePlayer,
+    PremierLeagueTeam
 }

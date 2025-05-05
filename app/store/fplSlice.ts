@@ -8,7 +8,7 @@ import {
     getManagerTransfers,
     getPlayerById
 } from '@/data/fplApi';
-import type { Player } from '@/types/Player';
+import type { PremierLeaguePlayer } from '@/types/PremierLeaguePlayer';
 
 interface ManagerHistoryEntry {
     managerName: string;
@@ -29,7 +29,7 @@ interface FPLState {
     managerTransfers: any[];
     managerTeam: any;
     allManagerHistories: ManagerHistoryEntry[];
-    allPlayers: Player[];
+    allPlayers: PremierLeaguePlayer[];
     loading: boolean;
     error: string | null | undefined;
 }

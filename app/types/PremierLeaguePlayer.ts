@@ -1,4 +1,4 @@
-export interface Player {
+export interface PremierLeaguePlayer {
     id: number;
     first_name: string;
     second_name: string;
@@ -25,4 +25,5 @@ export interface Player {
     value_season: string;
     cost_change_start: number;
     cost_change_event: number;
+    kit?: string;
 }

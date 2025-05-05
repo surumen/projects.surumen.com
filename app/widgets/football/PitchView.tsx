@@ -1,10 +1,10 @@
 import React from 'react';
 import { Image } from 'react-bootstrap';
 import { ArrowDownCircleFill, ArrowUpCircleFill, InfoCircle } from 'react-bootstrap-icons';
-import { Player } from '@/types/Player';
+import { PremierLeaguePlayer } from '@/types/PremierLeaguePlayer';
 
 interface PitchViewProps {
-    players: Player[];
+    players: PremierLeaguePlayer[];
 }
 
 const defaultShirt: string = 'https://fantasy.premierleague.com/dist/img/shirts/standard/shirt_1-220.webp';
@@ -19,14 +19,14 @@ const PitchView: React.FC<PitchViewProps> = ({ players }) => {
     const midfielders = startingPlayers.filter(p => p.element_type === 3);
     const forwards = startingPlayers.filter(p => p.element_type === 4);
 
-    const renderRow = (group: Player[], rowLabel: string, maxWidth: number = 20) => (
+    const renderRow = (group: PremierLeaguePlayer[], rowLabel: string, maxWidth: number = 20) => (
         <div className="row justify-content-center mt-3 text-center gx-1">
             {group.map((player) => (
                 <div key={player.id} className="col-auto px-1" style={{ flex: '0 0 auto', maxWidth: `${maxWidth}%` }}>
                     <div className="card bg-transparent border-0 rounded position-relative w-100">
                         <div className="card-body rounded bg-transparent p-0">
                             <Image
-                                src={defaultShirt}
+                                src={player.kit}
                                 className="card-img-top img-fluid w-50"
                                 alt={`${player.web_name} shirt`}
                             />
@@ -37,7 +37,7 @@ const PitchView: React.FC<PitchViewProps> = ({ players }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className="card-footer text-center border-0 rounded-bottom p-1 bg-secondary bg-opacity-75">
+                        <div className="card-footer text-center border-0 rounded-bottom p-1 bg-secondary">
                             <p className="mb-0 text-xs text-light fw-bold">{player.web_name}</p>
                         </div>
                     </div>
