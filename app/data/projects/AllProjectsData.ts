@@ -4,9 +4,9 @@ import { Project } from '@/types';
 export const AllProjectsData: Project[] = [
 	{
 		id: uuid(),
-		languages: ['Typescript'],
-		frameworks: ['OpenCV'],
-		technologyAreas: ['OpenCV', 'Python'],
+		languages: ['Typescript', 'Python'],
+		frameworks: ['AI Agents', 'Model Context Protocol','OpenAI', 'Anthropic'],
+		technologyAreas: ['Model Context Protocol', 'AI Agents', 'Anthropic', 'OpenAI', 'Python'],
 		title: 'Fantasy Manager Assistant',
 		slug: 'fantasy-manager-assistant',
 		shortDescription:
@@ -14,8 +14,8 @@ export const AllProjectsData: Project[] = [
 		status: 'Pending',
 		level: 'Advanced',
 		duration: '2h 40m',
-		rating: 2.5,
-		completed: '2024',
+		rating: 5.0,
+		completed: '2025',
 		description: `<p>Coming soon</p>
         `,
 		contentType: 'app',
@@ -53,7 +53,7 @@ export const AllProjectsData: Project[] = [
 	{
 		id: uuid(),
 		languages: ['Typescript'],
-		frameworks: ['D3.js', 'Next.js'],
+		frameworks: ['D3.js'],
 		technologyAreas: ['D3.js', 'Next.js'],
 		title: 'Data Visualization with D3 and Next.js',
 		slug: 'data-visualization-d3-next-js',

@@ -50,10 +50,16 @@ const ProjectCard = ({ project, viewby }) => {
 						<div className='d-block text-sm text-muted gap-2 mb-3'>
 							<span>{project.shortDescription}</span>
 						</div>
-						<div className='d-flex align-items-center gap-2 text-sm'>
-							<span className='badge badge-lg badge-dot'>
-								<i style={{ backgroundColor: getLanguageScheme(project.frameworks[0])}}></i>{project.frameworks[0]}
-							</span>
+						<div className='d-flex align-items-center gap-4 text-sm'>
+							{
+								project.frameworks.slice(0, 2).map((framework, index) => {
+									return (
+										<span key={index} className='badge badge-lg badge-dot'>
+											<i style={{ backgroundColor: getLanguageScheme(framework)}}></i> {framework}
+										</span>
+									);
+								})
+							}
 						</div>
 
 					</div>

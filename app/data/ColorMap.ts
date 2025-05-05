@@ -55,4 +55,20 @@ export const LanguageColorMap = [
         color: 'OpenCV',
         scheme: '#9B6400'
     },
+    {
+        color: 'AI Agents',
+        scheme: '#00ADD8'
+    },
+    {
+        color: 'Model Context Protocol',
+        scheme: '#9B6400'
+    },
+    {
+        color: 'OpenAI',
+        scheme: '#9B6400'
+    },
+    {
+        color: 'Anthropic',
+        scheme: '#00ADD8'
+    },
 ];

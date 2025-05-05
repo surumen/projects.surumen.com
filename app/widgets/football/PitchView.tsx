@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image } from 'react-bootstrap';
-import { ArrowUpCircleFill, InfoCircle } from 'react-bootstrap-icons';
+import { ArrowDownCircleFill, ArrowUpCircleFill, InfoCircle } from 'react-bootstrap-icons';
 import { Player } from '@/types/Player';
 
 interface PitchViewProps {
@@ -8,6 +8,7 @@ interface PitchViewProps {
 }
 
 const defaultShirt: string = 'https://fantasy.premierleague.com/dist/img/shirts/standard/shirt_1-220.webp';
+const pitchBackground: string = 'https://fantasy.premierleague.com/static/media/pitch-default.dab51b01.svg'
 
 const PitchView: React.FC<PitchViewProps> = ({ players }) => {
     const startingPlayers = players.slice(0, 11);
@@ -18,10 +19,10 @@ const PitchView: React.FC<PitchViewProps> = ({ players }) => {
     const midfielders = startingPlayers.filter(p => p.element_type === 3);
     const forwards = startingPlayers.filter(p => p.element_type === 4);
 
-    const renderRow = (group: Player[], rowLabel: string) => (
+    const renderRow = (group: Player[], rowLabel: string, maxWidth: number = 20) => (
         <div className="row justify-content-center mt-3 text-center gx-1">
             {group.map((player) => (
-                <div key={player.id} className="col-auto px-1" style={{ flex: '0 0 auto', maxWidth: '20%' }}>
+                <div key={player.id} className="col-auto px-1" style={{ flex: '0 0 auto', maxWidth: `${maxWidth}%` }}>
                     <div className="card bg-transparent border-0 rounded position-relative w-100">
                         <div className="card-body rounded bg-transparent p-0">
                             <Image
@@ -31,7 +32,7 @@ const PitchView: React.FC<PitchViewProps> = ({ players }) => {
                             />
                             <div className="group-item rounded-top d-flex flex-column p-1 position-absolute top-0 start-0 w-100 h-100 bg-secondary bg-opacity-10">
                                 <div className="d-flex justify-content-between">
-                                    <ArrowUpCircleFill size={12} className='text-danger me-1' />
+                                    <ArrowDownCircleFill size={12} className='text-danger me-1' />
                                     <InfoCircle size={12} className='text-white me-1' />
                                 </div>
                             </div>
@@ -46,23 +47,40 @@ const PitchView: React.FC<PitchViewProps> = ({ players }) => {
     );
 
     return (
-        <div
-            className="w-100"
-            style={{
-                backgroundImage: 'url("https://fantasy.premierleague.com/static/media/pitch-default.dab51b01.svg")',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'top center',
-                backgroundSize: 'cover',
-                borderRadius: '8px',
-                padding: '1rem'
-            }}
-        >
-            {goalkeeper && renderRow([goalkeeper], 'GK')}
-            {renderRow(defenders, 'DEF')}
-            {renderRow(midfielders, 'MID')}
-            {renderRow(forwards, 'FWD')}
-            {renderRow(substitutes, 'SUB')}
+        <div className="w-100 position-relative">
+            <div
+                style={{
+                    position: 'relative',
+                    width: '100%',
+                    paddingTop: '90%',
+                    borderRadius: '8px',
+                    overflow: 'visible',
+                }}
+            >
+                <div
+                    style={{
+                        position: 'absolute',
+                        inset: 0,
+                        backgroundImage: `url("${pitchBackground}")`,
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'top center',
+                        backgroundSize: 'cover',
+                        opacity: 0.9,
+                        zIndex: 0,
+                    }}
+                />
+                <div style={{ position: 'absolute', top: '5%', left: 0, right: 0, zIndex: 1 }}>
+                    {goalkeeper && renderRow([goalkeeper], 'GK')}
+                    {renderRow(defenders, 'DEF')}
+                    {renderRow(midfielders, 'MID')}
+                    {renderRow(forwards, 'FWD')}
+                </div>
+            </div>
+            <div style={{ marginTop: '-10%' }}>
+                {renderRow(substitutes, 'SUB', 18)}
+            </div>
         </div>
+
     );
 };
 
