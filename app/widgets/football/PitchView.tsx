@@ -23,20 +23,20 @@ const PitchView: React.FC<PitchViewProps> = ({ players }) => {
             {group.map((player) => (
                 <div key={player.id} className="col-auto px-1" style={{ flex: '0 0 auto', maxWidth: `${maxWidth}%` }}>
                     <div className="card bg-transparent border-0 rounded position-relative w-100">
-                        <div className="card-body rounded bg-transparent p-0">
+                        <div className="card-body rounded bg-transparent px-0 pt-1 pb-0">
                             <Image
                                 src={player.kit}
                                 className="card-img-top img-fluid w-50"
                                 alt={`${player.web_name} shirt`}
                             />
                             <div className="group-item rounded-top d-flex flex-column p-1 position-absolute top-0 start-0 w-100 h-100 bg-secondary bg-opacity-10">
-                                <div className="d-flex justify-content-between">
-                                    <ArrowDownCircleFill size={12} className='text-danger me-1' />
+                                <div className="d-flex justify-content-end">
+                                    {/*<ArrowDownCircleFill size={12} className='text-danger me-1' />*/}
                                     <InfoCircle size={12} className='text-white me-1' />
                                 </div>
                             </div>
                         </div>
-                        <div className="card-footer text-center border-0 rounded-bottom p-1 bg-secondary">
+                        <div className="card-footer text-center border-0 rounded-bottom mt-n2 p-1 bg-secondary">
                             <p className="mb-0 text-xs text-light fw-semibold">{player.web_name}</p>
                         </div>
                     </div>
@@ -44,8 +44,6 @@ const PitchView: React.FC<PitchViewProps> = ({ players }) => {
             ))}
         </div>
     );
-
-    const aspectRatio = (1790 / 2232) * 100;
 
     return (
         <div className="w-100 position-relative">
