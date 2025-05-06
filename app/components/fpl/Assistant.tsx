@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect, useMemo, useState } from 'react';
-import { Col, Dropdown, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { useAppDispatch } from '@/store/hooks';
 import {
     fetchManagerData,
@@ -7,16 +7,16 @@ import {
 } from '@/store/fplSlice';
 import { premierLeagueTeams } from '@/data/premier-league/Teams';
 import useFPL from '@/hooks/useFPL';
-import { PitchView } from '@/widgets';
+import { PitchView, Dropdown } from '@/widgets';
+import { DropdownItem } from '@/widgets/components/Dropdown';
 import { PremierLeaguePlayer } from '@/types/PremierLeaguePlayer';
-import { ChevronDown } from 'react-bootstrap-icons';
-import Link from 'next/link';
 
 const Assistant = () => {
     const dispatch = useAppDispatch();
     const managerId = 6888211;
     const [activeGameweek, setActiveGameweek] = useState<number>(35);
     const weeks = useMemo(() => [...Array(35).keys()].map(i => i + 1), []);
+    const weekItems: DropdownItem[] = weeks.map(w => ({ value: w, label: `GW ${w}` }));
 
     const {
         managerTeam,
@@ -61,54 +61,20 @@ const Assistant = () => {
         })
         .filter(Boolean) as PremierLeaguePlayer[];
 
-    const handleGameweekFilter = (year: number) => {
-        setActiveGameweek(year);
-    };
-
-    const ToggleGameweek: any = forwardRef((props: any, ref: any) => (
-        <Link
-            href='#'
-            ref={ref}
-            onClick={(e: any) => {
-                e.preventDefault();
-                props.onClick(e);
-            }}
-        >
-            {props.children}
-        </Link>
-    ));
-    ToggleGameweek.displayName = 'ToggleFilter';
-
     return (
         <div>
             <div className='row align-items-center g-6 mt-0'>
                 <div className='col-3 mt-0'>
                     <div className='d-flex gap-2'>
-                        <Dropdown>
-                            <Dropdown.Toggle
-                                as={ToggleGameweek}
-                                id='toggle-data-year'
-                            >
-                                <button className='btn btn-xs btn-outline-info opacity-75 rounded-pill d-flex align-items-center gap-2'>
-                                    <span className='mx-2'>GW {activeGameweek}</span>
-                                    <ChevronDown size={8} className='text-xs me-1'/>
-                                </button>
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu as='ul'>
-                                {weeks.map((item, index) => {
-                                    return (
-                                        <Dropdown.Item eventKey={index}
-                                                       as='li' bsPrefix=' ' key={index}
-                                                       onClick={() => handleGameweekFilter(item)}
-                                        >
-                                            <Link href='#' className={`dropdown-item ${activeGameweek === item ? 'active text-info' : 'text-muted'}`}>
-                                                GW {item}
-                                            </Link>
-                                        </Dropdown.Item>
-                                    );
-                                })}
-                            </Dropdown.Menu>
-                        </Dropdown>
+                        <Dropdown
+                            id="gameweek-dropdown"
+                            items={weekItems}
+                            selected={activeGameweek}
+                            onSelect={(v) => setActiveGameweek(Number(v))}
+                            width={120}             /* → 200px */
+                            menuMaxHeight="20vh"    /* → caps menu at 40% of viewport */
+                            /* or: width="15%" menuMaxHeight={300} */
+                        />
                     </div>
                 </div>
                 <div className='col-6 mt-0'>

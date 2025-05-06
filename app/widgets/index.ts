@@ -25,6 +25,10 @@ import Round from '@/widgets/brackets-advanced/Round';
 // import widget/custom components from football folder
 import PitchView from '@/widgets/football/PitchView';
 
+
+// import widget/custom components from dropdown folder
+import Dropdown from '@/widgets/components/Dropdown';
+
 export {
    ProjectCard,
    ProjectGridView,
@@ -36,5 +40,6 @@ export {
    ReactQuillEditor,
    RacingBarChart,
    Round,
-   PitchView
+   PitchView,
+   Dropdown,
 };
