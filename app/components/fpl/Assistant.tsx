@@ -64,9 +64,10 @@ const Assistant = () => {
         },
         {
             name: 'leagueId',
-            label: 'League ID (optional)',
+            label: 'League ID',
             type: 'input',
             inputType: 'text',
+            required: false,
             validate: v => v === '' || /^\d+$/.test(v),
             initialValue: leagueId?.toString() ?? '',
         },
@@ -121,9 +122,9 @@ const Assistant = () => {
     return (
         <Fragment>
             <Row>
-                <Col lg={9} className='order-2 order-lg-1 ps-lg-0'>
-                    <div className='card card-lg shadow-none rounded-2 rounded-top-0 border border-top-0'>
-                        <div className='dz-dropzone-card shadow-none border-light border-top-0 rounded-top-0 px-0 pb-0 pt-4'>
+                <Col lg={9} className='order-2 order-lg-1 ps-lg-0 pt-4'>
+                    <div className='card card-lg shadow-none rounded-2'>
+                        <div className='card-body'>
                             <PitchView players={playersOnPitch} className={'p-0 pt-4'} />
                         </div>
                     </div>

@@ -65,7 +65,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
                     case 'input':
                         return (
                             <Form.Group className="mb-3" key={f.name}>
-                                <Form.Label>{f.label}</Form.Label>
+                                <Form.Label>{f.label}
+                                    <span className='ms-1 text-muted'>{f.required ? '' : '(Optional)'}</span>
+                                </Form.Label>
                                 <Form.Control
                                     type={f.inputType || 'text'}
                                     value={val}
