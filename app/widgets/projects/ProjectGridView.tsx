@@ -42,7 +42,7 @@ const ProjectGridView = () => {
 						currentPage={page}
 						totalPages={totalPages}
 						onPageChange={setPage}
-						className="justify-content-center mt-4"
+						className='justify-content-center mt-4'
 					/>
 				</Col>
 			</Row>

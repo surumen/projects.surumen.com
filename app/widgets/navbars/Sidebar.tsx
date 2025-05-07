@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { Image, Navbar, Container, Nav } from 'react-bootstrap';
 
 import LogoIcon from '@/widgets/icons/LogoIcon'
+import { useMediaQuery } from 'react-responsive';
 
 
 const Sidebar = (props) => {
 	const year = useMemo(() => new Date().getFullYear(), []);
+	const isMobile = useMediaQuery({ maxWidth: 767 });
 
 	const rotatedStyle = useMemo(
 		() => ({
@@ -18,7 +20,8 @@ const Sidebar = (props) => {
 	);
 
 	return (
-		<Navbar className='navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-xl navbar-bordered navbar-vertical-aside-initialized'>
+		<Navbar className={`navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-xl navbar-bordered navbar-vertical-aside-initialized 
+			${isMobile ? 'd-none' : ''}`}>
 			<div className='navbar-vertical-container'>
 				<Navbar.Brand href="/" className='navbar-brand d-flex justify-content-center navbar-brand px-3 mt-3'>
 					<LogoIcon primary={'#377dff'} dark={'#1c232c'} />

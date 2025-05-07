@@ -25,11 +25,12 @@ const Pagination = ({
 		<Row>
 			<Col xs={12}>
 				<nav>
-					<ul className={`pagination ${className}`}>
+					<ul className={`pagination pagination-spaced ${className}`}>
 						{/* Prev */}
 						<li className={`page-item${currentPage === 1 ? ' disabled' : ''}`}>
 							<button
-								className="page-link"
+								className='page-link'
+								style={{ outline: 'none', boxShadow: 'none' }}
 								onClick={goPrev}
 								disabled={currentPage === 1}
 							>
@@ -41,10 +42,11 @@ const Pagination = ({
 						{pages.map((page) => (
 							<li
 								key={page}
-								className={`page-item${page === currentPage ? ' active' : ''}`}
+								className={`page-item ${page === currentPage ? 'active' : ''}`}
 							>
 								<button
-									className="page-link border shadow"
+									className='page-link'
+									style={{ outline: 'none', boxShadow: 'none' }}
 									onClick={() => onPageChange(page)}
 								>
 									{page}
@@ -59,7 +61,8 @@ const Pagination = ({
 							}`}
 						>
 							<button
-								className="page-link"
+								className='page-link'
+								style={{ outline: 'none', boxShadow: 'none' }}
 								onClick={goNext}
 								disabled={currentPage === totalPages}
 							>

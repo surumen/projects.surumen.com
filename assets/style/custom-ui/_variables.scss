@@ -1786,6 +1786,10 @@ $page-preloader-z-index:                                    $navbar-z-index + 1 
 
 // Colors
 $pagination-color:                                          $gray-700 !default;
+$pagination-disabled-color:                                 $gray-400;
+
+// Backgrounds
+$pagination-disabled-bg:                                    $coconut;
 
 // Borders
 $pagination-border-width:                                   0 !default;

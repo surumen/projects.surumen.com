@@ -36,7 +36,7 @@ const NavTop = (props) => {
     }
 
     return (
-        <Navbar className='navbar navbar-expand-lg navbar-fixed navbar-height navbar-container navbar-bordered'>
+        <Navbar className='navbar navbar-expand-lg navbar-fixed navbar-height navbar-container navbar-bordered bg-body'>
             <div className='navbar-nav-wrap'>
                 <Navbar.Brand href="/" className='navbar-brand d-none'>
                     <LogoIcon primary={'#377dff'} dark={'#1c232c'} />

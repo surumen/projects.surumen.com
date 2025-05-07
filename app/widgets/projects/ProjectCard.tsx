@@ -40,7 +40,7 @@ const ProjectCard = ({ project, viewby }) => {
 								<Col onClick={() => handleShow()} sm={10} className='mb-2 mb-md-0'>
 									<h4 className="mb-2 fw-semibold">{project.title}</h4>
 									<p className="text-muted">{project.shortDescription}</p>
-									<div className="row fs-6 text-body">
+									<div className="row fs-6 text-body gap-2">
 										{
 											project.frameworks.map((framework, index) => {
 												return (
@@ -53,7 +53,7 @@ const ProjectCard = ({ project, viewby }) => {
 										}
 									</div>
 								</Col>
-								<Col sm={3} className="col-md-auto order-md-last text-end ms-n3">
+								<Col sm={3} className="col-md-auto order-md-last text-md-end text-center ms-n3">
 									<button className="btn btn-ghost-primary btn-icon btn-sm rounded-circle">
 										<Heart size={16}/>
 									</button>
