@@ -70,7 +70,20 @@ export const fetchManagerTeam = createAsyncThunk(
         const picks = team.picks;
 
         const uniquePlayerIds: number[] = [...new Set<number>(picks.map(p => p.element))];
-        const players = await Promise.all(uniquePlayerIds.map((id) => getPlayerById(id)));
+
+        const players = await Promise.all(
+            uniquePlayerIds.map(async (id) => {
+                const player = await getPlayerById(id);
+                const pick   = picks.find(p => p.element === id)!;
+
+                return {
+                    ...player,
+                    is_captain:      pick.is_captain,
+                    is_vice_captain: pick.is_vice_captain,
+                };
+            })
+        );
+
 
         // Add to state using a reducer
         thunkAPI.dispatch(setAllPlayers(players));

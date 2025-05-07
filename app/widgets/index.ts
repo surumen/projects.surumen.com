@@ -2,13 +2,16 @@
 import ProjectCard from './projects/ProjectCard';
 import ProjectGridView from './projects/ProjectGridView';
 import ProjectSummary from './projects/ProjectSummary';
+import ProjectFilter from './projects/ProjectFilters';
+import ProjectHeader from './projects/ProjectHeader';
 
 // import widget/custom components from highlight-code folder 
 import HighlightCode from './highlight-code/HighlightCode';
 
 // import widget/custom components from navbars folder
 import Sidebar from './navbars/Sidebar';
-import NavbarTop from './navbars/NavbarTop';
+import ProjectFilters from './projects/ProjectFilters';
+import NavTop from './navbars/NavTop';
 
 // import widget/custom components from form-select folder
 import ReactQuillEditor from './editor/ReactQuillEditor';
@@ -25,21 +28,23 @@ import Round from '@/widgets/brackets-advanced/Round';
 // import widget/custom components from football folder
 import PitchView from '@/widgets/football/PitchView';
 
-
-// import widget/custom components from dropdown folder
-import Dropdown from '@/widgets/components/Dropdown';
+// import widget/custom components from forms folder
+import DynamicForm from '@/widgets/forms/DynamicForm';
 
 export {
    ProjectCard,
    ProjectGridView,
    ProjectSummary,
+   ProjectHeader,
+   ProjectFilter,
    Sidebar,
-   NavbarTop,
+   ProjectFilters,
+   NavTop,
    HighlightCode,
    Pagination,
    ReactQuillEditor,
    RacingBarChart,
    Round,
    PitchView,
-   Dropdown,
+   DynamicForm
 };

@@ -1,5 +1,7 @@
-import React, { forwardRef, useEffect, useMemo, useState } from 'react';
+import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
+import { CursorFill, QuestionCircle } from 'react-bootstrap-icons';
+
 import { useAppDispatch } from '@/store/hooks';
 import {
     fetchManagerData,
@@ -7,16 +9,19 @@ import {
 } from '@/store/fplSlice';
 import { premierLeagueTeams } from '@/data/premier-league/Teams';
 import useFPL from '@/hooks/useFPL';
-import { PitchView, Dropdown } from '@/widgets';
+import { PitchView, DynamicForm} from '@/widgets';
+import { FieldConfig } from '@/widgets/forms/DynamicForm';
 import { DropdownItem } from '@/widgets/components/Dropdown';
 import { PremierLeaguePlayer } from '@/types/PremierLeaguePlayer';
 
 const Assistant = () => {
     const dispatch = useAppDispatch();
-    const managerId = 6888211;
+    const [managerId, setManagerId] = useState<number | null>(6888211);
+    const [leagueId, setLeagueId] = useState<number>();
     const [activeGameweek, setActiveGameweek] = useState<number>(35);
     const weeks = useMemo(() => [...Array(35).keys()].map(i => i + 1), []);
     const weekItems: DropdownItem[] = weeks.map(w => ({ value: w, label: `GW ${w}` }));
+    const weekOptions = weeks.map(w => ({ value: w, label: `GW ${w}` }));
 
     const {
         managerTeam,
@@ -26,9 +31,61 @@ const Assistant = () => {
     } = useFPL();
 
     useEffect(() => {
-        dispatch(fetchManagerData(managerId));
-        dispatch(fetchManagerTeam({ managerId, gameweek: activeGameweek }));
+        if (managerId !== null) {
+            dispatch(fetchManagerData(managerId));
+            dispatch(fetchManagerTeam({ managerId, gameweek: activeGameweek }));
+        }
     }, [dispatch, managerId, activeGameweek]);
+
+    const handleFormSubmit = (vals: Record<string, any>) => {
+        setManagerId(parseInt(vals.managerId, 10));
+        setLeagueId(vals.leagueId ? parseInt(vals.leagueId, 10) : undefined);
+        setActiveGameweek(parseInt(vals.gameweek, 10));
+    };
+
+
+    const formFields: FieldConfig[] = [
+        {
+            name: 'competition',
+            label: 'Competition',
+            type: 'select',
+            options: [{ value: 'Premier League', label: 'Premier League' }],
+            initialValue: 'Premier League',
+            readOnly: true,
+        },
+        {
+            name: 'managerId',
+            label: 'Manager ID',
+            type: 'input',
+            inputType: 'text',
+            required: true,
+            validate: v => /^\d+$/.test(v),
+            initialValue: managerId?.toString() ?? '',
+        },
+        {
+            name: 'leagueId',
+            label: 'League ID (optional)',
+            type: 'input',
+            inputType: 'text',
+            validate: v => v === '' || /^\d+$/.test(v),
+            initialValue: leagueId?.toString() ?? '',
+        },
+        {
+            name: 'gameweek',
+            label: 'Gameweek',
+            type: 'select',
+            options: weekOptions,
+            required: true,
+            initialValue: activeGameweek,
+        },
+        // example switch:
+        // {
+        //   name: 'showProbabilities',
+        //   label: 'Show Probabilities',
+        //   type: 'switch',
+        //   initialValue: false,
+        // },
+    ];
 
     if (loading) {
         return <p className="text-center mt-4">Loading team data...</p>;
@@ -62,46 +119,26 @@ const Assistant = () => {
         .filter(Boolean) as PremierLeaguePlayer[];
 
     return (
-        <div>
-            <div className='row align-items-center g-6 mt-0'>
-                <div className='col-3 mt-0'>
-                    <div className='d-flex gap-2'>
-                        <Dropdown
-                            id="gameweek-dropdown"
-                            items={weekItems}
-                            selected={activeGameweek}
-                            onSelect={(v) => setActiveGameweek(Number(v))}
-                            width={120}             /* → 200px */
-                            menuMaxHeight="20vh"    /* → caps menu at 40% of viewport */
-                            /* or: width="15%" menuMaxHeight={300} */
+        <Fragment>
+            <Row>
+                <Col lg={9} className='order-2 order-lg-1 ps-lg-0'>
+                    <div className='card card-lg shadow-none rounded-2 rounded-top-0 border border-top-0'>
+                        <div className='dz-dropzone-card shadow-none border-light border-top-0 rounded-top-0 px-0 pb-0 pt-4'>
+                            <PitchView players={playersOnPitch} className={'p-0 pt-4'} />
+                        </div>
+                    </div>
+                </Col>
+                <Col lg={3} className="order-1 order-lg-2">
+                    <div className='sticky-top pt-4' style={{ top: '5%' }}>
+                        <DynamicForm
+                            fields={formFields}
+                            submitLabel={<><CursorFill className="me-1"/> Start</>}
+                            onSubmit={handleFormSubmit}
                         />
                     </div>
-                </div>
-                <div className='col-6 mt-0'>
-                    <div className='d-flex align-items-end justify-content-center'>
-                        <span className='fs-3 fw-bolder text-opacity-50 text-info'>Gameweek {activeGameweek} Team Selection</span>
-                    </div>
-                </div>
-                <div className='col-3 mt-0'>
-                    <div className='d-flex align-items-center justify-content-end'>
-                        <ul className='nav nav-segment bg-body rounded-pill shadow-none p-0'>
-                            <li className='nav-item'>
-                                <span className='nav-link bg-info-subtle text-xs text-info rounded-pill px-5'>Current</span>
-                            </li>
-                            <li className='nav-item'>
-                                <span className='nav-link text-xs text-muted rounded-pill px-5'>Upcoming</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <hr className='my-6'/>
-            <Row className="justify-content-center mt-4">
-                <Col xs={12} md={6}>
-                    <PitchView players={playersOnPitch} />
                 </Col>
             </Row>
-        </div>
+        </Fragment>
     );
 };
 

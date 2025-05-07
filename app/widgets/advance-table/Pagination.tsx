@@ -1,61 +1,87 @@
-// import node module libraries
-import React from 'react';
-import { Row, Col, Button, ListGroup } from 'react-bootstrap';
+import React, { useMemo } from 'react';
+import PropTypes from 'prop-types';
+import { Row, Col } from 'react-bootstrap';
 
 const Pagination = ({
-	previousPage,
-	pageCount,
-	pageIndex,
-	gotoPage,
-	nextPage
-}) => {
+						currentPage,
+						totalPages,
+						onPageChange,
+						className = '',
+					}) => {
+	const pages = useMemo(
+		() => Array.from({ length: totalPages }, (_, i) => i + 1),
+		[totalPages]
+	);
+
+	const goPrev = () => {
+		if (currentPage > 1) onPageChange(currentPage - 1);
+	};
+
+	const goNext = () => {
+		if (currentPage < totalPages) onPageChange(currentPage + 1);
+	};
+
 	return (
 		<Row>
-			<Col lg={12} md={12} sm={12}>
-				<div className="pb-5">
-					<nav>
-						<ListGroup
-							as="ul"
-							bsPrefix="pagination"
-							className="justify-content-center mb-0"
+			<Col xs={12}>
+				<nav>
+					<ul className={`pagination ${className}`}>
+						{/* Prev */}
+						<li className={`page-item${currentPage === 1 ? ' disabled' : ''}`}>
+							<button
+								className="page-link"
+								onClick={goPrev}
+								disabled={currentPage === 1}
+							>
+								<span>Prev</span>
+							</button>
+						</li>
+
+						{/* Page numbers */}
+						{pages.map((page) => (
+							<li
+								key={page}
+								className={`page-item${page === currentPage ? ' active' : ''}`}
+							>
+								<button
+									className="page-link border shadow"
+									onClick={() => onPageChange(page)}
+								>
+									{page}
+								</button>
+							</li>
+						))}
+
+						{/* Next */}
+						<li
+							className={`page-item${
+								currentPage === totalPages ? ' disabled' : ''
+							}`}
 						>
-							<ListGroup.Item as="li" bsPrefix="page-item">
-								<Button
-									onClick={() => previousPage()}
-									className="page-link mx-1 rounded"
-								>
-									<i className="fe fe-chevron-left"></i>
-								</Button>
-							</ListGroup.Item>
-							{Array.from(Array(pageCount).keys()).map((page) => (
-								<ListGroup.Item
-									as="li"
-									bsPrefix="page-item"
-									key={page}
-									className={`page-item ${pageIndex === page ? 'active' : ''}`}
-								>
-									<Button
-										className="page-link mx-1 rounded"
-										onClick={() => gotoPage(page)}
-									>
-										{page + 1}
-									</Button>
-								</ListGroup.Item>
-							))}
-							<ListGroup.Item as="li" bsPrefix="page-item">
-								<Button
-									onClick={() => nextPage()}
-									className="page-link mx-1 rounded"
-								>
-									<i className="fe fe-chevron-right"></i>
-								</Button>
-							</ListGroup.Item>
-						</ListGroup>
-					</nav>
-				</div>
+							<button
+								className="page-link"
+								onClick={goNext}
+								disabled={currentPage === totalPages}
+							>
+								<span>Next</span>
+							</button>
+						</li>
+					</ul>
+				</nav>
 			</Col>
 		</Row>
 	);
+};
+
+Pagination.propTypes = {
+	/** The currently active page (1-based) */
+	currentPage: PropTypes.number.isRequired,
+	/** Total number of pages available */
+	totalPages: PropTypes.number.isRequired,
+	/** Callback(pageNumber) when user clicks a page or Prev/Next */
+	onPageChange: PropTypes.func.isRequired,
+	/** Additional classes to apply to the <ul> */
+	className: PropTypes.string,
 };
 
 export default Pagination;

@@ -1,21 +1,22 @@
 // import node module libraries
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 
 // import widget/custom components
 import ProjectCard from './ProjectCard';
 import useProjects from '@/hooks/useProjects';
+import { ProjectFilters, Pagination } from '@/widgets';
 
 
 const ProjectGridView = () => {
 
 	const { projects, activeFilters } = useProjects();
 
-	/** filter projects based on selected filter option */
 	const filteredRecords = activeFilters.length === 0 ? projects :
 		projects.filter(project => project.technologyAreas.some(category => activeFilters.includes(category)));
-
+	const [page, setPage] = useState(1);
+	const totalPages = 5;
 
 	let displayRecords = filteredRecords.map((project, index) => {
 		return (
@@ -24,9 +25,10 @@ const ProjectGridView = () => {
 	});
 
 	return (
-		<main className='container-fluid px-3 py-5 p-lg-6 pt-lg-0'>
+		<Fragment>
+			<ProjectFilters />
 			<Row>
-				<Col>
+				<Col className="ps-0">
 					{displayRecords.length > 0 ? (
 						displayRecords
 					) : (
@@ -34,7 +36,17 @@ const ProjectGridView = () => {
 					)}
 				</Col>
 			</Row>
-		</main>
+			<Row className="justify-content-center">
+				<Col className="ps-0">
+					<Pagination
+						currentPage={page}
+						totalPages={totalPages}
+						onPageChange={setPage}
+						className="justify-content-center mt-4"
+					/>
+				</Col>
+			</Row>
+		</Fragment>
 	);
 };
 
