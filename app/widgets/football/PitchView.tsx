@@ -11,7 +11,6 @@ interface PitchViewProps {
 const pitchBackground: string = '/images/svg/pitch.svg'
 
 const PitchView: React.FC<PitchViewProps> = ({ players, className  }) => {
-    console.log(players)
     const startingPlayers = players.slice(0, 11);
     const substitutes = players.slice(11);
 
@@ -26,20 +25,20 @@ const PitchView: React.FC<PitchViewProps> = ({ players, className  }) => {
         <div className='row justify-content-center mt-3 text-center gx-1'>
             {group.map((player) => (
                 <div key={player.id} className='col-auto px-1' style={{ flex: '0 0 auto', maxWidth: `${maxWidth}%` }}>
-                    <div className='card card-sm w-100 border-0 bg-transparent'>
+                    <div className='card card-sm w-100 border-0 rounded bg-transparent shadow'>
                         <div className="card-img-top border-0">
                             <Image
                                 src={player.kit}
                                 className="card-img-top img-fluid w-50"
                                 alt={`${player.web_name} shirt`}
                             />
-                            <div className="group-item rounded-top d-flex flex-column p-1 position-absolute top-0 start-0 w-100 h-100 bg-secondary bg-opacity-10">
+                            <div className="group-item rounded-top d-flex flex-column p-1 position-absolute top-0 start-0 w-100 h-100 rounded bg-secondary bg-opacity-10">
                                 <div className="d-flex justify-content-end">
                                     <InfoCircle size={12} className='text-white me-1' />
                                 </div>
                             </div>
                         </div>
-                        <div className='alert alert-secondary card-alert rounded-top-0 rounded-1 mt-n2 py-1 px-1'>
+                        <div className='alert bg-accent-coconut text-body card-alert rounded-top-0 rounded mt-n2 py-1 px-1'>
                             <span className='alert-link text-xs fw-normal'>{player.web_name}
                                 <span className='ms-1'>{player.is_captain ? 'ⓒ' : player.is_vice_captain ? 'ⓥ' : ''}</span>
                             </span>
@@ -51,7 +50,7 @@ const PitchView: React.FC<PitchViewProps> = ({ players, className  }) => {
     );
 
     return (
-        <div className={`w-100 position-relative bg-light ${className}`}>
+        <div className={`w-100 position-relative ${className}`}>
             <div
                 style={{
                     position: 'relative',

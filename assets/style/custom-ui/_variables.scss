@@ -77,15 +77,17 @@ $disabled-bg-color:                                         rgba($gray-300, .5) 
 $primary-soft-bg-color:                                     rgba(lighten($primary, 12%), .1) !default;
 
 // Shadows
-$box-shadow:                                                0rem .375rem 1.5rem 0rem rgba($gray-600, .125) !default;
-$box-shadow-sm:                                             0rem .375rem .75rem rgba($gray-600, .075) !default;
+//$box-shadow:                                                0rem .375rem 1.5rem 0rem rgba($gray-600, .125) !default;
+$box-shadow:                                                0px 3px 3px -1px rgba(10 22 70 / 10%), 0px 0px 1px 0px rgb(10 22 70 / 6%) !default;
+//$box-shadow-sm:                                             0rem .375rem .75rem rgba($gray-600, .075) !default;
+$box-shadow-sm:                                             0px 1px 1px 0px rgba(10 22 70 / 10%), 0px 0px 1px 0px rgb(10 22 70 / 6%) !default;
 $box-shadow-sm-hover:                                       0px .1875rem .75rem rgba($gray-600, .25) !default;
 $box-shadow-lg:                                             0rem .6125rem 2.5rem .6125rem rgba($gray-600, .175) !default;
 $box-shadow-xl:                                             0rem 3.75rem 5rem 0rem rgba($gray-600, .3) !default;
 
 // Borders
 $border-width:                                              .0625rem !default;
-$border-color:                                              rgba($gray-300, .7) !default;
+$border-color:                                              rgba($gray-200, .7) !default;
 
 // Border Radius
 $border-radius:                                             .5rem !default;
@@ -204,7 +206,7 @@ $theme-colors: (
   "info":       $info,
   "warning":    $warning,
   "danger":     $danger,
-  "light":      $gray-100,
+  "light":      $light,
   "dark":       $dark
 );
 
@@ -218,6 +220,28 @@ $theme-soft-colors: (
   "danger":     $danger-soft,
   "light":      $light-soft,
   "dark":       $dark-soft
+) !default;
+
+
+$theme-accent-colors: (
+  "ocean":      $ocean,
+  "crimson":    $crimson,
+  "rust":       $rust,
+  "canopy":     $canopy,
+  "navy":       $navy,
+  "plum":       $plum,
+  "magenta":    $magenta,
+  "gold":       $gold,
+  "zen":        $zen,
+  "sunset":     $sunset,
+  "tangerine":  $tangerine,
+  "lime":       $lime,
+  "cloud":      $cloud,
+  "orchid":     $orchid,
+  "pink":       $pink,
+  "banana":     $banana,
+  "coconut":    $coconut,
+  "graphite":   $graphite,
 ) !default;
 
 $min-contrast-ratio:                                        2.1 !default;
@@ -300,7 +324,7 @@ $card-text-color:                                           $body-color !default
 
 // Backgrounds
 $card-cap-bg:                                               transparent !default;
-$card-bg:                                                   $white-bg !default;
+$card-bg:                                                   transparent !default;
 
 // Borders
 $card-border-color:                                         $border-color !default;

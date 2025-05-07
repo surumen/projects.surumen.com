@@ -125,7 +125,7 @@ const Assistant = () => {
                 <Col lg={9} className='order-2 order-lg-1 ps-lg-0 pt-4'>
                     <div className='card card-lg shadow-none rounded-2'>
                         <div className='card-body'>
-                            <PitchView players={playersOnPitch} className={'p-0 pt-4'} />
+                            <PitchView players={playersOnPitch} className={'bg-white p-0 pt-4'} />
                         </div>
                     </div>
                 </Col>

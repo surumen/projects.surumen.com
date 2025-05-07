@@ -77,7 +77,7 @@
 
 // Dotted
 .card-dotted {
-  border: $card-border-width dotted $card-border-color;
+  border-style: dotted !important;
 }
 
 // Body Centered

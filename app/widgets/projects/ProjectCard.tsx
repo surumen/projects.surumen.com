@@ -19,12 +19,14 @@ const ProjectCard = ({ project, viewby }) => {
 	const handleShow = () => setShow(true);
 
 	const getLanguageScheme = (language) => {
+		const val = LanguageColorMap.filter(map => map.color === language)[0].scheme;
+		console.log(val)
 		return LanguageColorMap.filter(map => map.color === language)[0].scheme;
 	}
 
 	const ListStackView = () => {
 		return (
-			<Nav.Link className="card shadow-none rounded-0 border-0 border-bottom border-dotted mb-0">
+			<Nav.Link className="card shadow-none rounded-0 border-0 border-bottom card-dotted mb-0">
 				<div className='card-body'>
 					<div className='d-flex align-items-md-center'>
 						<div onClick={() => handleShow()} className='flex-shrink-0'>
@@ -43,7 +45,7 @@ const ProjectCard = ({ project, viewby }) => {
 											project.frameworks.map((framework, index) => {
 												return (
 													<div key={index} className="col-auto">
-														<span className="legend-indicator" style={{ backgroundColor: getLanguageScheme(framework)}}></span>
+														<span className={`legend-indicator bg-accent-${getLanguageScheme(framework)}`}></span>
 														{framework}
 													</div>
 												);
