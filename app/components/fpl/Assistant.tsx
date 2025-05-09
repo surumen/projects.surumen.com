@@ -73,7 +73,7 @@ const Assistant = () => {
         return (
             <Row>
                 <Col sm={12}>
-                    <Alert className="alert-soft-danger text-center mt-4">
+                    <Alert variant={'danger'} className="alert-soft-danger text-center mt-4">
                         Error: {error}
                     </Alert>
                 </Col>
