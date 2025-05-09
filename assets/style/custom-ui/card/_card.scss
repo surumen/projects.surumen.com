@@ -260,6 +260,16 @@
   }
 }
 
+// Background On Hover
+.card-hover {
+  transition: $card-hover-shadow-transition;
+
+  &:hover {
+    background-color: $gray-100 !important;
+    border: none !important;
+  }
+}
+
 // Alert
 .card-alert {
   @include border-radius(0);

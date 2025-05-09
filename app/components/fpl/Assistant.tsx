@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useMemo, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
-import { CursorFill, QuestionCircle } from 'react-bootstrap-icons';
+import { Alert, Col, Row } from 'react-bootstrap';
+import { CursorFill } from 'react-bootstrap-icons';
 
 import { useAppDispatch } from '@/store/hooks';
 import {
@@ -9,10 +9,10 @@ import {
 } from '@/store/fplSlice';
 import { premierLeagueTeams } from '@/data/premier-league/Teams';
 import useFPL from '@/hooks/useFPL';
-import { PitchView, DynamicForm} from '@/widgets';
+import { DynamicForm, MatchLineupFormation } from '@/widgets';
 import { FieldConfig } from '@/widgets/forms/DynamicForm';
-import { DropdownItem } from '@/widgets/components/Dropdown';
 import { PremierLeaguePlayer } from '@/types/PremierLeaguePlayer';
+
 
 const Assistant = () => {
     const dispatch = useAppDispatch();
@@ -20,14 +20,13 @@ const Assistant = () => {
     const [leagueId, setLeagueId] = useState<number>();
     const [activeGameweek, setActiveGameweek] = useState<number>(35);
     const weeks = useMemo(() => [...Array(35).keys()].map(i => i + 1), []);
-    const weekItems: DropdownItem[] = weeks.map(w => ({ value: w, label: `GW ${w}` }));
     const weekOptions = weeks.map(w => ({ value: w, label: `GW ${w}` }));
 
     const {
         managerTeam,
         allPlayers,
         loading,
-        error
+        error,
     } = useFPL();
 
     useEffect(() => {
@@ -43,97 +42,99 @@ const Assistant = () => {
         setActiveGameweek(parseInt(vals.gameweek, 10));
     };
 
-
     const formFields: FieldConfig[] = [
-        {
-            name: 'competition',
-            label: 'Competition',
-            type: 'select',
+        { name: 'competition', label: 'Competition', type: 'select',
             options: [{ value: 'Premier League', label: 'Premier League' }],
-            initialValue: 'Premier League',
-            readOnly: true,
+            initialValue: 'Premier League', readOnly: true,
         },
-        {
-            name: 'managerId',
-            label: 'Manager ID',
-            type: 'input',
-            inputType: 'text',
-            required: true,
-            validate: v => /^\d+$/.test(v),
+        { name: 'managerId', label: 'Manager ID', type: 'input', inputType: 'text',
+            required: true, validate: v => /^\d+$/.test(v),
             initialValue: managerId?.toString() ?? '',
         },
-        {
-            name: 'leagueId',
-            label: 'League ID',
-            type: 'input',
-            inputType: 'text',
-            required: false,
-            validate: v => v === '' || /^\d+$/.test(v),
+        { name: 'leagueId', label: 'League ID', type: 'input', inputType: 'text',
+            required: false, validate: v => v === '' || /^\d+$/.test(v),
             initialValue: leagueId?.toString() ?? '',
         },
-        {
-            name: 'gameweek',
-            label: 'Gameweek',
-            type: 'select',
-            options: weekOptions,
-            required: true,
+        { name: 'gameweek', label: 'Gameweek', type: 'select',
+            options: weekOptions, required: true,
             initialValue: activeGameweek,
         },
-        // example switch:
-        // {
-        //   name: 'showProbabilities',
-        //   label: 'Show Probabilities',
-        //   type: 'switch',
-        //   initialValue: false,
-        // },
     ];
 
     if (loading) {
-        return <p className="text-center mt-4">Loading team data...</p>;
+        return (
+            <Row>
+                <Col sm={12}>
+                    <p className="text-center mt-4">Loading team data...</p>
+                </Col>
+            </Row>
+        );
     }
 
     if (error) {
-        return <p className="text-center text-danger mt-4">Error: {error}</p>;
+        return (
+            <Row>
+                <Col sm={12}>
+                    <Alert className="alert-soft-danger text-center mt-4">
+                        Error: {error}
+                    </Alert>
+                </Col>
+            </Row>
+        );
     }
 
     if (!managerTeam || !Array.isArray(managerTeam.picks) || !Array.isArray(allPlayers)) {
-        return <p className="text-center mt-4">Waiting for team and player data...</p>;
+        return (
+            <Row>
+                <Col sm={12}>
+                    <p className="text-center mt-4">
+                        Waiting for team and player data...
+                    </p>
+                </Col>
+            </Row>
+        );
     }
 
+    // Build players for the pitch...
     const playersOnPitch: PremierLeaguePlayer[] = managerTeam.picks
-        .map((pick: any) => {
-            const player = allPlayers.find((p: PremierLeaguePlayer) => p.id === pick.element);
+        .map(pick => {
+            const player = allPlayers.find(p => p.id === pick.element);
             if (!player) return null;
-
-            const teamData = premierLeagueTeams.find(team => team.id === player.team);
+            const teamData = premierLeagueTeams.find(t => t.id === player.team);
             const kit = teamData
-                ? player.element_type === 1
-                    ? teamData.goalkeeper_kit
-                    : teamData.kit
+                ? (player.element_type === 1 ? teamData.goalkeeper_kit : teamData.kit)
                 : undefined;
-
-            return {
-                ...player,
-                kit
-            };
+            return { ...player, kit };
         })
         .filter(Boolean) as PremierLeaguePlayer[];
 
     return (
         <Fragment>
             <Row>
-                <Col lg={9} className='order-2 order-lg-1 ps-lg-0 pt-4'>
-                    <div className='card card-lg shadow-none rounded-2'>
-                        <div className='card-body'>
-                            <PitchView players={playersOnPitch} className={'bg-white p-0 pt-4'} />
-                        </div>
-                    </div>
+                <Col lg={9} className="order-2 order-lg-1 ps-lg-0 pt-4">
+                    <Row className="align-items-center py-4">
+                        <Col>
+                            <MatchLineupFormation players={playersOnPitch} />
+                        </Col>
+                    </Row>
+
+                    {/* Scout Recommendations */}
+                    <Row className="align-items-center justify-content-end py-4">
+                        <Col>
+                            <div className="divider-center">
+                                <h5 className="text-muted display-6 mb-0 fw-semibold opacity-50">
+                                    Scout Recommendations
+                                </h5>
+                            </div>
+                        </Col>
+                    </Row>
                 </Col>
+
                 <Col lg={3} className="order-1 order-lg-2">
-                    <div className='sticky-top pt-4' style={{ top: '5%' }}>
+                    <div className="sticky-top pt-4" style={{ top: '5%' }}>
                         <DynamicForm
                             fields={formFields}
-                            submitLabel={<><CursorFill className="me-1"/> Start</>}
+                            submitLabel={<><CursorFill className="me-1" /> Start</>}
                             onSubmit={handleFormSubmit}
                         />
                     </div>

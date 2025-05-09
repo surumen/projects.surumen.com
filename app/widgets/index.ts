@@ -26,10 +26,13 @@ import RacingBarChart from '@/widgets/charts/BarChart';
 import Round from '@/widgets/brackets-advanced/Round';
 
 // import widget/custom components from football folder
-import PitchView from '@/widgets/football/PitchView';
+import MatchLineupFormation from '@/widgets/football/MatchLineupFormation';
 
 // import widget/custom components from forms folder
 import DynamicForm from '@/widgets/forms/DynamicForm';
+
+// import widget/custom components from components folder
+import TabPane from '@/widgets/components/TabPane';
 
 export {
    ProjectCard,
@@ -45,6 +48,7 @@ export {
    ReactQuillEditor,
    RacingBarChart,
    Round,
-   PitchView,
-   DynamicForm
+   MatchLineupFormation,
+   DynamicForm,
+   TabPane
 };

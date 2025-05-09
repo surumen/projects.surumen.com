@@ -35,7 +35,7 @@ const ProjectFilters = (props) => {
 						return (
 							<li key={index} className='col-auto'>
 								<button onClick={()=> {dispatch(applyFilter(category))}}
-										className={`btn btn-sm rounded-pill ${isSelectedFilter(category)  ? `btn-primary` : `btn-outline-primary`}`}>
+										className={`btn btn-sm rounded-pill shadow-none ${isSelectedFilter(category)  ? `btn-primary border-primary` : `btn-outline-primary`}`}>
 									{category}
 									{isSelectedFilter(category) ? (
 										<X size={14} className='ms-2 me-n1' />

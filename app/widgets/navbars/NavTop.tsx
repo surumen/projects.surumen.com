@@ -43,8 +43,8 @@ const NavTop = (props) => {
                 </Navbar.Brand>
 
                 <div className='navbar-nav-wrap-content-start'>
-                    <div className='d-none d-lg-block'>
-                        <div className='input-group input-group-merge input-group-borderless input-group-hover-light navbar-input-group'>
+                    <div className='d-none d-md-block'>
+                        <div className='input-group input-group-merge input-group-borderless navbar-input-group rounded-pill shadow-none'>
                             <div className='input-group-prepend input-group-text'>
                                 <Search size={12} className='me-1'/>
                             </div>
