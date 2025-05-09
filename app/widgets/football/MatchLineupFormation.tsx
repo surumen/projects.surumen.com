@@ -140,8 +140,8 @@ const MatchLineupFormation: FC<MatchLineupFormationProps> = ({
                 </h5>
             </div>
 
-            {/* —— Substitutes below the pitch —— */}
-            <ul className="d-flex justify-content-center gap-4 mt-3" style={{ listStyle: 'none', padding: 0 }}>
+            {/* —— Substitutes —— */}
+            <ul className="d-flex justify-content-center gap-4 mt-3 px-3" style={{ listStyle: 'none', padding: 0 }}>
                 {subs.map(player => (
                     <li key={player.id} style={{ width: `${100 / TOTAL_COLS}%` }}>
                         <button
