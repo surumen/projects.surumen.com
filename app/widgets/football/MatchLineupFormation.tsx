@@ -116,7 +116,7 @@ const MatchLineupFormation: FC<MatchLineupFormationProps> = ({
     )
 
     return (
-        <div className={`bg-success rounded bg-opacity-10 pb-4 ${className}`}>
+        <div className={`bg-success rounded bg-opacity-10 pb-3 ${className}`}>
             {/* —— Pitch + on-pitch overlay —— */}
             <div className="position-relative w-100 overflow-hidden">
                 <Pitch />
@@ -137,7 +137,7 @@ const MatchLineupFormation: FC<MatchLineupFormationProps> = ({
             </div>
 
             {/* —— Substitutes —— */}
-            <ul className="d-flex justify-content-center gap-4 mt-3 px-3" style={{ listStyle: 'none', padding: 0 }}>
+            <ul className="d-flex justify-content-center gap-4 mt-2 px-3" style={{ listStyle: 'none', padding: 0 }}>
                 {subs.map(player => (
                     <li key={player.id} style={{ width: `${100 / TOTAL_COLS}%` }}>
                         <button
