@@ -11,7 +11,7 @@ import LogoIcon from '@/widgets/icons/LogoIcon';
 
 
 const NavTop = (props) => {
-    const placeholder = useMemo(() => 'Search projects, skills, technologies...', []);
+    const placeholder = useMemo(() => 'Ask me a question...', []);
 
     const defaultSkin = useSelector((state: any) => state.app.skin);
     const dispatch = useDispatch();

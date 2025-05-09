@@ -51,25 +51,23 @@ const Assistant = () => {
             required: true, validate: v => /^\d+$/.test(v),
             initialValue: managerId?.toString() ?? '',
         },
-        { name: 'leagueId', label: 'League ID', type: 'input', inputType: 'text',
-            required: false, validate: v => v === '' || /^\d+$/.test(v),
-            initialValue: leagueId?.toString() ?? '',
+        {
+          name: 'showTransferRecommendations',
+          label: 'Show transfer recommendations',
+          type: 'switch',
+          initialValue: true,
+        },
+        {
+            name: 'showDreamTeam',
+            label: 'Show me my dream team',
+            type: 'switch',
+            initialValue: false,
         },
         { name: 'gameweek', label: 'Gameweek', type: 'select',
             options: weekOptions, required: true,
             initialValue: activeGameweek,
         },
     ];
-
-    if (loading) {
-        return (
-            <Row>
-                <Col sm={12}>
-                    <p className="text-center mt-4">Loading team data...</p>
-                </Col>
-            </Row>
-        );
-    }
 
     if (error) {
         return (
