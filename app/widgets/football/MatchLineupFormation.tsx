@@ -146,7 +146,7 @@ const MatchLineupFormation: FC<MatchLineupFormationProps> = ({
                     <li key={player.id} style={{ width: `${100 / TOTAL_COLS}%` }}>
                         <button
                             type="button"
-                            className="btn btn-light bg-transparent border-0 rounded-0 btn-xs p-0 w-100"
+                            className="btn btn-light bg-transparent border-0 shadow rounded-0 btn-xs p-0 w-100"
                         >
                             <div className="avatar avatar-lg w-auto h-auto bg-transparent">
                                 <Image
