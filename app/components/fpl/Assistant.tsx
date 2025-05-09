@@ -121,11 +121,7 @@ const Assistant = () => {
                     {/* Scout Recommendations */}
                     <Row className="align-items-center justify-content-end py-4">
                         <Col>
-                            <div className="divider-center">
-                                <h5 className="text-muted display-6 mb-0 fw-semibold opacity-50">
-                                    Scout Recommendations
-                                </h5>
-                            </div>
+
                         </Col>
                     </Row>
                 </Col>

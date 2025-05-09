@@ -73,26 +73,27 @@ const Pitch: FC = () => (
     </div>
 )
 
-// ————————————————
-// MatchLineupFormation component
 const MatchLineupFormation: FC<MatchLineupFormationProps> = ({
                                                                  players,
                                                                  className = '',
                                                              }) => {
-    const starting = players.slice(0, 11)
-    const gk   = starting.filter(p => p.element_type === 1)
-    const defs = starting.filter(p => p.element_type === 2)
-    const mids = starting.filter(p => p.element_type === 3)
-    const fwds = starting.filter(p => p.element_type === 4)
+    // split out starters and subs
+    const starters = players.slice(0, 11)
+    const gk   = starters.filter(p => p.element_type === 1)
+    const defs = starters.filter(p => p.element_type === 2)
+    const mids = starters.filter(p => p.element_type === 3)
+    const fwds = starters.filter(p => p.element_type === 4)
+    const subs = players.slice(11)
 
-    const makeRow = (group: PremierLeaguePlayer[], key: string) => (
-        <li key={key} className="d-flex justify-content-center gap-4">
+    // renders a centered row of up to 5 slots
+    const makeOnPitchRow = (group: PremierLeaguePlayer[], key: string) => (
+        <li
+            key={key}
+            className="d-flex justify-content-center gap-4"
+            style={{ listStyle: 'none' }}
+        >
             {group.map(player => (
-                <div
-                    key={player.id}
-                    // each slot gets 1/5th of the row
-                    style={{ width: `${100 / TOTAL_COLS}%` }}
-                >
+                <div key={player.id} style={{ width: `${100 / TOTAL_COLS}%` }}>
                     <button
                         type="button"
                         className="btn btn-light bg-transparent border-0 rounded-0 btn-xs p-0 w-100"
@@ -119,19 +120,55 @@ const MatchLineupFormation: FC<MatchLineupFormationProps> = ({
     )
 
     return (
-        <div className={`position-relative w-100 overflow-hidden bg-success rounded bg-opacity-10 ${className}`}>
-            <Pitch />
+        <div className={`bg-success rounded bg-opacity-10 pb-4 ${className}`}>
+            {/* —— Pitch + on-pitch overlay —— */}
+            <div className="position-relative w-100 overflow-hidden">
+                <Pitch />
+                <ul
+                    className="position-absolute top-0 start-0 bottom-0 w-100 h-100 d-flex flex-column justify-content-between py-5 px-4 m-0"
+                >
+                    {makeOnPitchRow(gk,   'gk')}
+                    {makeOnPitchRow(defs, 'defs')}
+                    {makeOnPitchRow(mids, 'mids')}
+                    {makeOnPitchRow(fwds, 'fwds')}
+                </ul>
+            </div>
 
-            <ul
-                className="position-absolute top-0 start-0 bottom-0 w-100 h-100 d-flex flex-column justify-content-between py-5 px-4 m-0"
-            >
-                {makeRow(gk,   'gk')}
-                {makeRow(defs, 'defs')}
-                {makeRow(mids, 'mids')}
-                {makeRow(fwds, 'fwds')}
+            <div className="align-items-center justify-content-center pt-4 pb-2 text-center">
+                <h5 className="text-muted display-6 mb-0 fw-semibold opacity-50">
+                    Substitutes
+                </h5>
+            </div>
+
+            {/* —— Substitutes below the pitch —— */}
+            <ul className="d-flex justify-content-center gap-4 mt-3" style={{ listStyle: 'none', padding: 0 }}>
+                {subs.map(player => (
+                    <li key={player.id} style={{ width: `${100 / TOTAL_COLS}%` }}>
+                        <button
+                            type="button"
+                            className="btn btn-light bg-transparent border-0 rounded-0 btn-xs p-0 w-100"
+                        >
+                            <div className="avatar avatar-lg w-auto h-auto bg-transparent">
+                                <Image
+                                    className="avatar-img rounded-0"
+                                    src={player.kit}
+                                    alt={`${player.web_name} kit`}
+                                />
+                            </div>
+                            <ul className="list-group list-group-sm text-center mt-n3 m-0">
+                                <li className="list-group-item rounded-0 bg-secondary text-light border-0 px-4 py-1">
+                                    {player.web_name}
+                                </li>
+                                <li className="list-group-item rounded-0 border-0 bg-light p-1">
+                                    {`£${(player.now_cost).toFixed(1)}m`}
+                                </li>
+                            </ul>
+                        </button>
+                    </li>
+                ))}
             </ul>
         </div>
     )
 }
 
-export default MatchLineupFormation;
+export default MatchLineupFormation
