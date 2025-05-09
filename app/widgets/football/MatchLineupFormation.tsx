@@ -105,7 +105,7 @@ const MatchLineupFormation: FC<MatchLineupFormationProps> = ({
                             <li className="list-group-item rounded-0 bg-secondary text-light border-0 px-4 py-1">
                                 {player.web_name}
                             </li>
-                            <li className="list-group-item rounded-0 border-0 bg-light p-1">
+                            <li className="list-group-item rounded-0 border-0 bg-light text-body p-1">
                                 {`£${(player.now_cost).toFixed(1)}m`}
                             </li>
                         </ul>
@@ -155,7 +155,7 @@ const MatchLineupFormation: FC<MatchLineupFormationProps> = ({
                                 <li className="list-group-item rounded-0 bg-secondary text-light border-0 px-4 py-1">
                                     {player.web_name}
                                 </li>
-                                <li className="list-group-item rounded-0 border-0 bg-light p-1">
+                                <li className="list-group-item rounded-0 border-0 text-body bg-light p-1">
                                     {`£${(player.now_cost).toFixed(1)}m`}
                                 </li>
                             </ul>

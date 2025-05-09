@@ -112,7 +112,7 @@ const Assistant = () => {
         <Fragment>
             <Row>
                 <Col lg={9} className="order-2 order-lg-1 ps-lg-0 pt-4">
-                    <Row className="align-items-center py-4">
+                    <Row className="align-items-center pb-4">
                         <Col>
                             <MatchLineupFormation players={playersOnPitch} />
                         </Col>
