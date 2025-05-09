@@ -9,9 +9,6 @@ interface MatchLineupFormationProps {
 
 const TOTAL_COLS = 5
 
-// ————————————————
-// Pitch constant (adds w-100 to prevent overflow)
-// ————————————————
 const Pitch: FC = () => (
     <div
         className="p-0 w-100"
@@ -30,14 +27,13 @@ const Pitch: FC = () => (
                 '--pitch-line-color': '#b7db92',
                 minHeight: '35rem',
                 color: 'var(--gray-0)',
-                backgroundImage:
-                    'url(https://images.onefootball.com/cw/images/pitch-tile.jpg)',
+                backgroundImage: 'url(/images/icons/pitch-tile.jpg)',
                 backgroundSize: '29%',
                 border: '2px solid var(--pitch-line-color)',
                 borderTop: 'none',
             } as React.CSSProperties}
         >
-            {/* Penalty area (flipped) */}
+            {/* Penalty area */}
             <svg
                 viewBox="0 0 200 89"
                 style={{ fill: 'none', stroke: 'var(--pitch-line-color)', width: '40%' }}
@@ -51,7 +47,7 @@ const Pitch: FC = () => (
                 </g>
             </svg>
 
-            {/* Centre circle (flipped) */}
+            {/* Centre circle */}
             <svg
                 viewBox="0 0 160 82"
                 style={{
