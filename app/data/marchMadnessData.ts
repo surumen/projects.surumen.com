@@ -24,9 +24,9 @@ export const ncaaTournamentData: TournamentStructure = {
             // seeds remaining by round: R64 → R32 → S16 → E8 finalists
             rounds: [
                 [1,16,8,9,5,12,4,13,6,11,3,14,7,10,2,15],
-                [1,9,12,4,6,3,7,2],
-                [1,4,6,2],
-                [4,6]
+                [0,0,0,0,0,0,0,0],
+                [0,0,0,0],
+                [0,0]
             ],
             // actual match-ups each round
             games: [
@@ -62,9 +62,9 @@ export const ncaaTournamentData: TournamentStructure = {
             },
             rounds: [
                 [1,16,8,9,5,12,4,13,6,11,3,14,7,10,2,15],
-                [1,9,5,4,11,3,7,2],
-                [1,4,3,2],
-                [1,3]
+                [0,0,0,0,0,0,0,0],
+                [0,0,0,0],
+                [0,0]
             ],
             games: [
                 [[1,16],[8,9],[5,12],[4,13],[6,11],[3,14],[7,10],[2,15]],
@@ -95,9 +95,9 @@ export const ncaaTournamentData: TournamentStructure = {
             },
             rounds: [
                 [1,16,8,9,5,12,4,13,6,11,3,14,7,10,2,15],
-                [1,8,5,4,11,3,7,2],
-                [1,4,3,2],
-                [1,2]
+                [0,0,0,0,0,0,0,0],
+                [0,0,0,0],
+                [0,0]
             ],
             games: [
                 [[1,16],[8,9],[5,12],[4,13],[6,11],[3,14],[7,10],[2,15]],
@@ -128,9 +128,9 @@ export const ncaaTournamentData: TournamentStructure = {
             },
             rounds: [
                 [1,16,8,9,5,12,4,13,6,11,3,14,7,10,2,15],
-                [1,9,12,4,11,14,10,2],
-                [1,4,11,2],
-                [11,4]
+                [0,0,0,0,0,0,0,0],
+                [0,0,0,0],
+                [0,0]
             ],
             games: [
                 [[1,16],[8,9],[5,12],[4,13],[6,11],[3,14],[7,10],[2,15]],
@@ -143,11 +143,17 @@ export const ncaaTournamentData: TournamentStructure = {
 
     // The Final Four and Championship
     final: {
+        // seeds: {
+        //     East:    'uconn',
+        //     West:    'alabama',
+        //     Midwest: 'purdue',
+        //     South:   'nc-state',
+        // },
         seeds: {
-            East:    'uconn',
-            West:    'alabama',
-            Midwest: 'purdue',
-            South:   'nc-state',
+            East:    '',
+            West:    '',
+            Midwest: '',
+            South:   '',
         },
 
         // BEFORE the semis are played, you might write:
@@ -163,16 +169,17 @@ export const ncaaTournamentData: TournamentStructure = {
         // ],
 
         // The championship pairing:
-        finalGame: ['uconn','purdue'],
+        // finalGame: ['uconn','nc-state'],
+        finalGame: ['',''],
 
         games: {
             // semis scores:
             semiScores: [
-                [75,64],
-                [68,65],
+                [0,0],
+                [0,0],
             ],
             // final score:
-            finalScore: [82,76],
+            finalScore: [0,0],
         }
     }
 };

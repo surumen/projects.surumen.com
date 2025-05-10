@@ -33,43 +33,56 @@ export function computeFinalBracket(
     rounds: number[][],
     games: number[][][]
 } {
-    const blank: SeedMeta = { name:'', abbreviation:'', shortName:'', logo:'', color:'' }
-    const seeds: Record<number,SeedMeta> = {}
+    const blank: SeedMeta = { name:'', abbreviation:'', shortName:'', logo:'', color:'' };
+    const seeds: Record<number,SeedMeta> = {};
+
+    // helper to get slot-number or zero
+    const slotFor = (idx: number, slug: string) => {
+        if (!slug) return 0;
+        // fill the metadata
+        const meta = teams[slug] ?? blank;
+        seeds[idx] = meta;
+        return idx;
+    };
 
     if (final.semiFinals) {
-        final.semiFinals.forEach((pair, si) =>
-            pair.forEach((slug, pi) => {
-                const slot = si*2 + pi + 1
-                seeds[slot] = slug ? (teams[slug] ?? blank) : blank
-            })
-        )
+        // flatten semis into 4 slots
+        const semisFlat = final.semiFinals.flat();
+        const firstRound = semisFlat.map((slug, i) =>
+            // slots are 1..4
+            slotFor(i + 1, slug)
+        );
 
-        const rounds = [
-            // **4** slots for semis
-            [1,2,3,4],
-            // **2** slots for final
-            [1,2]
-        ]
+        // championship slots always positions 1 & 2
+        const finalRound = final.finalGame.map((slug, i) =>
+            slotFor(i + 1, slug)
+        );
 
         const games = [
-            final.games.semiScores ?? [],       // two semis
-            [ final.games.finalScore ]          // one final
-        ]
+            final.games.semiScores ?? [[0,0],[0,0]],
+            [final.games.finalScore]
+        ];
 
-        return { seeds, rounds, games }
+        return {
+            seeds,
+            rounds: [ firstRound, finalRound ],
+            games
+        };
     } else {
-        // only one game
-        const [a,b] = final.finalGame
-        seeds[1] = a ? teams[a] ?? blank : blank
-        seeds[2] = b ? teams[b] ?? blank : blank
+        // just a single final
+        const [a, b] = final.finalGame;
+        const firstRound = [
+            slotFor(1, a),
+            slotFor(2, b)
+        ];
 
-        const rounds = [[1,2]]
-        const games  = [[ final.games.finalScore ]]
-
-        return { seeds, rounds, games }
+        return {
+            seeds,
+            rounds: [ firstRound ],
+            games: [[ final.games.finalScore ]]
+        };
     }
 }
-
 
 
 /**

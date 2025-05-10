@@ -58,7 +58,7 @@ const Game: React.FC<GameProps> = ({
                     color={team2?.color}
                 />
 
-                 <GameSelector games={games} seeds={summarySeeds} type={type} />
+                 {/*<GameSelector games={games} seeds={summarySeeds} type={type} />*/}
             </button>
         </div>
     );

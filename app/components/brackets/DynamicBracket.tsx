@@ -8,7 +8,7 @@ import { teamsData as nbaTeams } from '@/data/nbaPlayoffsData'
 import { resolveSeeds, computeFinalBracket } from '@/helpers'
 
 const DynamicBracket: React.FC<DynamicBracketProps> = ({
-                                                           tournamentType = 'ncaa',
+                                                           tournamentType = 'nba',
                                                            regionsPerRow = 2,
                                                        }) => {
     // pick the right raw data & teams array
@@ -53,7 +53,7 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({
 
                 {hasFinal && (
                     <div
-                        className="position-absolute"
+                        className="position-absolute col-2"
                         style={
                             finalData.semiFinals
                                 // semis present → center between rows
@@ -114,7 +114,7 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({
                 {/* floating final region */}
                 {hasFinal && (
                     <div
-                        className="position-absolute"
+                        className="position-absolute col-4"
                         style={
                             // when semis exist, use top centering to straddle rows
                             finalData.semiFinals

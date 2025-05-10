@@ -62,8 +62,8 @@ export const nbaPlayoffsData: TournamentStructure = {
             },
             rounds: [
                 [1,8,4,5,2,7,3,6],
-                [1,4,2,3],
-                [4,2],
+                [0,0,0,0],
+                [0,0],
             ],
             games: [
                 [[1,8],[4,5],[2,7],[3,6]],
@@ -75,17 +75,22 @@ export const nbaPlayoffsData: TournamentStructure = {
 
     final: {
         // champions by region
+        // seeds: {
+        //     West: 'golden-state',  // Warriors
+        //     East: 'boston',        // Celtics
+        // },
         seeds: {
-            West: 'golden-state',  // Warriors
-            East: 'boston',        // Celtics
+            West: '',  // TBD
+            East: '',        // TBD
         },
 
         // head-to-head final pairing
-        finalGame: ['golden-state','boston'],
+        // finalGame: ['golden-state','boston'],
+        finalGame: ['',''],
 
         // “scores” here represent which seed won (3 → Warriors, 2 → Celtics)
         games: {
-            finalScore: [3,2]
+            finalScore: [0,0]
         }
     }
 };
