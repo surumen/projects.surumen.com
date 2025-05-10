@@ -24,12 +24,30 @@ export interface TournamentRegion {
     games: number[][][];
 }
 
-/** Final stage combining regions */
+/** Final stage: semis (optional) + final */
 export interface FinalRegion {
-    /** map region name to that region's seed mapping */
-    seeds: Record<string, Record<number, string>>;
-    rounds: number[][];
-    games: number[][][];
+    /** champion slug by region name — unchanged */
+    seeds: Record<string,string>;
+
+    /**
+     * Optional two semifinals.  Each tuple is a
+     * slug or "" if not yet determined.
+     * E.g. [ ["uconn","alabama"], ["purdue","nc-state"] ]
+     */
+    semiFinals?: [string,string][];
+
+    /**
+     * Always present.  Each element is the two slugs
+     * (or "" placeholders) for the championship.
+     * E.g. ["uconn","purdue"]
+     */
+    finalGame: [string,string];
+
+    /** scores must line up with the above slots */
+    games: {
+        semiScores?: [number,number][];
+        finalScore: [number,number];
+    };
 }
 
 /** Full tournament structure with dynamic regions and final */
@@ -145,9 +163,12 @@ export interface RegionProps {
         games: number[][];
     };
     champion?: string;
+    isFinal?: boolean;
     teamsInfo?: SeedMeta[];
 }
 
 export interface DynamicBracketProps {
-    managerKey: string;
+    tournamentType?: string;
+    regionsPerRow?: number;
+    managerKey?: string;
 }

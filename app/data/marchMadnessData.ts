@@ -144,18 +144,35 @@ export const ncaaTournamentData: TournamentStructure = {
     // The Final Four and Championship
     final: {
         seeds: {
-            East: {1: 'uconn'},
-            West: {1: 'alabama'},
-            Midwest: {1: 'purdue'},
-            South: {1: 'nc-state'}
+            East:    'uconn',
+            West:    'alabama',
+            Midwest: 'purdue',
+            South:   'nc-state',
         },
-        rounds: [
-            [1,1,1,1],  // four regional champs
-            [1,1]       // two finalists
+
+        // BEFORE the semis are played, you might write:
+        semiFinals: [
+            ['',''],    // East vs West TBD
+            ['',''],    // Purdue vs NC State TBD
         ],
-        games: [
-            [[1,1],[1,1]],  // UConn vs Alabama, Purdue vs NC State in semis
-            [[1,1]]         // UConn vs Purdue in the title game
-        ]
+
+        // After semis, fill in actual slugs:
+        // semiFinals: [
+        //   ['uconn','alabama'],
+        //   ['purdue','nc-state']
+        // ],
+
+        // The championship pairing:
+        finalGame: ['uconn','purdue'],
+
+        games: {
+            // semis scores:
+            semiScores: [
+                [75,64],
+                [68,65],
+            ],
+            // final score:
+            finalScore: [82,76],
+        }
     }
 };

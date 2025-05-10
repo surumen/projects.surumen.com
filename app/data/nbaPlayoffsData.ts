@@ -38,19 +38,13 @@ export const nbaPlayoffsData: TournamentStructure = {
                 8: 'los-angeles-clippers',
             },
             rounds: [
-                // Round 1 entrants by seed-pair order
                 [1,8,4,5,2,7,3,6],
-                // Round 2 winners: Phoenix, Denver, Memphis, Warriors
                 [1,4,2,3],
-                // Conference Finals: Phoenix vs. Warriors
                 [1,3],
             ],
             games: [
-                // Round 1 matchups
                 [[1,8],[4,5],[2,7],[3,6]],
-                // Semifinals
                 [[1,4],[2,3]],
-                // West Finals
                 [[1,3]],
             ],
         },
@@ -69,7 +63,7 @@ export const nbaPlayoffsData: TournamentStructure = {
             rounds: [
                 [1,8,4,5,2,7,3,6],
                 [1,4,2,3],
-                [4,2],  // Cleveland (4) vs. Boston (2)
+                [4,2],
             ],
             games: [
                 [[1,8],[4,5],[2,7],[3,6]],
@@ -80,17 +74,18 @@ export const nbaPlayoffsData: TournamentStructure = {
     },
 
     final: {
+        // champions by region
         seeds: {
-            West:  { 1: 'golden-state' }, // Warriors won out of their CF seed (3)
-            East:  { 2: 'boston' },       // Celtics won out of their CF seed (2)
+            West: 'golden-state',  // Warriors
+            East: 'boston',        // Celtics
         },
-        rounds: [
-            // NBA Finals: Warriors vs. Celtics
-            [3,2],
-        ],
-        games: [
-            // Final matchup by CF seed numbers
-            [[3,2]],
-        ],
-    },
+
+        // head-to-head final pairing
+        finalGame: ['golden-state','boston'],
+
+        // “scores” here represent which seed won (3 → Warriors, 2 → Celtics)
+        games: {
+            finalScore: [3,2]
+        }
+    }
 };

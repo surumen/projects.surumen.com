@@ -1,4 +1,4 @@
-import type { SeedMeta } from '@/types';
+import type { FinalRegion, SeedMeta } from '@/types';
 
 /**
  * Converts a seed slug map into full SeedMeta using known teams data.
@@ -16,6 +16,60 @@ export function resolveSeeds(
         return acc;
     }, {} as Record<number, SeedMeta>);
 }
+
+
+/**
+ * Given a FinalRegion (with optional semis + always finalGame)
+ * and your teams map (slug → SeedMeta), returns:
+ *  - seeds: slot → SeedMeta
+ *  - rounds: array of slot‐lists
+ *  - games: array of score arrays
+ */
+export function computeFinalBracket(
+    final: FinalRegion,
+    teams: Record<string,SeedMeta>
+): {
+    seeds: Record<number,SeedMeta>,
+    rounds: number[][],
+    games: number[][][]
+} {
+    const blank: SeedMeta = { name:'', abbreviation:'', shortName:'', logo:'', color:'' }
+    const seeds: Record<number,SeedMeta> = {}
+
+    if (final.semiFinals) {
+        final.semiFinals.forEach((pair, si) =>
+            pair.forEach((slug, pi) => {
+                const slot = si*2 + pi + 1
+                seeds[slot] = slug ? (teams[slug] ?? blank) : blank
+            })
+        )
+
+        const rounds = [
+            // **4** slots for semis
+            [1,2,3,4],
+            // **2** slots for final
+            [1,2]
+        ]
+
+        const games = [
+            final.games.semiScores ?? [],       // two semis
+            [ final.games.finalScore ]          // one final
+        ]
+
+        return { seeds, rounds, games }
+    } else {
+        // only one game
+        const [a,b] = final.finalGame
+        seeds[1] = a ? teams[a] ?? blank : blank
+        seeds[2] = b ? teams[b] ?? blank : blank
+
+        const rounds = [[1,2]]
+        const games  = [[ final.games.finalScore ]]
+
+        return { seeds, rounds, games }
+    }
+}
+
 
 
 /**

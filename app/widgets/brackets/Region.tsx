@@ -1,3 +1,4 @@
+// components/Region.tsx
 import React, { useRef } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import Round from './Round';
@@ -10,14 +11,13 @@ const Region: React.FC<RegionProps> = ({
                                            seeds,
                                            rounds,
                                            games,
+                                           isFinal = false,
                                        }) => {
-    // 1) Reverse sequences for right
-    const roundSeq  = type === 'right' ? [...rounds].reverse()            : rounds;
-    const gamesSeq  = type === 'right' ? [...games].reverse()             : games;
+    const roundSeq  = type === 'right' ? [...rounds].reverse() : rounds;
+    const gamesSeq  = type === 'right' ? [...games].reverse()  : games;
     const maxRounds = roundSeq.length;
 
-    // 2) Stable gameRefs using useRef + lazy init
-    const gameRefs = useRef<Array<Array<React.RefObject<HTMLDivElement>>>>();
+    const gameRefs = useRef<React.RefObject<HTMLDivElement>[][]>();
     if (!gameRefs.current) {
         gameRefs.current = roundSeq.map(r =>
             Array(Math.ceil(r.length / 2))
@@ -25,31 +25,110 @@ const Region: React.FC<RegionProps> = ({
                 .map(() => React.createRef<HTMLDivElement>())
         );
     }
-
     const containerRef = useRef<HTMLDivElement>(null);
 
-    return (
-        <div
-            ref={containerRef}
-            className="position-relative mb-4 d-flex flex-column h-100"
-        >
+    // Final layout
+    if (isFinal) {
+        // single championship
+        if (roundSeq.length === 1) {
+            const [a, b] = roundSeq[0];
+            const [g]    = gamesSeq[0];
+            const refs   = gameRefs.current![0];
 
-            {/* Region name centered in the middle */}
+            return (
+                <div ref={containerRef} className="position-relative mb-4 d-flex flex-column h-100">
+                    <div className="d-flex justify-content-center align-items-center flex-grow-1">
+                        <Round
+                            seeds={seeds}
+                            pairings={[a, b]}
+                            games={[g]}
+                            final={true}
+                            number={0}
+                            maxRounds={1}
+                            type="left"
+                            gameRefs={refs}
+                        />
+                    </div>
+                </div>
+            );
+        }
+
+        // semis + final
+        const semisSeeds = roundSeq[0];
+        const semisGames = gamesSeq[0];
+        const finalSeeds = roundSeq[1];
+        const finalGames = gamesSeq[1];
+        const semiRefs   = gameRefs.current![0];
+        const finalRefs  = gameRefs.current![1];
+
+        return (
+            <div ref={containerRef} className="position-relative mb-4 d-flex flex-column h-100">
+                <Connector
+                    gameRefs={gameRefs.current!}
+                    containerRef={containerRef}
+                    isFinalRegion={true}    // use new flag
+                />
+
+                <div className="d-flex justify-content-center align-items-center flex-grow-1">
+                    {/* Left Semi */}
+                    <div className="px-2">
+                        <Round
+                            seeds={seeds}
+                            pairings={[semisSeeds[0], semisSeeds[1]]}
+                            games={[semisGames[0]]}
+                            final={false}
+                            number={0}
+                            maxRounds={2}
+                            type="left"
+                            gameRefs={[semiRefs[0]]}
+                        />
+                    </div>
+                    {/* Championship */}
+                    <div className="px-4">
+                        <Round
+                            seeds={seeds}
+                            pairings={finalSeeds}
+                            games={finalGames}
+                            final={true}
+                            number={1}
+                            maxRounds={2}
+                            type="left"
+                            gameRefs={finalRefs}
+                        />
+                    </div>
+                    {/* Right Semi */}
+                    <div className="px-2">
+                        <Round
+                            seeds={seeds}
+                            pairings={[semisSeeds[2], semisSeeds[3]]}
+                            games={[semisGames[1]]}
+                            final={false}
+                            number={0}
+                            maxRounds={2}
+                            type="right"
+                            gameRefs={[semiRefs[1]]}
+                        />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Default regions
+    return (
+        <div ref={containerRef} className="position-relative mb-4 d-flex flex-column h-100">
             <h2
                 className="position-absolute top-50 start-50 translate-middle text-uppercase fw-semibold text-muted"
                 style={{ zIndex: 2, pointerEvents: 'none' }}
             >
                 {name}
             </h2>
-
-            {/* Connector behind everything */}
             <Connector
                 gameRefs={gameRefs.current!}
                 containerRef={containerRef}
                 type={type}
+                isFinalRegion={false}
             />
-
-            {/* Foreground game buttons */}
             <div className="position-relative flex-grow-1" style={{ zIndex: 1, minHeight: 0 }}>
                 <Row className="h-100 g-2">
                     {roundSeq.map((pairings, idx) => (
