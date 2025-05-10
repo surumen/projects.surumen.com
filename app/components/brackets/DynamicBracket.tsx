@@ -11,15 +11,13 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({
                                                            tournamentType = 'nba',
                                                            regionsPerRow = 2,
                                                        }) => {
-    // pick the right raw data & teams array
-    const data = tournamentType === 'ncaa' ? ncaaTournamentData : nbaPlayoffsData
-    const rawTeams = tournamentType === 'ncaa' ? ncaaTeams : nbaTeams
+    const data     = tournamentType === 'ncaa' ? ncaaTournamentData : nbaPlayoffsData
+    const rawTeams = tournamentType === 'ncaa' ? ncaaTeams         : nbaTeams
 
     const allRegions = Object.keys(data.regions)
-    const finalData = data.final as FinalRegion
-    const hasFinal = Boolean(finalData && finalData.finalGame)
+    const finalData  = data.final as FinalRegion
+    const hasFinal   = Boolean(finalData.finalGame)
 
-    // compute the final‐bracket seeds, rounds & games
     const finalBr = hasFinal
         ? computeFinalBracket(
             finalData,
@@ -30,135 +28,69 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({
         )
         : { seeds: {}, rounds: [], games: [] }
 
-    // special layout if exactly 2 regions
+    // helper to render any row of regions
+    const renderRow = (regions: string[], key: string, isTop: boolean) => (
+        <div className={`row gx-4 ${isTop ? 'mb-4' : 'mt-4'}`} key={key}>
+            {regions.map((region, i) => {
+                const { seeds, rounds, games } = data.regions[region]
+                const colLg = 12 / regionsPerRow
+                return (
+                    <div key={region} className={`col-12 col-lg-${colLg} h-100`}>
+                        <Region
+                            name={region}
+                            type={i % 2 === 0 ? 'left' : 'right'}
+                            seeds={resolveSeeds(seeds, rawTeams)}
+                            rounds={rounds}
+                            games={games}
+                        />
+                    </div>
+                )
+            })}
+        </div>
+    )
+
+    // shared final‐game overlay
+    const finalColClass = allRegions.length === 2 ? 'col-2' : 'col-4'
+    const finalStyle    = finalData.semiFinals
+        ? { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }
+        : { bottom: '10%', left: '50%', transform: 'translateX(-50%)' }
+
+    const renderFinal = hasFinal && (
+        <div
+            className={`position-absolute ${finalColClass}`}
+            style={{ ...finalStyle, zIndex: 10 }}
+        >
+            <Region
+                name="Final"
+                isFinal
+                seeds={finalBr.seeds}
+                rounds={finalBr.rounds}
+                games={finalBr.games}
+            />
+        </div>
+    )
+
+    // case: exactly two regions (side-by-side)
     if (allRegions.length === 2) {
         return (
             <div className="tournament container py-4 position-relative">
-                <div className="row gx-4">
-                    {allRegions.map((region, i) => {
-                        const { seeds, rounds, games } = data.regions[region]
-                        return (
-                            <div key={region} className={`col-12 col-lg-${12 / 2} h-100`}>
-                                <Region
-                                    name={region}
-                                    type={i === 0 ? 'left' : 'right'}
-                                    seeds={resolveSeeds(seeds, rawTeams)}
-                                    rounds={rounds}
-                                    games={games}
-                                />
-                            </div>
-                        )
-                    })}
-                </div>
-
-                {hasFinal && (
-                    <div
-                        className="position-absolute col-2"
-                        style={
-                            finalData.semiFinals
-                                // semis present → center between rows
-                                ? {
-                                    top: '50%',
-                                    left: '50%',
-                                    transform: 'translate(-50%, -50%)',
-                                    zIndex: 10,
-                                }
-                                // no semis → two-region style, sit low
-                                : {
-                                    bottom: '10%',
-                                    left: '50%',
-                                    transform: 'translateX(-50%)',
-                                    zIndex: 10,
-                                }
-                        }
-                    >
-                        <Region
-                            name="Final"
-                            isFinal
-                            seeds={finalBr.seeds}
-                            rounds={finalBr.rounds}
-                            games={finalBr.games}
-                        />
-                    </div>
-                )}
+                {renderRow(allRegions, 'two', true)}
+                {renderFinal}
             </div>
         )
     }
 
-    // default: >2 regions, split top/bottom
-    const mid = Math.ceil(allRegions.length / 2)
-    const top = allRegions.slice(0, mid)
+    // default: split >2 regions into top/bottom
+    const mid    = Math.ceil(allRegions.length / 2)
+    const top    = allRegions.slice(0, mid)
     const bottom = allRegions.slice(mid)
 
     return (
         <div className="tournament container py-4">
             <div className="position-relative">
-                {/* top row */}
-                <div className="row gx-4 mb-4">
-                    {top.map((region, i) => {
-                        const { seeds, rounds, games } = data.regions[region]
-                        return (
-                            <div key={region} className={`col-12 col-lg-${12 / regionsPerRow} h-100`}>
-                                <Region
-                                    name={region}
-                                    type={i % 2 === 0 ? 'left' : 'right'}
-                                    seeds={resolveSeeds(seeds, rawTeams)}
-                                    rounds={rounds}
-                                    games={games}
-                                />
-                            </div>
-                        )
-                    })}
-                </div>
-
-                {/* floating final region */}
-                {hasFinal && (
-                    <div
-                        className="position-absolute col-4"
-                        style={
-                            // when semis exist, use top centering to straddle rows
-                            finalData.semiFinals
-                                ? {
-                                    top: '50%',
-                                    left: '50%',
-                                    transform: 'translate(-50%, -50%)',
-                                    zIndex: 10,
-                                }
-                                : {
-                                    bottom: '10%',
-                                    left: '50%',
-                                    transform: 'translateX(-50%)',
-                                    zIndex: 10,
-                                }
-                        }
-                    >
-                        <Region
-                            name="Final"
-                            isFinal
-                            seeds={finalBr.seeds}
-                            rounds={finalBr.rounds}
-                            games={finalBr.games}
-                        />
-                    </div>
-                )}
-
-                {/* bottom row */}
-                <div className="row gx-4 mt-4">
-                    {bottom.map((region, i) => {
-                        const { seeds, rounds, games } = data.regions[region]
-                        return (
-                            <div key={region} className={`col-12 col-lg-${12 / regionsPerRow} h-100`}>
-                                <Region
-                                    name={region}
-                                    type={i % 2 === 0 ? 'left' : 'right'}
-                                    seeds={resolveSeeds(seeds, rawTeams)}
-                                    rounds={rounds}
-                                    games={games}
-                                />
-                            </div>
-                        )
-                    })}
-                </div>
+                {renderRow(top,    'top',    true )}
+                {renderFinal}
+                {renderRow(bottom, 'bottom', false)}
             </div>
         </div>
     )
