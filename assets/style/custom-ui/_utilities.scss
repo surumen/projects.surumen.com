@@ -1,5 +1,7 @@
 // Utilities
 
+$rounded-values: map-get(map-get($utilities, "rounded"), "values");
+
 $utilities: map-merge(
   $utilities,
   (
@@ -20,6 +22,26 @@ $utilities: map-merge(
       class: content-space,
       responsive: true,
       values: map-merge($content-spacers, (auto: auto))
+    ),
+    "rounded-top-start": (
+        property: border-top-left-radius,
+        class: rounded-top-start,
+        values: $rounded-values
+    ),
+    "rounded-top-end": (
+        property: border-top-right-radius,
+        class: rounded-top-end,
+        values: $rounded-values
+    ),
+    "rounded-bottom-end": (
+        property: border-bottom-right-radius,
+        class: rounded-bottom-end,
+        values: $rounded-values
+    ),
+    "rounded-bottom-start": (
+        property: border-bottom-left-radius,
+        class: rounded-bottom-start,
+        values: $rounded-values
     ),
     "z-index": (
       property: z-index,

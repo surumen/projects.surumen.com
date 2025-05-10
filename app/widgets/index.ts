@@ -32,6 +32,9 @@ import MatchLineupFormation from '@/widgets/football/MatchLineupFormation';
 import DynamicForm from '@/widgets/forms/DynamicForm';
 
 // import widget/custom components from components folder
+import Region from '@/widgets/brackets/Region';
+
+// import widget/custom components from components folder
 import TabPane from '@/widgets/components/TabPane';
 
 export {
@@ -50,5 +53,6 @@ export {
    Round,
    MatchLineupFormation,
    DynamicForm,
-   TabPane
+   TabPane,
+   Region
 };
