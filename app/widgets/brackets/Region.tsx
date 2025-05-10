@@ -36,6 +36,15 @@ const Region: React.FC<RegionProps> = ({
             ref={containerRef}
             className="position-relative mb-4 d-flex flex-column h-100"
         >
+
+            {/* Region name centered in the middle */}
+            <h2
+                className="position-absolute top-50 start-50 translate-middle text-uppercase fw-semibold text-muted"
+                style={{ zIndex: 2, pointerEvents: 'none' }}
+            >
+                {name}
+            </h2>
+
             {/* Connector behind everything */}
             <Connector
                 gameRefs={gameRefs.current!}
