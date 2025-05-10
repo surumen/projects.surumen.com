@@ -38,7 +38,7 @@ const GameSelector: React.FC<GameSelectorProps> = ({
         'list-group-item',
         'd-flex',
         'flex-wrap',
-        isRight ? 'justify-content-end' : 'justify-content-center',
+        isRight ? 'justify-content-end' : 'justify-content-start',
         'gap-1',
         'align-items-center',
         'rounded-0',

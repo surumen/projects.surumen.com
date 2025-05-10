@@ -27,10 +27,10 @@ const Game: React.FC<GameProps> = ({
     const team1 = seeds[firstSeed];
     const team2 = seeds[secondSeed];
 
-    // const summarySeeds: Record<number, { name: string }> = {
-    //     [firstSeed]: { name: team1?.name ?? '' },
-    //     [secondSeed]: { name: team2?.name ?? '' },
-    // };
+    const summarySeeds: Record<number, { name: string }> = {
+        [firstSeed]: { name: team1?.name ?? '' },
+        [secondSeed]: { name: team2?.name ?? '' },
+    };
 
     const name1 = team1?.shortName ?? team1?.name ?? '';
     const name2 = team2?.shortName ?? team2?.name ?? '';
@@ -58,7 +58,7 @@ const Game: React.FC<GameProps> = ({
                     color={team2?.color}
                 />
 
-                 {/*<GameSelector games={games} seeds={summarySeeds} type={type} />*/}
+                 <GameSelector games={games} seeds={summarySeeds} type={type} />
             </button>
         </div>
     );
