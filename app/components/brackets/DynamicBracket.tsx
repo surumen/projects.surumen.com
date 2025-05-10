@@ -19,7 +19,7 @@ interface Props extends DynamicBracketProps {
 }
 
 const DynamicBracket: React.FC<Props> = ({
-                                             tournamentType = 'nba',
+                                             tournamentType = 'ncaa',
                                              regionsPerRow = 2 // default to 2 per row
                                          }) => {
     const data = tournamentType === 'ncaa' ? ncaaTournamentData : nbaPlayoffsData;
