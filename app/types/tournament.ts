@@ -114,7 +114,7 @@ export interface RoundProps {
     /** scores for this round */
     games: number[][];
     /** predicted scores per matchup */
-    gamesPredicted: number[];
+    gamesPredicted?: number[];
     /** optional predicted pairings, same structure as pairings */
     pairingsPredicted?: Array<number | [string, number]>;
     /** if true, renders in final style */
@@ -139,7 +139,7 @@ export interface RegionProps {
     seeds: Record<number, SeedMeta>;
     rounds: number[][];
     games: number[][][];
-    userData: {
+    userData?: {
         matchups: Array<number | [string, number]>[];
         games: number[][];
     };

@@ -10,13 +10,10 @@ const Region: React.FC<RegionProps> = ({
                                            seeds,
                                            rounds,
                                            games,
-                                           userData,
                                        }) => {
     // 1) Reverse sequences for right
     const roundSeq  = type === 'right' ? [...rounds].reverse()            : rounds;
     const gamesSeq  = type === 'right' ? [...games].reverse()             : games;
-    const matchups  = type === 'right' ? [...userData.matchups].reverse() : userData.matchups;
-    const userGames = type === 'right' ? [...userData.games].reverse()    : userData.games;
     const maxRounds = roundSeq.length;
 
     // 2) Stable gameRefs using useRef + lazy init
@@ -61,8 +58,6 @@ const Region: React.FC<RegionProps> = ({
                                 seeds={seeds}
                                 pairings={pairings}
                                 games={gamesSeq[idx]}
-                                gamesPredicted={userGames[idx]}
-                                pairingsPredicted={matchups[idx]}
                                 final={false}
                                 number={idx}
                                 maxRounds={maxRounds}

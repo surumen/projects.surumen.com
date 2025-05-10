@@ -11,7 +11,6 @@ import { resolveSeeds, resolveMatchups } from '@/helpers';
 const DynamicBracket: React.FC<DynamicBracketProps> = ({ managerKey = 'moses' }) => {
     const regionNames = Object.keys(tournamentData.regions);
 
-    // 🧠 Dynamically resolve enriched seeds for the final
     const enrichedFinalSeeds: Record<string, Record<number, any>> = Object.entries(
         tournamentData.final.seeds
     ).reduce((acc, [region, seedMap]) => {
@@ -26,11 +25,8 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({ managerKey = 'moses' })
                     const leftFacing = regionName.toLowerCase() === 'west';
                     const type = leftFacing ? 'left' : 'right';
 
-                    const { matchups, games } = bracketData[managerKey].regions[regionName];
                     const { seeds, rounds, games: regionGames } = tournamentData.regions[regionName];
-
                     const enrichedSeeds = resolveSeeds(seeds, teamsData);
-                    const enrichedMatchups = resolveMatchups(enrichedSeeds, matchups);
 
                     return (
                         <div key={regionName} className="col-12 col-lg-6 mb-4 h-100">
@@ -40,7 +36,6 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({ managerKey = 'moses' })
                                 seeds={enrichedSeeds}
                                 rounds={rounds}
                                 games={regionGames}
-                                userData={{ matchups, games }}
                             />
                         </div>
                     );
