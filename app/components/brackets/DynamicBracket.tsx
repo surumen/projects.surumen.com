@@ -2,63 +2,58 @@ import React from 'react';
 import { Region } from '@/widgets';
 import type { DynamicBracketProps } from '@/types';
 import {
-    tournamentData,
-    bracketData,
-    teamsData,
-} from '@/data/tournamentData';
-import { resolveSeeds, resolveMatchups } from '@/helpers';
+    nbaPlayoffsData,
+    teamsData as nbaTeams
+} from '@/data/nbaPlayoffsData';
+import {
+    ncaaTournamentData,
+} from '@/data/marchMadnessData';
+import {
+    teamsData as ncaaTeams
+} from '@/data/ncaaTeamsData';
+import { resolveSeeds } from '@/helpers';
 
-const DynamicBracket: React.FC<DynamicBracketProps> = ({ managerKey = 'moses' }) => {
-    const regionNames = Object.keys(tournamentData.regions);
+interface Props extends DynamicBracketProps {
+    tournamentType?: 'nba' | 'ncaa';
+    regionsPerRow?: number;
+}
 
-    const enrichedFinalSeeds: Record<string, Record<number, any>> = Object.entries(
-        tournamentData.final.seeds
-    ).reduce((acc, [region, seedMap]) => {
-        acc[region] = resolveSeeds(seedMap, teamsData);
-        return acc;
-    }, {} as Record<string, Record<number, any>>);
+const DynamicBracket: React.FC<Props> = ({
+                                             tournamentType = 'nba',
+                                             regionsPerRow = 2 // default to 2 per row
+                                         }) => {
+    const data = tournamentType === 'ncaa' ? ncaaTournamentData : nbaPlayoffsData;
+    const teams = tournamentType === 'ncaa' ? ncaaTeams : nbaTeams;
+
+    const regionNames = Object.keys(data.regions);
 
     return (
         <div className="tournament container py-4">
-            <div className="row gx-4">
-                {regionNames.map(regionName => {
-                    const leftFacing = regionName.toLowerCase() === 'west';
-                    const type = leftFacing ? 'left' : 'right';
+            {Array.from({ length: Math.ceil(regionNames.length / regionsPerRow) }, (_, rowIdx) => {
+                const group = regionNames.slice(rowIdx * regionsPerRow, rowIdx * regionsPerRow + regionsPerRow);
+                return (
+                    <div className="row gx-4 mb-4" key={`row-${rowIdx}`}>
+                        {group.map((regionName, idx) => {
+                            const type: 'left' | 'right' = (idx % 2 === 0) ? 'left' : 'right';
 
-                    const { seeds, rounds, games: regionGames } = tournamentData.regions[regionName];
-                    const enrichedSeeds = resolveSeeds(seeds, teamsData);
+                            const { seeds, rounds, games: regionGames } = data.regions[regionName];
+                            const enrichedSeeds = resolveSeeds(seeds, teams);
 
-                    return (
-                        <div key={regionName} className="col-12 col-lg-6 mb-4 h-100">
-                            <Region
-                                name={regionName}
-                                type={type}
-                                seeds={enrichedSeeds}
-                                rounds={rounds}
-                                games={regionGames}
-                            />
-                        </div>
-                    );
-                })}
-
-                {/* Optional Final Region Rendering */}
-                {/*
-                <div className="col-12">
-                    <Region
-                        name="Final"
-                        type="right"
-                        seeds={enrichedFinalSeeds}
-                        rounds={tournamentData.final.rounds}
-                        games={tournamentData.final.games}
-                        userData={{
-                            matchups: bracketData[managerKey].final.matchups,
-                            games: bracketData[managerKey].final.games,
-                        }}
-                        champion={bracketData[managerKey].final.winner}
-                    />
-                </div>
-                */}
-            </div>
+                            return (
+                                <div key={regionName} className={`col-12 col-lg-${12 / regionsPerRow} h-100`}>
+                                    <Region
+                                        name={regionName}
+                                        type={type}
+                                        seeds={enrichedSeeds}
+                                        rounds={rounds}
+                                        games={regionGames}
+                                    />
+                                </div>
+                            );
+                        })}
+                    </div>
+                );
+            })}
         </div>
     );
 };

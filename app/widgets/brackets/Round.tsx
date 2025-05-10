@@ -25,7 +25,6 @@ const Round: React.FC<RoundProps> = ({
         ((type === 'left' && number === 0) ||
             (type === 'right' && number === maxRounds - 1));
 
-    // This value controls alignment for all columns — only compute from full first round
     const baselineGames = Object.keys(seeds).length / 2;
     const totalRows = baselineGames * 2 + 1;
     const singleGame = matchTuples.length === 1;
@@ -43,11 +42,19 @@ const Round: React.FC<RoundProps> = ({
                 const firstSeed = typeof rawA === 'number' ? rawA : rawA[1];
                 const secondSeed = typeof rawB === 'number' ? rawB : rawB[1];
 
+                // Mirror round index for right-facing alignment
+                const effectiveRound = type === 'right'
+                    ? maxRounds - number - 1
+                    : number;
+
+                const spacingPerGame = Math.pow(2, effectiveRound + 1);
+                const baseOffset = spacingPerGame / 2;
+
                 const rowStart = singleGame
                     ? Math.ceil(totalRows / 2)
                     : isBaseline
-                        ? idx * 2 + 2       // evenly spaced for baseline
-                        : idx * 4 + 3;      // aligned spacing for upper rounds
+                        ? idx * 2 + 2
+                        : idx * spacingPerGame + baseOffset + 1;
 
                 return (
                     <div

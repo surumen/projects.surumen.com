@@ -6,6 +6,8 @@
 export interface SeedMeta {
     /** team slug (used as unique ID) */
     name: string;
+    abbreviation?: string;
+    shortName?: string;
     /** optional team logo path or URL */
     logo?: string;
     /** optional color (Bootstrap variant or custom accent) */
@@ -127,8 +129,7 @@ export interface RoundProps {
     type?: 'left' | 'right';
     /** champion name, only for final round */
     champion?: string;
-
-    baselineMatchCount?: any;
+    gameCount?: number;
 
     gameRefs?: React.Ref<HTMLDivElement>[];
 }
