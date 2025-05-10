@@ -19,7 +19,7 @@ const Assistant = () => {
     const [managerId, setManagerId] = useState<number | null>(6888211);
     const [leagueId, setLeagueId] = useState<number>();
     const [activeGameweek, setActiveGameweek] = useState<number>(35);
-    const weeks = useMemo(() => [...Array(35).keys()].map(i => i + 1), []);
+    const weeks = useMemo(() => [...Array(36).keys()].map(i => i + 1), []);
     const weekOptions = weeks.map(w => ({ value: w, label: `GW ${w}` }));
 
     const {
