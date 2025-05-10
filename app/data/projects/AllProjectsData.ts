@@ -7,17 +7,24 @@ export const AllProjectsData: Project[] = [
 		languages: ['Typescript', 'Python'],
 		frameworks: ['AI Agents', 'Model Context Protocol','OpenAI', 'Anthropic'],
 		technologyAreas: ['Model Context Protocol', 'AI Agents', 'Anthropic', 'OpenAI', 'Python'],
-		title: 'Fantasy Manager Assistant',
+		shortTitle: 'Fantasy Manager Assistant',
+		title: 'Fantasy Premier League Manager Assistant',
 		slug: 'fantasy-manager-assistant',
-		shortDescription:
-			'Coming soon.',
+		shortDescription: 'An AI-driven FPL co-manager that delivers transfer picks, lineup optimizations, and fixture insights in seconds without the busywork.',
 		status: 'Pending',
 		level: 'Advanced',
 		duration: '2h 40m',
 		rating: 5.0,
 		completed: '2025',
-		description: `<p>Coming soon</p>
-        `,
+		description: `
+			<p>Fantasy Manager Assistant is your personal AI-powered FPL co-manager. It continuously ingests live Premier League data—player form, fixture difficulty, price changes—and runs it through advanced AI Agents using the Model Context Protocol.</p>
+			<ul>
+			  <li>Real-time analysis: Auto-update on form swings, injuries, and fixture shifts.</li>
+			  <li>Transfer strategy: AI-driven ins and outs tailored to your budget and league.</li>
+			  <li>Fixture forecasting: Predicted points and difficulty ratings for every gameweek.</li>
+			</ul>
+			<p>Spend less time crunching numbers and more time celebrating wins—Fantasy Manager Assistant handles the heavy lifting so you can dominate your league all season long.</p>
+		`,
 		contentType: 'app',
 		component: 'fplAssistant',
 		hasWriteUp: false,

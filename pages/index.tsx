@@ -14,9 +14,9 @@ export default function Home() {
     const acceptedCookies = useSelector((state: any) => state.app.acceptedCookies);
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        document.body.classList.add('bg-body-tertiary');
-    });
+    // useEffect(() => {
+    //     document.body.classList.add('bg-body-tertiary');
+    // });
 
     const {
         storageValue,

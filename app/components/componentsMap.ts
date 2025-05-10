@@ -1,9 +1,9 @@
-import FantasyPremierLeague from "@/components/fpl/FantasyPremierLeague";
-import MarchMadness from "@/components/march-madness/MarchMadness";
+import FantasyPremierLeague from "@/components/standings/FantasyPremierLeague";
 import Assistant from '@/components/fpl/Assistant'
+import DynamicBracket from '@/components/brackets/DynamicBracket';
 
 export const COMPONENTS_MAP = {
-    ncaa: MarchMadness,
+    ncaa: DynamicBracket,
     fpl: FantasyPremierLeague,
     fplAssistant: Assistant
 }

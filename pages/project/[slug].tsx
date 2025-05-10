@@ -18,9 +18,9 @@ const ProjectSingle = ({project, blog}) => {
 
     }
 
-    useEffect(() => {
-        document.body.classList.add('bg-body-tertiary');
-    });
+    // useEffect(() => {
+    //     document.body.classList.add('bg-body-tertiary');
+    // });
 
     const ProjectSummary = dynamic(() => import('@/widgets/projects/ProjectSummary'), {
         ssr: false,

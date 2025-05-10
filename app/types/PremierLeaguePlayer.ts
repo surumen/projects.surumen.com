@@ -26,4 +26,6 @@ export interface PremierLeaguePlayer {
     cost_change_start: number;
     cost_change_event: number;
     kit?: string;
+    is_captain?: boolean;
+    is_vice_captain?: boolean;
 }

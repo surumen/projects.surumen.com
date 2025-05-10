@@ -1,0 +1,29 @@
+// assets/style/theme.scss
+
+// 1️⃣ bootstrap core Sass functions (needed by variables & maps)
+@import "~bootstrap/scss/functions";
+
+// 2️⃣ Your variable overrides (after ~bootstrap’s own defaults)
+@import "themes/default";
+@import "user-variables";
+@import "custom-ui/variables";
+
+// 3️⃣ bootstrap’s variable definitions
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/variables-dark';
+@import 'bootstrap/scss/maps';
+@import 'bootstrap/scss/utilities';
+
+// 6️⃣ Your custom utilities
+@import "custom-ui/utilities";
+@import "user-utilities";
+
+// 7️⃣ ~bootstrap’s component library (buttons, grid, cards, etc)
+@import "~bootstrap/scss/bootstrap";
+
+@import "custom-ui/custom-ui";
+
+// 8️⃣ Your final custom overrides
+@import "user";
