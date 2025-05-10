@@ -58,7 +58,7 @@ const Region: React.FC<RegionProps> = ({
                     {roundSeq.map((pairings, idx) => (
                         <Col key={idx} xs={12} lg className="d-flex flex-column px-2">
                             <Round
-                                seeds={seeds as Record<number, string>}
+                                seeds={seeds}
                                 pairings={pairings}
                                 games={gamesSeq[idx]}
                                 gamesPredicted={userGames[idx]}

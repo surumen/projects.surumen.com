@@ -8,13 +8,14 @@ import {
     BracketRegion,
     BracketFinal,
     BracketData,
+    SeedMeta,
     TeamProps,
     GameSelectorProps,
     GameProps,
     RoundProps,
     RegionProps,
     DynamicBracketProps
-} from './Tournament';
+} from './tournament';
 
 export type {
     Project,
@@ -26,6 +27,7 @@ export type {
     BracketRegion,
     BracketFinal,
     BracketData,
+    SeedMeta,
     TeamProps,
     GameSelectorProps,
     GameProps,

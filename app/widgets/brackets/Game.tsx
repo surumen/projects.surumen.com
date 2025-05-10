@@ -1,4 +1,3 @@
-// components/Game.tsx
 import React from 'react';
 import Team from './Team';
 import GameSelector from './GameSelector';
@@ -9,74 +8,58 @@ const Game: React.FC<GameProps> = ({
                                        firstSeed,
                                        secondSeed,
                                        games = [],
-                                       gamesPredicted = 0,
-                                       firstSeedPredicted = 0,
-                                       secondSeedPredicted = 0,
-                                       type = 'left',         // default to left bracket
+                                       type = 'left',
                                    }) => {
     const isLeft = type === 'right';
 
-    // build container classes dynamically
     const containerClass = [
         'list-group',
         'list-group-sm',
         'mt-n3',
         'm-0',
         'shadow',
-        // swap text-align, rounding, and border side:
-        isLeft
-            ? 'text-end rounded-start'
-            : 'text-start rounded-end',
+        isLeft ? 'text-end rounded-start' : 'text-start rounded-end',
     ].join(' ');
 
     const fmt = (slug = '') =>
         slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
-    // actual slugs & display names
-    const slug1 = seeds[firstSeed] ?? '';
-    const slug2 = seeds[secondSeed] ?? '';
-    const name1 = fmt(slug1);
-    const name2 = fmt(slug2);
+    const team1 = seeds[firstSeed];
+    const team2 = seeds[secondSeed];
 
-    // predicted
-    const slug1p = seeds[firstSeedPredicted] ?? '';
-    const slug2p = seeds[secondSeedPredicted] ?? '';
-    const name1p = fmt(slug1p);
-    const name2p = fmt(slug2p);
+    const name1 = fmt(team1?.name ?? '');
+    const name2 = fmt(team2?.name ?? '');
 
     const summarySeeds: Record<number, { name: string }> = {
-        [firstSeed]: { name: slug1 },
-        [secondSeed]: { name: slug2 },
+        [firstSeed]: { name: team1?.name ?? '' },
+        [secondSeed]: { name: team2?.name ?? '' },
     };
 
     return (
         <button className={`border-0 rounded-0 p-0 shadow ${containerClass}`}>
             <Team
-                name={slug1}
+                name={team1?.name}
                 seed={firstSeed}
                 displayName={name1}
-                namePredicted={slug1p || undefined}
-                seedPredicted={slug1p ? firstSeedPredicted : undefined}
-                displayNamePredicted={slug1p ? name1p : undefined}
                 position="top"
                 type={type}
+                logo={team1?.logo}
+                color={team1?.color}
             />
 
             <Team
-                name={slug2}
+                name={team2?.name}
                 seed={secondSeed}
                 displayName={name2}
-                namePredicted={slug2p || undefined}
-                seedPredicted={slug2p ? secondSeedPredicted : undefined}
-                displayNamePredicted={slug2p ? name2p : undefined}
                 position="middle"
                 type={type}
+                logo={team2?.logo}
+                color={team2?.color}
             />
 
             <GameSelector
                 games={games}
                 seeds={summarySeeds}
-                gamesPredicted={gamesPredicted}
                 type={type}
             />
         </button>

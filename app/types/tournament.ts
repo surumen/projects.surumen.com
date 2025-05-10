@@ -2,6 +2,16 @@
 
 // --- Tournament data interfaces ---
 
+/** Metadata for each team seed */
+export interface SeedMeta {
+    /** team slug (used as unique ID) */
+    name: string;
+    /** optional team logo path or URL */
+    logo?: string;
+    /** optional color (Bootstrap variant or custom accent) */
+    color?: string;
+}
+
 /** One region of the tournament (e.g. East, West, Midwest, South) */
 export interface TournamentRegion {
     /** map seed number to team slug */
@@ -73,6 +83,8 @@ export interface TeamProps {
     displayNamePredicted?: string;
     position: 'top' | 'middle' | 'bottom';
     type?: Orientation;
+    color?: string;
+    logo?: string;
 }
 
 export interface GameSelectorProps {
@@ -83,7 +95,7 @@ export interface GameSelectorProps {
 }
 
 export interface GameProps {
-    seeds: Record<number, string>;
+    seeds: Record<number, SeedMeta>;
     firstSeed: number;
     secondSeed: number;
     games?: number[];
@@ -96,7 +108,7 @@ export interface GameProps {
 
 export interface RoundProps {
     /** seeds for this round (or final-seeds map for Final) */
-    seeds: Record<number, string> | FinalRegion['seeds'];
+    seeds: Record<number, SeedMeta>;
     /** flat array mixing seed numbers and [region,seed] tuples */
     pairings: Array<number | [string, number]>;
     /** scores for this round */
@@ -124,7 +136,7 @@ export interface RoundProps {
 export interface RegionProps {
     name: string;
     type?: 'left' | 'right';
-    seeds: Record<number, string> | FinalRegion['seeds'];
+    seeds: Record<number, SeedMeta>;
     rounds: number[][];
     games: number[][][];
     userData: {
@@ -132,6 +144,7 @@ export interface RegionProps {
         games: number[][];
     };
     champion?: string;
+    teamsInfo?: SeedMeta[];
 }
 
 export interface DynamicBracketProps {

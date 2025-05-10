@@ -1,27 +1,18 @@
-// components/Round.tsx
 import React from 'react';
 import Game from './Game';
 import type { RoundProps } from '@/types';
 
-interface RoundWithRefsProps extends RoundProps {
-    /** Refs to each Game container in this round */
-    gameRefs?: React.RefObject<HTMLDivElement>[];
-}
-
-const Round: React.FC<RoundWithRefsProps> = ({
-                                                 seeds,
-                                                 pairings,
-                                                 games,
-                                                 gamesPredicted,
-                                                 pairingsPredicted = [],
-                                                 final = false,
-                                                 number,
-                                                 maxRounds = 0,
-                                                 type = 'left',
-                                                 champion,
-                                                 gameRefs,
-                                             }) => {
-    // pairings come in as a flat array: turn into [[a,b], [c,d], …]
+const Round: React.FC<RoundProps> = ({
+                                         seeds,
+                                         pairings,
+                                         games,
+                                         final = false,
+                                         number,
+                                         maxRounds = 0,
+                                         type = 'left',
+                                         gameRefs,
+                                     }) => {
+    // Convert flat list of seed refs to pairs: [a, b], [c, d], ...
     const matchTuples: Array<
         [number | [string, number], number | [string, number]]
     > = [];
@@ -34,7 +25,7 @@ const Round: React.FC<RoundWithRefsProps> = ({
         ((type === 'left' && number === 0) ||
             (type === 'right' && number === maxRounds - 1));
 
-    // grid rows = baselineGames * 2 + 1
+    // This value controls alignment for all columns — only compute from full first round
     const baselineGames = Object.keys(seeds).length / 2;
     const totalRows = baselineGames * 2 + 1;
     const singleGame = matchTuples.length === 1;
@@ -49,25 +40,14 @@ const Round: React.FC<RoundWithRefsProps> = ({
         >
             {matchTuples.map((tuple, idx) => {
                 const [rawA, rawB] = tuple;
-                const firstSeed =
-                    typeof rawA === 'number' ? rawA : (rawA as [string, number])[1];
-                const secondSeed =
-                    typeof rawB === 'number' ? rawB : (rawB as [string, number])[1];
-
-                const predA = pairingsPredicted[idx * 2];
-                const predB = pairingsPredicted[idx * 2 + 1];
-                const firstSeedPredicted = Array.isArray(predA)
-                    ? predA[1]
-                    : (predA as number) || 0;
-                const secondSeedPredicted = Array.isArray(predB)
-                    ? predB[1]
-                    : (predB as number) || 0;
+                const firstSeed = typeof rawA === 'number' ? rawA : rawA[1];
+                const secondSeed = typeof rawB === 'number' ? rawB : rawB[1];
 
                 const rowStart = singleGame
                     ? Math.ceil(totalRows / 2)
                     : isBaseline
-                        ? idx * 2 + 2
-                        : idx * 4 + 3;
+                        ? idx * 2 + 2       // evenly spaced for baseline
+                        : idx * 4 + 3;      // aligned spacing for upper rounds
 
                 return (
                     <div
@@ -76,14 +56,11 @@ const Round: React.FC<RoundWithRefsProps> = ({
                         style={{ gridRowStart: rowStart }}
                     >
                         <Game
-                            seeds={seeds as Record<number, string>}
+                            seeds={seeds}
                             firstSeed={firstSeed}
                             secondSeed={secondSeed}
                             type={type}
                             games={games?.[idx] || []}
-                            gamesPredicted={gamesPredicted?.[idx] || 0}
-                            firstSeedPredicted={firstSeedPredicted}
-                            secondSeedPredicted={secondSeedPredicted}
                             final={final}
                         />
                     </div>
