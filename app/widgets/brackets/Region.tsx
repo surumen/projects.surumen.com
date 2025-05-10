@@ -36,7 +36,14 @@ const Region: React.FC<RegionProps> = ({
             ref={containerRef}
             className="position-relative mb-4 d-flex flex-column h-100"
         >
-            {/* Bracket layout */}
+            {/* Connector behind everything */}
+            <Connector
+                gameRefs={gameRefs.current!}
+                containerRef={containerRef}
+                type={type}
+            />
+
+            {/* Foreground game buttons */}
             <div className="position-relative flex-grow-1" style={{ zIndex: 1, minHeight: 0 }}>
                 <Row className="h-100 g-2">
                     {roundSeq.map((pairings, idx) => (
@@ -57,12 +64,6 @@ const Region: React.FC<RegionProps> = ({
                         </Col>
                     ))}
                 </Row>
-                <Connector
-                    gameRefs={gameRefs.current!}
-                    containerRef={containerRef}
-                    type={type}
-                />
-
             </div>
         </div>
     );

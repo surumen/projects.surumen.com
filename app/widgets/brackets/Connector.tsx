@@ -12,43 +12,62 @@ const Connector: React.FC<ConnectorProps> = ({ gameRefs, containerRef, type }) =
 
     const draw = () => {
         if (!containerRef.current) return;
-
         const containerRect = containerRef.current.getBoundingClientRect();
         const newPaths: JSX.Element[] = [];
 
+        const totalRounds = gameRefs.length;
         const roundIndexes = type === 'left'
-            ? [...Array(gameRefs.length - 1).keys()]
-            : [...Array(gameRefs.length - 1).keys()].map(i => gameRefs.length - 1 - i);
+            ? [...Array(totalRounds - 1).keys()]
+            : [...Array(totalRounds - 1).keys()].map(i => totalRounds - 1 - i);
 
         for (const round of roundIndexes) {
             const current = gameRefs[round];
+            const nextRoundIndex = type === 'left' ? round + 1 : round - 1;
+            const next = gameRefs[nextRoundIndex];
 
             for (let i = 0; i < current.length; i++) {
                 const outerDiv = current[i]?.current;
                 if (!outerDiv) continue;
-
-                // 🔍 Try to find the actual button inside the container
                 const button = outerDiv.querySelector('button');
                 if (!button) continue;
 
                 const buttonRect = button.getBoundingClientRect();
-
                 const fromY = (buttonRect.top + buttonRect.bottom) / 2 - containerRect.top;
-
                 const fromX = type === 'left'
                     ? buttonRect.right - containerRect.left
                     : buttonRect.left - containerRect.left;
-
                 const toX = type === 'left'
-                    ? fromX + buttonRect.width * 0.5 // go right
-                    : fromX - buttonRect.width * 0.5; // go left
+                    ? fromX + buttonRect.width * 0.5
+                    : fromX - buttonRect.width * 0.5;
+
+                const nextIndex = Math.floor(i / 2);
+                const nextDiv = next?.[nextIndex]?.current;
+                if (!nextDiv) continue;
+                const nextButton = nextDiv.querySelector('button');
+                if (!nextButton) continue;
+
+                const nextRect = nextButton.getBoundingClientRect();
+                const toY = (nextRect.top + nextRect.bottom) / 2 - containerRect.top;
+
+                const radius = 15;
+                const curveDown = toY > fromY;
+                const verticalOffset = curveDown ? radius : -radius;
+                const horizontalOffset = type === 'left' ? radius : -radius;
+                const arcSweep = type === 'left'
+                    ? (curveDown ? 1 : 0)
+                    : (curveDown ? 0 : 1);
 
                 newPaths.push(
                     <path
-                        key={`h-${round}-${i}`}
-                        d={`M${fromX},${fromY} L${toX},${fromY}`}
-                        stroke="var(--bs-secondary)"
-                        strokeWidth="1"
+                        key={`hv-${round}-${i}`}
+                        d={`
+                            M${fromX},${fromY}
+                            L${toX - horizontalOffset},${fromY}
+                            A${radius},${radius} 0 0,${arcSweep} ${toX},${fromY + verticalOffset}
+                            L${toX},${toY}
+                        `}
+                        stroke="var(--bs-border-color)"
+                        strokeWidth="var(--bs-border-width)"
                         fill="none"
                         strokeLinecap="round"
                     />
@@ -61,8 +80,7 @@ const Connector: React.FC<ConnectorProps> = ({ gameRefs, containerRef, type }) =
 
     useEffect(() => {
         if (!containerRef.current) return;
-
-        draw(); // initial draw
+        draw();
 
         const observer = new ResizeObserver(draw);
         observer.observe(containerRef.current);
