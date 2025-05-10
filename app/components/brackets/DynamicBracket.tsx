@@ -1,4 +1,3 @@
-// components/DynamicBracket.tsx
 import React from 'react'
 import { Region } from '@/widgets'
 import type { DynamicBracketProps, SeedMeta, FinalRegion } from '@/types'
