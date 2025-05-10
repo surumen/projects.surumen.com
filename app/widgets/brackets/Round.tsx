@@ -80,7 +80,6 @@ const Round: React.FC<RoundWithRefsProps> = ({
                             firstSeed={firstSeed}
                             secondSeed={secondSeed}
                             type={type}
-                            // @ts-ignore
                             games={games?.[idx] || []}
                             gamesPredicted={gamesPredicted?.[idx] || 0}
                             firstSeedPredicted={firstSeedPredicted}

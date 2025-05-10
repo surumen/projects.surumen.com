@@ -60,7 +60,6 @@ const Region: React.FC<RegionProps> = ({
                             <Round
                                 seeds={seeds as Record<number, string>}
                                 pairings={pairings}
-                                // @ts-ignore
                                 games={gamesSeq[idx]}
                                 gamesPredicted={userGames[idx]}
                                 pairingsPredicted={matchups[idx]}

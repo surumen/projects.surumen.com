@@ -100,7 +100,7 @@ export interface RoundProps {
     /** flat array mixing seed numbers and [region,seed] tuples */
     pairings: Array<number | [string, number]>;
     /** scores for this round */
-    games: number[];
+    games: number[][];
     /** predicted scores per matchup */
     gamesPredicted: number[];
     /** optional predicted pairings, same structure as pairings */

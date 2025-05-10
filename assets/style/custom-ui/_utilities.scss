@@ -97,19 +97,19 @@ $utilities: map-merge(
       map-get($utilities, "color"),
       (
         values: map-merge(
-                        map-get(map-get($utilities, color), values),
-                        $theme-accent-colors
+          map-get(map-get($utilities, "color"), "values"),
+          $theme-accent-colors
         )
-      ),
+      )
     ),
     "border-color": map-merge(
       map-get($utilities, "border-color"),
       (
         values: map-merge(
           map-get(map-get($utilities, "border-color"), "values"),
-          ("white-10": $white-10),
-        ),
-      ),
+          $theme-accent-colors
+        )
+      )
     ),
     "shadow": map-merge(
       map-get($utilities, "shadow"),
