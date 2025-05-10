@@ -10,6 +10,7 @@ const Team: React.FC<TeamProps> = ({
                                        position,
                                        type = 'left',
                                        color = 'secondary',
+                                       onClick
                                    }) => {
 
     const isRight = type === 'right';
@@ -51,7 +52,7 @@ const Team: React.FC<TeamProps> = ({
         .join(' ');
 
     return (
-        <div className={classes}>
+        <div className={classes} onClick={onClick}>
             {isRight ? (
                 <>
                     {teamDisplay}

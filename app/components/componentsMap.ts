@@ -1,5 +1,4 @@
-import FantasyPremierLeague from "@/components/fpl/FantasyPremierLeague";
-import MarchMadness from "@/components/march-madness/MarchMadness";
+import FantasyPremierLeague from "@/components/standings/FantasyPremierLeague";
 import Assistant from '@/components/fpl/Assistant'
 import DynamicBracket from '@/components/brackets/DynamicBracket';
 

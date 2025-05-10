@@ -9,6 +9,8 @@ const Game: React.FC<GameProps> = ({
                                        secondSeed,
                                        games = [],
                                        type = 'left',
+                                       gameIndex,
+                                       onSeedClick,
                                    }) => {
     const isRight = type === 'right';
 
@@ -46,6 +48,7 @@ const Game: React.FC<GameProps> = ({
                     type={type}
                     logo={team1?.logo}
                     color={team1?.color}
+                    onClick={() => onSeedClick?.(firstSeed)}
                 />
 
                 <Team
@@ -56,6 +59,7 @@ const Game: React.FC<GameProps> = ({
                     type={type}
                     logo={team2?.logo}
                     color={team2?.color}
+                    onClick={() => onSeedClick?.(secondSeed)}
                 />
 
                  {/*<GameSelector games={games} seeds={summarySeeds} type={type} />*/}

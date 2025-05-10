@@ -66,7 +66,7 @@ export interface TournamentStructure {
  */
 export interface BracketRegion {
     matchups: number[][];
-    games: number[][];
+    games: number[][][];
 }
 
 /**
@@ -105,6 +105,7 @@ export interface TeamProps {
     type?: Orientation;
     color?: string;
     logo?: string;
+    onClick?: () => void;
 }
 
 export interface GameSelectorProps {
@@ -124,6 +125,8 @@ export interface GameProps {
     secondSeedPredicted?: number;
     final?: boolean;
     type?: 'left' | 'right';
+    gameIndex?: number;
+    onSeedClick?: (seed: number) => void;
 }
 
 export interface RoundProps {
@@ -148,8 +151,9 @@ export interface RoundProps {
     /** champion name, only for final round */
     champion?: string;
     gameCount?: number;
-
     gameRefs?: React.Ref<HTMLDivElement>[];
+
+    onSeedClick?: (gameIndex: number, seed: number) => void;
 }
 
 export interface RegionProps {
@@ -160,11 +164,12 @@ export interface RegionProps {
     games: number[][][];
     userData?: {
         matchups: Array<number | [string, number]>[];
-        games: number[][];
+        games: number[][][];
     };
     champion?: string;
     isFinal?: boolean;
     teamsInfo?: SeedMeta[];
+    onAdvanceTeam?: (round: number, gameIndex: number, seed: number) => void;
 }
 
 export interface DynamicBracketProps {

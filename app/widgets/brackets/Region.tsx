@@ -12,6 +12,8 @@ const Region: React.FC<RegionProps> = ({
                                            rounds,
                                            games,
                                            isFinal = false,
+                                           userData,
+                                           onAdvanceTeam,
                                        }) => {
     // Order rounds & games for right-hand flip
     const roundSeq = type === 'right' ? [...rounds].reverse() : rounds;
@@ -110,20 +112,36 @@ const Region: React.FC<RegionProps> = ({
                 />
 
                 <div className="d-flex justify-content-between align-items-center flex-grow-1">
-                    {sections.map(sec => (
-                        <div key={sec.key} className={`px-${sec.px} w-100`}>
-                            <Round
-                                seeds={seeds}
-                                pairings={sec.pairings}
-                                games={sec.games}
-                                final={sec.final}
-                                number={sec.number}
-                                maxRounds={maxRounds}
-                                type={sec.type}
-                                gameRefs={sec.refs}
-                            />
-                        </div>
-                    ))}
+                    {sections.map(sec => {
+                        // Convert display “section number” back to logical round
+                        const logicalRound =
+                            sec.type === 'right'
+                                ? maxRounds - sec.number - 1
+                                : sec.number
+
+                        // Merge user picks on top of the static pairings
+                        const userSec = userData?.matchups[logicalRound] ?? []
+                        const mergedPairings = sec.pairings.map((s, i) => userSec[i] ?? s);
+
+                        return (
+                            <div key={sec.key} className={`px-${sec.px} w-100`}>
+                                <Round
+                                    seeds={seeds}
+                                    pairings={mergedPairings}
+                                    games={sec.games}
+                                    final={sec.final}
+                                    number={sec.number}
+                                    maxRounds={maxRounds}
+                                    type={sec.type}
+                                    gameRefs={sec.refs}
+                                    onSeedClick={(gameIndex, seed) => {
+                                        const logicalRound = sec.type === 'right' ? maxRounds - sec.number - 1 : sec.number;
+                                        onAdvanceTeam?.(logicalRound, gameIndex, seed)
+                                    }}
+                                />
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         );
@@ -152,20 +170,37 @@ const Region: React.FC<RegionProps> = ({
                 style={{ zIndex: 1, minHeight: 0 }}
             >
                 <Row className="h-100 g-2">
-                    {roundSeq.map((pairings, idx) => (
-                        <Col key={idx} xs={12} lg className="d-flex flex-column px-2">
-                            <Round
-                                seeds={seeds}
-                                pairings={pairings}
-                                games={gamesSeq[idx]}
-                                final={false}
-                                number={idx}
-                                maxRounds={maxRounds}
-                                type={type}
-                                gameRefs={gameRefs.current![idx]}
-                            />
-                        </Col>
-                    ))}
+                    {roundSeq.map((basePairings, idx) => {
+                        // Map the displayed column back to the logical round index
+                        const logicalRound =
+                            type === 'right'
+                                ? maxRounds - idx - 1
+                                : idx
+
+                        // Merge any user picks into the static seed list
+                        const userRound = userData?.matchups[logicalRound] ?? []
+                        const mergedPairings = basePairings.map((seed, i) => userRound[i] ?? seed)
+
+                        return (
+                            <Col key={idx} xs={12} lg className='d-flex flex-column px-2'>
+                                <Round
+                                    seeds={seeds}
+                                    pairings={mergedPairings}
+                                    games={gamesSeq[idx]}
+                                    final={false}
+                                    number={idx}
+                                    maxRounds={maxRounds}
+                                    type={type}
+                                    gameRefs={gameRefs.current![idx]}
+                                    onSeedClick={(gameIndex, seed) => {
+                                        // convert display-idx back to logical round
+                                        const logicalRound = type === 'right' ? maxRounds - idx - 1 : idx;
+                                        onAdvanceTeam?.(logicalRound, gameIndex, seed)
+                                    }}
+                                />
+                            </Col>
+                        );
+                    })}
                 </Row>
             </div>
         </div>

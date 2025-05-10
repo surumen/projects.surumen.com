@@ -11,6 +11,7 @@ const Round: React.FC<RoundProps> = ({
                                          maxRounds = 0,
                                          type = 'left',
                                          gameRefs,
+                                         onSeedClick,
                                      }) => {
     // Convert flat list of seed refs to pairs: [a, b], [c, d], ...
     const matchTuples: Array<
@@ -69,6 +70,10 @@ const Round: React.FC<RoundProps> = ({
                             type={type}
                             games={games?.[idx] || []}
                             final={final}
+                            gameIndex={idx}
+                            onSeedClick={(seed) =>
+                                onSeedClick?.(idx, seed)
+                            }
                         />
                     </div>
                 );
