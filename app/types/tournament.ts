@@ -85,16 +85,34 @@ export interface BracketData {
 type Orientation = 'left' | 'right';
 
 export interface TeamProps {
+    /** Full slug name (for aria / keying) */
     name?: string;
+
+    /** Seed number */
     seed: number;
+
+    /** What to show as the main label */
     displayName: string;
-    namePredicted?: string;
-    seedPredicted?: number;
+
+    /** Optional override when you’re showing predictions */
     displayNamePredicted?: string;
+
+    /** Current position in the game cell */
     position: 'top' | 'middle' | 'bottom';
+
+    /** Layout direction */
     type?: Orientation;
+
+    /** Optional Bootstrap color variant or CSS color */
     color?: string;
+
+    /** Optional short abbreviation (e.g. “UO” for Oregon) */
+    abbreviation?: string;
+
+    /** Optional path or URL to a team logo image */
     logo?: string;
+
+    /** Click handler */
     onClick?: () => void;
 }
 
