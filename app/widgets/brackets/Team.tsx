@@ -30,7 +30,7 @@ const Team: React.FC<TeamProps> = ({
         ? isRight ? 'rounded-bottom-start' : 'rounded-bottom-end'
         : '';
 
-    const paddingX = isRight ? 'px-2 pe-0' : 'px-2 ps-0';
+    const paddingX = isRight ? 'ps-2 pe-0' : 'pe-2 ps-0';
 
     const classes = [
         'list-group-item',
@@ -49,6 +49,7 @@ const Team: React.FC<TeamProps> = ({
         paddingX,
         'py-1',
         'cursor-pointer',
+        'text-truncate',
     ]
         .filter(Boolean)
         .join(' ');
