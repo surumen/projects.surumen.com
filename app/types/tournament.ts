@@ -6,6 +6,7 @@ export interface SeedMeta {
     name: string;
     abbreviation?: string;
     shortName?: string;
+    fullName?: string;
     logo?: string;
     color?: string;
 
