@@ -11,7 +11,7 @@ import { teamsData as nbaTeams } from '@/data/tournaments/teams/nba'
 import { resolveSeeds, computeFinalBracket } from '@/helpers'
 
 const DynamicBracket: React.FC<DynamicBracketProps> = ({
-                                                           tournamentType = 'nba',
+                                                           tournamentType = 'ncaa',
                                                            regionsPerRow = 2,
                                                        }) => {
     const dispatch = useAppDispatch()

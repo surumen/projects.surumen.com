@@ -1,5 +1,5 @@
 // widgets/brackets/Connector.tsx
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 
 interface ConnectorProps {
     gameRefs: React.RefObject<HTMLDivElement>[][];
@@ -14,25 +14,31 @@ const Connector: React.FC<ConnectorProps> = ({
                                                  isFinalRegion = false,
                                                  type = 'left',
                                              }) => {
-    // If it's the final region and there's only one game, draw nothing
-    if (isFinalRegion && gameRefs.length < 2) {
-        return null;
-    }
-
+    // 1) Hooks always run
     const [paths, setPaths] = useState<JSX.Element[]>([]);
     const observerRef = useRef<ResizeObserver | null>(null);
 
-    const draw = () => {
+    // 2) draw logic wrapped in useCallback so it can be a stable dependency
+    const draw = useCallback(() => {
         if (!containerRef.current) return;
         const containerRect = containerRef.current.getBoundingClientRect();
         const newPaths: JSX.Element[] = [];
 
+        if (isFinalRegion && gameRefs.length < 2) {
+            // nothing to draw in this edge case
+            setPaths([]);
+            return;
+        }
+
         if (isFinalRegion) {
-            // ─── FinalRegion: straight horizontal lines from each semi to final ───
+            // Final-region horizontal lines
             const [semis, finals] = gameRefs;
-            const semiButtons = semis.map(ref => ref.current?.querySelector('button'));
+            const semiButtons = semis.map(r => r.current?.querySelector('button'));
             const finalBtn = finals[0].current?.querySelector('button');
-            if (!finalBtn) return;
+            if (!finalBtn) {
+                setPaths([]);
+                return;
+            }
 
             const finalRect = finalBtn.getBoundingClientRect();
             const finalX = (finalRect.left + finalRect.right) / 2 - containerRect.left;
@@ -41,9 +47,10 @@ const Connector: React.FC<ConnectorProps> = ({
                 if (!btn) return;
                 const r = btn.getBoundingClientRect();
                 const fromY = (r.top + r.bottom) / 2 - containerRect.top;
-                const fromX = type === 'left'
-                    ? r.right - containerRect.left
-                    : r.left  - containerRect.left;
+                const fromX =
+                    type === 'left'
+                        ? r.right - containerRect.left
+                        : r.left - containerRect.left;
 
                 newPaths.push(
                     <path
@@ -56,13 +63,13 @@ const Connector: React.FC<ConnectorProps> = ({
                     />
                 );
             });
-
         } else {
-            // ─── Non-final regions: your original HV connector logic ───
+            // Non-final HV connectors
             const totalRounds = gameRefs.length;
-            const roundIndexes = type === 'left'
-                ? [...Array(totalRounds - 1).keys()]
-                : [...Array(totalRounds - 1).keys()].map(i => totalRounds - 1 - i);
+            const roundIndexes =
+                type === 'left'
+                    ? [...Array(totalRounds - 1).keys()]
+                    : [...Array(totalRounds - 1).keys()].map(i => totalRounds - 1 - i);
 
             for (const round of roundIndexes) {
                 const current = gameRefs[round];
@@ -77,13 +84,15 @@ const Connector: React.FC<ConnectorProps> = ({
 
                     const bRect = button.getBoundingClientRect();
                     const fromY = (bRect.top + bRect.bottom) / 2 - containerRect.top;
-                    const fromX = type === 'left'
-                        ? bRect.right - containerRect.left
-                        : bRect.left  - containerRect.left;
+                    const fromX =
+                        type === 'left'
+                            ? bRect.right - containerRect.left
+                            : bRect.left - containerRect.left;
 
-                    const toX = type === 'left'
-                        ? fromX + bRect.width * 0.5
-                        : fromX - bRect.width * 0.5;
+                    const toX =
+                        type === 'left'
+                            ? fromX + bRect.width * 0.5
+                            : fromX - bRect.width * 0.5;
 
                     const nextIndex = Math.floor(i / 2);
                     const nextDiv = next?.[nextIndex]?.current;
@@ -98,9 +107,14 @@ const Connector: React.FC<ConnectorProps> = ({
                     const curveDown = toY > fromY;
                     const vOffset = curveDown ? radius : -radius;
                     const hOffset = type === 'left' ? radius : -radius;
-                    const arcSweep = type === 'left'
-                        ? (curveDown ? 1 : 0)
-                        : (curveDown ? 0 : 1);
+                    const arcSweep =
+                        type === 'left'
+                            ? curveDown
+                                ? 1
+                                : 0
+                            : curveDown
+                                ? 0
+                                : 1;
 
                     newPaths.push(
                         <path
@@ -122,17 +136,26 @@ const Connector: React.FC<ConnectorProps> = ({
         }
 
         setPaths(newPaths);
-    };
+    }, [gameRefs, containerRef, isFinalRegion, type]);
 
+    // 3) Effect to redraw on resize
     useEffect(() => {
         if (!containerRef.current) return;
         draw();
         const obs = new ResizeObserver(draw);
         obs.observe(containerRef.current);
         observerRef.current = obs;
-        return () => { obs.disconnect(); };
-    }, [gameRefs, containerRef, isFinalRegion, type]);
+        return () => {
+            obs.disconnect();
+        };
+    }, [containerRef, draw]);
 
+    // 4) Only now bail out if really nothing to render
+    if (isFinalRegion && gameRefs.length < 2) {
+        return null;
+    }
+
+    // 5) Render SVG with computed paths
     return (
         <svg
             className="position-absolute"
