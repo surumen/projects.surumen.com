@@ -7,7 +7,7 @@ import {
     fetchManagerData,
     fetchManagerTeam,
 } from '@/store/fplSlice';
-import { premierLeagueTeams } from '@/data/premier-league/Teams';
+import { premierLeagueTeams } from '@/data/tournaments/teams/premierLeague';
 import useFPL from '@/hooks/useFPL';
 import { DynamicForm, MatchLineupFormation } from '@/widgets';
 import { FieldConfig } from '@/widgets/forms/DynamicForm';
