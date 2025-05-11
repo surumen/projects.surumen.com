@@ -1,25 +1,35 @@
-import type { TournamentStructure, SeedMeta } from '@/types';
+import type { SeedMeta } from '@/types';
 
-// 2022 NBA Playoffs teams
+// All 30 NBA teams
 export const teamsData: SeedMeta[] = [
-    // West
-    { name: 'phoenix',           abbreviation: 'PHX', shortName: 'Suns',        logo: '/logos/phoenix.png',           color: 'sunset'    },
-    { name: 'memphis',           abbreviation: 'MEM', shortName: 'Grizzlies',   logo: '/logos/memphis.png',           color: 'navy'      },
-    { name: 'golden-state',      abbreviation: 'GSW', shortName: 'Warriors',    logo: '/logos/golden-state.png',      color: 'gold'      },
-    { name: 'denver',            abbreviation: 'DEN', shortName: 'Nuggets',     logo: '/logos/denver.png',            color: 'cloud'     },
-    { name: 'minnesota',         abbreviation: 'MIN', shortName: 'Timberwolves',logo: '/logos/minnesota.png',         color: 'plum'      },
-    { name: 'new-orleans',       abbreviation: 'NOP', shortName: 'Pelicans',    logo: '/logos/new-orleans.png',       color: 'crimson'   },
-    { name: 'los-angeles-lakers',abbreviation: 'LAL', shortName: 'Lakers',      logo: '/logos/los-angeles-lakers.png',color: 'primary'   },
-    { name: 'los-angeles-clippers',abbreviation:'LAC', shortName: 'Clippers',   logo: '/logos/los-angeles-clippers.png',color:'tangerine' },
-
-    // East
-    { name: 'miami',             abbreviation: 'MIA', shortName: 'Heat',        logo: '/logos/miami.png',             color: 'danger'    },
-    { name: 'boston',            abbreviation: 'BOS', shortName: 'Celtics',     logo: '/logos/boston.png',            color: 'secondary' },
-    { name: 'milwaukee',         abbreviation: 'MIL', shortName: 'Bucks',       logo: '/logos/milwaukee.png',         color: 'warning'   },
-    { name: 'cleveland',         abbreviation: 'CLE', shortName: 'Cavaliers',   logo: '/logos/cleveland.png',         color: 'crimson'   },
-    { name: 'new-york-knicks',   abbreviation: 'NYK', shortName: 'Knicks',      logo: '/logos/new-york-knicks.png',   color: 'orange'    },
-    { name: 'atlanta',           abbreviation: 'ATL', shortName: 'Hawks',       logo: '/logos/atlanta.png',           color: 'graphite'  },
-    { name: 'philadelphia',      abbreviation: 'PHI', shortName: 'Sixers',      logo: '/logos/philadelphia.png',      color: 'orchid'    },
-    { name: 'brooklyn',          abbreviation: 'BKN', shortName: 'Nets',        logo: '/logos/brooklyn.png',          color: 'cloud'     },
+    { name: 'atlanta',            abbreviation: 'ATL', shortName: 'Hawks',          logo: 'https://sports.cbsimg.net/fly/images/team-logos/333.svg', color: 'graphite'  },
+    { name: 'boston',             abbreviation: 'BOS', shortName: 'Celtics',        logo: 'https://sports.cbsimg.net/fly/images/team-logos/334.svg', color: 'secondary'},
+    { name: 'brooklyn',           abbreviation: 'BKN', shortName: 'Nets',           logo: 'https://sports.cbsimg.net/fly/images/team-logos/349.svg', color: 'cloud'     },
+    { name: 'charlotte',          abbreviation: 'CHA', shortName: 'Hornets',        logo: 'https://sports.cbsimg.net/fly/images/team-logos/448283.svg', color: 'teal'      },
+    { name: 'chicago',            abbreviation: 'CHI', shortName: 'Bulls',          logo: 'https://sports.cbsimg.net/fly/images/team-logos/336.svg', color: 'warning'   },
+    { name: 'cleveland',          abbreviation: 'CLE', shortName: 'Cavaliers',      logo: 'https://sports.cbsimg.net/fly/images/team-logos/337.svg', color: 'crimson'   },
+    { name: 'dallas',             abbreviation: 'DAL', shortName: 'Mavericks',      logo: 'https://sports.cbsimg.net/fly/images/team-logos/338.svg', color: 'primary'   },
+    { name: 'denver',             abbreviation: 'DEN', shortName: 'Nuggets',        logo: 'https://sports.cbsimg.net/fly/images/team-logos/339.svg', color: 'cloud'     },
+    { name: 'detroit',            abbreviation: 'DET', shortName: 'Pistons',        logo: 'https://sports.cbsimg.net/fly/images/team-logos/340.svg', color: 'danger'    },
+    { name: 'golden-state',       abbreviation: 'GSW', shortName: 'Warriors',       logo: 'https://sports.cbsimg.net/fly/images/team-logos/341.svg', color: 'gold'      },
+    { name: 'houston',            abbreviation: 'HOU', shortName: 'Rockets',        logo: 'https://sports.cbsimg.net/fly/images/team-logos/342.svg', color: 'red'       },
+    { name: 'indiana',            abbreviation: 'IND', shortName: 'Pacers',         logo: 'https://sports.cbsimg.net/fly/images/team-logos/343.svg', color: 'yellow'    },
+    { name: 'los-angeles-clippers',abbreviation:'LAC', shortName: 'Clippers',     logo: 'https://sports.cbsimg.net/fly/images/team-logos/344.svg', color: 'tangerine' },
+    { name: 'los-angeles-lakers', abbreviation:'LAL', shortName: 'Lakers',        logo: 'https://sports.cbsimg.net/fly/images/team-logos/345.svg', color: 'primary'   },
+    { name: 'memphis',            abbreviation: 'MEM', shortName: 'Grizzlies',      logo: 'https://sports.cbsimg.net/fly/images/team-logos/360.svg', color: 'navy'      },
+    { name: 'miami',              abbreviation: 'MIA', shortName: 'Heat',           logo: 'https://sports.cbsimg.net/fly/images/team-logos/346.svg', color: 'danger'    },
+    { name: 'milwaukee',          abbreviation: 'MIL', shortName: 'Bucks',          logo: 'https://sports.cbsimg.net/fly/images/team-logos/347.svg', color: 'warning'   },
+    { name: 'minnesota',          abbreviation: 'MIN', shortName: 'Timberwolves',   logo: 'https://sports.cbsimg.net/fly/images/team-logos/348.svg', color: 'plum'      },
+    { name: 'new-orleans',        abbreviation: 'NOP', shortName: 'Pelicans',       logo: 'https://sports.cbsimg.net/fly/images/team-logos/335.svg', color: 'crimson'   },
+    { name: 'new-york-knicks',    abbreviation: 'NYK', shortName: 'Knicks',         logo: 'https://sports.cbsimg.net/fly/images/team-logos/350.svg', color: 'orange'    },
+    { name: 'oklahoma-city',      abbreviation: 'OKC', shortName: 'Thunder',        logo: 'https://sports.cbsimg.net/fly/images/team-logos/1628527.svg', color: 'blue'      },
+    { name: 'orlando',            abbreviation: 'ORL', shortName: 'Magic',          logo: 'https://sports.cbsimg.net/fly/images/team-logos/351.svg', color: 'blue'      },
+    { name: 'philadelphia',       abbreviation: 'PHI', shortName: 'Sixers',         logo: 'https://sports.cbsimg.net/fly/images/team-logos/352.svg', color: 'orchid'    },
+    { name: 'phoenix',            abbreviation: 'PHX', shortName: 'Suns',           logo: 'https://sports.cbsimg.net/fly/images/team-logos/353.svg', color: 'sunset'    },
+    { name: 'portland',           abbreviation: 'POR', shortName: 'Trail Blazers',  logo: 'https://sports.cbsimg.net/fly/images/team-logos/354.svg', color: 'red'       },
+    { name: 'sacramento',         abbreviation: 'SAC', shortName: 'Kings',          logo: 'https://sports.cbsimg.net/fly/images/team-logos/355.svg', color: 'purple'    },
+    { name: 'san-antonio',        abbreviation: 'SAS', shortName: 'Spurs',          logo: 'https://sports.cbsimg.net/fly/images/team-logos/356.svg', color: 'gray'      },
+    { name: 'toronto',            abbreviation: 'TOR', shortName: 'Raptors',        logo: 'https://sports.cbsimg.net/fly/images/team-logos/358.svg', color: 'red'       },
+    { name: 'utah',               abbreviation: 'UTA', shortName: 'Jazz',           logo: 'https://sports.cbsimg.net/fly/images/team-logos/359.svg', color: 'navy'      },
+    { name: 'washington',         abbreviation: 'WAS', shortName: 'Wizards',        logo: 'https://sports.cbsimg.net/fly/images/team-logos/361.svg', color: 'blue'      },
 ];
-

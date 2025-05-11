@@ -1,50 +1,67 @@
 import type { TournamentStructure, GameData, SeedMeta } from '@/types';
-import { buildCustomRegion, fromGame }      from '@/utils/bracketBuilder';
-import { teamsData as nbaTeams }            from '@/data/tournaments/teams/nba';
+import { fromGame, buildCustomRegion }                  from '@/utils/bracketBuilder';
+import { teamsData }                                    from '@/data/tournaments/teams/nba';
 
-/** Per‐conference seed‐to‐slug maps */
-export const regionSeeds: Record<string, Record<number, string>> = {
-    West: {
-        1: 'phoenix',
-        2: 'memphis',
-        3: 'golden-state',
-        4: 'denver',
-        5: 'minnesota',
-        6: 'new-orleans',
-        7: 'los-angeles-lakers',
-        8: 'los-angeles-clippers',
-    },
-    East: {
-        1: 'miami',
-        2: 'boston',
-        3: 'milwaukee',
-        4: 'cleveland',
-        5: 'new-york-knicks',
-        6: 'atlanta',
-        7: 'philadelphia',
-        8: 'brooklyn',
-    },
+/** Raw playoff‐seed info */
+const playoffs2022Seeds = [
+    // West
+    { abbreviation: 'PHX', seed: 1, conference: 'West' },
+    { abbreviation: 'MEM', seed: 2, conference: 'West' },
+    { abbreviation: 'GSW', seed: 3, conference: 'West' },
+    { abbreviation: 'DEN', seed: 4, conference: 'West' },
+    { abbreviation: 'MIN', seed: 5, conference: 'West' },
+    { abbreviation: 'NOP', seed: 6, conference: 'West' },
+    { abbreviation: 'LAL', seed: 7, conference: 'West' },
+    { abbreviation: 'LAC', seed: 8, conference: 'West' },
+    // East
+    { abbreviation: 'BOS', seed: 1, conference: 'East' },
+    { abbreviation: 'MIA', seed: 2, conference: 'East' },
+    { abbreviation: 'MIL', seed: 3, conference: 'East' },
+    { abbreviation: 'CLE', seed: 4, conference: 'East' },
+    { abbreviation: 'NYK', seed: 5, conference: 'East' },
+    { abbreviation: 'ATL', seed: 6, conference: 'East' },
+    { abbreviation: 'PHI', seed: 7, conference: 'East' },
+    { abbreviation: 'BKN', seed: 8, conference: 'East' },
+] as const;
+
+/** Build the 16‐team playoff list with full metadata in each entry */
+const playoffs2022: SeedMeta[] = playoffs2022Seeds.map(ps => {
+    const team = teamsData.find(t => t.abbreviation === ps.abbreviation);
+    if (!team) throw new Error(`Team not found: ${ps.abbreviation}`);
+    return { ...team, seed: ps.seed, conference: ps.conference };
+});
+
+/** Define how to seed each conference bracket */
+const regionSeeds: Record<string, Record<number, string>> = {
+    West: Object.fromEntries(
+        playoffs2022
+            .filter(t => t.conference === 'West')
+            .map(t => [t.seed!, t.name])
+    ),
+    East: Object.fromEntries(
+        playoffs2022
+            .filter(t => t.conference === 'East')
+            .map(t => [t.seed!, t.name])
+    ),
 };
 
-/** Initial placeholders for the two conference champions */
-const finalSeeds: Record<string, SeedMeta> = Object.fromEntries(
-    Object.keys(regionSeeds).map(conf => [conf, { name: '' }])
-) as Record<string, SeedMeta>;
-
-/** Quarterfinal pairings for an 8‐team bracket */
+/** Quarterfinal matchups */
 const initialQuarters: [number, number][] = [
-    [1, 8], [4, 5], [2, 7], [3, 6],
+    [1, 8],
+    [4, 5],
+    [2, 7],
+    [3, 6],
 ];
 
-/** Build each conference bracket (Quarters → Semis → Final) */
+/** Build each conference bracket using your existing builder */
 const regions = Object.fromEntries(
     Object.entries(regionSeeds).map(([conf, seedsMap]) => [
         conf,
-        buildCustomRegion(conf, seedsMap, nbaTeams, initialQuarters),
+        buildCustomRegion(conf, seedsMap, playoffs2022, initialQuarters),
     ])
-);
+) as Record<string, { seeds: Record<number, string>; games: GameData[] }>;
 
-/** The NBA Finals: winner of the Conf Finals */
+/** NBA Finals game */
 const finalGames: GameData[] = [
     {
         roundNumber: 0,
@@ -55,6 +72,13 @@ const finalGames: GameData[] = [
     },
 ];
 
+/** Placeholders for conf champions */
+const finalSeeds: Record<string, SeedMeta> = {
+    West: { name: '' },
+    East: { name: '' },
+};
+
+/** One export—fully DRY, no resolveSeeds needed downstream */
 export const nbaTournamentData: TournamentStructure = {
     regions,
     final: {

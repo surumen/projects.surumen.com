@@ -8,6 +8,10 @@ export interface SeedMeta {
     shortName?: string;
     logo?: string;
     color?: string;
+
+    /** (only for playoff teams) */
+    seed?: number;
+    conference?: string;
 }
 
 export interface GameSource {
