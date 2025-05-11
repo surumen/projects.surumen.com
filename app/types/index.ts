@@ -1,25 +1,41 @@
 import { Project } from './Project';
-import {
-    Game,
-    GameParticipant,
-    TeamSeeding,
-    Team,
-    Score,
-    Court,
-    TournamentRound
-} from './Tournament';
 import { PremierLeaguePlayer } from './PremierLeaguePlayer';
 import { PremierLeagueTeam } from './PremierLeagueTeam';
+import {
+    TournamentRegion,
+    FinalRegion,
+    TournamentStructure,
+    BracketRegion,
+    BracketFinal,
+    BracketData,
+    SeedMeta,
+    GameSource,
+    GameData,
+    TeamProps,
+    GameSelectorProps,
+    GameProps,
+    RoundProps,
+    RegionProps,
+    DynamicBracketProps
+} from './tournament';
 
 export type {
     Project,
-    Game,
-    GameParticipant,
-    TeamSeeding,
-    Team,
-    Score,
-    Court,
-    TournamentRound,
     PremierLeaguePlayer,
-    PremierLeagueTeam
+    PremierLeagueTeam,
+    TournamentRegion,
+    FinalRegion,
+    TournamentStructure,
+    BracketRegion,
+    BracketFinal,
+    BracketData,
+    SeedMeta,
+    GameSource,
+    GameData,
+    TeamProps,
+    GameSelectorProps,
+    GameProps,
+    RoundProps,
+    RegionProps,
+    DynamicBracketProps
 }

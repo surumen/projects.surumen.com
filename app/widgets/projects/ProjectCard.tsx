@@ -1,16 +1,16 @@
 // import node module libraries
 import React, {Fragment, useState} from 'react';
 import PropTypes from 'prop-types';
-import { Offcanvas, Button } from 'react-bootstrap';
+import { Offcanvas, Button, Col, Nav } from 'react-bootstrap';
 
 // import bootstrap icons
-import { SendFill } from 'react-bootstrap-icons';
+import { SendFill, Pin, Heart, HeartFill, PinFill, StarFill } from 'react-bootstrap-icons';
 
 // import sub components
 import ProjectSummary from './ProjectSummary';
 
 // import data files
-import { LanguageColorMap } from '@/data/ColorMap';
+import { LanguageColorMap } from '@/data/colorMap';
 
 
 const ProjectCard = ({ project, viewby }) => {
@@ -24,49 +24,43 @@ const ProjectCard = ({ project, viewby }) => {
 
 	const ListStackView = () => {
 		return (
-			<div className='vstack gap-2 mx-n3'>
-				<div onClick={() => handleShow()}
-					 className='
-					 position-relative
-					 d-flex align-items-center
-					 px-3 py-0 rounded-3
-					 bg-body-secondary-hover
-					 cursor-pointer'>
+			<Nav.Link className="card card-hover shadow-none rounded border-0 border-bottom card-dotted mb-0">
+				<div className='card-body'>
+					<div className='d-flex align-items-md-center'>
+						<div onClick={() => handleShow()} className='flex-shrink-0'>
+							<div className='icon icon-shape rounded-circle flex-none text-base bg-body-tertiary text-bg-body-secondary'>
+								<SendFill size={16} />
+							</div>
+						</div>
 
-					<div className='flex-none'>
-						<div className='icon icon-shape rounded-circle flex-none text-base bg-body-tertiary text-bg-body-secondary'>
-							<SendFill size={16} />
+						<div className='flex-grow-1 ms-5'>
+							<div className="row align-items-md-center justify-content-between">
+								<Col onClick={() => handleShow()} sm={10} className='mb-2 mb-md-0'>
+									<h4 className="mb-2 fw-semibold">{project.title}</h4>
+									<p className="text-muted">{project.shortDescription}</p>
+									<div className="row fs-6 text-body gap-2">
+										{
+											project.frameworks.map((framework, index) => {
+												return (
+													<div key={index} className="col-auto">
+														<span className={`legend-indicator bg-accent-${getLanguageScheme(framework)}`}></span>
+														{framework}
+													</div>
+												);
+											})
+										}
+									</div>
+								</Col>
+								<Col sm={3} className="col-md-auto order-md-last text-md-end text-center ms-n3">
+									<button className="btn btn-ghost-primary btn-icon btn-sm rounded-circle">
+										<Heart size={16}/>
+									</button>
+								</Col>
+							</div>
 						</div>
 					</div>
-
-					<div className='
-					ms-3 ms-md-4 py-6
-					border-bottom border-dotted border-top-0 border-start-0 border-end-0
-					flex-fill
-					'>
-
-						<h4 className='text-heading fw-semibold mb-2'>{project.title}</h4>
-
-						<div className='d-block text-sm text-muted gap-2 mb-3'>
-							<span>{project.shortDescription}</span>
-						</div>
-						<div className='d-flex align-items-center gap-4 text-sm'>
-							{
-								project.frameworks.slice(0, 2).map((framework, index) => {
-									return (
-										<span key={index} className='badge badge-lg badge-dot'>
-											<i style={{ backgroundColor: getLanguageScheme(framework)}}></i> {framework}
-										</span>
-									);
-								})
-							}
-						</div>
-
-					</div>
-
-
 				</div>
-			</div>
+			</Nav.Link>
 		);
 	};
 
@@ -74,10 +68,11 @@ const ProjectCard = ({ project, viewby }) => {
 		<Fragment>
 			<ListStackView />
 			<Offcanvas show={show}
-					   className={'w-92 border-0'}
+					   className={'border-0'}
 					   onHide={handleClose}
 					   placement='end'
 					   name='end'
+					   style={{width: 'calc(100vw - 8rem)'}}
 			>
 				<Offcanvas.Header className='justify-content-end border-bottom'>
 					<Button onClick={handleClose} className='btn d-inline-flex btn-sm btn-neutral shadow-none rounded-pill'><span>Back Home</span></Button>
