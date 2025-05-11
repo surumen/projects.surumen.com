@@ -211,6 +211,7 @@ export interface RegionProps {
 
 export interface DynamicBracketProps {
     tournamentType?: string;
+    year?: number;
     regionsPerRow?: number;
     managerKey?: string;
 }
