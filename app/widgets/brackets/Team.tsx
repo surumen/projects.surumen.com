@@ -6,8 +6,8 @@ import { Image } from 'react-bootstrap';
 
 const Team: React.FC<TeamProps> = ({
                                        name = '',
-                                       seed,
-                                       displayName,
+                                       seed = 0,
+                                       displayName= '',
                                        displayNamePredicted,
                                        position,
                                        type = 'left',

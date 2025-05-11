@@ -1,3 +1,4 @@
+// store/bracketSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { TournamentStructure, BracketRegion, GameData } from '@/types'
 import { ncaaTournamentData } from '@/data/tournaments/marchMadness'
@@ -5,14 +6,16 @@ import { nbaTournamentData } from '@/data/tournaments/nbaPlayoffs'
 
 type TournamentType = string
 
+const TOURNAMENTS: Record<TournamentType, TournamentStructure> = {
+    ncaa: ncaaTournamentData,
+    nba:  nbaTournamentData,
+}
+
 interface BracketState {
     regions: Record<TournamentType, Record<string, BracketRegion>>
 }
 
-/**
- * Build empty BracketRegion for each region by grouping its flat GameData[] by roundNumber.
- */
-function makeInitialRegions(
+function createEmptyRegions(
     data: TournamentStructure
 ): Record<string, BracketRegion> {
     const regs: Record<string, BracketRegion> = {}
@@ -20,7 +23,7 @@ function makeInitialRegions(
     for (const regionName in data.regions) {
         const gameData = data.regions[regionName].games as GameData[]
 
-        // Group games by roundNumber
+        // group by round
         const roundsMap = new Map<number, GameData[]>()
         for (const g of gameData) {
             const arr = roundsMap.get(g.roundNumber) || []
@@ -28,16 +31,16 @@ function makeInitialRegions(
             roundsMap.set(g.roundNumber, arr)
         }
 
-        // Turn that into a sorted array of rounds
         const roundsData = Array.from(roundsMap.entries())
             .sort(([a], [b]) => a - b)
             .map(([, arr]) => arr)
 
-        // Now build empty user state matching that shape:
-        const matchups = roundsData.map(() => [] as number[])
-        const games = roundsData.map(roundGames =>
-            roundGames.map(() => [0, 0] as [number, number])
+        // empty picks/scores
+        const matchups = roundsData.map(roundGames =>
+            // for each game in this round, start with a [0,0] tuple
+            roundGames.map(() => [0, 0] as [number,number])
         )
+        const games    = roundsData.map(r => r.map(() => [0,0] as [number,number]))
 
         regs[regionName] = { matchups, games }
     }
@@ -47,8 +50,8 @@ function makeInitialRegions(
 
 const initialState: BracketState = {
     regions: {
-        ncaa: makeInitialRegions(ncaaTournamentData),
-        nba: makeInitialRegions(nbaTournamentData),
+        ncaa: createEmptyRegions(TOURNAMENTS.ncaa),
+        nba:  createEmptyRegions(TOURNAMENTS.nba),
     },
 }
 
@@ -60,10 +63,10 @@ const bracketSlice = createSlice({
             state,
             action: PayloadAction<{
                 tournamentType: TournamentType
-                region: string
-                round: number
-                gameIdx: number
-                seed: number
+                region:         string
+                round:          number   // current round
+                gameIdx:        number   // index within current round
+                seed:           number   // the seed we picked
             }>
         ) => {
             const { tournamentType, region, round, gameIdx, seed } = action.payload
@@ -71,17 +74,23 @@ const bracketSlice = createSlice({
             const next = round + 1
             if (!reg || next >= reg.matchups.length) return
 
-            reg.matchups[next][gameIdx] = seed
+            // which parent-game this feeds into...
+            const parentGame = Math.floor(gameIdx / 2)
+            // left child (even idx) → slot 0, right child (odd idx) → slot 1
+            const slot = gameIdx % 2   // 0 or 1
+
+            reg.matchups[next][parentGame][slot] = seed
+
+            // clear any deeper rounds so nothing stale remains
             for (let r = next + 1; r < reg.matchups.length; r++) {
-                reg.matchups[r] = []
+                // reset every game to [0,0]
+                reg.matchups[r] = reg.matchups[r].map(() => [0, 0] as [number,number])
             }
         },
 
         resetBracket: (state, action: PayloadAction<TournamentType>) => {
             const t = action.payload
-            state.regions[t] = makeInitialRegions(
-                t === 'ncaa' ? ncaaTournamentData : nbaTournamentData
-            )
+            state.regions[t] = createEmptyRegions(TOURNAMENTS[t])
         },
     },
 })

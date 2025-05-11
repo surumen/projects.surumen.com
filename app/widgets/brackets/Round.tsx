@@ -12,6 +12,7 @@ const Round: React.FC<RoundProps> = ({
                                          maxRounds = 0,
                                          type = 'left',
                                          gameRefs,
+                                         picks,
                                          onSeedClick,
                                      }) => {
     // number of baseline games = total seeds / 2
@@ -47,6 +48,11 @@ const Round: React.FC<RoundProps> = ({
                         ? idx * 2 + 2
                         : idx * spacingPerGame + baseOffset + 1;
 
+                // if the user pre-picked this entire game, it'll be a [seedA,seedB] tuple
+                const participants = picks?.[idx]
+                    ? ([ picks[idx][0], picks[idx][1] ] as [number,number])
+                    : undefined;
+
                 return (
                     <div
                         key={idx}
@@ -57,6 +63,9 @@ const Round: React.FC<RoundProps> = ({
                             seeds={seeds}
                             game={game}
                             type={type}
+                            participants={participants
+                                ? [ seeds[participants[0]], seeds[participants[1]] ]
+                                : undefined}
                             onSeedClick={(seed) => onSeedClick?.(idx, seed)}
                         />
                     </div>

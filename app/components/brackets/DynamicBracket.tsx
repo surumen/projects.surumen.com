@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Region } from '@/widgets'
 import type { DynamicBracketProps, SeedMeta, FinalRegion, GameData } from '@/types'
 import { useAppSelector, useAppDispatch } from '@/store/hooks'
@@ -15,55 +15,47 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({
                                                            regionsPerRow = 2,
                                                        }) => {
     const dispatch = useAppDispatch()
-    const bracketRegions = useAppSelector(
+    const userRegions = useAppSelector(
         (state: RootState) => state.bracket.regions[tournamentType]
     )
 
-    const data = tournamentType === 'ncaa' ? ncaaTournamentData : nbaTournamentData
-    const rawTeams = tournamentType === 'ncaa' ? ncaaTeams : nbaTeams
+    const { data, teams } = useMemo(() => {
+        return tournamentType === 'ncaa'
+            ? { data: ncaaTournamentData, teams: ncaaTeams }
+            : { data: nbaTournamentData,  teams: nbaTeams }
+    }, [tournamentType])
 
-    const allRegions = Object.keys(data.regions)
-    const finalData = data.final as FinalRegion
-    const hasFinal = Boolean(finalData.games)
+    const regions = Object.keys(data.regions)
+    const finalInfo = data.final as FinalRegion
+    const hasFinal = finalInfo.games.length > 0
 
-    // Helper to group GameData[] by roundNumber
-    const groupByRound = (games: GameData[]) => {
-        const map = new Map<number, GameData[]>()
-        games.forEach(g => {
-            const arr = map.get(g.roundNumber) || []
-            arr.push(g)
-            map.set(g.roundNumber, arr)
-        })
-        return Array.from(map.entries())
-            .sort(([a], [b]) => a - b)
-            .map(([, roundGames]) => roundGames)
+    const onAdvance = (region: string, round: number, gameIdx: number, seed: number) => {
+        dispatch(
+            advanceTeam({
+                tournamentType,
+                region,
+                round,
+                gameIdx,
+                seed,
+            })
+        )
     }
 
-    const renderRow = (regions: string[], key: string, isTop: boolean) => (
-        <div className={`row gx-4 ${isTop ? 'mb-4' : 'mt-4'}`} key={key}>
-            {regions.map((region, i) => {
-                const { seeds: seedsMap, games } = data.regions[region]
-                const colLg = 12 / regionsPerRow
+    const renderRow = (regionKeys: string[], isTop: boolean) => (
+        <div className={`row gx-4 ${isTop ? 'mb-4' : 'mt-4'}`} key={isTop ? 'top' : 'bottom'}>
+            {regionKeys.map((region, idx) => {
+                const { seeds, games } = data.regions[region]
+                const colSize = Math.floor(12 / regionsPerRow)
 
                 return (
-                    <div key={region} className={`col-12 col-lg-${colLg} h-100`}>
+                    <div key={region} className={`col-12 col-lg-${colSize} h-100`}>
                         <Region
                             name={region}
-                            type={i % 2 === 0 ? 'left' : 'right'}
-                            seeds={resolveSeeds(seedsMap, rawTeams)}
+                            type={idx % 2 === 0 ? 'left' : 'right'}
+                            seeds={resolveSeeds(seeds, teams)}
                             games={games}
-                            userData={bracketRegions[region]}
-                            onAdvanceTeam={(round, gameIdx, seed) =>
-                                dispatch(
-                                    advanceTeam({
-                                        tournamentType,
-                                        region,
-                                        round,
-                                        gameIdx,
-                                        seed,
-                                    })
-                                )
-                            }
+                            userData={userRegions[region]}
+                            onAdvanceTeam={(round, gameIdx, seed) => onAdvance(region, round, gameIdx, seed)}
                         />
                     </div>
                 )
@@ -71,60 +63,48 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({
         </div>
     )
 
-    // Final four + championship
-    const finalBr = hasFinal
-        ? computeFinalBracket(finalData)
+    const finalBracket = hasFinal
+        ? computeFinalBracket(finalInfo)
         : { seeds: {} as Record<string, SeedMeta>, games: [] as GameData[] }
 
-    const finalColClass = allRegions.length === 2 ? 'col-2' : 'col-4'
+    const finalColClass = regions.length === 2 ? 'col-2' : 'col-4'
     const finalStyle = hasFinal
         ? { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }
         : { bottom: '10%', left: '50%', transform: 'translateX(-50%)' }
 
     const renderFinal = hasFinal && (
-        <div
-            className={`position-absolute ${finalColClass}`}
-            style={{ ...finalStyle, zIndex: 10 }}
-        >
+        <div className={`position-absolute ${finalColClass}`} style={{ ...finalStyle, zIndex: 10 }}>
             <Region
                 name="Final"
                 isFinal
-                seeds={finalBr.seeds}
-                games={finalBr.games}
+                seeds={finalBracket.seeds}
+                games={finalBracket.games}
                 onAdvanceTeam={(round, gameIdx, seed) =>
-                    dispatch(
-                        advanceTeam({
-                            tournamentType,
-                            region: 'Final',
-                            round,
-                            gameIdx,
-                            seed,
-                        })
-                    )
+                    onAdvance('Final', round, gameIdx, seed)
                 }
             />
         </div>
     )
 
-    if (allRegions.length === 2) {
+    if (regions.length === 2) {
         return (
             <div className="tournament container py-4 position-relative">
-                {renderRow(allRegions, 'two', true)}
+                {renderRow(regions, true)}
                 {renderFinal}
             </div>
         )
     }
 
-    const mid = Math.ceil(allRegions.length / 2)
-    const top = allRegions.slice(0, mid)
-    const bottom = allRegions.slice(mid)
+    const mid = Math.ceil(regions.length / 2)
+    const topRegions = regions.slice(0, mid)
+    const bottomRegions = regions.slice(mid)
 
     return (
         <div className="tournament container py-4">
             <div className="position-relative">
-                {renderRow(top, 'top', true)}
+                {renderRow(topRegions, true)}
                 {renderFinal}
-                {renderRow(bottom, 'bottom', false)}
+                {renderRow(bottomRegions, false)}
             </div>
         </div>
     )

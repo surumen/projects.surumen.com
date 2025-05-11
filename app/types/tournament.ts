@@ -55,8 +55,8 @@ export interface TournamentStructure {
  *   games[roundIndex]   = array of scores for each matchup
  */
 export interface BracketRegion {
-    matchups: number[][];
-    games: number[][][];
+    matchups: [number, number][][];
+    games: [number, number][][];
 }
 
 /**
@@ -133,6 +133,9 @@ export interface GameProps {
     /** Direction for rendering */
     type?: 'left' | 'right';
 
+    /** explicit [teamA, teamB] from Redux picks */
+    participants?: [SeedMeta?, SeedMeta?];
+
     /** Called when clicking a team */
     onSeedClick?: (seed: number) => void;
 }
@@ -156,6 +159,8 @@ export interface RoundProps {
     /** “left” or “right” facing layout */
     type?: 'left' | 'right';
 
+    picks?: any;
+
     /** refs for each rendered `<div>` around a game */
     gameRefs?: React.Ref<HTMLDivElement>[];
 
@@ -176,12 +181,16 @@ export interface RegionProps {
     /** Flat list of all games in this region (R64 → region final, or Final Four) */
     games: GameData[];
 
-    /** Optional picks & scores stored in Redux */
+    /**
+     * Picks & scores stored in Redux.
+     * - For a non-final region, `matchups` is an array of seed-numbers per round.
+     * - For the final region you’d use a different prop (`BracketFinal`) instead.
+     */
     userData?: {
-        /** for each round index, the array of picked seed-numbers or [region,game] tuples */
-        matchups: Array<number | [string, number]>[];
-        /** for each round index, the array of [scoreA,scoreB] tuples */
-        games: number[][][];
+        /** now: for each round, an array of [seedA,seedB] picks (one tuple per game) */
+        matchups: [number,number][][];
+        /** unchanged: one [scoreA,scoreB] per game */
+        games: [number,number][][];
     };
 
     /** When true, render in Final-region style */

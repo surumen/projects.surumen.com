@@ -53,6 +53,7 @@ const Region: React.FC<RegionProps> = ({
                         <Round
                             seeds={seeds}
                             gamesData={[champGame]}
+                            picks={userData?.matchups[0]}
                             final
                             number={0}
                             maxRounds={1}
@@ -115,6 +116,7 @@ const Region: React.FC<RegionProps> = ({
                                 <Round
                                     seeds={seeds}
                                     gamesData={sec.games}
+                                    picks={userData?.matchups[logicalRound]}
                                     final={sec.final}
                                     number={sec.number}
                                     maxRounds={maxRounds}
@@ -156,6 +158,7 @@ const Region: React.FC<RegionProps> = ({
                                 <Round
                                     seeds={seeds}
                                     gamesData={roundGames}
+                                    picks={userData?.matchups[logicalRound]}
                                     final={false}
                                     number={idx}
                                     maxRounds={maxRounds}
