@@ -6,8 +6,13 @@ import { getNbaTournamentData }       from '@/data/tournaments/nbaPlayoffs';
 export type TournamentKey = string; // e.g. "ncaa-2022" or "nba-2022"
 
 const TOURNAMENTS: Record<TournamentKey, TournamentStructure> = {
+    // ncaa
     'ncaa-2022': getNcaaTournamentData(2022),
     'ncaa-2023': getNcaaTournamentData(2023),
+    'ncaa-2024': getNcaaTournamentData(2024),
+    'ncaa-2025': getNcaaTournamentData(2025),
+
+    // nba
     'nba-2022':  getNbaTournamentData(2022),
     // → add future years here, e.g. 'nba-2023': getNbaTournamentData(2023)
 };

@@ -62,7 +62,61 @@ const seedsByYear: Record<
             13: 'furman',       14: 'uc-santa-barbara',15: 'princeton',   16: 'texas-a&m-corpus-christi',
         },
     },
-    // 2023, 2024, … go here
+    // — 2024 bracket seeds —
+    2024: {
+        East: {
+            1: 'uconn',      2: 'iowa-state',  3: 'illinois',    4: 'auburn',
+            5: 'san-diego-state', 6: 'byu',  7: 'washington-state', 8: 'florida-atlantic',
+            9: 'northwestern',   10: 'drake', 11: 'duquesne',   12: 'uab',
+            13: 'yale',     14: 'morehead-state', 15: 'south-dakota-state',16: 'longwood',
+        },
+        Midwest: {
+            1: 'purdue',    2: 'tennessee',  3: 'creighton',   4: 'kansas',
+            5: 'gonzaga',   6: 'south-carolina', 7: 'texas', 8: 'utah-state',
+            9: 'tcu',    10: 'virginia', 11: 'oregon',     12: 'mcneese-state',
+            13: 'samford', 14: 'akron',    15: 'st-peters',  16: 'montana-state',
+        },
+        South: {
+            1: 'houston',   2: 'unc', 3: 'west-virginia', 4: 'penn-state',
+            5: 'arkansas',  6: 'maryland',   7: 'texas-a&m', 8: 'florida',
+            9: 'auburn',    10: 'kansas-state',11: 'baylor',    12: 'mississippi',
+            13: 'creighton',14: 'belmont',   15: 'jacksonville-state',16: 'colgate',
+        },
+        West: {
+            1: 'ucla',      2: 'gonzaga',    3: 'memphis',     4: 'kansas-state',
+            5: 'arizona',   6: 'michigan',   7: 'iowa',        8: 'marquette',
+            9: 'boise-state',10: 'kentucky',11: 'usc',        12: 'xavier',
+            13: 'vcu',     14: 'grand-canyon',15: 'montana',    16: 'fairleigh-dickinson',
+        },
+    },
+    2025: {
+        East: {
+            1:  'duke',            2:  'alabama',      3:  'wisconsin',    4:  'arizona',
+            5:  'oregon',          6:  'byu',          7:  'saint-marys',  8:  'mississippi-state',
+            9:  'baylor',         10: 'vanderbilt',  11:  'vcu',         12:  'liberty',
+            13:  'akron',         14:  'montana',     15:  'robert-morris',16:  'alabama-state',
+        },
+        Midwest: {
+            1:  'houston',         2:  'tennessee',    3:  'kentucky',     4:  'purdue',
+            5:  'clemson',         6:  'illinois',     7:  'ucla',         8:  'gonzaga',
+            9:  'georgia',        10: 'utah-state',  11:  'texas',      12:  'mcneese-state',
+            13:  'high-point',    14:  'troy',        15:  'wofford',    16:  'siu-edwardsville',
+        },
+
+        South: {
+            1:  'auburn',          2:  'michigan-state',3:  'iowa-state',  4:  'texas-a&m',
+            5:  'michigan',        6:  'ole-miss',     7:  'marquette',    8:  'louisville',
+            9:  'creighton',      10: 'new-mexico',  11:  'unc',12: 'uc-san-diego',
+            13: 'yale',          14: 'lipscomb',    15: 'bryant',      16: 'alabama-state',
+        },
+
+        West: {
+            1:  'florida',         2:  'uconn',        3:  'memphis',      4:  'maryland',
+            5:  'mississippi',     6:  'missouri',     7:  'kansas',       8:  'baylor',
+            9:  'oklahoma',       10: 'georgia',     11:  'drake',       12:  'colorado-state',
+            13: 'grand-canyon',   14: 'montana',     15: 'omaha',       16: 'norfolk-state',
+        },
+    },
 };
 
 function buildYear(year: number): TournamentStructure {
