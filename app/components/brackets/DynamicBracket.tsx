@@ -1,15 +1,13 @@
-// components/DynamicBracket.tsx
-
 import React from 'react'
 import { Region } from '@/widgets'
 import type { DynamicBracketProps, SeedMeta, FinalRegion, GameData } from '@/types'
 import { useAppSelector, useAppDispatch } from '@/store/hooks'
 import type { RootState } from '@/store/store'
 import { advanceTeam } from '@/store/bracketSlice'
-import { ncaaTournamentData } from '@/data/marchMadnessData'
-import { nbaPlayoffsData } from '@/data/nbaPlayoffsData'
-import { teamsData as ncaaTeams } from '@/data/ncaaTeamsData'
-import { teamsData as nbaTeams } from '@/data/nbaPlayoffsData'
+import { ncaaTournamentData } from '@/data/tournaments/marchMadness'
+import { nbaTournamentData } from '@/data/tournaments/nbaPlayoffs'
+import { teamsData as ncaaTeams } from '@/data/tournaments/teams/ncaaBasketball'
+import { teamsData as nbaTeams } from '@/data/tournaments/teams/nba'
 import { resolveSeeds, computeFinalBracket } from '@/helpers'
 
 const DynamicBracket: React.FC<DynamicBracketProps> = ({
@@ -21,7 +19,7 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({
         (state: RootState) => state.bracket.regions[tournamentType]
     )
 
-    const data = tournamentType === 'ncaa' ? ncaaTournamentData : nbaPlayoffsData
+    const data = tournamentType === 'ncaa' ? ncaaTournamentData : nbaTournamentData
     const rawTeams = tournamentType === 'ncaa' ? ncaaTeams : nbaTeams
 
     const allRegions = Object.keys(data.regions)

@@ -1,5 +1,3 @@
-// helpers/bracketHelpers.ts
-
 import type { FinalRegion, SeedMeta, GameData, GameSource } from '@/types';
 import { fromGame } from '@/utils/bracketBuilder';
 

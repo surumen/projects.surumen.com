@@ -22,9 +22,6 @@ import Pagination from './advance-table/Pagination';
 // import widget/custom components from live-chart folder
 import RacingBarChart from '@/widgets/charts/BarChart';
 
-// import widget/custom components from brackets folder
-import Round from '@/widgets/brackets-advanced/Round';
-
 // import widget/custom components from football folder
 import MatchLineupFormation from '@/widgets/football/MatchLineupFormation';
 
@@ -50,7 +47,6 @@ export {
    Pagination,
    ReactQuillEditor,
    RacingBarChart,
-   Round,
    MatchLineupFormation,
    DynamicForm,
    TabPane,

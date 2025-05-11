@@ -1,5 +1,3 @@
-// utils/bracketBuilder.ts
-
 import type { GameData, SeedMeta } from '@/types';
 
 /**
@@ -30,52 +28,48 @@ export function getSeed(
 }
 
 /**
- * Build a region’s bracket games array from Round-of-64 through Elite-8.
+ * Build a k-team playoff bracket, given any initial pairing list.
  *
- * @param region     name of the region (e.g. “West”)
- * @param seedsMap   map of seed number → team slug for that region
- * @param teams      array of SeedMeta entries (must include all slugs)
+ * @param region           e.g. "West"
+ * @param seedsMap         map seed → slug (only the seeds appearing in `initialPairings`)
+ * @param teams            array of SeedMeta
+ * @param initialPairings  array of [seedA, seedB] for the very first round
  *
- * @returns an object containing:
- *   - seeds: the same seedsMap (for reference)
- *   - games: full GameData[] listing every game with either
- *            firstSeed/secondSeed (round 0) or sourceGame refs (>0)
+ * @returns seeds (cloned seedsMap) and games[] with roundNumber starting at 0,
+ *          then halving each round until a single champion.
  */
-export function buildRegion(
+export function buildCustomRegion(
     region: string,
-    seedsMap: Record<number, string>,
-    teams: SeedMeta[]
-): { seeds: Record<number, string>; games: GameData[] } {
+    seedsMap: Record<number,string>,
+    teams: SeedMeta[],
+    initialPairings: [number,number][]
+): { seeds: Record<number,string>; games: GameData[] } {
     const games: GameData[] = [];
 
-    // Round-of-64 fixed pairings
-    const r64: [number, number][] = [
-        [1, 16], [8, 9], [5, 12], [4, 13],
-        [6, 11], [3, 14], [7, 10], [2, 15]
-    ];
-
-    // R64 games
-    r64.forEach(([a, b], idx) => {
+    // --- Round 0: your custom initial pairings ---
+    initialPairings.forEach(([a, b], idx) => {
         games.push({
             roundNumber: 0,
             gameNumber: idx,
             region,
-            firstSeed: getSeed(seedsMap, teams, a),
+            firstSeed:  getSeed(seedsMap, teams, a),
             secondSeed: getSeed(seedsMap, teams, b),
         });
     });
 
-    // R32, S16, E8
-    for (let round = 1, prevCount = r64.length; round <= 3; round++, prevCount /= 2) {
-        for (let i = 0; i < prevCount; i += 2) {
+    // --- Subsequent rounds: halve until 1 game left ---
+    let prevCount = initialPairings.length;
+    for (let round = 1; prevCount > 1; round++) {
+        for (let i = 0; i < prevCount / 2; i++) {
             games.push({
                 roundNumber: round,
-                gameNumber: i / 2,
+                gameNumber: i,
                 region,
-                sourceGame1: fromGame(region, round - 1, i),
-                sourceGame2: fromGame(region, round - 1, i + 1),
+                sourceGame1: fromGame(region, round - 1, i * 2),
+                sourceGame2: fromGame(region, round - 1, i * 2 + 1),
             });
         }
+        prevCount /= 2;
     }
 
     return { seeds: { ...seedsMap }, games };

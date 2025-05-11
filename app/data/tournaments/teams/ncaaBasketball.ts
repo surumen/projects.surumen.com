@@ -27,7 +27,7 @@ export const teamsData: SeedMeta[] = [
     },
     {
         name: "saint-marys",
-        shortName: "Saint Mary's",
+        shortName: "St. Mary's",
         logo: "https://sports.cbsimg.net/fly/images/ncaa/logos/team/21422.svg",
         color: "danger"
     },
@@ -45,13 +45,13 @@ export const teamsData: SeedMeta[] = [
     },
     {
         name: "mississippi-state",
-        shortName: "Mississippi State",
+        shortName: "Miss. St.",
         logo: "https://sports.cbsimg.net/fly/images/ncaa/logos/team/21360.svg",
         color: "info"
     },
     {
         name: "michigan-state",
-        shortName: "Michigan State",
+        shortName: "Mich. St.",
         logo: "https://sports.cbsimg.net/fly/images/ncaa/logos/team/21194.svg",
         color: "primary"
     },
@@ -69,7 +69,7 @@ export const teamsData: SeedMeta[] = [
     },
     {
         name: "grand-canyon",
-        shortName: "Grand Canyon",
+        shortName: "GCU",
         logo: "https://sports.cbsimg.net/fly/images/ncaa/logos/team/160925.svg",
         color: "crimson"
     },
@@ -87,7 +87,7 @@ export const teamsData: SeedMeta[] = [
     },
     {
         name: "long-beach-state",
-        shortName: "Long Beach St.",
+        shortName: "Long B.St.",
         logo: "https://sports.cbsimg.net/fly/images/ncaa/logos/team/21218.svg",
         color: "gold"
     },
@@ -105,7 +105,7 @@ export const teamsData: SeedMeta[] = [
     },
     {
         name: "iowa-state",
-        shortName: "Iowa State",
+        shortName: "Iowa St.",
         logo: "https://sports.cbsimg.net/fly/images/ncaa/logos/team/21203.svg",
         color: "ocean"
     },
@@ -135,7 +135,7 @@ export const teamsData: SeedMeta[] = [
     },
     {
         name: "washington-state",
-        shortName: "Washington St.",
+        shortName: "Wash. St.",
         logo: "https://sports.cbsimg.net/fly/images/ncaa/logos/team/21344.svg",
         color: "orchid"
     },
@@ -177,7 +177,7 @@ export const teamsData: SeedMeta[] = [
     },
     {
         name: "morehead-state",
-        shortName: "Morehead St.",
+        shortName: "More. St.",
         logo: "https://sports.cbsimg.net/fly/images/ncaa/logos/team/21329.svg",
         color: "graphite"
     },
@@ -321,7 +321,7 @@ export const teamsData: SeedMeta[] = [
     },
     {
         name: "texas-tech",
-        shortName: "Texas Tech",
+        shortName: "Texas T.",
         logo: "https://sports.cbsimg.net/fly/images/ncaa/logos/team/21212.svg",
         color: "graphite"
     },
@@ -357,7 +357,7 @@ export const teamsData: SeedMeta[] = [
     },
     {
         name: "james-madison",
-        shortName: "James Madison",
+        shortName: "James Mad.",
         logo: "https://sports.cbsimg.net/fly/images/ncaa/logos/team/21228.svg",
         color: "navy"
     },
@@ -375,7 +375,7 @@ export const teamsData: SeedMeta[] = [
     },
     {
         name: "western-kentucky",
-        shortName: "W. Kentucky",
+        shortName: "W. Kent.",
         logo: "https://sports.cbsimg.net/fly/images/ncaa/logos/team/21403.svg",
         color: "coconut"
     },

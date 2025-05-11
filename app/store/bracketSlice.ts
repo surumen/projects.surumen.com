@@ -1,9 +1,7 @@
-// store/bracketSlice.ts
-
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { TournamentStructure, BracketRegion, GameData } from '@/types'
-import { ncaaTournamentData } from '@/data/marchMadnessData'
-import { nbaPlayoffsData } from '@/data/nbaPlayoffsData'
+import { ncaaTournamentData } from '@/data/tournaments/marchMadness'
+import { nbaTournamentData } from '@/data/tournaments/nbaPlayoffs'
 
 type TournamentType = string
 
@@ -50,7 +48,7 @@ function makeInitialRegions(
 const initialState: BracketState = {
     regions: {
         ncaa: makeInitialRegions(ncaaTournamentData),
-        nba: makeInitialRegions(nbaPlayoffsData),
+        nba: makeInitialRegions(nbaTournamentData),
     },
 }
 
@@ -82,7 +80,7 @@ const bracketSlice = createSlice({
         resetBracket: (state, action: PayloadAction<TournamentType>) => {
             const t = action.payload
             state.regions[t] = makeInitialRegions(
-                t === 'ncaa' ? ncaaTournamentData : nbaPlayoffsData
+                t === 'ncaa' ? ncaaTournamentData : nbaTournamentData
             )
         },
     },

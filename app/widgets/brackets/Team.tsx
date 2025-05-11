@@ -2,6 +2,7 @@
 
 import React from 'react';
 import type { TeamProps } from '@/types';
+import { Image } from 'react-bootstrap';
 
 const Team: React.FC<TeamProps> = ({
                                        name = '',
@@ -29,6 +30,8 @@ const Team: React.FC<TeamProps> = ({
         ? isRight ? 'rounded-bottom-start' : 'rounded-bottom-end'
         : '';
 
+    const paddingX = isRight ? 'px-2 pe-0' : 'px-2 ps-0';
+
     const classes = [
         'list-group-item',
         'd-flex',
@@ -40,9 +43,10 @@ const Team: React.FC<TeamProps> = ({
         borderSide,
         'border-5',
         `border-${color}`,
+        'rounded-0',
         roundTop,
         roundBottom,
-        'px-2',
+        paddingX,
         'py-1',
         'cursor-pointer',
     ]
@@ -51,25 +55,41 @@ const Team: React.FC<TeamProps> = ({
 
     return (
         <div className={classes} onClick={onClick} aria-label={`${name} (Seed ${seed})`}>
-            {isRight && logo && (
-                <img src={logo} alt={`${label} logo`} style={{ height: 24, marginRight: 8 }} />
-            )}
             {isRight ? (
                 <>
-                    <span>{label}</span>
-                    <span className="badge bg-secondary rounded-pill ms-2">
-            {seed}
-          </span>
+                    <div className='d-flex align-items-center'>
+                        <span>{label}</span>
+                        <span className="badge bg-transparent text-muted fw-light rounded-pill ms-1">
+                            {seed}
+                        </span>
+                        {logo && (
+                            <span className="badge bg-transparent rounded-pill">
+                                <Image
+                                    className='avatar avatar-xss me-2'
+                                    src={logo}
+                                    alt={`${label} logo`}
+                                />
+                            </span>
+                        )}
+                    </div>
                 </>
             ) : (
                 <>
-          <span className="badge bg-secondary rounded-pill me-2">
-            {seed}
-          </span>
-                    <span>{label}</span>
-                    {!isRight && logo && (
-                        <img src={logo} alt={`${label} logo`} style={{ height: 24, marginLeft: 8 }} />
-                    )}
+                    <div className='d-flex align-items-center'>
+                        {logo && (
+                            <span className="badge bg-transparent rounded-pill">
+                                <Image
+                                    className='avatar avatar-xss'
+                                    src={logo}
+                                    alt={`${label} logo`}
+                                />
+                            </span>
+                        )}
+                        <span className="badge bg-transparent text-muted fw-light rounded-pill me-1">
+                            {seed}
+                        </span>
+                        <span>{label}</span>
+                    </div>
                 </>
             )}
         </div>
