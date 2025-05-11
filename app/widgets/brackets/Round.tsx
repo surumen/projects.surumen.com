@@ -48,10 +48,14 @@ const Round: React.FC<RoundProps> = ({
                         ? idx * 2 + 2
                         : idx * spacingPerGame + baseOffset + 1;
 
-                // if the user pre-picked this entire game, it'll be a [seedA,seedB] tuple
-                const participants = picks?.[idx]
-                    ? ([ picks[idx][0], picks[idx][1] ] as [number,number])
-                    : undefined;
+                // pull out exactly one tuple per game
+                const tuple = picks?.[idx]            // [seedA,seedB] or undefined
+                const participants = tuple
+                    ? [
+                        seeds[tuple[0]] ?? undefined,
+                        seeds[tuple[1]] ?? undefined,
+                    ] as [typeof seeds[number]?, typeof seeds[number]?]
+                    : undefined
 
                 return (
                     <div
@@ -63,9 +67,7 @@ const Round: React.FC<RoundProps> = ({
                             seeds={seeds}
                             game={game}
                             type={type}
-                            participants={participants
-                                ? [ seeds[participants[0]], seeds[participants[1]] ]
-                                : undefined}
+                            participants={participants}
                             onSeedClick={(seed) => onSeedClick?.(idx, seed)}
                         />
                     </div>

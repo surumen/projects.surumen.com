@@ -40,6 +40,11 @@ const Region: React.FC<RegionProps> = ({
         );
     }
     const containerRef = useRef<HTMLDivElement>(null);
+    // helper to get the “real” gameIndex inside that round (before reversal)
+    const realGameIdx = (displayIdx: number, roundGames: GameData[]) =>
+        type === 'right'
+            ? roundGames.length - displayIdx - 1
+            : displayIdx
 
     // FINAL region layout
     if (isFinal) {
@@ -59,7 +64,9 @@ const Region: React.FC<RegionProps> = ({
                             maxRounds={1}
                             type="left"
                             gameRefs={refs}
-                            // onSeedClick={(gameIdx, seed) => onAdvanceTeam?.(0, gameIdx, seed)}
+                            onSeedClick={(_, seed) =>
+                                onAdvanceTeam?.(champGame, 0, champGame.gameNumber, seed)
+                            }
                         />
                     </div>
                 </div>
@@ -122,14 +129,15 @@ const Region: React.FC<RegionProps> = ({
                                     maxRounds={maxRounds}
                                     type={sec.type}
                                     gameRefs={sec.refs}
-                                    onSeedClick={(roundIdx, seed) =>
+                                    onSeedClick={(displayIdx, seed) => {
+                                        const game  = sec.games[displayIdx];
                                         onAdvanceTeam?.(
-                                            roundSeq[logicalRound][roundIdx],
+                                            game,
                                             logicalRound,
-                                            roundIdx,
+                                            game.gameNumber,
                                             seed
-                                        )
-                                    }
+                                        );
+                                    }}
                                 />
                             </div>
                         );
@@ -169,14 +177,15 @@ const Region: React.FC<RegionProps> = ({
                                     maxRounds={maxRounds}
                                     type={type}
                                     gameRefs={refs}
-                                    onSeedClick={(roundIdx, seed) =>
+                                    onSeedClick={(displayIdx, seed) => {
+                                        const game = roundGames[displayIdx];
                                         onAdvanceTeam?.(
-                                            roundSeq[logicalRound][roundIdx],
+                                            game,
                                             logicalRound,
-                                            roundIdx,
+                                            game.gameNumber,
                                             seed
-                                        )
-                                    }
+                                        );
+                                    }}
                                 />
                             </Col>
                         );

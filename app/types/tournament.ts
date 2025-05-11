@@ -159,7 +159,7 @@ export interface RoundProps {
     /** “left” or “right” facing layout */
     type?: 'left' | 'right';
 
-    picks?: any;
+    picks?: [number,number][]
 
     /** refs for each rendered `<div>` around a game */
     gameRefs?: React.Ref<HTMLDivElement>[];
