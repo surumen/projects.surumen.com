@@ -3,6 +3,8 @@ import { Row, Col } from 'react-bootstrap';
 import Round from './Round';
 import type { RegionProps, GameData } from '@/types';
 import Connector from '@/widgets/brackets/Connector';
+import useMounted from '@/hooks/useMounted';
+import { useMediaQuery } from 'react-responsive';
 
 const Region: React.FC<RegionProps> = ({
                                            name,
@@ -13,6 +15,11 @@ const Region: React.FC<RegionProps> = ({
                                            userData,
                                            onAdvanceTeam,
                                        }) => {
+
+    const hasMounted = useMounted();
+    const isMobileQuery = useMediaQuery({ query: '(max-width: 767px)' });
+    const isMobile = hasMounted && isMobileQuery;
+
     // group games by roundNumber
     const roundsData: GameData[][] = React.useMemo(() => {
         const m = new Map<number, GameData[]>();
@@ -40,11 +47,8 @@ const Region: React.FC<RegionProps> = ({
         );
     }
     const containerRef = useRef<HTMLDivElement>(null);
-    // helper to get the “real” gameIndex inside that round (before reversal)
-    const realGameIdx = (displayIdx: number, roundGames: GameData[]) =>
-        type === 'right'
-            ? roundGames.length - displayIdx - 1
-            : displayIdx
+    const scrollRef    = useRef<HTMLDivElement>(null);
+    const connectorRef = isMobile ? scrollRef : containerRef;
 
     // FINAL region layout
     if (isFinal) {
@@ -148,18 +152,45 @@ const Region: React.FC<RegionProps> = ({
     }
 
     // NORMAL region layout
+    // inside your NORMAL-region return, before you map:
+    const roundCount = roundSeq.length
+    // floor so you don’t exceed 12 columns; if you have e.g. 5 rounds → 12/5 = 2.4 → 2 cols each
+    const mobileColSpan = Math.floor(12 / roundCount) || 1
+
     return (
         <div ref={containerRef} className="position-relative mb-4 d-flex flex-column h-100">
-            <h2
-                className="position-absolute top-50 start-50 translate-middle text-uppercase fw-semibold text-muted"
-                style={{ zIndex: 2, pointerEvents: 'none' }}
-            >
-                {name}
-            </h2>
-            <Connector gameRefs={gameRefs.current!} containerRef={containerRef} type={type} isFinalRegion={false} />
+            { !isMobile && (
+                <h2
+                    className="position-absolute top-50 start-50 translate-middle text-uppercase fw-semibold text-muted"
+                    style={{ zIndex: 2, pointerEvents: 'none' }}
+                >
+                    {name}
+                </h2>
+            )}
+            <Connector
+                gameRefs={gameRefs.current!}
+                containerRef={containerRef}
+                type={type}
+                isFinalRegion={false}
+            />
 
-            <div className="position-relative flex-grow-1" style={{ zIndex: 1, minHeight: 0 }}>
-                <Row className="h-100 g-2">
+            <div
+                className="position-relative flex-grow-1"
+                style={{ zIndex: 1, minHeight: 0 }}
+            >
+                <div
+                    // keep it a CSS grid even on mobile
+                    style={{
+                        display: 'grid',
+                        // make all rounds shrink equally to fit the container
+                        gridTemplateColumns: `repeat(${roundCount}, minmax(0, 1fr))`,
+                        // negative gap on mobile for overlap, small positive gap on desktop
+                        columnGap: isMobile ? '-2.75rem' : '1rem',
+                        // push the entire first column back in by half the overlap
+                        paddingLeft: isMobile && type === 'left' ? '1.375rem' : undefined,
+                        paddingRight: isMobile && type === 'right' ? '1.375rem' : undefined,
+                    }}
+                >
                     {roundSeq.map((roundGames, idx) => {
                         const logicalRound = type === 'right'
                             ? maxRounds - idx - 1
@@ -167,7 +198,17 @@ const Region: React.FC<RegionProps> = ({
                         const refs = gameRefs.current![idx];
 
                         return (
-                            <Col key={idx} xs={12} lg className="d-flex flex-column px-2">
+                            <div
+                                key={idx} className="px-2 d-flex flex-column"
+                                style={
+                                    isMobile
+                                        ? // bump this Round inward by half the overlap
+                                            type === 'left'
+                                            ? { marginLeft: '-1.375rem' }
+                                            : { marginRight: '-1.375rem' }
+                                        : undefined
+                                }
+                            >
                                 <Round
                                     seeds={seeds}
                                     gamesData={roundGames}
@@ -187,10 +228,10 @@ const Region: React.FC<RegionProps> = ({
                                         );
                                     }}
                                 />
-                            </Col>
+                            </div>
                         );
                     })}
-                </Row>
+                </div>
             </div>
         </div>
     );

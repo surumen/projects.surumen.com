@@ -9,6 +9,9 @@ import { nbaTournamentData } from '@/data/tournaments/nbaPlayoffs'
 import { teamsData as ncaaTeams } from '@/data/tournaments/teams/ncaaBasketball'
 import { teamsData as nbaTeams } from '@/data/tournaments/teams/nba'
 import { resolveSeeds, computeFinalBracket } from '@/helpers'
+import useMounted from '@/hooks/useMounted';
+import { useMediaQuery } from 'react-responsive';
+import { Row } from 'react-bootstrap';
 
 const DynamicBracket: React.FC<DynamicBracketProps> = ({
                                                            tournamentType = 'ncaa',
@@ -43,19 +46,30 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({
                 round,
                 gameIdx,
                 seed,
-                game,            // pass the GameData into the action
+                game,
             })
         )
     }
 
+    const hasMounted = useMounted();
+    const isMobileQuery = useMediaQuery({ query: '(max-width: 767px)' });
+    const isMobile = hasMounted && isMobileQuery;
+    // when mobile, force 1 region per row; otherwise use whatever was passed in
+    const effectiveRegionsPerRow = isMobile ? 1 : regionsPerRow
+    const colSize = Math.floor(12 / effectiveRegionsPerRow)
+
     const renderRow = (regionKeys: string[], isTop: boolean) => (
-        <div className={`row gx-4 ${isTop ? 'mb-4' : 'mt-4'}`} key={isTop ? 'top' : 'bottom'}>
+        <Row className={`gx-4 ${isTop ? 'mb-4' : 'mt-4'}`} key={isTop ? 'top' : 'bottom'}>
             {regionKeys.map((region, idx) => {
                 const { seeds, games } = data.regions[region]
-                const colSize = Math.floor(12 / regionsPerRow)
+
+                // produce exactly col-12 on mobile, col-lg-* (and md, if you like) on desktop
+                const colClass = isMobile
+                    ? 'col-12 px-0'
+                    : `col-12 col-md-${colSize} col-lg-${colSize}`
 
                 return (
-                    <div key={region} className={`col-12 col-lg-${colSize} h-100`}>
+                    <div key={region} className={`col-12 ${colClass} h-100`}>
                         <Region
                             name={region}
                             type={idx % 2 === 0 ? 'left' : 'right'}
@@ -69,7 +83,7 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({
                     </div>
                 )
             })}
-        </div>
+        </Row>
     )
 
     const finalBracket = hasFinal

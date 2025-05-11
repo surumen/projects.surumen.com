@@ -3,6 +3,8 @@
 import React from 'react';
 import Game from './Game';
 import type { RoundProps } from '@/types';
+import useMounted from '@/hooks/useMounted';
+import { useMediaQuery } from 'react-responsive';
 
 const Round: React.FC<RoundProps> = ({
                                          seeds,
@@ -15,6 +17,11 @@ const Round: React.FC<RoundProps> = ({
                                          picks,
                                          onSeedClick,
                                      }) => {
+
+    const hasMounted = useMounted();
+    const isMobileQuery = useMediaQuery({ query: '(max-width: 767px)' });
+    const isMobile = hasMounted && isMobileQuery;
+
     // number of baseline games = total seeds / 2
     const baselineGames = Object.keys(seeds).length / 2;
     const totalRows = baselineGames * 2 + 1;
@@ -36,6 +43,7 @@ const Round: React.FC<RoundProps> = ({
             style={{
                 display: 'grid',
                 gridTemplateRows: `repeat(${totalRows}, 1fr)`,
+                ...(isMobile ? { rowGap: '1.75rem' } : {}),   // only on mobile
             }}
         >
             {gamesData.map((game, idx) => {
