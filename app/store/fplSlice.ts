@@ -7,7 +7,7 @@ import {
     getManagerTeam,
     getManagerTransfers,
     getPlayerById
-} from '@/data/fplApi';
+} from '@/data/apis/fplApi';
 import type { PremierLeaguePlayer } from '@/types/PremierLeaguePlayer';
 
 interface ManagerHistoryEntry {

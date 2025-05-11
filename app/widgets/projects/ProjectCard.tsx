@@ -10,7 +10,7 @@ import { SendFill, Pin, Heart, HeartFill, PinFill, StarFill } from 'react-bootst
 import ProjectSummary from './ProjectSummary';
 
 // import data files
-import { LanguageColorMap } from '@/data/ColorMap';
+import { LanguageColorMap } from '@/data/colorMap';
 
 
 const ProjectCard = ({ project, viewby }) => {
