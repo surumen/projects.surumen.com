@@ -185,7 +185,7 @@ const Region: React.FC<RegionProps> = ({
                         // make all rounds shrink equally to fit the container
                         gridTemplateColumns: `repeat(${roundCount}, minmax(0, 1fr))`,
                         // negative gap on mobile for overlap, small positive gap on desktop
-                        columnGap: isMobile ? '-2.75rem' : '1rem',
+                        columnGap: isMobile ? '-2.75rem' : '2rem',
                         // push the entire first column back in by half the overlap
                         paddingLeft: isMobile && type === 'left' ? '1.375rem' : undefined,
                         paddingRight: isMobile && type === 'right' ? '1.375rem' : undefined,
