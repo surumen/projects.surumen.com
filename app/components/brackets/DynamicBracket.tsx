@@ -20,7 +20,7 @@ import { useMediaQuery }                   from 'react-responsive';
 
 
 const DynamicBracket: React.FC<DynamicBracketProps> = ({
-                                                           tournamentType = 'ncaa',
+                                                           tournamentType = 'nba',
                                                            year = 2025,
                                                            regionsPerRow = 2,
                                                        }) => {

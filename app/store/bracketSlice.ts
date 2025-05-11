@@ -3,19 +3,17 @@ import type { TournamentStructure, BracketRegion, GameData } from '@/types';
 import { getNcaaTournamentData } from '@/data/tournaments/marchMadness';
 import { getNbaTournamentData }       from '@/data/tournaments/nbaPlayoffs';
 
-export type TournamentKey = string; // e.g. "ncaa-2022" or "nba-2022"
+export type TournamentKey = string;
 
-const TOURNAMENTS: Record<TournamentKey, TournamentStructure> = {
-    // ncaa
-    'ncaa-2022': getNcaaTournamentData(2022),
-    'ncaa-2023': getNcaaTournamentData(2023),
-    'ncaa-2024': getNcaaTournamentData(2024),
-    'ncaa-2025': getNcaaTournamentData(2025),
+const years = [2022, 2023, 2024, 2025] as const;
 
-    // nba
-    'nba-2022':  getNbaTournamentData(2022),
-    // → add future years here, e.g. 'nba-2023': getNbaTournamentData(2023)
-};
+// build the record programmatically
+export const TOURNAMENTS: Record<TournamentKey, TournamentStructure> = Object.fromEntries(
+    years.flatMap((year) => ([
+        [`ncaa-${year}`, getNcaaTournamentData(year)],
+        [`nba-${year}`,  getNbaTournamentData(year)],
+    ]))
+) as Record<TournamentKey, TournamentStructure>;
 
 interface BracketState {
     regions: Record<TournamentKey, Record<string, BracketRegion>>;
