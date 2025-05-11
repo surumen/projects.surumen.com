@@ -123,7 +123,7 @@ export const teamsData: SeedMeta[] = [
     },
     {
         name: "san-diego-state",
-        shortName: "San Diego St.",
+        shortName: "San Diego",
         logo: "https://sports.cbsimg.net/fly/images/ncaa/logos/team/21431.svg",
         color: "primary"
     },
@@ -147,7 +147,7 @@ export const teamsData: SeedMeta[] = [
     },
     {
         name: "northwestern",
-        shortName: "Northwestern",
+        shortName: "Northwest.",
         logo: "https://sports.cbsimg.net/fly/images/ncaa/logos/team/21196.svg",
         color: "danger"
     },
@@ -357,7 +357,7 @@ export const teamsData: SeedMeta[] = [
     },
     {
         name: "james-madison",
-        shortName: "James Mad.",
+        shortName: "JMU",
         logo: "https://sports.cbsimg.net/fly/images/ncaa/logos/team/21228.svg",
         color: "navy"
     },
