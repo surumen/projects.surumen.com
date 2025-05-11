@@ -29,9 +29,9 @@ const Game: React.FC<GameProps> = ({
     return (
         <div className={`d-flex ${type==='right' ? 'justify-content-end' : 'justify-content-start'}`}>
             <button
-                className={`w-100 border-0 rounded-0 p-0 list-group list-group-sm mt-n3 m-0 shadow ${
+                className={`border-0 rounded-0 p-0 list-group list-group-sm mt-n3 m-0 shadow ${
                     type==='right'?'text-end rounded-start':'text-start rounded-end'
-                }`}
+                }`} style={{minWidth: '8rem', maxWidth: '8rem', textOverflow: 'ellipsis'}}
             >
                 <Team
                     name={teamA?.name}
