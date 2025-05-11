@@ -1,18 +1,46 @@
 import React from 'react';
 import Team from './Team';
-import GameSelector from './GameSelector';
 import type { GameProps } from '@/types';
 
 const Game: React.FC<GameProps> = ({
                                        seeds,
-                                       firstSeed,
-                                       secondSeed,
-                                       games = [],
+                                       game,
                                        type = 'left',
-                                       gameIndex,
                                        onSeedClick,
                                    }) => {
     const isRight = type === 'right';
+
+    // Build reverse lookup: slug → seed number
+    const slugToSeed = React.useMemo(
+        () =>
+            Object.fromEntries(
+                Object.entries(seeds).map(([num, meta]) => [meta.name, Number(num)])
+            ) as Record<string, number>,
+        [seeds]
+    );
+
+    // Determine the two seed numbers
+    let firstSeedNum = 0;
+    let secondSeedNum = 0;
+
+    if (game.roundNumber === 0) {
+        // Guard against undefined firstSeed/secondSeed
+        const nameA = game.firstSeed?.name;
+        const nameB = game.secondSeed?.name;
+        firstSeedNum = (nameA && slugToSeed[nameA]) || 0;
+        secondSeedNum = (nameB && slugToSeed[nameB]) || 0;
+    } else {
+        // Later rounds: ideally you resolve via game.winnerSeed or from your state
+        // Fallback to 0 if not available
+        firstSeedNum = game.sourceGame1?.gameNumber ?? 0;
+        secondSeedNum = game.sourceGame2?.gameNumber ?? 0;
+    }
+
+    const team1 = seeds[firstSeedNum];
+    const team2 = seeds[secondSeedNum];
+
+    // Extract score
+    const [score1, score2] = game.finalScore ?? [0, 0];
 
     const containerClass = [
         'list-group',
@@ -23,46 +51,32 @@ const Game: React.FC<GameProps> = ({
         isRight ? 'text-end rounded-start' : 'text-start rounded-end',
     ].join(' ');
 
-    const fmt = (slug = '') =>
-        slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-
-    const team1 = seeds[firstSeed];
-    const team2 = seeds[secondSeed];
-
-    const summarySeeds: Record<number, { name: string }> = {
-        [firstSeed]: { name: team1?.name ?? '' },
-        [secondSeed]: { name: team2?.name ?? '' },
-    };
-
-    const name1 = team1?.shortName ?? team1?.name ?? '';
-    const name2 = team2?.shortName ?? team2?.name ?? '';
-
     return (
         <div className={`d-flex ${isRight ? 'justify-content-end' : 'justify-content-start'}`}>
             <button className={`w-100 border-0 rounded-0 p-0 ${containerClass}`}>
                 <Team
                     name={team1?.name}
-                    seed={firstSeed}
-                    displayName={name1}
+                    seed={firstSeedNum}
+                    displayName={team1?.shortName ?? team1?.name ?? ''}
                     position="top"
                     type={type}
                     logo={team1?.logo}
                     color={team1?.color}
-                    onClick={() => onSeedClick?.(firstSeed)}
+                    onClick={() => onSeedClick?.(firstSeedNum)}
                 />
-
+                {/*<div className="text-center">*/}
+                {/*    {score1} – {score2}*/}
+                {/*</div>*/}
                 <Team
                     name={team2?.name}
-                    seed={secondSeed}
-                    displayName={name2}
+                    seed={secondSeedNum}
+                    displayName={team2?.shortName ?? team2?.name ?? ''}
                     position="middle"
                     type={type}
                     logo={team2?.logo}
                     color={team2?.color}
-                    onClick={() => onSeedClick?.(secondSeed)}
+                    onClick={() => onSeedClick?.(secondSeedNum)}
                 />
-
-                 {/*<GameSelector games={games} seeds={summarySeeds} type={type} />*/}
             </button>
         </div>
     );

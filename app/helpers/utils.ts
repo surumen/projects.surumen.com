@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 
 /**
- * Functions in utils
+ * Functions in utils.ts
  */
 
 /**

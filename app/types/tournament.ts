@@ -2,60 +2,50 @@
 
 // --- Tournament data interfaces ---
 
-/** Metadata for each team seed */
 export interface SeedMeta {
-    /** team slug (used as unique ID) */
     name: string;
     abbreviation?: string;
     shortName?: string;
-    /** optional team logo path or URL */
     logo?: string;
-    /** optional color (Bootstrap variant or custom accent) */
     color?: string;
 }
 
-/** One region of the tournament (e.g. East, West, Midwest, South) */
+export interface GameSource {
+    region: string;
+    roundNumber: number;
+    gameNumber: number;
+}
+
+export interface GameData {
+    roundNumber: number;
+    gameNumber: number;
+    region: string;
+    firstSeed?: SeedMeta;
+    secondSeed?: SeedMeta;
+    sourceGame1?: GameSource;
+    sourceGame2?: GameSource;
+    winnerSeed?: SeedMeta;
+    finalScore?: [number, number];
+}
+
 export interface TournamentRegion {
-    /** map seed number to team slug */
     seeds: Record<number, string>;
-    /** rounds[i] = array of seed numbers for round i */
-    rounds: number[][];
-    /** games[i][j] = array of scores for matchup j in round i */
-    games: number[][][];
+    games: GameData[];
 }
 
-/** Final stage: semis (optional) + final */
 export interface FinalRegion {
-    /** champion slug by region name — unchanged */
-    seeds: Record<string,string>;
+    /** champion metadata by region name — empty until filled */
+    seeds: Record<string, SeedMeta>;
 
-    /**
-     * Optional two semifinals.  Each tuple is a
-     * slug or "" if not yet determined.
-     * E.g. [ ["uconn","alabama"], ["purdue","nc-state"] ]
-     */
-    semiFinals?: [string,string][];
-
-    /**
-     * Always present.  Each element is the two slugs
-     * (or "" placeholders) for the championship.
-     * E.g. ["uconn","purdue"]
-     */
-    finalGame: [string,string];
-
-    /** scores must line up with the above slots */
-    games: {
-        semiScores?: [number,number][];
-        finalScore: [number,number];
-    };
+    /** all Final Four + Championship games */
+    games: GameData[];
 }
 
-/** Full tournament structure with dynamic regions and final */
 export interface TournamentStructure {
-    /** dynamic regions keyed by name */
     regions: Record<string, TournamentRegion>;
     final: FinalRegion;
 }
+
 
 // --- Bracket result interfaces ---
 
@@ -116,59 +106,70 @@ export interface GameSelectorProps {
 }
 
 export interface GameProps {
+    /** Lookup map seed number → SeedMeta */
     seeds: Record<number, SeedMeta>;
-    firstSeed: number;
-    secondSeed: number;
-    games?: number[];
-    gamesPredicted?: number;
-    firstSeedPredicted?: number;
-    secondSeedPredicted?: number;
-    final?: boolean;
+
+    /** Full metadata for this game */
+    game: GameData;
+
+    /** Direction for rendering */
     type?: 'left' | 'right';
-    gameIndex?: number;
+
+    /** Called when clicking a team */
     onSeedClick?: (seed: number) => void;
 }
 
 export interface RoundProps {
-    /** seeds for this round (or final-seeds map for Final) */
+    /** seeds lookup (seed number → SeedMeta) */
     seeds: Record<number, SeedMeta>;
-    /** flat array mixing seed numbers and [region,seed] tuples */
-    pairings: Array<number | [string, number]>;
-    /** scores for this round */
-    games: number[][];
-    /** predicted scores per matchup */
-    gamesPredicted?: number[];
-    /** optional predicted pairings, same structure as pairings */
-    pairingsPredicted?: Array<number | [string, number]>;
-    /** if true, renders in final style */
+
+    /** full metadata for every game in this round, in order */
+    gamesData: GameData[];
+
+    /** if true, renders in final (championship) style */
     final?: boolean;
-    /** round index */
+
+    /** this round’s index (0 = first round, etc) */
     number: number;
+
     /** total number of rounds in this region */
     maxRounds: number;
-    /** region direction for justification */
+
+    /** “left” or “right” facing layout */
     type?: 'left' | 'right';
-    /** champion name, only for final round */
-    champion?: string;
-    gameCount?: number;
+
+    /** refs for each rendered `<div>` around a game */
     gameRefs?: React.Ref<HTMLDivElement>[];
 
+    /** click handler: (gameIndex, seed) */
     onSeedClick?: (gameIndex: number, seed: number) => void;
 }
 
 export interface RegionProps {
+    /** Region display name (e.g. “West”, “Final”) */
     name: string;
+
+    /** Layout direction */
     type?: 'left' | 'right';
+
+    /** Map seed number → team slug for lookup */
     seeds: Record<number, SeedMeta>;
-    rounds: number[][];
-    games: number[][][];
+
+    /** Flat list of all games in this region (R64 → region final, or Final Four) */
+    games: GameData[];
+
+    /** Optional picks & scores stored in Redux */
     userData?: {
+        /** for each round index, the array of picked seed-numbers or [region,game] tuples */
         matchups: Array<number | [string, number]>[];
+        /** for each round index, the array of [scoreA,scoreB] tuples */
         games: number[][][];
     };
-    champion?: string;
+
+    /** When true, render in Final-region style */
     isFinal?: boolean;
-    teamsInfo?: SeedMeta[];
+
+    /** Called when the user clicks a seed button */
     onAdvanceTeam?: (round: number, gameIndex: number, seed: number) => void;
 }
 

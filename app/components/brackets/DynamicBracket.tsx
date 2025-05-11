@@ -1,6 +1,8 @@
+// components/DynamicBracket.tsx
+
 import React from 'react'
 import { Region } from '@/widgets'
-import type { DynamicBracketProps, SeedMeta, FinalRegion } from '@/types'
+import type { DynamicBracketProps, SeedMeta, FinalRegion, GameData } from '@/types'
 import { useAppSelector, useAppDispatch } from '@/store/hooks'
 import type { RootState } from '@/store/store'
 import { advanceTeam } from '@/store/bracketSlice'
@@ -24,22 +26,25 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({
 
     const allRegions = Object.keys(data.regions)
     const finalData = data.final as FinalRegion
-    const hasFinal = Boolean(finalData.finalGame)
+    const hasFinal = Boolean(finalData.games)
 
-    const finalBr = hasFinal
-        ? computeFinalBracket(
-            finalData,
-            rawTeams.reduce(
-                (m, tm) => ({ ...m, [tm.name]: tm }),
-                {} as Record<string, SeedMeta>
-            )
-        )
-        : { seeds: {}, rounds: [], games: [] }
+    // Helper to group GameData[] by roundNumber
+    const groupByRound = (games: GameData[]) => {
+        const map = new Map<number, GameData[]>()
+        games.forEach(g => {
+            const arr = map.get(g.roundNumber) || []
+            arr.push(g)
+            map.set(g.roundNumber, arr)
+        })
+        return Array.from(map.entries())
+            .sort(([a], [b]) => a - b)
+            .map(([, roundGames]) => roundGames)
+    }
 
     const renderRow = (regions: string[], key: string, isTop: boolean) => (
         <div className={`row gx-4 ${isTop ? 'mb-4' : 'mt-4'}`} key={key}>
             {regions.map((region, i) => {
-                const { seeds, rounds, games } = data.regions[region]
+                const { seeds: seedsMap, games } = data.regions[region]
                 const colLg = 12 / regionsPerRow
 
                 return (
@@ -47,8 +52,7 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({
                         <Region
                             name={region}
                             type={i % 2 === 0 ? 'left' : 'right'}
-                            seeds={resolveSeeds(seeds, rawTeams)}
-                            rounds={rounds}
+                            seeds={resolveSeeds(seedsMap, rawTeams)}
                             games={games}
                             userData={bracketRegions[region]}
                             onAdvanceTeam={(round, gameIdx, seed) =>
@@ -69,8 +73,13 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({
         </div>
     )
 
+    // Final four + championship
+    const finalBr = hasFinal
+        ? computeFinalBracket(finalData)
+        : { seeds: {} as Record<string, SeedMeta>, games: [] as GameData[] }
+
     const finalColClass = allRegions.length === 2 ? 'col-2' : 'col-4'
-    const finalStyle = finalData.semiFinals
+    const finalStyle = hasFinal
         ? { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }
         : { bottom: '10%', left: '50%', transform: 'translateX(-50%)' }
 
@@ -83,8 +92,18 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({
                 name="Final"
                 isFinal
                 seeds={finalBr.seeds}
-                rounds={finalBr.rounds}
                 games={finalBr.games}
+                onAdvanceTeam={(round, gameIdx, seed) =>
+                    dispatch(
+                        advanceTeam({
+                            tournamentType,
+                            region: 'Final',
+                            round,
+                            gameIdx,
+                            seed,
+                        })
+                    )
+                }
             />
         </div>
     )
