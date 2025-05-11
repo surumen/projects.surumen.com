@@ -7,6 +7,7 @@ export type TournamentKey = string; // e.g. "ncaa-2022" or "nba-2022"
 
 const TOURNAMENTS: Record<TournamentKey, TournamentStructure> = {
     'ncaa-2022': getNcaaTournamentData(2022),
+    'ncaa-2023': getNcaaTournamentData(2023),
     'nba-2022':  getNbaTournamentData(2022),
     // → add future years here, e.g. 'nba-2023': getNbaTournamentData(2023)
 };
@@ -79,10 +80,12 @@ function getUpPath(
 }
 
 const initialState: BracketState = {
-    regions: {
-        'ncaa-2022': createEmptyRegions(TOURNAMENTS['ncaa-2022']),
-        'nba-2022':  createEmptyRegions(TOURNAMENTS['nba-2022']),
-    },
+    regions: Object.fromEntries(
+        Object.entries(TOURNAMENTS).map(([key, data]) => [
+            key,
+            createEmptyRegions(data),
+        ])
+    ) as Record<TournamentKey, Record<string, BracketRegion>>,
 };
 
 export const bracketSlice = createSlice({

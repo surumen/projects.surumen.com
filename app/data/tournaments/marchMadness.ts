@@ -36,6 +36,32 @@ const seedsByYear: Record<
             13:'vermont',14:'oakland',15:'western-kentucky',16:'longwood',
         },
     },
+    2023: {
+        West: {
+            1:  'kansas',        2:  'ucla',           3:  'gonzaga',       4:  'uconn',
+            5:  'saint-marys',   6:  'tcu',            7:  'northwestern',  8:  'arkansas',
+            9:  'illinois',     10:  'boise-state',   11:  'arizona-state',12:  'vcu',
+            13: 'iona',         14:  'grand-canyon',  15:  'unc-asheville',16:  'howard',
+        },
+        East: {
+            1:  'purdue',        2:  'marquette',     3:  'kansas-state',  4:  'tennessee',
+            5:  'duke',          6:  'kentucky',      7:  'michigan-state',8:  'memphis',
+            9:  'florida-atlantic',10: 'usc',         11: 'providence',   12: 'oral-roberts',
+            13: 'louisiana',     14: 'montana-state',15: 'vermont',       16: 'fairleigh-dickinson',
+        },
+        Midwest: {
+            1:  'houston',       2:  'texas',         3:  'xavier',        4:  'indiana',
+            5:  'miami-fl',      6:  'iowa-state',    7:  'texas-a&m',     8:  'iowa',
+            9:  'auburn',       10:  'penn-state',   11: 'mississippi-state',12: 'drake',
+            13: 'kent-state',   14: 'kennesaw-state',15: 'colgate',      16: 'northern-kentucky',
+        },
+        South: {
+            1:  'alabama',       2:  'arizona',       3:  'baylor',        4:  'virginia',
+            5:  'san-diego-state',6: 'creighton',    7:  'missouri',      8:  'maryland',
+            9:  'west-virginia',10: 'utah-state',   11: 'nc-state',     12: 'charleston',
+            13: 'furman',       14: 'uc-santa-barbara',15: 'princeton',   16: 'texas-a&m-corpus-christi',
+        },
+    },
     // 2023, 2024, … go here
 };
 

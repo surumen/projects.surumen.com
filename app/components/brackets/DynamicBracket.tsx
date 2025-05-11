@@ -21,7 +21,7 @@ import { useMediaQuery }                   from 'react-responsive';
 
 const DynamicBracket: React.FC<DynamicBracketProps> = ({
                                                            tournamentType = 'ncaa',
-                                                           year = 2022,
+                                                           year = 2023,
                                                            regionsPerRow = 2,
                                                        }) => {
     const dispatch = useAppDispatch();
