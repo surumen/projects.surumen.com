@@ -55,6 +55,32 @@ const initialState: BracketState = {
     },
 }
 
+/**
+ * Starting from (round, gameIdx), returns an array of all the parent slots
+ * you will fill in later rounds.  Each item tells you:
+ *   - round:   the next round index
+ *   - gameIdx: which game in that round
+ *   - slot:    which side (0 = left, 1 = right) you will occupy
+ */
+function getUpPath(
+    totalRounds: number,
+    startRound: number,
+    startGameIdx: number
+): Array<{ round: number; gameIdx: number; slot: 0 | 1 }> {
+    const path: Array<{ round: number; gameIdx: number; slot: 0 | 1 }> = []
+    let prevIdx = startGameIdx
+
+    for (let r = startRound + 1; r < totalRounds; r++) {
+        const parentGame = Math.floor(prevIdx / 2)
+        const slot       = (prevIdx % 2) as 0 | 1
+        path.push({ round: r, gameIdx: parentGame, slot })
+        prevIdx = parentGame
+    }
+
+    return path
+}
+
+
 const bracketSlice = createSlice({
     name: 'bracket',
     initialState,
@@ -64,27 +90,35 @@ const bracketSlice = createSlice({
             action: PayloadAction<{
                 tournamentType: TournamentType
                 region:         string
-                round:          number   // current round
-                gameIdx:        number   // index within current round
-                seed:           number   // the seed we picked
+                round:          number    // current round
+                gameIdx:        number    // index within current round
+                seed:           number    // the seed we picked
             }>
         ) => {
             const { tournamentType, region, round, gameIdx, seed } = action.payload
             const reg = state.regions[tournamentType][region]
-            const next = round + 1
-            if (!reg || next >= reg.matchups.length) return
+            if (!reg) return
 
-            // which parent-game this feeds into...
-            const parentGame = Math.floor(gameIdx / 2)
-            // left child (even idx) → slot 0, right child (odd idx) → slot 1
-            const slot = gameIdx % 2   // 0 or 1
+            const totalRounds = reg.matchups.length
+            if (round + 1 >= totalRounds) return
 
-            reg.matchups[next][parentGame][slot] = seed
+            // figure out your defeated opponent
+            const [a, b] = reg.matchups[round][gameIdx]
+            const defeated = a === seed ? b : a
 
-            // clear any deeper rounds so nothing stale remains
-            for (let r = next + 1; r < reg.matchups.length; r++) {
-                // reset every game to [0,0]
-                reg.matchups[r] = reg.matchups[r].map(() => [0, 0] as [number,number])
+            // get the entire path, but we'll only use the very first step
+            const path = getUpPath(totalRounds, round, gameIdx)
+            if (path.length === 0) return
+
+            const { round: nextR, gameIdx: nextG, slot } = path[0]
+            const opp = 1 - slot
+
+            // 1) place the winner one level up
+            reg.matchups[nextR][nextG][slot] = seed
+
+            // 2) clear only that defeated opponent in the sibling slot
+            if (reg.matchups[nextR][nextG][opp] === defeated) {
+                reg.matchups[nextR][nextG][opp] = 0
             }
         },
 
