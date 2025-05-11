@@ -29,7 +29,13 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({
     const finalInfo = data.final as FinalRegion
     const hasFinal = finalInfo.games.length > 0
 
-    const onAdvance = (region: string, round: number, gameIdx: number, seed: number) => {
+    const onAdvance = (
+        game: GameData,
+        region: string,
+        round: number,
+        gameIdx: number,
+        seed: number
+    ) => {
         dispatch(
             advanceTeam({
                 tournamentType,
@@ -37,6 +43,7 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({
                 round,
                 gameIdx,
                 seed,
+                game,            // pass the GameData into the action
             })
         )
     }
@@ -55,7 +62,9 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({
                             seeds={resolveSeeds(seeds, teams)}
                             games={games}
                             userData={userRegions[region]}
-                            onAdvanceTeam={(round, gameIdx, seed) => onAdvance(region, round, gameIdx, seed)}
+                            onAdvanceTeam={(game, round, gameIdx, seed) =>
+                                onAdvance(game, region, round, gameIdx, seed)
+                            }
                         />
                     </div>
                 )
@@ -79,8 +88,8 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({
                 isFinal
                 seeds={finalBracket.seeds}
                 games={finalBracket.games}
-                onAdvanceTeam={(round, gameIdx, seed) =>
-                    onAdvance('Final', round, gameIdx, seed)
+                onAdvanceTeam={(game, round, gameIdx, seed) =>
+                    onAdvance(game, 'Final', round, gameIdx, seed)
                 }
             />
         </div>

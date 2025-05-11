@@ -59,7 +59,7 @@ const Region: React.FC<RegionProps> = ({
                             maxRounds={1}
                             type="left"
                             gameRefs={refs}
-                            onSeedClick={(gameIdx, seed) => onAdvanceTeam?.(0, gameIdx, seed)}
+                            // onSeedClick={(gameIdx, seed) => onAdvanceTeam?.(0, gameIdx, seed)}
                         />
                     </div>
                 </div>
@@ -122,8 +122,13 @@ const Region: React.FC<RegionProps> = ({
                                     maxRounds={maxRounds}
                                     type={sec.type}
                                     gameRefs={sec.refs}
-                                    onSeedClick={(gameIdx, seed) =>
-                                        onAdvanceTeam?.(logicalRound, gameIdx, seed)
+                                    onSeedClick={(roundIdx, seed) =>
+                                        onAdvanceTeam?.(
+                                            roundSeq[logicalRound][roundIdx],
+                                            logicalRound,
+                                            roundIdx,
+                                            seed
+                                        )
                                     }
                                 />
                             </div>
@@ -164,8 +169,13 @@ const Region: React.FC<RegionProps> = ({
                                     maxRounds={maxRounds}
                                     type={type}
                                     gameRefs={refs}
-                                    onSeedClick={(gameIdx, seed) =>
-                                        onAdvanceTeam?.(logicalRound, gameIdx, seed)
+                                    onSeedClick={(roundIdx, seed) =>
+                                        onAdvanceTeam?.(
+                                            roundSeq[logicalRound][roundIdx],
+                                            logicalRound,
+                                            roundIdx,
+                                            seed
+                                        )
                                     }
                                 />
                             </Col>

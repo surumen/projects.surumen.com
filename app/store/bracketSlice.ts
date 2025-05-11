@@ -15,53 +15,7 @@ interface BracketState {
     regions: Record<TournamentType, Record<string, BracketRegion>>
 }
 
-function createEmptyRegions(
-    data: TournamentStructure
-): Record<string, BracketRegion> {
-    const regs: Record<string, BracketRegion> = {}
-
-    for (const regionName in data.regions) {
-        const gameData = data.regions[regionName].games as GameData[]
-
-        // group by round
-        const roundsMap = new Map<number, GameData[]>()
-        for (const g of gameData) {
-            const arr = roundsMap.get(g.roundNumber) || []
-            arr.push(g)
-            roundsMap.set(g.roundNumber, arr)
-        }
-
-        const roundsData = Array.from(roundsMap.entries())
-            .sort(([a], [b]) => a - b)
-            .map(([, arr]) => arr)
-
-        // empty picks/scores
-        const matchups = roundsData.map(roundGames =>
-            // for each game in this round, start with a [0,0] tuple
-            roundGames.map(() => [0, 0] as [number,number])
-        )
-        const games    = roundsData.map(r => r.map(() => [0,0] as [number,number]))
-
-        regs[regionName] = { matchups, games }
-    }
-
-    return regs
-}
-
-const initialState: BracketState = {
-    regions: {
-        ncaa: createEmptyRegions(TOURNAMENTS.ncaa),
-        nba:  createEmptyRegions(TOURNAMENTS.nba),
-    },
-}
-
-/**
- * Starting from (round, gameIdx), returns an array of all the parent slots
- * you will fill in later rounds.  Each item tells you:
- *   - round:   the next round index
- *   - gameIdx: which game in that round
- *   - slot:    which side (0 = left, 1 = right) you will occupy
- */
+// helper as before
 function getUpPath(
     totalRounds: number,
     startRound: number,
@@ -80,6 +34,36 @@ function getUpPath(
     return path
 }
 
+function createEmptyRegions(
+    data: TournamentStructure
+): Record<string, BracketRegion> {
+    const regs: Record<string, BracketRegion> = {}
+    for (const regionName in data.regions) {
+        const gameData = data.regions[regionName].games as GameData[]
+        const roundsMap = new Map<number, GameData[]>()
+        gameData.forEach(g => {
+            const arr = roundsMap.get(g.roundNumber) || []
+            arr.push(g)
+            roundsMap.set(g.roundNumber, arr)
+        })
+        const roundsData = Array.from(roundsMap.entries())
+            .sort(([a], [b]) => a - b)
+            .map(([, arr]) => arr)
+        const matchups = roundsData.map(roundGames =>
+            roundGames.map(() => [0, 0] as [number, number])
+        )
+        const games = roundsData.map(() => [])
+        regs[regionName] = { matchups, games }
+    }
+    return regs
+}
+
+const initialState: BracketState = {
+    regions: {
+        ncaa: createEmptyRegions(TOURNAMENTS.ncaa),
+        nba:  createEmptyRegions(TOURNAMENTS.nba),
+    },
+}
 
 const bracketSlice = createSlice({
     name: 'bracket',
@@ -90,35 +74,54 @@ const bracketSlice = createSlice({
             action: PayloadAction<{
                 tournamentType: TournamentType
                 region:         string
-                round:          number    // current round
-                gameIdx:        number    // index within current round
-                seed:           number    // the seed we picked
+                game:           GameData
+                round:          number
+                gameIdx:        number
+                seed:           number
             }>
         ) => {
-            const { tournamentType, region, round, gameIdx, seed } = action.payload
+            const { tournamentType, region, game, round, gameIdx, seed } = action.payload
             const reg = state.regions[tournamentType][region]
             if (!reg) return
 
             const totalRounds = reg.matchups.length
-            if (round + 1 >= totalRounds) return
-
-            // figure out your defeated opponent
-            const [a, b] = reg.matchups[round][gameIdx]
-            const defeated = a === seed ? b : a
-
-            // get the entire path, but we'll only use the very first step
             const path = getUpPath(totalRounds, round, gameIdx)
             if (path.length === 0) return
 
-            const { round: nextR, gameIdx: nextG, slot } = path[0]
-            const opp = 1 - slot
+            // first step in path is the very next round
+            const { round: nxtR, gameIdx: parent, slot } = path[0]
 
-            // 1) place the winner one level up
-            reg.matchups[nextR][nextG][slot] = seed
+            // write the winner into its slot
+            reg.matchups[nxtR][parent][slot] = seed
 
-            // 2) clear only that defeated opponent in the sibling slot
-            if (reg.matchups[nextR][nextG][opp] === defeated) {
-                reg.matchups[nextR][nextG][opp] = 0
+            // determine defeated seed
+            let defeated: number
+            if (round === 0) {
+                // map team‐slug back to seed#
+                const slugMap = Object.fromEntries(
+                    Object.entries(
+                        TOURNAMENTS[tournamentType].regions[region].seeds as Record<number,string>
+                    ).map(([num, slug]) => [slug, Number(num)])
+                ) as Record<string,number>
+                const a = game.firstSeed?.name ?? ''
+                const b = game.secondSeed?.name ?? ''
+                const A = slugMap[a] || 0
+                const B = slugMap[b] || 0
+                defeated = seed === A ? B : A
+            } else {
+                // sibling slot holds the loser
+                defeated = reg.matchups[nxtR][parent][slot ^ 1]
+            }
+
+            // now clear only that defeated‐lane further down the path
+            for (let i = 1; i < path.length; i++) {
+                const { round: r, gameIdx: idx, slot: s } = path[i]
+                if (reg.matchups[r][idx][s] === defeated) {
+                    reg.matchups[r][idx][s] = 0
+                } else {
+                    // once we hit a slot that doesn't match defeated, stop clearing
+                    break
+                }
             }
         },
 

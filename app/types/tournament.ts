@@ -197,7 +197,12 @@ export interface RegionProps {
     isFinal?: boolean;
 
     /** Called when the user clicks a seed button */
-    onAdvanceTeam?: (round: number, gameIndex: number, seed: number) => void;
+    onAdvanceTeam?: (
+        game:    GameData,
+        round:   number,
+        gameIdx: number,
+        seed:    number
+    ) => void;
 }
 
 export interface DynamicBracketProps {
