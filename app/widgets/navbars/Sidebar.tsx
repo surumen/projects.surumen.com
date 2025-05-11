@@ -20,8 +20,7 @@ const Sidebar = (props) => {
 	);
 
 	return (
-		<Navbar className={`navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-xl navbar-bordered navbar-vertical-aside-initialized 
-			${isMobile ? 'd-none' : ''}`}>
+		<Navbar className={`d-none d-md-block navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-xl navbar-bordered navbar-vertical-aside-initialized`}>
 			<div className='navbar-vertical-container'>
 				<Navbar.Brand href="/" className='navbar-brand d-flex justify-content-center navbar-brand px-3 mt-3'>
 					<LogoIcon primary={'#377dff'} dark={'#1c232c'} />
