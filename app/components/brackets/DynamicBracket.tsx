@@ -1,4 +1,3 @@
-// src/widgets/DynamicBracket.tsx
 import React from 'react';
 import { Row } from 'react-bootstrap';
 import { Region } from '@/widgets';
@@ -11,28 +10,26 @@ import type {
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import type { RootState } from '@/store/store';
 import { advanceTeam }                    from '@/store/bracketSlice';
-import { ncaaTournamentData }            from '@/data/tournaments/marchMadness';
+import { getNcaaTournamentData } from '@/data/tournaments/marchMadness';
 import { getNbaTournamentData }          from '@/data/tournaments/nbaPlayoffs';
 import { teamsData as ncaaTeams }        from '@/data/tournaments/teams/ncaaBasketball';
 import { resolveSeeds, computeFinalBracket } from '@/helpers';
 import useMounted                          from '@/hooks/useMounted';
 import { useMediaQuery }                   from 'react-responsive';
 
-interface DynamicBracketPropsWithYear extends DynamicBracketProps {
-    year?: number;
-}
 
-const DynamicBracket: React.FC<DynamicBracketPropsWithYear> = ({
-                                                                   tournamentType = 'nba',
-                                                                   year = 2022,
-                                                                   regionsPerRow = 2,
-                                                               }) => {
+
+const DynamicBracket: React.FC<DynamicBracketProps> = ({
+                                                           tournamentType = 'ncaa',
+                                                           year = 2022,
+                                                           regionsPerRow = 2,
+                                                       }) => {
     const dispatch = useAppDispatch();
     const key      = `${tournamentType}-${year}`;
 
     const data = tournamentType === 'nba'
         ? getNbaTournamentData(year)
-        : ncaaTournamentData;
+        : getNcaaTournamentData(year);
     const teams = tournamentType === 'nba' ? undefined : ncaaTeams;
     const userRegions = useAppSelector(
         (state: RootState) => state.bracket.regions[key]
