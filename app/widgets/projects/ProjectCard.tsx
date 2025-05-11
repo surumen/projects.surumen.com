@@ -11,12 +11,15 @@ import ProjectSummary from './ProjectSummary';
 
 // import data files
 import { LanguageColorMap } from '@/data/colorMap';
+import { useMediaQuery } from 'react-responsive';
+import useMounted from '@/hooks/useMounted';
 
 
 const ProjectCard = ({ project, viewby }) => {
 	const [show, setShow] = useState(false);
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
+	const hasMounted = useMounted();
 
 	const getLanguageScheme = (language) => {
 		return LanguageColorMap.filter(map => map.color === language)[0].scheme;
@@ -64,6 +67,13 @@ const ProjectCard = ({ project, viewby }) => {
 		);
 	};
 
+	const isMobileQuery = useMediaQuery({ query: '(max-width: 767px)' });
+	const isMobile = hasMounted && isMobileQuery;
+
+	const offcanvasWidth = isMobile
+		? '100vw'
+		: 'calc(100vw - 8rem)';
+
 	return (
 		<Fragment>
 			<ListStackView />
@@ -72,7 +82,7 @@ const ProjectCard = ({ project, viewby }) => {
 					   onHide={handleClose}
 					   placement='end'
 					   name='end'
-					   style={{width: 'calc(100vw - 8rem)'}}
+					   style={{width: offcanvasWidth}}
 			>
 				<Offcanvas.Header className='justify-content-end border-bottom'>
 					<Button onClick={handleClose} className='btn d-inline-flex btn-sm btn-neutral shadow-none rounded-pill'><span>Back Home</span></Button>

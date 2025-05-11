@@ -58,16 +58,16 @@ const NavTop = (props) => {
 
                 <div className='navbar-nav-wrap-content-end'>
                     <ul className='navbar-nav'>
-                        <Nav.Link target='_blank' href='https://surumen.com' className='nav-item nav-link rounded-pill d-none d-sm-inline-block cursor-pointer'>
+                        <Nav.Link target='_blank' href='https://surumen.com' className='nav-item nav-link rounded-pill d-inline-block cursor-pointer'>
                             <Person size={22} />
                         </Nav.Link>
-                        <Nav.Link target='_blank' href='https://www.linkedin.com/in/mosessurumen' className='nav-item nav-link rounded-pill d-none d-lg-block cursor-pointer'>
+                        <Nav.Link target='_blank' href='https://www.linkedin.com/in/mosessurumen' className='nav-item nav-link rounded-pill d-inline-block cursor-pointer'>
                             <Linkedin size={18} />
                         </Nav.Link>
                         {/*<Nav.Link target='_blank' href='https://github.com/surumen' className='nav-item nav-link rounded-pill d-none d-lg-block cursor-pointer'>*/}
                         {/*    <Github size={18} />*/}
                         {/*</Nav.Link>*/}
-                        <Nav.Link onClick={changeColorMode} className='nav-item nav-link rounded-pill d-none d-sm-inline-block cursor-pointer'>
+                        <Nav.Link onClick={changeColorMode} className='nav-item nav-link rounded-pill d-inline-block cursor-pointer'>
                             {storageValue === 'dark' ? (
                                 <MoonFill size={18} />
                             ) : (
