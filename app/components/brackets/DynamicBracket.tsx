@@ -11,7 +11,7 @@ import { TOURNEY_REGISTRY } from '@/data/tournaments';
 
 const DynamicBracket: React.FC<DynamicBracketProps> = ({
                                                            tournamentType = 'ncaa',
-                                                           year = 2025,
+                                                           year = 2023,
                                                            regionsPerRow = 2,
                                                        }) => {
     const instanceKey = `${tournamentType}-${year}`;
