@@ -1,4 +1,3 @@
-// src/widgets/brackets/Round.tsx
 import React from 'react';
 import useMounted from '@/hooks/useMounted';
 import { useMediaQuery } from 'react-responsive';

@@ -1,4 +1,3 @@
-// Game.tsx
 import React from 'react';
 import Team from './Team';
 import type { GameProps, SeedMeta } from '@/types';
