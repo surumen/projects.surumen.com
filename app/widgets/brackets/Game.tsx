@@ -26,11 +26,12 @@ const Game: React.FC<GameProps> = ({
         : 0;
 
     return (
-        <div className={`d-flex ${type==='right' ? 'justify-content-end' : 'justify-content-start'}`}>
+        <div className={`d-flex ${type === 'right' ? 'justify-content-end' : 'justify-content-start'}`}>
             <button
                 className={`border-0 rounded-0 p-0 list-group list-group-sm mt-n3 m-0 shadow ${
-                    type==='right'?'text-end rounded-start':'text-start rounded-end'
-                }`} style={{minWidth: '8rem', maxWidth: '8rem', textOverflow: 'ellipsis'}}
+                    type === 'right' ? 'text-end rounded-start' : 'text-start rounded-end'
+                }`}
+                style={{ minWidth: '10rem', maxWidth: '10rem' }}
             >
                 <Team
                     name={teamA?.name}
@@ -46,7 +47,7 @@ const Game: React.FC<GameProps> = ({
                     name={teamB?.name}
                     seed={secondSeedNum}
                     displayName={teamB?.shortName ?? teamB?.name ?? ''}
-                    position="middle"
+                    position="bottom"
                     type={type}
                     logo={teamB?.logo}
                     color={teamB?.color}
