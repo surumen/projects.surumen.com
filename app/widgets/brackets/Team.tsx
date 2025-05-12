@@ -34,6 +34,7 @@ const Team: React.FC<TeamProps> = ({
 
     const classes = [
         'list-group-item',
+        'w-100',
         'd-flex',
         isRight ? 'justify-content-end' : 'justify-content-start',
         'align-items-center',
