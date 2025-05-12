@@ -66,14 +66,18 @@ const Region: React.FC<RegionProps> = ({
 
             {/* Header */}
             {!isMobile && (
-                <h6
-                    className={`position-relative text-${
-                        isRight ? 'end' : 'start'
-                    } text-uppercase text-muted mb-2`}
-                    style={{ zIndex: 1 }}
+                <h2
+                    className="position-absolute text-uppercase text-muted"
+                    style={{
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        zIndex: 1,
+                        pointerEvents: 'none'
+                    }}
                 >
                     {name}
-                </h6>
+                </h2>
             )}
 
             {/* Visual grid (flipped for right) */}

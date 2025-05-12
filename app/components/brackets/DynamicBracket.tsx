@@ -15,7 +15,7 @@ import { useMediaQuery } from 'react-responsive';
 import { TOURNEY_REGISTRY } from '@/data/tournaments';
 
 const DynamicBracket: React.FC<DynamicBracketProps> = ({
-                                                           tournamentType = 'ncaa',
+                                                           tournamentType = 'ucl',
                                                            year = 2025,
                                                            regionsPerRow = 2,
                                                        }) => {
