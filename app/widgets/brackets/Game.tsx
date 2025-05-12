@@ -25,12 +25,16 @@ const Game: React.FC<GameProps> = ({
         ? Number(Object.entries(seeds).find(([n,m])=>m===teamB)?.[0] ?? 0)
         : 0;
 
+    const textClass: string = type === 'right' ? 'text-end' :
+        type === 'left' ? 'text-start' : 'text-center';
+
+    const roundedClass: string = type === 'right' ? 'rounded-0 rounded-start' :
+        type === 'left' ? 'rounded-0 rounded-end' : 'rounded';
+
     return (
         <div className={`d-flex ${type === 'right' ? 'justify-content-end' : 'justify-content-start'}`}>
             <button
-                className={`border-0 rounded-0 p-0 list-group list-group-sm mt-n3 m-0 shadow ${
-                    type === 'right' ? 'text-end rounded-start' : 'text-start rounded-end'
-                }`}
+                className={`border-0 ${roundedClass} p-0 list-group list-group-sm mt-n3 m-0 shadow ${textClass}`}
                 style={{ minWidth: '10rem', maxWidth: '10rem' }}
             >
                 <Team

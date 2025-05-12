@@ -14,19 +14,20 @@ const Team: React.FC<TeamProps> = ({
                                        onClick,
                                    }) => {
     const isRight = type === 'right';
+    const isLeft = type === 'left';
     const label = displayNamePredicted ?? displayName;
 
-    const borderSide = isRight ? 'border-end' : 'border-start';
-    const roundTop = position === 'top' ? (isRight ? 'rounded-top-start' : 'rounded-top-end') : '';
-    const roundBottom = position === 'bottom' ? (isRight ? 'rounded-bottom-start' : 'rounded-bottom-end') : '';
+    const borderSide = isRight ? 'border-end' : isLeft ? 'border-start' : '';
+    const roundTop = position === 'top' ? (isRight ? 'rounded-top-start' : isLeft ? 'rounded-top-end' : 'rounded-top') : '';
+    const roundBottom = position === 'bottom' ? (isRight ? 'rounded-bottom-start' : isLeft ? 'rounded-bottom-end' : 'rounded-bottom') : '';
 
-    const paddingX = isRight ? 'ps-2 pe-0' : 'pe-2 ps-0';
+    const paddingX = isRight ? 'ps-2 pe-0' : isLeft ? 'pe-2 ps-0' : 'px-3';
 
     const classes = [
         'list-group-item',
         'w-100',
         'd-flex',
-        isRight ? 'justify-content-end' : 'justify-content-start',
+        isRight ? 'justify-content-end' : isLeft ? 'justify-content-start' : '',
         'align-items-center',
         'bg-light',
         'text-body',
@@ -34,7 +35,7 @@ const Team: React.FC<TeamProps> = ({
         borderSide,
         'border-5',
         `border-${color}`,
-        'rounded-0',
+        isLeft || isRight ? 'rounded-0' : 'rounded',
         roundTop,
         roundBottom,
         paddingX,

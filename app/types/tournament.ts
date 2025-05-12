@@ -87,7 +87,7 @@ export interface BracketData {
 
 // --- Component prop interfaces ---
 
-type Orientation = 'left' | 'right';
+type Orientation = 'left' | 'right' | 'center';
 
 export interface TeamProps {
     /** Full slug name (for aria / keying) */
@@ -136,7 +136,7 @@ export interface GameProps {
     game: GameData;
 
     /** Direction for rendering */
-    type?: 'left' | 'right';
+    type?: 'left' | 'right' | 'center';
 
     /** explicit [teamA, teamB] from Redux picks */
     participants?: [SeedMeta?, SeedMeta?];
@@ -166,7 +166,7 @@ export interface RoundProps {
     totalRows?: number;
 
     /** “left” or “right” facing layout */
-    type?: 'left' | 'right';
+    type?: 'left' | 'right' | 'center';
 
     pick?: [number,number];
 
