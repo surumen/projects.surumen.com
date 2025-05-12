@@ -7,6 +7,7 @@ import Game from './Game';
 const Round: React.FC<RoundProps> = ({
                                          seeds,
                                          gamesData,
+                                         number,
                                          type = 'left',
                                          pick,
                                          onSeedClick,
@@ -38,12 +39,15 @@ const Round: React.FC<RoundProps> = ({
         typeof seeds[number]
     ];
 
+    const verticalOffset = `${(number ?? 0) * (isMobile ? 0.75 : 0.25)}rem`;
+
     return (
         <div
             className="d-grid"
             style={{
                 gridTemplateRows: 'auto 1fr',
                 rowGap: isMobile ? '2.5rem' : '1rem',
+                marginTop: verticalOffset, // Incremental vertical offset per round
             }}
         >
             <div>

@@ -168,7 +168,7 @@ const Region: React.FC<RegionProps> = ({
                         display: 'grid',
                         gridTemplateRows: `repeat(${rowCount},1fr)`,
                         gridTemplateColumns: `repeat(${roundCount},1fr)`,
-                        columnGap: isMobile ? '1rem' : '2rem',
+                        columnGap: isMobile ? '-1rem' : '-2rem', // negative gap allows rounds to overlap slightly
                         alignContent: 'stretch',
                         ...(isRight ? { transform: 'scaleX(-1)' } : {}),
                     }}
