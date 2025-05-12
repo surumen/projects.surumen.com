@@ -22,10 +22,16 @@ const Round: React.FC<RoundProps> = ({
     // did the user actually pick a non-zero pair?
     const hasPick = !!pick && (pick[0] !== 0 || pick[1] !== 0);
 
-    // if they haven’t, fall back to the real seeds
-    const tuple: [number,number] = hasPick
-        ? pick!
-        : [ game.firstSeed!.seed!, game.secondSeed!.seed! ];
+    // build the seed tuple safely
+    let tuple: [number, number];
+    if (hasPick) {
+        tuple = pick!;
+    } else if (game.firstSeed && game.secondSeed) {
+        tuple = [game.firstSeed.seed!, game.secondSeed.seed!];
+    } else {
+        // fallback for final region games without first/second seeds
+        tuple = [0, 0];
+    }
 
     // lookup the full metadata
     const participants = tuple.map(s => seeds[s]) as [
