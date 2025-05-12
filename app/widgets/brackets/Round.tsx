@@ -16,15 +16,13 @@ const Round: React.FC<RoundProps> = ({
                                          gameRefs,
                                          picks,
                                          onSeedClick,
+                                         rowCount,   // ← new prop
+                                         spacing,    // ← new prop
                                      }) => {
-
     const hasMounted = useMounted();
     const isMobileQuery = useMediaQuery({ query: '(max-width: 767px)' });
     const isMobile = hasMounted && isMobileQuery;
 
-    // number of baseline games = total seeds / 2
-    const baselineGames = Object.keys(seeds).length / 2;
-    const totalRows = baselineGames * 2 + 1;
     const singleGame = gamesData.length === 1;
 
     // Mirror round index for right-facing alignment
@@ -42,28 +40,24 @@ const Round: React.FC<RoundProps> = ({
             className="flex-grow-1 h-100"
             style={{
                 display: 'grid',
-                gridTemplateRows: `repeat(${totalRows}, 1fr)`,
-                ...(isMobile ? { rowGap: '1.75rem' } : {}),   // only on mobile
+                gridTemplateRows: `repeat(${rowCount}, 1fr)`,
+                ...(isMobile ? { rowGap: '1.75rem' } : {}),
             }}
         >
             {gamesData.map((game, idx) => {
-                const spacingPerGame = Math.pow(2, effectiveRound + 1);
-                const baseOffset = spacingPerGame / 2;
-
+                // center single game, otherwise use uniform spacing
                 const rowStart = singleGame
-                    ? Math.ceil(totalRows / 2)
-                    : isBaseline
-                        ? idx * 2 + 2
-                        : idx * spacingPerGame + baseOffset + 1;
+                    ? Math.ceil(rowCount / 2)
+                    : Math.round(spacing * (idx + 1));
 
                 // pull out exactly one tuple per game
-                const tuple = picks?.[idx]            // [seedA,seedB] or undefined
+                const tuple = picks?.[idx];
                 const participants = tuple
                     ? [
                         seeds[tuple[0]] ?? undefined,
                         seeds[tuple[1]] ?? undefined,
                     ] as [typeof seeds[number]?, typeof seeds[number]?]
-                    : undefined
+                    : undefined;
 
                 return (
                     <div

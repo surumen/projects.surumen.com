@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { TournamentStructure, BracketRegion, GameData } from '@/types';
 import { getNcaaTournamentData } from '@/data/tournaments/marchMadness';
-import { getNbaTournamentData }       from '@/data/tournaments/nbaPlayoffs';
+import { getNbaTournamentData }  from '@/data/tournaments/nbaPlayoffs';
+import { getUclTournamentData }  from '@/data/tournaments/uefaChampionsLeague';
 
 export type TournamentKey = string;
 
@@ -12,6 +13,7 @@ export const TOURNAMENTS: Record<TournamentKey, TournamentStructure> = Object.fr
     years.flatMap((year) => ([
         [`ncaa-${year}`, getNcaaTournamentData(year)],
         [`nba-${year}`,  getNbaTournamentData(year)],
+        [`ucl-${year}`, getUclTournamentData(year)]
     ]))
 ) as Record<TournamentKey, TournamentStructure>;
 

@@ -5,32 +5,37 @@ import type {
     DynamicBracketProps,
     SeedMeta,
     FinalRegion,
-    GameData,
+    GameData, TournamentStructure
 } from '@/types';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import type { RootState } from '@/store/store';
 import { advanceTeam }                    from '@/store/bracketSlice';
-import { getNcaaTournamentData } from '@/data/tournaments/marchMadness';
-import { getNbaTournamentData }          from '@/data/tournaments/nbaPlayoffs';
-import { teamsData as ncaaTeams }        from '@/data/tournaments/teams/ncaaBasketball';
 import { resolveSeeds, computeFinalBracket } from '@/helpers';
 import useMounted                          from '@/hooks/useMounted';
 import { useMediaQuery }                   from 'react-responsive';
 
 
+import { TOURNEY_REGISTRY } from '@/data/tournaments';
+
 
 const DynamicBracket: React.FC<DynamicBracketProps> = ({
-                                                           tournamentType = 'nba',
+                                                           tournamentType = 'ucl',
                                                            year = 2025,
                                                            regionsPerRow = 2,
                                                        }) => {
     const dispatch = useAppDispatch();
-    const key      = `${tournamentType}-${year}`;
+    const key = `${tournamentType}-${year}`;
 
-    const data = tournamentType === 'nba'
-        ? getNbaTournamentData(year)
-        : getNcaaTournamentData(year);
-    const teams = tournamentType === 'nba' ? undefined : ncaaTeams;
+    // 1) lookup our registry
+    const config = TOURNEY_REGISTRY[tournamentType];
+    if (!config) throw new Error(`Unknown tournament type "${tournamentType}"`);
+
+    // 2) fetch its data & optional teamsData
+    const data: TournamentStructure = config.getData(year);
+    const teams: SeedMeta[] | undefined = config.teamsData;
+    console.log(data)
+
+    // 3) grab user state
     const userRegions = useAppSelector(
         (state: RootState) => state.bracket.regions[key]
     );

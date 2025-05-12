@@ -161,6 +161,9 @@ export interface RoundProps {
     /** total number of rounds in this region */
     maxRounds: number;
 
+    rowCount: number;
+    spacing:  number;
+
     /** “left” or “right” facing layout */
     type?: 'left' | 'right';
 
