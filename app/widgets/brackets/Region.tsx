@@ -1,243 +1,139 @@
-// src/widgets/brackets/Region.tsx
-
-import React, { useRef } from 'react';
-import Round from './Round';
-import Connector from '@/widgets/brackets/Connector';
+import React, { useRef, useMemo } from 'react';
 import useMounted from '@/hooks/useMounted';
 import { useMediaQuery } from 'react-responsive';
-import type { RegionProps, GameData } from '@/types';
+import type { RegionProps } from '@/types';
+import Round from '@/widgets/brackets/Round';
+import Connector from '@/widgets/brackets/Connector';
 
 const Region: React.FC<RegionProps> = ({
                                            name,
                                            type = 'left',
                                            seeds,
                                            games,
-                                           isFinal = false,
                                            userData,
                                            onAdvanceTeam,
                                        }) => {
     const hasMounted = useMounted();
     const isMobileQuery = useMediaQuery({ query: '(max-width: 767px)' });
     const isMobile = hasMounted && isMobileQuery;
+    const isRight = type === 'right';
 
-    // ─── NEW: compute rows needed for grid based on number of teams ─────────
-    const teamCount = Object.keys(seeds).length;    // e.g. 8 teams in R16
-    const rowCount  = teamCount * 2 - 1;            // e.g. 15 rows
-
-    // 1) group & optionally reverse
-    const roundsData = React.useMemo(() => {
-        const m = new Map<number, GameData[]>();
-        games.forEach(g => {
-            (m.get(g.roundNumber) || m.set(g.roundNumber, []).get(g.roundNumber)!)
-                .push(g);
+    // 1) group games by roundNumber
+    const roundsData = useMemo(() => {
+        const map = new Map<number, typeof games>();
+        games.forEach((g) => {
+            const arr = map.get(g.roundNumber) ?? [];
+            arr.push(g);
+            map.set(g.roundNumber, arr);
         });
-        return Array.from(m.entries())
-            .sort(([a], [b]) => a - b)
-            .map(([, arr]) => arr);
+        return Array.from(map.keys())
+            .sort((a, b) => a - b)
+            .map((round) => map.get(round)!);
     }, [games]);
 
-    const roundSeq = type === 'right' ? [...roundsData].reverse() : roundsData;
-    const maxRounds = roundSeq.length;
+    const roundCount = roundsData.length;
+    // total grid rows = 2 * (first-round games) - 1
+    const rowCount = useMemo(() => roundsData[0].length * 2 - 1, [roundsData]);
 
-    // 2) prepare refs
+    // 2) prepare refs for each cell
     const gameRefs = useRef<React.RefObject<HTMLDivElement>[][]>();
     if (!gameRefs.current) {
-        gameRefs.current = roundSeq.map(r =>
+        gameRefs.current = roundsData.map((r) =>
             r.map(() => React.createRef<HTMLDivElement>())
         );
     }
-    const containerRef = useRef<HTMLDivElement>(null);
 
-    // 3) renderGrid helper — now uses rowCount & computes spacing per round
-    const renderGrid = (cols: number, finalFlags: boolean[]) => (
-        <div className="position-relative flex-grow-1" style={{ zIndex: 1, minHeight: 0 }}>
-            <div
-                style={{
-                    display: 'grid',
-                    gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
-                    columnGap: isMobile ? '-2.75rem' : '2rem',
-                    paddingLeft: isMobile && type === 'left'   ? '1.375rem' : undefined,
-                    paddingRight: isMobile && type === 'right' ? '1.375rem' : undefined,
-                }}
-            >
-                {roundSeq.map((roundGames, idx) => {
-                    const logicalRound = type === 'right'
-                        ? maxRounds - idx - 1
-                        : idx;
-                    const refs = gameRefs.current![idx];
-                    const isFinalRound = finalFlags[idx];
-
-                    // compute spacing for this round
-                    const gamesInRound = roundGames.length;            // 4, 2, or 1
-                    const spacing      = rowCount / (gamesInRound + 1);
-
-                    return (
-                        <div
-                            key={idx}
-                            className="px-2 d-flex flex-column"
-                            style={
-                                isMobile
-                                    ? (type === 'left'
-                                        ? { marginLeft: '-1.375rem' }
-                                        : { marginRight: '-1.375rem' })
-                                    : undefined
-                            }
-                        >
-                            <Round
-                                seeds={seeds}
-                                gamesData={roundGames}
-                                picks={userData?.matchups[logicalRound]}
-                                final={isFinalRound}
-                                number={idx}
-                                maxRounds={maxRounds}
-                                type={type}
-                                gameRefs={refs}
-                                rowCount={rowCount}
-                                spacing={spacing}
-                                onSeedClick={(displayIdx, seed) => {
-                                    const game = roundGames[displayIdx];
-                                    onAdvanceTeam?.(
-                                        game,
-                                        logicalRound,
-                                        game.gameNumber,
-                                        seed
-                                    );
-                                }}
-                            />
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
+    // 3) if this is a right region, reverse refs so Connector sees logical 0→1→2 order
+    const refsForConnector = useMemo(
+        () => (isRight ? [...gameRefs.current!].reverse() : gameRefs.current!),
+        [isRight]
     );
 
-    // ─── 1) Final + Mobile: act like a 2-col left-type Normal ─────────────
-    if (isFinal && isMobile) {
-        return (
-            <div
-                ref={containerRef}
-                className="position-relative mb-4 d-flex flex-column h-100"
-            >
-                <Connector
-                    gameRefs={gameRefs.current!}
-                    containerRef={containerRef}
-                    type="left"
-                    isFinalRegion={false}
-                />
-                {renderGrid(2, [false, true])}
-            </div>
-        );
-    }
+    const containerRef = useRef<HTMLDivElement>(null);
 
-    // ─── 2) Final + Desktop: three-section semis / champ / semis ─────────
-    if (isFinal) {
-        const [semis, finals] = roundSeq;
-        const [semiRefs, finalRefs] = gameRefs.current!;
-
-        const sections = [
-            {
-                key: 'left-semi',
-                games: [semis[0]],
-                final: false,
-                number: 0,
-                type: 'left' as const,
-                refs: [semiRefs[0]],
-                px: 2,
-            },
-            {
-                key: 'championship',
-                games: finals,
-                final: true,
-                number: 1,
-                type: 'left' as const,
-                refs: finalRefs,
-                px: 4,
-            },
-            {
-                key: 'right-semi',
-                games: [semis[1]],
-                final: false,
-                number: 0,
-                type: 'right' as const,
-                refs: [semiRefs[1]],
-                px: 2,
-            },
-        ];
-
-        return (
-            <div
-                ref={containerRef}
-                className="position-relative mb-0 d-flex flex-column h-100"
-            >
-                <Connector
-                    gameRefs={gameRefs.current!}
-                    containerRef={containerRef}
-                    isFinalRegion
-                />
-                <div className="d-flex justify-content-between align-items-center flex-grow-1">
-                    {sections.map(sec => {
-                        const logicalRound = sec.type === 'right'
-                            ? maxRounds - sec.number - 1
-                            : sec.number;
-
-                        // compute spacing for this section
-                        const gamesInSection = sec.games.length;        // 1 or more
-                        const sectionSpacing = rowCount / (gamesInSection + 1);
-
-                        return (
-                            <div key={sec.key} className={`px-${sec.px} w-100`}>
-                                <Round
-                                    seeds={seeds}
-                                    gamesData={sec.games}
-                                    picks={userData?.matchups[logicalRound]}
-                                    final={sec.final}
-                                    number={sec.number}
-                                    maxRounds={maxRounds}
-                                    type={sec.type}
-                                    gameRefs={sec.refs}
-                                    rowCount={rowCount}
-                                    spacing={sectionSpacing}
-                                    onSeedClick={(displayIdx, seed) => {
-                                        const game = sec.games[displayIdx];
-                                        onAdvanceTeam?.(
-                                            game,
-                                            logicalRound,
-                                            game.gameNumber,
-                                            seed
-                                        );
-                                    }}
-                                />
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
-        );
-    }
-
-    // ─── 3) Normal region (any screen) ─────────────────────────────────────
     return (
         <div
             ref={containerRef}
-            className="position-relative mb-4 d-flex flex-column h-100"
+            className="h-100 d-flex flex-column position-relative"
         >
-            {!isMobile && (
-                <h2
-                    className="position-absolute top-50 start-50 translate-middle text-uppercase fw-semibold text-muted"
-                    style={{ zIndex: 2, pointerEvents: 'none' }}
-                >
-                    {name}
-                </h2>
-            )}
-
+            {/* Connector uses refsForConnector (never flipped) */}
             <Connector
-                gameRefs={gameRefs.current!}
+                gameRefs={refsForConnector}
                 containerRef={containerRef}
                 type={type}
                 isFinalRegion={false}
             />
 
-            {renderGrid(maxRounds, Array(maxRounds).fill(false))}
+            {/* Header */}
+            {!isMobile && (
+                <h6
+                    className={`position-relative text-${
+                        isRight ? 'end' : 'start'
+                    } text-uppercase text-muted mb-2`}
+                    style={{ zIndex: 1 }}
+                >
+                    {name}
+                </h6>
+            )}
+
+            {/* Visual grid (flipped for right) */}
+            <div
+                className="flex-grow-1"
+                style={{
+                    display: 'grid',
+                    // break into 2*N-1 rows so midpoints align
+                    gridTemplateRows: `repeat(${rowCount}, 1fr)`,
+                    gridTemplateColumns: `repeat(${roundCount}, 1fr)`,
+                    columnGap: isMobile ? '1rem' : '2rem',
+                    alignContent: 'stretch',
+                    ...(isRight ? { transform: 'scaleX(-1)' } : {}),
+                }}
+            >
+                {roundsData.map((gamesInRound, roundIdx) =>
+                    gamesInRound.map((game, gameIdx) => {
+                        // still pass spacing for Round, even if not used for positioning
+                        const spacing = rowCount / (gamesInRound.length + 1);
+                        // place each game halfway between its two feeders:
+                        const rowStart =
+                            gameIdx * Math.pow(2, roundIdx + 1) + Math.pow(2, roundIdx);
+
+                        const pick = userData?.matchups?.[roundIdx]?.[gameIdx];
+                        const participants = pick
+                            ? ([seeds[pick[0]], seeds[pick[1]]] as [
+                                typeof seeds[number]?,
+                                typeof seeds[number]?
+                            ])
+                            : undefined;
+
+                        return (
+                            <div
+                                key={`${roundIdx}-${gameIdx}`}
+                                ref={gameRefs.current![roundIdx][gameIdx]}
+                                style={{
+                                    gridColumn: roundIdx + 1,
+                                    gridRowStart: rowStart,
+                                    // un-flip the content inside
+                                    ...(isRight ? { transform: 'scaleX(-1)' } : {}),
+                                }}
+                            >
+                                <Round
+                                    seeds={seeds}
+                                    gamesData={[game]}
+                                    number={roundIdx}
+                                    type={type}
+                                    pick={userData?.matchups?.[roundIdx]?.[gameIdx]}
+                                    rowCount={rowCount}
+                                    spacing={spacing}
+                                    gameRefs={gameRefs.current![roundIdx]}
+                                    onSeedClick={(seed) =>
+                                        onAdvanceTeam!(game, roundIdx, gameIdx, seed)
+                                    }
+                                />
+                            </div>
+                        );
+                    })
+                )}
+            </div>
         </div>
     );
 };

@@ -159,21 +159,22 @@ export interface RoundProps {
     number: number;
 
     /** total number of rounds in this region */
-    maxRounds: number;
+    maxRounds?: number;
 
-    rowCount: number;
+    rowCount?: number;
     spacing:  number;
+    totalRows?: number;
 
     /** “left” or “right” facing layout */
     type?: 'left' | 'right';
 
-    picks?: [number,number][]
+    pick?: [number,number];
 
     /** refs for each rendered `<div>` around a game */
     gameRefs?: React.Ref<HTMLDivElement>[];
 
     /** click handler: (gameIndex, seed) */
-    onSeedClick?: (gameIndex: number, seed: number) => void;
+    onSeedClick?: (seed: number) => void;
 }
 
 export interface RegionProps {

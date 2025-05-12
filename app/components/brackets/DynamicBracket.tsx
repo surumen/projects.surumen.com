@@ -1,51 +1,43 @@
 import React from 'react';
-import { Row } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import { Region } from '@/widgets';
 import type {
     DynamicBracketProps,
     SeedMeta,
-    FinalRegion,
-    GameData, TournamentStructure
+    GameData,
+    TournamentStructure,
 } from '@/types';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
-import type { RootState } from '@/store/store';
-import { advanceTeam }                    from '@/store/bracketSlice';
-import { resolveSeeds, computeFinalBracket } from '@/helpers';
-import useMounted                          from '@/hooks/useMounted';
-import { useMediaQuery }                   from 'react-responsive';
-
-
+import { RootState } from '@/store/store';
+import { advanceTeam } from '@/store/bracketSlice';
+import useMounted from '@/hooks/useMounted';
+import { useMediaQuery } from 'react-responsive';
 import { TOURNEY_REGISTRY } from '@/data/tournaments';
 
-
 const DynamicBracket: React.FC<DynamicBracketProps> = ({
-                                                           tournamentType = 'ucl',
+                                                           tournamentType = 'ncaa',
                                                            year = 2025,
                                                            regionsPerRow = 2,
                                                        }) => {
     const dispatch = useAppDispatch();
     const key = `${tournamentType}-${year}`;
 
-    // 1) lookup our registry
+    // 1) lookup data
     const config = TOURNEY_REGISTRY[tournamentType];
     if (!config) throw new Error(`Unknown tournament type "${tournamentType}"`);
-
-    // 2) fetch its data & optional teamsData
     const data: TournamentStructure = config.getData(year);
-    const teams: SeedMeta[] | undefined = config.teamsData;
-    console.log(data)
 
-    // 3) grab user state
+    // 2) user state
     const userRegions = useAppSelector(
         (state: RootState) => state.bracket.regions[key]
     );
 
+    // 3) responsiveness
     const hasMounted = useMounted();
     const isMobileQuery = useMediaQuery({ query: '(max-width: 767px)' });
     const isMobile = hasMounted && isMobileQuery;
-    const colsPerRow = isMobile ? 1 : regionsPerRow;
-    const colSize    = Math.floor(12 / colsPerRow);
 
+    // advance callback
     const onAdvance = (
         game: GameData,
         region: string,
@@ -53,100 +45,65 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({
         gameIdx: number,
         seed: number
     ) => {
-        dispatch(advanceTeam({ tournamentKey: key, region, game, round, gameIdx, seed }));
+        dispatch(
+            advanceTeam({ tournamentKey: key, region, game, round, gameIdx, seed })
+        );
     };
 
-    const renderRow = (regs: string[], isTop: boolean) => (
-        <Row className={isTop ? 'mb-4 gx-4' : 'mt-4 gx-4'} key={isTop?'top':'bot'}>
-            {regs.map((region, idx) => {
-                const { seeds: raw, games } = data.regions[region];
-                let seedsMap: Record<number,SeedMeta>;
-                if (tournamentType==='nba') {
-                    seedsMap = {};
-                    games.filter(g=>g.roundNumber===0).forEach(g=>{
-                        if (g.firstSeed?.seed!=null)   seedsMap[g.firstSeed.seed]   = g.firstSeed;
-                        if (g.secondSeed?.seed!=null)  seedsMap[g.secondSeed.seed]  = g.secondSeed;
+    // split region keys into top/bottom rows
+    const allRegions = Object.keys(data.regions);
+    const topRegions = allRegions.slice(0, regionsPerRow);
+    const bottomRegions = allRegions.slice(regionsPerRow);
+
+    const renderRow = (regions: string[]) => (
+        <Row className="gy-md-5 mb-md-5" key={regions.join('-')}>
+            {regions.map((regionName, idx) => {
+                const { games } = data.regions[regionName];
+
+                // extract Round 0 seeds
+                const seedsMap: Record<number, SeedMeta> = {};
+                games
+                    .filter(g => g.roundNumber === 0)
+                    .forEach(g => {
+                        if (g.firstSeed?.seed != null)
+                            seedsMap[g.firstSeed.seed] = g.firstSeed;
+                        if (g.secondSeed?.seed != null)
+                            seedsMap[g.secondSeed.seed] = g.secondSeed;
                     });
-                } else {
-                    seedsMap = resolveSeeds(raw, teams!);
-                }
-                const colClass = isMobile
-                    ? 'col-12 px-0'
-                    : `col-12 col-md-${colSize} col-lg-${colSize}`;
+
+                // left/right based on column index
+                const isLeft = idx % 2 === 0;
 
                 return (
-                    <div key={region} className={`${colClass} h-100`}>
+                    <Col
+                        key={regionName}
+                        xs={12}
+                        md={12 / regionsPerRow}
+                        className="px-0 h-100"
+                    >
                         <Region
-                            name={region}
-                            type={idx%2===0?'left':'right'}
+                            name={regionName}
+                            type={isLeft ? 'left' : 'right'}
                             seeds={seedsMap}
                             games={games}
-                            userData={userRegions[region]}
-                            onAdvanceTeam={(g, r, gi, s) => onAdvance(g, region, r, gi, s)}
+                            userData={userRegions[regionName]}
+                            onAdvanceTeam={(game, round, gameIdx, seed) =>
+                                dispatch(advanceTeam({ tournamentKey: key,
+                                    region: regionName,
+                                    game, round, gameIdx, seed }))
+                            }
                         />
-                    </div>
+                    </Col>
                 );
             })}
         </Row>
     );
 
-    const regions = Object.keys(data.regions);
-    const finalInfo = data.final as FinalRegion;
-    const hasFinal  = finalInfo.games.length>0;
-    const finalBr   = hasFinal
-        ? computeFinalBracket(finalInfo)
-        : { seeds:{} as Record<string,SeedMeta>, games:[] };
-
-    const finalCols  = regions.length===2?'col-2':'col-4';
-    const finalStyle = hasFinal
-        ? { top:'50%',left:'50%',transform:'translate(-50%,-50%)' }
-        : { bottom:'10%',left:'50%',transform:'translateX(-50%)' };
-
-    const absoluteFinal = hasFinal && !isMobile && (
-        <div className={`position-absolute ${finalCols}`} style={{...finalStyle,zIndex:10}}>
-            <Region
-                name="Final"
-                isFinal
-                seeds={finalBr.seeds}
-                games={finalBr.games}
-                onAdvanceTeam={(g,r,gi,s)=>onAdvance(g,'Final',r,gi,s)}
-            />
-        </div>
-    );
-
-    const inlineFinal = hasFinal && isMobile && (
-        <Row className="gx-4 mt-4">
-            <div className="col-12 px-0">
-                <Region
-                    name="Final"
-                    isFinal
-                    seeds={finalBr.seeds}
-                    games={finalBr.games}
-                    onAdvanceTeam={(g,r,gi,s)=>onAdvance(g,'Final',r,gi,s)}
-                />
-            </div>
-        </Row>
-    );
-
-    if (regions.length===2) {
-        return (
-            <div className="tournament container py-4 position-relative">
-                {renderRow(regions,true)}
-                {absoluteFinal}
-                {inlineFinal}
-            </div>
-        );
-    }
-    const mid = Math.ceil(regions.length/2);
     return (
-        <div className="tournament container py-4">
-            <div className="position-relative">
-                {renderRow(regions.slice(0,mid),true)}
-                {absoluteFinal}
-                {inlineFinal}
-                {renderRow(regions.slice(mid),false)}
-            </div>
-        </div>
+        <Container fluid className="tournament py-4">
+            {renderRow(topRegions)}
+            {bottomRegions.length > 0 && renderRow(bottomRegions)}
+        </Container>
     );
 };
 

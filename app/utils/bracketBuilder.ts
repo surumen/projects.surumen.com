@@ -1,4 +1,3 @@
-// src/utils/bracketBuilder.ts
 import type { GameData, SeedMeta } from '@/types';
 
 /**
@@ -49,14 +48,16 @@ export function buildCustomRegion(
 ): { seeds: Record<number, string>; games: GameData[] } {
     const games: GameData[] = [];
 
-    // Round 0
+    // Round 0 - use actual seed numbers
     initialPairings.forEach(([a, b], idx) => {
+        const teamA = getSeed(seedsMap, teams, a);
+        const teamB = getSeed(seedsMap, teams, b);
         games.push({
             roundNumber: 0,
             gameNumber: idx,
             region,
-            firstSeed:  getSeed(seedsMap, teams, a),
-            secondSeed: getSeed(seedsMap, teams, b),
+            firstSeed:  { ...teamA, seed: a },
+            secondSeed: { ...teamB, seed: b },
         });
     });
 

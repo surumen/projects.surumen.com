@@ -6,7 +6,7 @@ import { getUclTournamentData }  from '@/data/tournaments/uefaChampionsLeague';
 
 export type TournamentKey = string;
 
-const years = [2022, 2023, 2024, 2025] as const;
+const years: number[] = [2022, 2023, 2024, 2025] as const;
 
 // build the record programmatically
 export const TOURNAMENTS: Record<TournamentKey, TournamentStructure> = Object.fromEntries(
@@ -40,8 +40,15 @@ function createEmptyRegions(
             .map(([, arr]) => arr);
 
         regs[regionName] = {
-            matchups: rounds.map((r) => r.map(() => [0, 0] as [number, number])),
-            games:    rounds.map((r) => r.map(() => [0, 0] as [number, number])),
+            matchups: rounds.map((gamesInRound, roundIndex) =>
+                gamesInRound.map((game) =>
+                    // use actual seed numbers for round 0, zeros thereafter
+                    roundIndex === 0
+                        ? [game.firstSeed?.seed ?? 0, game.secondSeed?.seed ?? 0] as [number, number]
+                        : [0, 0] as [number, number]
+                )
+            ),
+            games: rounds.map((r) => r.map(() => [0, 0] as [number, number])),
         };
     }
 
@@ -71,7 +78,7 @@ function createEmptyRegions(
 function getUpPath(
     totalRounds: number,
     startRound:  number,
-    startGameIdx:number
+    startGameIdx: number
 ): Array<{ round: number; gameIdx: number; slot: 0 | 1 }> {
     const path: Array<{ round: number; gameIdx: number; slot: 0 | 1 }> = [];
     let idx = startGameIdx;

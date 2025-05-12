@@ -1,80 +1,55 @@
-// components/Round.tsx
-
+// src/widgets/brackets/Round.tsx
 import React from 'react';
-import Game from './Game';
-import type { RoundProps } from '@/types';
 import useMounted from '@/hooks/useMounted';
 import { useMediaQuery } from 'react-responsive';
+import type { RoundProps } from '@/types';
+import Game from './Game';
 
 const Round: React.FC<RoundProps> = ({
                                          seeds,
                                          gamesData,
-                                         final = false,
-                                         number,
-                                         maxRounds = 0,
                                          type = 'left',
-                                         gameRefs,
-                                         picks,
+                                         pick,
                                          onSeedClick,
-                                         rowCount,   // ← new prop
-                                         spacing,    // ← new prop
                                      }) => {
     const hasMounted = useMounted();
     const isMobileQuery = useMediaQuery({ query: '(max-width: 767px)' });
     const isMobile = hasMounted && isMobileQuery;
 
-    const singleGame = gamesData.length === 1;
+    // only game in this Round
+    const game = gamesData[0];
 
-    // Mirror round index for right-facing alignment
-    const effectiveRound = type === 'right'
-        ? maxRounds - number - 1
-        : number;
+    // did the user actually pick a non-zero pair?
+    const hasPick = !!pick && (pick[0] !== 0 || pick[1] !== 0);
 
-    const isBaseline =
-        !final &&
-        ((type === 'left' && number === 0) ||
-            (type === 'right' && number === maxRounds - 1));
+    // if they haven’t, fall back to the real seeds
+    const tuple: [number,number] = hasPick
+        ? pick!
+        : [ game.firstSeed!.seed!, game.secondSeed!.seed! ];
+
+    // lookup the full metadata
+    const participants = tuple.map(s => seeds[s]) as [
+        typeof seeds[number],
+        typeof seeds[number]
+    ];
 
     return (
         <div
-            className="flex-grow-1 h-100"
+            className="d-grid"
             style={{
-                display: 'grid',
-                gridTemplateRows: `repeat(${rowCount}, 1fr)`,
-                ...(isMobile ? { rowGap: '1.75rem' } : {}),
+                gridTemplateRows: 'auto 1fr',
+                rowGap: isMobile ? '0.5rem' : '1rem',
             }}
         >
-            {gamesData.map((game, idx) => {
-                // center single game, otherwise use uniform spacing
-                const rowStart = singleGame
-                    ? Math.ceil(rowCount / 2)
-                    : Math.round(spacing * (idx + 1));
-
-                // pull out exactly one tuple per game
-                const tuple = picks?.[idx];
-                const participants = tuple
-                    ? [
-                        seeds[tuple[0]] ?? undefined,
-                        seeds[tuple[1]] ?? undefined,
-                    ] as [typeof seeds[number]?, typeof seeds[number]?]
-                    : undefined;
-
-                return (
-                    <div
-                        key={idx}
-                        ref={gameRefs?.[idx]}
-                        style={{ gridRowStart: rowStart }}
-                    >
-                        <Game
-                            seeds={seeds}
-                            game={game}
-                            type={type}
-                            participants={participants}
-                            onSeedClick={(seed) => onSeedClick?.(idx, seed)}
-                        />
-                    </div>
-                );
-            })}
+            <div>
+                <Game
+                    seeds={seeds}
+                    game={game}
+                    type={type}
+                    participants={participants}
+                    onSeedClick={onSeedClick}
+                />
+            </div>
         </div>
     );
 };
