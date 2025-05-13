@@ -118,73 +118,68 @@ export const bracketSlice = createSlice({
         advanceTeam(
             state,
             action: PayloadAction<{
-                tournamentKey: TournamentKey;
-                region:        string;
-                game:          GameData;
-                round:         number;
-                gameIdx:       number;
-                pick:          SeedMeta;
+                tournamentKey: TournamentKey
+                region:        string
+                game:          GameData
+                round:         number
+                gameIdx:       number
+                pick:          SeedMeta
             }>
         ) {
-            const { tournamentKey, region, game, round, gameIdx, pick } = action.payload;
-            const reg = state.regions[tournamentKey]?.[region];
-            if (!reg) return;
+            const { tournamentKey, region, game, round, gameIdx, pick } = action.payload
+            const reg = state.regions[tournamentKey]?.[region]
+            if (!reg) return
 
-            const totalRounds = reg.matchups.length;
-            let thisSlot: 0 | 1;
+            const totalRounds = reg.matchups.length
+            const pair = reg.matchups[round][gameIdx]
 
-            // 0) figure out which slot the user clicked
-            if (round === 0) {
-                // compare against game.firstSeed.seed
-                thisSlot = game.firstSeed?.seed === pick.seed ? 0 : 1;
-            } else {
-                // later rounds: see which slot currently holds pick.seed
-                const pair = reg.matchups[round][gameIdx];
-                thisSlot = (
-                    pair.findIndex(m => m?.seed === pick.seed) === 1 ? 1 : 0
-                ) as 0 | 1;
+            // 1) SLOT DETECTION: identity-first
+            let thisSlot = pair.findIndex(m => m === pick) as 0 | 1
+
+            // fallback to seed-compare only in Round 0 of non-Final regions
+            if (thisSlot < 0 && region !== 'Final' && round === 0) {
+                thisSlot = (game.firstSeed?.seed === pick.seed ? 0 : 1) as 0 | 1
             }
 
-            // 1) write your pick into that slot
-            reg.matchups[round][gameIdx][thisSlot] = pick;
+            // 2) WRITE YOUR PICK (skip writing into the Final-region semis)
+            if (!(region === 'Final' && round === 0)) {
+                reg.matchups[round][gameIdx][thisSlot] = pick
+            }
 
-            // SPECIAL: if this *is* the region-final, also seed into the Final bracket
-            if (round === totalRounds - 1) {
-                const finalReg = state.regions[tournamentKey]?.['Final'];
-                if (!finalReg) return;
+            // 3) If this was the region-final in a non-Final region → seed into Final Four
+            if (region !== 'Final' && round === totalRounds - 1) {
+                const finalReg = state.regions[tournamentKey]?.['Final']
+                if (!finalReg) return
 
                 const semi = TOURNAMENTS[tournamentKey].final.games.find(g =>
                     g.roundNumber === 0 &&
                     (g.sourceGame1?.region === region || g.sourceGame2?.region === region)
-                );
-                if (!semi) return;
+                )
+                if (!semi) return
 
-                const semiSlot = semi.sourceGame1?.region === region ? 0 : 1;
-                finalReg.matchups[0][semi.gameNumber][semiSlot] = pick;
-                return;
+                const semiSlot = semi.sourceGame1!.region === region ? 0 : 1
+                finalReg.matchups[0][semi.gameNumber][semiSlot] = pick
+                return
             }
 
-            // otherwise, propagate winner/loser downstream…
-            const path = getUpPath(totalRounds, round, gameIdx);
-            if (!path.length) return;
+            // 4) Otherwise, propagate downstream (handles Final-region semis → championship)
+            const path = getUpPath(totalRounds, round, gameIdx)
+            if (path.length) {
+                const { round: nr, gameIdx: parent, slot } = path[0]
+                reg.matchups[nr][parent][slot] = pick
+            }
 
-            // 2) write winner up one round as metadata
-            const { round: nr, gameIdx: parent, slot } = path[0];
-            reg.matchups[nr][parent][slot] = pick;
-
-            // 3) compute loser.seed so we can clear it
-            const loserSlot = (thisSlot ^ 1) as 0 | 1;
-            const loserMeta = reg.matchups[round][gameIdx][loserSlot];
-            const loserSeed = loserMeta?.seed ?? 0;
-
-            // 4) clear that loser’s lane in every deeper round
-            for (let i = 1; i < path.length; i++) {
-                const { round: rr, gameIdx: gi, slot: ss } = path[i];
-                const entry = reg.matchups[rr][gi][ss];
-                if (entry?.seed === loserSeed) {
-                    reg.matchups[rr][gi][ss] = null;
-                } else {
-                    break;
+            // 5) Clear the loser out of any deeper rounds
+            const loserSlot = (thisSlot ^ 1) as 0 | 1
+            const loserSeed = reg.matchups[round][gameIdx][loserSlot]?.seed
+            if (loserSeed != null) {
+                for (let i = 1; i < path.length; i++) {
+                    const { round: rr, gameIdx: gi, slot: ss } = path[i]
+                    if (reg.matchups[rr][gi][ss]?.seed === loserSeed) {
+                        reg.matchups[rr][gi][ss] = null
+                    } else {
+                        break
+                    }
                 }
             }
         },

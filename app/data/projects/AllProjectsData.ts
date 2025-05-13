@@ -52,7 +52,7 @@ export const AllProjectsData: Project[] = [
 		That said, with the available data every year, it is still possible to somewhat predict a decent number of games 
 		based on each team's season statistics.</p>
         `,
-		component: 'ncaa',
+		component: 'tournament',
 		contentType: 'app',
 		hasWriteUp: false,
 		content: ``
