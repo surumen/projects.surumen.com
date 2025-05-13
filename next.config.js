@@ -4,7 +4,7 @@ const path = require('path')
 const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
-  // basePath: '/projects.surumen.com',
+  basePath: '/projects.surumen.com',
 
   // Tell the Sass compiler where to look for your partials
   sassOptions: {
