@@ -142,14 +142,14 @@ function buildYear(year: number): TournamentStructure {
             roundNumber: 0,
             gameNumber: 0,
             sourceGame1: fromGame('West', 3, 0),
-            sourceGame2: fromGame('East', 3, 0),
+            sourceGame2: fromGame('South', 3, 0),
         },
         {
             region: 'Final',
             roundNumber: 0,
             gameNumber: 1,
+            sourceGame2: fromGame('East', 3, 0),
             sourceGame1: fromGame('Midwest', 3, 0),
-            sourceGame2: fromGame('South', 3, 0),
         },
         {
             region: 'Final',
