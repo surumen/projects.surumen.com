@@ -178,7 +178,7 @@ export function getUclTournamentData(year: number): TournamentStructure {
     // Final between the two semi winners (round = 3)
     const finalGame: GameData = {
         region:      'Final',
-        roundNumber: 3,
+        roundNumber: 0,
         gameNumber:  0,
         sourceGame1: fromGame('SideA', 2, 0),
         sourceGame2: fromGame('SideB', 2, 0),

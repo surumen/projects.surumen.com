@@ -46,6 +46,44 @@ const Region: React.FC<RegionProps> = ({
     const containerRef = useRef<HTMLDivElement>(null);
 
     if (isFinal) {
+        // if there's only one round, render just the championship
+        if (roundsData.length === 1) {
+            const finalGame = roundsData[0][0];
+            const reindex = (m: Record<string,SeedMeta> = {}) => {
+                const out: Record<number,SeedMeta> = {};
+                Object.values(m).forEach(meta => {
+                    if (meta?.seed) out[meta.seed] = meta;
+                });
+                return out;
+            };
+            const seedsF = reindex(semiSeedsMaps?.[finalGame.gameNumber]);
+
+            return (
+                <div ref={containerRef} className="h-100 d-flex flex-column position-relative">
+                    <Connector
+                        gameRefs={refsForConnector!}
+                        containerRef={containerRef}
+                        type={type}
+                        isFinalRegion
+                    />
+                    <div className="d-flex justify-content-center align-items-center flex-grow-1">
+                        <div ref={gameRefs.current![0][0]} style={{ flexShrink: 0 }}>
+                            <Round
+                                seeds={seedsF}
+                                gamesData={[finalGame]}
+                                number={0}
+                                type="center"
+                                pick={userData?.matchups?.[0]?.[0]}
+                                rowCount={rowCount}
+                                spacing={rowCount / 2}
+                                gameRefs={gameRefs.current![0]}
+                                onSeedClick={pick => onAdvanceTeam!(finalGame, 0, 0, pick)}
+                            />
+                        </div>
+                    </div>
+                </div>
+            );
+        }
         const semis = roundsData[0];
         const finalGame = roundsData[1]?.[0];
 

@@ -55,10 +55,13 @@ const InnerBracket: React.FC<DynamicBracketProps> = ({
     });
 
     // 2) build semiSeedsMaps keyed by gameNumber → regionName → SeedMeta
+
+    // flip to “any multi‐region (2 or 4)”
+    const isMultiRegion = regionKeys.length > 1;
     const isFourRegion = regionKeys.length === 4;
     const semiSeedsMaps: Record<number, Record<string, SeedMeta>> = {};
 
-    if (isFourRegion) {
+    if (isMultiRegion) {
         data.final.games
             .filter(g => g.roundNumber === 0)  // only the two semis
             .forEach(semi => {
@@ -122,44 +125,59 @@ const InnerBracket: React.FC<DynamicBracketProps> = ({
             {regionKeys.length > regionsPerRow && renderRow(regionKeys.slice(regionsPerRow))}
 
             {/* Final Four – desktop */}
-            {!isMobile && isFourRegion && (
-                <div
-                    style={{
-                        position: 'absolute', top: 0,
-                        left: `${(100/regionsPerRow)/2}%`,
-                        width:  `${100/regionsPerRow}%`, height: '100%',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        pointerEvents: 'none', zIndex: 1,
-                    }}
-                >
-                    <div style={{ pointerEvents: 'auto' }}>
-                        <Region
-                            name="Final"
-                            type="left"
-                            seeds={{}}
-                            games={data.final.games}
-                            userData={userRegs['Final']}
-                            isFinal
-                            semiSeedsMaps={semiSeedsMaps}
-                            onAdvanceTeam={(game, round, gameIdx, pick: SeedMeta) =>
-                                dispatch(
-                                    advanceTeam({
+            {!isMobile && isMultiRegion && (() => {
+                // 1) decide if it's a single final (2-region) or full Final Four (4-region)
+                const firstRoundGames = data.final.games.filter(g => g.roundNumber === 0);
+                const isSingleFinal   = firstRoundGames.length === 1;
+
+                // 2) pick which games to render
+                const gamesForFinal = isSingleFinal
+                    ? firstRoundGames     // just the one final
+                    : data.final.games;   // semis + final
+
+                // 3) pick the positioning style
+                const positionStyle: React.CSSProperties = isSingleFinal
+                    ? { top: '20%', left: '50%', transform: 'translateX(-50%)' }
+                    : { top: 0, left: `${(100/regionsPerRow)/2}%`, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' };
+
+                // 4) render the single wrapper + Region
+                return (
+                    <div
+                        style={{
+                            position:     'absolute',
+                            width:        `${100/regionsPerRow}%`,
+                            pointerEvents:'none',
+                            zIndex:       1,
+                            ...positionStyle,
+                        }}
+                    >
+                        <div style={{ pointerEvents: 'auto' }}>
+                            <Region
+                                name="Final"
+                                type="left"
+                                seeds={{}}
+                                games={gamesForFinal}
+                                userData={userRegs['Final']}
+                                isFinal
+                                semiSeedsMaps={semiSeedsMaps}
+                                onAdvanceTeam={(game, round, gameIdx, pick: SeedMeta) =>
+                                    dispatch(advanceTeam({
                                         tournamentKey: keyString,
                                         region:        'Final',
                                         game,
                                         round,
                                         gameIdx,
                                         pick,
-                                    })
-                                )
-                            }
-                        />
+                                    }))
+                                }
+                            />
+                        </div>
                     </div>
-                </div>
-            )}
+                );
+            })()}
 
             {/* Final Four – mobile */}
-            {isMobile && isFourRegion && (
+            {isMobile && isMultiRegion && (
                 <Row className="gy-md-5 mb-md-5">
                     <Col xs={12} className="px-0 h-100">
                         <Region
