@@ -141,6 +141,9 @@ export const bracketSlice = createSlice({
                 thisSlot = (game.firstSeed?.seed === pick.seed ? 0 : 1) as 0 | 1
             }
 
+            const loserSlot = (thisSlot ^ 1) as 0 | 1
+            const loserSeed = reg.matchups[round][gameIdx][loserSlot]?.seed
+
             // 2) WRITE YOUR PICK (skip writing into the Final-region semis)
             if (!(region === 'Final' && round === 0)) {
                 reg.matchups[round][gameIdx][thisSlot] = pick
@@ -159,6 +162,20 @@ export const bracketSlice = createSlice({
 
                 const semiSlot = semi.sourceGame1!.region === region ? 0 : 1
                 finalReg.matchups[0][semi.gameNumber][semiSlot] = pick
+
+                // clear the loserSeed out of **any** Final-region slot
+                if (loserSeed != null) {
+                    for (let r = 0; r < finalReg.matchups.length; r++) {
+                        for (let gi = 0; gi < finalReg.matchups[r].length; gi++) {
+                            for (const s of [0, 1] as const) {
+                                if (finalReg.matchups[r][gi][s]?.seed === loserSeed) {
+                                    finalReg.matchups[r][gi][s] = null
+                                }
+                            }
+                        }
+                    }
+                }
+
                 return
             }
 
@@ -170,8 +187,6 @@ export const bracketSlice = createSlice({
             }
 
             // 5) Clear the loser out of any deeper rounds
-            const loserSlot = (thisSlot ^ 1) as 0 | 1
-            const loserSeed = reg.matchups[round][gameIdx][loserSlot]?.seed
             if (loserSeed != null) {
                 for (let i = 1; i < path.length; i++) {
                     const { round: rr, gameIdx: gi, slot: ss } = path[i]
@@ -179,6 +194,20 @@ export const bracketSlice = createSlice({
                         reg.matchups[rr][gi][ss] = null
                     } else {
                         break
+                    }
+                }
+            }
+
+            // 6) ALSO clear the loser from the Final region (in case they advanced there)
+            const finalReg = state.regions[tournamentKey]?.['Final']
+            if (finalReg && loserSeed != null) {
+                for (let r = 0; r < finalReg.matchups.length; r++) {
+                    for (let gi = 0; gi < finalReg.matchups[r].length; gi++) {
+                        for (const s of [0, 1] as const) {
+                            if (finalReg.matchups[r][gi][s]?.seed === loserSeed) {
+                                finalReg.matchups[r][gi][s] = null
+                            }
+                        }
                     }
                 }
             }
