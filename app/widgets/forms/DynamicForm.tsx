@@ -14,19 +14,29 @@ export interface FieldConfig {
     readOnly?: boolean;
     validate?: (val: any) => boolean;             // return false = invalid
     initialValue?: any;
+    /** Optional class for the Form.Group wrapper */
+    groupClassName?: string;
+    /** Optional class for the input/select control */
+    controlClassName?: string;
 }
 
 export interface DynamicFormProps {
     fields: FieldConfig[];
     onSubmit: (values: Record<string, any>) => void;
-    /** can be text, icon, or any JSX */
-    submitLabel?: ReactNode;
+    /** can be text, icon, JSX; `null` to hide submit button */
+    submitLabel?: ReactNode | null;
+    /** called on every field change with current values */
+    onFieldChange?: (values: Record<string, any>) => void;
+    /** Optional className for the <Form> element */
+    formClassName?: string;
 }
 
 const DynamicForm: React.FC<DynamicFormProps> = ({
                                                      fields,
                                                      onSubmit,
                                                      submitLabel = 'Submit' as ReactNode,
+                                                     onFieldChange,
+                                                     formClassName,
                                                  }) => {
     const initialState = fields.reduce((acc, f) => {
         acc[f.name] = f.initialValue ?? (f.type === 'switch' ? false : '');
@@ -37,38 +47,45 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     const [touched, setTouched] = useState<Record<string, boolean>>({});
 
     const handleChange = (name: string, val: any) => {
-        setValues(v => ({ ...v, [name]: val }));
+        const newValues = { ...values, [name]: val };
+        setValues(newValues);
         setTouched(t => ({ ...t, [name]: true }));
+        if (onFieldChange) onFieldChange(newValues);
     };
 
     const isValid = (f: FieldConfig) => {
         const val = values[f.name];
-        if (f.required && (val === '' || val === null || val === undefined)) return false;
+        if (f.required && (val === '' || val == null)) return false;
         if (f.validate && !f.validate(val)) return false;
         return true;
     };
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        const allGood = fields.every(f => isValid(f));
+        const allGood = fields.every(isValid);
         if (!allGood) return;
         onSubmit(values);
     };
 
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} className={formClassName}>
             {fields.map(f => {
                 const val = values[f.name];
                 const invalid = touched[f.name] && !isValid(f);
+                const groupClass = `mb-3 ${f.groupClassName || ''}`.trim();
+                const autoControl = f.groupClassName?.includes('d-flex') && !f.controlClassName;
+                const controlClass = f.controlClassName || (autoControl ? 'flex-fill' : '');
 
                 switch (f.type) {
                     case 'input':
                         return (
-                            <Form.Group className="mb-3" key={f.name}>
-                                <Form.Label>{f.label}
-                                    <span className='ms-1 text-muted'>{f.required ? '' : '(Optional)'}</span>
+                            <Form.Group className={groupClass} key={f.name} controlId={f.name}>
+                                <Form.Label className={autoControl ? 'me-2 mb-0' : undefined}>
+                                    {f.label}{' '}
+                                    {!f.required && <span className='text-muted'>(Optional)</span>}
                                 </Form.Label>
                                 <Form.Control
+                                    className={controlClass}
                                     type={f.inputType || 'text'}
                                     value={val}
                                     readOnly={f.readOnly}
@@ -76,39 +93,46 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
                                     isInvalid={invalid}
                                     required={f.required}
                                 />
-                                {invalid && <Form.Control.Feedback type="invalid">
-                                    {f.label} is invalid.
-                                </Form.Control.Feedback>}
+                                {invalid && (
+                                    <Form.Control.Feedback type="invalid">
+                                        {f.label} is invalid.
+                                    </Form.Control.Feedback>
+                                )}
                             </Form.Group>
                         );
 
                     case 'select':
                         return (
-                            <Form.Group className="mb-3" key={f.name}>
-                                <Form.Label>{f.label}</Form.Label>
+                            <Form.Group className={groupClass} key={f.name} controlId={f.name}>
+                                <Form.Label className={autoControl ? 'me-2 mb-0' : undefined}>
+                                    {f.label}
+                                </Form.Label>
                                 <Form.Select
+                                    className={controlClass}
                                     value={val}
                                     onChange={e => handleChange(f.name, e.target.value)}
                                     disabled={f.readOnly}
                                     isInvalid={invalid}
                                     required={f.required}
                                 >
-                                    <option value="">— select —</option>
+                                    <option value="" disabled>— select —</option>
                                     {f.options?.map(o => (
                                         <option key={o.value} value={o.value}>
                                             {o.label}
                                         </option>
                                     ))}
                                 </Form.Select>
-                                {invalid && <Form.Control.Feedback type="invalid">
-                                    Please select {f.label.toLowerCase()}.
-                                </Form.Control.Feedback>}
+                                {invalid && (
+                                    <Form.Control.Feedback type="invalid">
+                                        Please select {f.label.toLowerCase()}.
+                                    </Form.Control.Feedback>
+                                )}
                             </Form.Group>
                         );
 
                     case 'switch':
                         return (
-                            <Form.Group className="mb-3" controlId={f.name} key={f.name}>
+                            <Form.Group className={groupClass} key={f.name} controlId={f.name}>
                                 <Form.Check
                                     type="switch"
                                     label={f.label}
@@ -123,11 +147,13 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
                 }
             })}
 
-            <div className="d-grid">
-                <Button type="submit" disabled={fields.some(f => !isValid(f))}>
-                    {submitLabel}
-                </Button>
-            </div>
+            {submitLabel != null && (
+                <div className="d-grid">
+                    <Button type="submit" disabled={fields.some(f => !isValid(f))}>
+                        {submitLabel}
+                    </Button>
+                </div>
+            )}
         </Form>
     );
 };
