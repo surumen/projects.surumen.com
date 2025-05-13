@@ -3,6 +3,7 @@ import type { TournamentStructure, BracketRegion, GameData } from '@/types';
 import { getNcaaTournamentData } from '@/data/tournaments/marchMadness';
 import { getNbaTournamentData }  from '@/data/tournaments/nbaPlayoffs';
 import { getUclTournamentData }  from '@/data/tournaments/uefaChampionsLeague';
+import { SeedMeta } from '@/types';
 
 export type TournamentKey = string;
 
@@ -27,10 +28,11 @@ function createEmptyRegions(
 ): Record<string, BracketRegion> {
     const regs: Record<string, BracketRegion> = {};
 
+    // 1) build each region’s rounds
     for (const regionName in data.regions) {
         const allGames = data.regions[regionName].games as GameData[];
         const byRound  = new Map<number, GameData[]>();
-        allGames.forEach((g) => {
+        allGames.forEach(g => {
             const arr = byRound.get(g.roundNumber) ?? [];
             arr.push(g);
             byRound.set(g.roundNumber, arr);
@@ -39,24 +41,29 @@ function createEmptyRegions(
             .sort(([a], [b]) => a - b)
             .map(([, arr]) => arr);
 
+        // 2) initialize matchups with full SeedMeta in round 0, null thereafter
         regs[regionName] = {
             matchups: rounds.map((gamesInRound, roundIndex) =>
-                gamesInRound.map((game) =>
-                    // use actual seed numbers for round 0, zeros thereafter
+                gamesInRound.map(game =>
                     roundIndex === 0
-                        ? [game.firstSeed?.seed ?? 0, game.secondSeed?.seed ?? 0] as [number, number]
-                        : [0, 0] as [number, number]
+                        ? [
+                            game.firstSeed  ?? null,
+                            game.secondSeed ?? null
+                        ] as [SeedMeta|null,SeedMeta | null]
+                        : [null, null] as [SeedMeta | null, SeedMeta | null]
                 )
             ),
-            games: rounds.map((r) => r.map(() => [0, 0] as [number, number])),
+
+            // scores stay as [number,number]
+            games: rounds.map(r => r.map(() => [0, 0] as [number, number])),
         };
     }
 
-    // Final Four + Championship
+    // 3) Final Four + Championship
     if (data.final?.games.length) {
-        const allFinal = data.final.games as GameData[];
-        const byFinal  = new Map<number, GameData[]>();
-        allFinal.forEach((g) => {
+        const allFinal  = data.final.games as GameData[];
+        const byFinal   = new Map<number, GameData[]>();
+        allFinal.forEach(g => {
             const arr = byFinal.get(g.roundNumber) ?? [];
             arr.push(g);
             byFinal.set(g.roundNumber, arr);
@@ -66,8 +73,12 @@ function createEmptyRegions(
             .map(([, arr]) => arr);
 
         regs['Final'] = {
-            matchups: finalRounds.map((r) => r.map(() => [0, 0] as [number, number])),
-            games:    finalRounds.map((r) => r.map(() => [0, 0] as [number, number])),
+            matchups: finalRounds.map(roundGames =>
+                roundGames.map(() =>
+                    [null, null] as [SeedMeta|null,SeedMeta|null]
+                )
+            ),
+            games: finalRounds.map(r => r.map(() => [0, 0] as [number, number])),
         };
     }
 
@@ -112,96 +123,66 @@ export const bracketSlice = createSlice({
                 game:          GameData;
                 round:         number;
                 gameIdx:       number;
-                seed:          number;
+                pick:          SeedMeta;
             }>
         ) {
-            const { tournamentKey, region, game, round, gameIdx, seed } = action.payload;
+            const { tournamentKey, region, game, round, gameIdx, pick } = action.payload;
             const reg = state.regions[tournamentKey]?.[region];
             if (!reg) return;
 
             const totalRounds = reg.matchups.length;
             let thisSlot: 0 | 1;
 
-            // 0) record this pick
+            // 0) figure out which slot the user clicked
             if (round === 0) {
-                // same slug→seed logic for round 0
-                const slugMap = Object.fromEntries(
-                    Object.entries(
-                        TOURNAMENTS[tournamentKey].regions[region].seeds as Record<number,string>
-                    ).map(([n, slug]) => [slug, Number(n)])
-                ) as Record<string,number>;
-
-                const A = slugMap[game.firstSeed?.name  ?? ''] || 0;
-                const B = slugMap[game.secondSeed?.name ?? ''] || 0;
-                thisSlot = seed === A ? 0 : 1;
+                // compare against game.firstSeed.seed
+                thisSlot = game.firstSeed?.seed === pick.seed ? 0 : 1;
             } else {
-                // detect which slot currently holds your seed
+                // later rounds: see which slot currently holds pick.seed
                 const pair = reg.matchups[round][gameIdx];
-                thisSlot = (pair.findIndex(s => s === seed) === 1 ? 1 : 0) as 0 | 1;
+                thisSlot = (
+                    pair.findIndex(m => m?.seed === pick.seed) === 1 ? 1 : 0
+                ) as 0 | 1;
             }
 
-            reg.matchups[round][gameIdx][thisSlot] = seed;
+            // 1) write your pick into that slot
+            reg.matchups[round][gameIdx][thisSlot] = pick;
 
-            // SPECIAL: if this *is* the final round of *this* region…
+            // SPECIAL: if this *is* the region-final, also seed into the Final bracket
             if (round === totalRounds - 1) {
                 const finalReg = state.regions[tournamentKey]?.['Final'];
-                if (finalReg) {
-                    const finalGames = TOURNAMENTS[tournamentKey].final.games;
-                    const semi = finalGames.find(g =>
-                        g.roundNumber === 0 &&
-                        (g.sourceGame1?.region === region || g.sourceGame2?.region === region)
-                    );
-                    if (semi) {
-                        const semiGameIdx = semi.gameNumber;
-                        const semiSlot    = (semi.sourceGame1?.region === region ? 0 : 1) as 0 | 1;
+                if (!finalReg) return;
 
-                        // place your region champion into the semis
-                        finalReg.matchups[0][semiGameIdx][semiSlot] = seed;
+                const semi = TOURNAMENTS[tournamentKey].final.games.find(g =>
+                    g.roundNumber === 0 &&
+                    (g.sourceGame1?.region === region || g.sourceGame2?.region === region)
+                );
+                if (!semi) return;
 
-                        // then auto‐propagate winner into the championship
-                        const finalPath = getUpPath(
-                            finalReg.matchups.length,
-                            0,
-                            semiGameIdx
-                        );
-                        if (finalPath.length > 0) {
-                            const { round: fR, gameIdx: fG, slot: fS } = finalPath[0];
-                            finalReg.matchups[fR][fG][fS] = seed;
-                        }
-                    }
-                }
+                const semiSlot = semi.sourceGame1?.region === region ? 0 : 1;
+                finalReg.matchups[0][semi.gameNumber][semiSlot] = pick;
                 return;
             }
 
-            // otherwise, fall back to your normal propagation…
+            // otherwise, propagate winner/loser downstream…
             const path = getUpPath(totalRounds, round, gameIdx);
             if (!path.length) return;
 
-            // 1) write winner up one round
+            // 2) write winner up one round as metadata
             const { round: nr, gameIdx: parent, slot } = path[0];
-            reg.matchups[nr][parent][slot] = seed;
+            reg.matchups[nr][parent][slot] = pick;
 
-            // 2) compute loser (opposite slot)
+            // 3) compute loser.seed so we can clear it
             const loserSlot = (thisSlot ^ 1) as 0 | 1;
-            let loser: number;
-            if (round === 0) {
-                const slugMap = Object.fromEntries(
-                    Object.entries(
-                        TOURNAMENTS[tournamentKey].regions[region].seeds as Record<number,string>
-                    ).map(([n, slug]) => [slug, Number(n)])
-                ) as Record<string,number>;
-                const A = slugMap[game.firstSeed?.name  ?? ''] || 0;
-                const B = slugMap[game.secondSeed?.name ?? ''] || 0;
-                loser = seed === A ? B : A;
-            } else {
-                loser = reg.matchups[round][gameIdx][loserSlot];
-            }
+            const loserMeta = reg.matchups[round][gameIdx][loserSlot];
+            const loserSeed = loserMeta?.seed ?? 0;
 
-            // 3) clear that loser’s lane in deeper rounds
+            // 4) clear that loser’s lane in every deeper round
             for (let i = 1; i < path.length; i++) {
                 const { round: rr, gameIdx: gi, slot: ss } = path[i];
-                if (reg.matchups[rr][gi][ss] === loser) {
-                    reg.matchups[rr][gi][ss] = 0;
+                const entry = reg.matchups[rr][gi][ss];
+                if (entry?.seed === loserSeed) {
+                    reg.matchups[rr][gi][ss] = null;
                 } else {
                     break;
                 }

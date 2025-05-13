@@ -60,7 +60,7 @@ export interface TournamentStructure {
  *   games[roundIndex]   = array of scores for each matchup
  */
 export interface BracketRegion {
-    matchups: [number, number][][];
+    matchups: [SeedMeta | null, SeedMeta | null][][];
     games: [number, number][][];
 }
 
@@ -70,7 +70,7 @@ export interface BracketRegion {
  *   games[roundIndex]    = array of scores for each matchup
  */
 export interface BracketFinal {
-    matchups: [string, number][][];
+    matchups: [SeedMeta | null, SeedMeta | null][][];
     games: number[][];
     winner: string;
 }
@@ -138,11 +138,11 @@ export interface GameProps {
     /** Direction for rendering */
     type?: 'left' | 'right' | 'center';
 
-    /** explicit [teamA, teamB] from Redux picks */
-    participants?: [SeedMeta?, SeedMeta?];
+    /** [teamA, teamB] from Redux picks */
+    participants: [SeedMeta, SeedMeta];
 
     /** Called when clicking a team */
-    onSeedClick?: (seed: number) => void;
+    onSeedClick?: (pick: SeedMeta) => void;
 }
 
 export interface RoundProps {
@@ -168,13 +168,13 @@ export interface RoundProps {
     /** “left” or “right” facing layout */
     type?: 'left' | 'right' | 'center';
 
-    pick?: [number,number];
+    pick?: [SeedMeta | null, SeedMeta | null]
 
     /** refs for each rendered `<div>` around a game */
     gameRefs?: React.Ref<HTMLDivElement>[];
 
     /** click handler: (gameIndex, seed) */
-    onSeedClick?: (seed: number) => void;
+    onSeedClick?: (seed: SeedMeta) => void;
 }
 
 export interface RegionProps {
@@ -197,7 +197,7 @@ export interface RegionProps {
      */
     userData?: {
         /** now: for each round, an array of [seedA,seedB] picks (one tuple per game) */
-        matchups: [number,number][][];
+        matchups: [SeedMeta|null, SeedMeta|null][][];
         /** unchanged: one [scoreA,scoreB] per game */
         games: [number,number][][];
     };
@@ -205,12 +205,14 @@ export interface RegionProps {
     /** When true, render in Final-region style */
     isFinal?: boolean;
 
+    semiSeedsMaps?: any;
+
     /** Called when the user clicks a seed button */
     onAdvanceTeam?: (
         game:    GameData,
         round:   number,
         gameIdx: number,
-        seed:    number
+        pick:    SeedMeta
     ) => void;
 }
 
