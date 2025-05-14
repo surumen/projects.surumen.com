@@ -21,7 +21,7 @@ const DefaultLayout = (props) => {
 				<Sidebar />
 			</nav>
 			<div className='vh-100'>
-				<NavTop />
+				<NavTop showSearch={true}/>
 				<div className='main'>
 					<div className='content container-fluid'>
 						{props.children}
