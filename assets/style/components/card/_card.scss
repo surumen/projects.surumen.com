@@ -265,8 +265,8 @@
   transition: $card-hover-shadow-transition;
 
   &:hover {
-    background-color: $gray-100 !important;
-    border: none !important;
+    background-color: $card-hover-bg !important;
+    border-radius: 0 !important;
   }
 }
 

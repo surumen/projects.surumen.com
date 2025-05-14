@@ -8,32 +8,11 @@ import { Linkedin, Person, Search, XLg, Github, MoonFill, Sun } from 'react-boot
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { changeSkin } from '@/store/appSlice';
 import LogoIcon from '@/widgets/icons/LogoIcon';
+import QuickMenu from '@/widgets/navbars/QuickMenu';
 
 
 const NavTop = ({ showSearch, className }) => {
     const placeholder = useMemo(() => 'Ask me a question...', []);
-
-    const defaultSkin = useSelector((state: any) => state.app.skin);
-    const dispatch = useDispatch();
-
-    const {
-        storageValue,
-        setStorageValue,
-        getStorageValue
-    } = useLocalStorage('skin', defaultSkin);
-    useEffect(() => {
-        const element = document.querySelector('html');
-        if (element != null) {
-            element.setAttribute('data-theme', getStorageValue('skin','light'));
-            element.setAttribute('data-bs-theme', getStorageValue('skin','light'));
-            dispatch(changeSkin(storageValue));
-        }
-    }, [dispatch, getStorageValue, storageValue]);
-
-    const changeColorMode = () => {
-        setStorageValue(storageValue === 'light' ? 'dark' : 'light');
-        dispatch(changeSkin(storageValue));
-    }
 
     return (
         <Navbar className='navbar navbar-expand-lg navbar-fixed navbar-height navbar-container navbar-bordered bg-body'>
@@ -60,22 +39,7 @@ const NavTop = ({ showSearch, className }) => {
 
                 <div className='navbar-nav-wrap-content-end'>
                     <ul className='navbar-nav'>
-                        <Nav.Link target='_blank' href='https://surumen.com' className='nav-item nav-link rounded-pill d-inline-block cursor-pointer'>
-                            <Person size={22} />
-                        </Nav.Link>
-                        <Nav.Link target='_blank' href='https://www.linkedin.com/in/mosessurumen' className='nav-item nav-link rounded-pill d-inline-block cursor-pointer'>
-                            <Linkedin size={18} />
-                        </Nav.Link>
-                        {/*<Nav.Link target='_blank' href='https://github.com/surumen' className='nav-item nav-link rounded-pill d-none d-lg-block cursor-pointer'>*/}
-                        {/*    <Github size={18} />*/}
-                        {/*</Nav.Link>*/}
-                        <Nav.Link onClick={changeColorMode} className='nav-item nav-link rounded-pill d-inline-block cursor-pointer'>
-                            {storageValue === 'dark' ? (
-                                <MoonFill size={18} />
-                            ) : (
-                                <Sun size={24} />
-                            )}
-                        </Nav.Link>
+                        <QuickMenu />
                     </ul>
                 </div>
             </div>

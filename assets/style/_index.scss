@@ -1,4 +1,18 @@
-// assets/style/_index.scss
+// theme.scss
 
-@import "theme";
-//@import "theme-dark";  // dark‐mode overrides only
+@import "~bootstrap/scss/functions";
+@import "themes/_default";
+@import "components/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "themes/_variables-dark";
+@import "~bootstrap/scss/variables-dark";
+
+@import "~bootstrap/scss/maps";
+@import "~bootstrap/scss/utilities";
+@import "~bootstrap/scss/bootstrap";
+@import "components/index";
+
+// finally, layer on your CSS-custom-prop overrides:
+@import "themes/_darkmode";
