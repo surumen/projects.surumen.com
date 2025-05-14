@@ -5,15 +5,55 @@ export const AllProjectsData: Project[] = [
 	{
 		id: uuid(),
 		languages: ['Typescript', 'Python'],
+		frameworks: [
+			'Next.js',
+			'React',
+			'AI Agents',
+			'Model Context Protocol',
+			'OpenAI',
+			'Anthropic'
+		],
+		technologyAreas: [
+			'Model Context Protocol',
+			'AI Agents',
+			'Anthropic',
+			'OpenAI',
+			'Machine Learning',
+			'Sports Analytics'
+		],
+		shortTitle: 'Tournament Brackets AI Assistant',
+		title: 'Tournament Brackets AI Assistant',
+		slug: 'tournament-brackets-ai-assistant',
+		shortDescription: 'An AI-driven assistant for bracket predictions and tactical insights across college basketball tournaments, soccer, and other professional leagues.',
+		status: 'Pending',
+		level: 'Advanced',
+		rating: 5.0,
+		completed: '2025',
+		description: `
+			<p>The <strong>Multi-Tournament AI Assistant</strong> is your one-stop, data-driven bracket predictor and tactical adviser for tournaments like <strong>NCAA March Madness</strong>, NBA Playoffs, and the UEFA Champions League.</p>
+			<p>Under the hood, it:</p>
+			<ul>
+			  <li><strong>Ingests real-time data</strong> (team form swings, injuries, lineup changes, live box scores).</li>
+			  <li><strong>Models player & team analytics</strong>—offensive/defensive ratings, shooting streakiness, points-in-the-paint, rebounding, and mismatch factors.</li>
+			  <li><strong>Offers “what-if” bracket simulations</strong> for March Madness, letting you explore alternative championship scenarios.</li>
+			</ul>
+		`,
+		contentType: 'app',
+		component: 'tournament',
+		hasWriteUp: false,
+		content: ``
+	},
+	{
+		id: uuid(),
+		languages: ['Typescript', 'Python'],
 		frameworks: ['AI Agents', 'Model Context Protocol','OpenAI', 'Anthropic'],
 		technologyAreas: ['Model Context Protocol', 'AI Agents', 'Anthropic', 'OpenAI', 'Python'],
 		shortTitle: 'Fantasy Manager Assistant',
 		title: 'Fantasy Premier League Manager Assistant',
 		slug: 'fantasy-manager-assistant',
-		shortDescription: 'An AI-driven FPL co-manager that delivers transfer picks, lineup optimizations, and fixture insights in seconds without the busywork.',
+		shortDescription: 'An fantasy game co-manager that delivers transfer picks, lineup optimizations, and fixture insights in seconds without the busywork.',
 		status: 'Pending',
 		level: 'Advanced',
-		duration: '2h 40m',
 		rating: 5.0,
 		completed: '2025',
 		description: `
@@ -27,33 +67,6 @@ export const AllProjectsData: Project[] = [
 		`,
 		contentType: 'app',
 		component: 'fplAssistant',
-		hasWriteUp: false,
-		content: ``
-	},
-	{
-		id: uuid(),
-		languages: ['Typescript', 'Python'],
-		frameworks: ['Machine Learning', 'Python'],
-		technologyAreas: ['Recurrent Neural Networks', 'Feature Selection', 'Next.js', 'Python'],
-		title: 'March Madness Brackets Assistant',
-		slug: 'march-madness-assistant',
-		shortDescription:
-			'Automated NCAA March Madness™ brackets assistant to beat the competition',
-		status: 'Pending',
-		level: 'Advanced',
-		duration: '2h 40m',
-		rating: 2.5,
-		completed: '2024',
-		description: `<p>If you are a basketball fan, or just relish the competition with your friends, 
-		you're likely to spend quite some time every spring strategizing, and trying to crunch some complicated data 
-		(unless if you don't mind losing a few bucks and coming last in your bracket).</p>
-		<p>&nbsp;&nbsp;</p>
-		<p>The odds of predicting a perfect bracket are an astronomical 1 in 9,223,372 billion.
-		That said, with the available data every year, it is still possible to somewhat predict a decent number of games 
-		based on each team's season statistics.</p>
-        `,
-		component: 'tournament',
-		contentType: 'app',
 		hasWriteUp: false,
 		content: ``
 	},
