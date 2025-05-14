@@ -3,7 +3,7 @@
 //
 
 // Transitions
-@import "bootstrap/scss/transitions";
+@import "../../../node_modules/bootstrap/scss/transitions";
 
 // Static utilities
 @import "background";
@@ -19,7 +19,7 @@
 //@import "typekit";
 
 // Bootstrap utilities
-@import "bootstrap/scss/utilities";
+@import "../../../node_modules/bootstrap/scss/utilities";
 
 // Webpixels utilities
 @import "utilities";

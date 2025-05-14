@@ -10,8 +10,7 @@ import { Provider } from 'react-redux'
 import { store } from '@/store/store'
 
 // Styles
-// import 'style/_index.scss'
-import 'assets/style/_index.scss';
+import 'style/_index.scss';
 
 // import default layouts
 import DefaultLayout from '../layouts/DefaultLayout';
