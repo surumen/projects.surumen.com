@@ -1,4 +1,3 @@
-// widgets/brackets/Region.tsx
 import React, { useRef, useMemo, useEffect } from 'react';
 import useMounted from '@/hooks/useMounted';
 import { useMediaQuery } from 'react-responsive';
@@ -50,8 +49,8 @@ const Region: React.FC<RegionProps> = ({
     const getPick = (round: number, idx: number) =>
         userData?.matchups?.[round]?.[idx];
 
-    // FINAL-REGION (unchanged) …
-    if (isFinal) {
+    // FINAL-REGION
+    if (isFinal && !isMobile) {
         // 1) split out semis + final
         const semiFinals = games.filter(g => g.roundNumber === 0);
         const finalGame  = games.find(g => g.roundNumber > 0) || games[0];
@@ -66,74 +65,41 @@ const Region: React.FC<RegionProps> = ({
                     isFinalRegion
                 />
 
-                {/* region label in the middle */}
-                {!isMobile && (
-                    <h2
-                        className="position-absolute text-uppercase text-muted"
-                        style={{
-                            top: '50%',
-                            left: '50%',
-                            transform: 'translate(-50%, -50%)',
-                            zIndex: 1,
-                            pointerEvents: 'none',
-                        }}
-                    >
-                        {name}
-                    </h2>
-                )}
-
                 {/* DESKTOP: flex trifecta */}
-                {!isMobile ? (
-                    <div className="d-flex align-items-center justify-content-center h-100">
-                        {hasTwoSemis && (
-                            <Round
-                                seeds={seeds}
-                                gamesData={[semiFinals[0]]}
-                                number={0}
-                                type="left"
-                                pick={getPick(0, 0)}
-                                onSeedClick={p => onAdvanceTeam!(semiFinals[0],   0, 0, p)}
-                            />
-                        )}
+                <div className="d-flex align-items-center justify-content-center h-100">
+                    {hasTwoSemis && (
+                        <Round
+                            seeds={seeds}
+                            gamesData={[semiFinals[0]]}
+                            number={0}
+                            type="left"
+                            pick={getPick(0, 0)}
+                            onSeedClick={p => onAdvanceTeam!(semiFinals[0],   0, 0, p)}
+                        />
+                    )}
 
-                        <div className="mx-4">
-                            <Round
-                                seeds={seeds}
-                                gamesData={[finalGame]}
-                                number={hasTwoSemis ? 1 : 0}
-                                type="left"
-                                pick={getPick(hasTwoSemis ? 1 : 0, 0)}
-                                onSeedClick={p => onAdvanceTeam!(finalGame, hasTwoSemis ? 1 : 0, 0, p)}
-                            />
-                        </div>
+                    <div className="mx-4">
+                        <Round
+                            seeds={seeds}
+                            gamesData={[finalGame]}
+                            number={hasTwoSemis ? 1 : 0}
+                            type="left"
+                            pick={getPick(hasTwoSemis ? 1 : 0, 0)}
+                            onSeedClick={p => onAdvanceTeam!(finalGame, hasTwoSemis ? 1 : 0, 0, p)}
+                        />
+                    </div>
 
-                        {hasTwoSemis && (
-                            <Round
-                                seeds={seeds}
-                                gamesData={[semiFinals[1]]}
-                                number={0}
-                                type="right"
-                                pick={getPick(0, 1)}
-                                onSeedClick={p => onAdvanceTeam!(semiFinals[1],   0, 1, p)}
-                            />
-                        )}
-                    </div>
-                ) : (
-                    /* MOBILE: fall back to your normal grid */
-                    <div
-                        className="flex-grow-1"
-                        style={{
-                            display:            'grid',
-                            gridTemplateRows:   `repeat(${roundsData[0].length * 2 - 1}, 1fr)`,
-                            gridTemplateColumns:`repeat(${roundsData.length}, 1fr)`,
-                            columnGap:          '0',
-                            rowGap:             '1rem',
-                            alignContent:       'stretch',
-                        }}
-                    >
-                        {/* ...exactly your existing grid mapping here... */}
-                    </div>
-                )}
+                    {hasTwoSemis && (
+                        <Round
+                            seeds={seeds}
+                            gamesData={[semiFinals[1]]}
+                            number={0}
+                            type="right"
+                            pick={getPick(0, 1)}
+                            onSeedClick={p => onAdvanceTeam!(semiFinals[1],   0, 1, p)}
+                        />
+                    )}
+                </div>
             </div>
         );
     }
