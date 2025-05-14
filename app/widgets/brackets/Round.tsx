@@ -35,7 +35,7 @@ const Round: React.FC<RoundProps> = ({
             className="d-grid"
             style={{
                 gridTemplateRows: 'auto 1fr',
-                rowGap: isMobile ? '2.5rem' : '1rem',
+                rowGap: isMobile ? '2rem' : '1rem',
             }}
         >
             <div>

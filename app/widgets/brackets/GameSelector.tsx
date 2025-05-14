@@ -31,7 +31,7 @@ const GameSelector: React.FC<GameSelectorProps> = ({
         'align-items-center',
         'rounded-0',
         isRight ? 'rounded-bottom-start' : 'rounded-bottom-end',
-        'bg-light',
+        'bg-transparent',
         'text-body',
         'border-0',
         isRight ? 'border-end' : 'border-start',

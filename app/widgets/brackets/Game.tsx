@@ -46,7 +46,7 @@ const Game: React.FC<GameProps> = ({
                 : 'rounded';
 
     const width = !isMobile && !game.isSeries ? '10rem' :
-        !isMobile && game.isSeries ? '12rem': '10rem';
+        game.isSeries ? '12rem': '10rem';
 
     return (
         <div className={`d-flex ${type === 'right' ? 'justify-content-end' : 'justify-content-start'}`}>
@@ -54,7 +54,7 @@ const Game: React.FC<GameProps> = ({
                 renderGameHeader(game, type)
             )}
             <button
-                className={`border-0 ${roundedClass} p-0 list-group list-group-sm mt-n3 m-0 shadow ${textClass}`}
+                className={`border-0 bg-light ${roundedClass} p-0 list-group list-group-sm mt-n3 m-0 shadow ${textClass}`}
                 style={{ minWidth: width, maxWidth: width }}
             >
                 <Team
