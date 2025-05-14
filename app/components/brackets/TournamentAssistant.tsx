@@ -64,10 +64,17 @@ const TournamentAssistant: React.FC = () => {
         );
     };
 
-    const renderGameFooter = (_game: GameData) => {
-        // only show selector for NBA
+    const renderGameFooter = (_game: GameData, _type: string) => {
         if (league !== 'nba') return null;
-        return <GameSelector />;
+
+        const winner = _game.winnerSeed;
+        const cls = winner ? `bg-accent-${winner.color} text-${winner.color}` : ''
+        return (
+            <GameSelector
+                type={_type}
+                className={cls}
+            />
+        );
     };
 
     return (

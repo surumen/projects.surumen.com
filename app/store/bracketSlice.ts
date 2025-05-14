@@ -9,7 +9,6 @@ export type TournamentKey = string;
 
 const years: number[] = [2022, 2023, 2024, 2025] as const;
 
-// build the record programmatically
 export const TOURNAMENTS: Record<TournamentKey, TournamentStructure> = Object.fromEntries(
     years.flatMap((year) => ([
         [`ncaa-${year}`, getNcaaTournamentData(year)],
@@ -39,49 +38,65 @@ function createEmptyRegions(
             arr.push(g);
             byRound.set(g.roundNumber, arr);
         });
-        const rounds = Array.from(byRound.entries())
+        const rounds: GameData[][] = Array.from(byRound.entries())
             .sort(([a], [b]) => a - b)
             .map(([, arr]) => arr);
 
-        // 2) initialize matchups with full SeedMeta in round 0, null thereafter
-        regs[regionName] = {
-            matchups: rounds.map((gamesInRound, roundIndex) =>
+        // 2a) matchups: tuple of exactly two entries per game
+        const matchups: [SeedMeta|null, SeedMeta|null][][] = rounds.map(
+            (gamesInRound, roundIndex): [SeedMeta|null, SeedMeta|null][] =>
                 gamesInRound.map(game =>
                     roundIndex === 0
                         ? [
                             game.firstSeed  ?? null,
                             game.secondSeed ?? null
-                        ] as [SeedMeta|null,SeedMeta | null]
-                        : [null, null] as [SeedMeta | null, SeedMeta | null]
+                        ] as [SeedMeta|null, SeedMeta|null]
+                        : ([null, null] as [SeedMeta|null, SeedMeta|null])
                 )
-            ),
+        );
 
-            // scores stay as [number,number]
-            games: rounds.map(r => r.map(() => [0, 0] as [number, number])),
-        };
+        // 2b) scores: [number,number] matrix
+        const scores: [number, number][][] = rounds.map(r =>
+            r.map(() => [0, 0] as [number, number])
+        );
+
+        // 2c) games:
+        const games: GameData[][] = rounds.map(r =>
+            r.map(g => ({ ...g }))
+        );
+
+        regs[regionName] = { matchups, games, scores };
     }
 
     // 3) Final Four + Championship
     if (data.final?.games.length) {
-        const allFinal  = data.final.games as GameData[];
-        const byFinal   = new Map<number, GameData[]>();
+        const allFinal = data.final.games as GameData[];
+        const byFinal  = new Map<number, GameData[]>();
         allFinal.forEach(g => {
             const arr = byFinal.get(g.roundNumber) ?? [];
             arr.push(g);
             byFinal.set(g.roundNumber, arr);
         });
-        const finalRounds = Array.from(byFinal.entries())
+        const finalRounds: GameData[][] = Array.from(byFinal.entries())
             .sort(([a], [b]) => a - b)
             .map(([, arr]) => arr);
 
-        regs['Final'] = {
-            matchups: finalRounds.map(roundGames =>
+        const matchups: [SeedMeta|null, SeedMeta|null][][] = finalRounds.map(
+            roundGames =>
                 roundGames.map(() =>
-                    [null, null] as [SeedMeta|null,SeedMeta|null]
+                    [null, null] as [SeedMeta|null, SeedMeta|null]
                 )
-            ),
-            games: finalRounds.map(r => r.map(() => [0, 0] as [number, number])),
-        };
+        );
+
+        const scores: [number, number][][] = finalRounds.map(r =>
+            r.map(() => [0, 0] as [number, number])
+        );
+
+        const games: GameData[][] = finalRounds.map(r =>
+            r.map(g => ({ ...g }))
+        );
+
+        regs['Final'] = { matchups, games, scores };
     }
 
     return regs;
@@ -139,6 +154,9 @@ export const bracketSlice = createSlice({
             const { tournamentKey, region, game, round, gameIdx, pick } = action.payload
             const reg = state.regions[tournamentKey]?.[region]
             if (!reg) return
+
+            // set the game's winnerSeed
+            reg.games[round][gameIdx].winnerSeed = pick;
 
             const totalRounds = reg.matchups.length
             const pair = reg.matchups[round][gameIdx]

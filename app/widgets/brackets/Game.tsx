@@ -78,8 +78,6 @@ const Game: React.FC<GameProps> = ({
                 {renderGameFooter && (
                     renderGameFooter(game, type)
                 )}
-                {/*<GameSelector games={games} seeds={summarySeeds} type={type} />*/}
-
             </button>
         </div>
     );

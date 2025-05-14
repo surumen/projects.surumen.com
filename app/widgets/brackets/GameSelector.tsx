@@ -3,6 +3,7 @@ import type { GameSelectorProps } from '@/types';
 
 const GameSelector: React.FC<GameSelectorProps> = ({
                                                        type = 'left',
+                                                       className = 'bg-secondary bg-opacity-10'
                                                    }) => {
     const isRight = type === 'right';
 
@@ -10,11 +11,8 @@ const GameSelector: React.FC<GameSelectorProps> = ({
     let options = Array.from({ length: 7 }, (_, idx) => {
         const seq = idx + 1;
 
-        let cls = 'badge rounded-circle text-center ';
-        cls += ' bg-secondary bg-opacity-10 small text-secondary';
-
         return (
-            <span key={idx} className={cls} data-value={idx}>
+            <span key={idx} className={`badge ${className} rounded-circle text-center small`} data-value={idx}>
                 {seq}
             </span>
         );

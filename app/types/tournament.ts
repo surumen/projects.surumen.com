@@ -64,7 +64,8 @@ export interface TournamentStructure {
  */
 export interface BracketRegion {
     matchups: [SeedMeta | null, SeedMeta | null][][];
-    games: [number, number][][];
+    games:    GameData[][];
+    scores:   [number, number][][];
 }
 
 /**
@@ -106,10 +107,11 @@ export interface TeamProps {
 }
 
 export interface GameSelectorProps {
+    type: string;
+    className?: string;
     games?: number[];
     seeds?: Record<number, { name: string }>;
     gamesPredicted?: number;
-    type?: string;
 }
 
 export interface GameProps {

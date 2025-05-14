@@ -12,8 +12,11 @@ import { TOURNEY_REGISTRY } from '@/data/tournaments';
 const DynamicBracket: React.FC<DynamicBracketProps> = props => {
     const instanceKey = `${props.tournamentType}-${props.year}`;
     return (
-        <Container key={instanceKey} className="tournament py-4 px-0 position-relative">
-            <InnerBracket {...props}/>
+        <Container
+            key={instanceKey}
+            className="tournament py-4 px-0 position-relative"
+        >
+            <InnerBracket {...props} />
         </Container>
     );
 };
@@ -24,13 +27,13 @@ const InnerBracket: React.FC<DynamicBracketProps> = ({
                                                          regionsPerRow = 2,
                                                          renderRegionHeader,
                                                          renderGameHeader,
-                                                         renderGameFooter
+                                                         renderGameFooter,
                                                      }) => {
-    const dispatch = useAppDispatch();
-    const keyString = `${tournamentType}-${year}`;
-    const config    = TOURNEY_REGISTRY[tournamentType]!;
-    const data      = config.getData(year);
-    const userRegs  = useAppSelector((s: RootState) => s.bracket.regions[keyString]);
+    const dispatch    = useAppDispatch();
+    const keyString   = `${tournamentType}-${year}`;
+    const config      = TOURNEY_REGISTRY[tournamentType]!;
+    const data        = config.getData(year);
+    const userRegs    = useAppSelector((s: RootState) => s.bracket.regions[keyString]);
     const hasMounted    = useMounted();
     const isMobileQuery = useMediaQuery({ query: '(max-width: 767px)' });
     const isMobile      = hasMounted && isMobileQuery;
@@ -50,22 +53,20 @@ const InnerBracket: React.FC<DynamicBracketProps> = ({
     });
 
     // 2) build semiSeedsMaps keyed by gameNumber → regionName → SeedMeta
-
-    // flip to “any multi‐region (2 or 4)”
     const isMultiRegion = regionKeys.length > 1;
     const semiSeedsMaps: Record<number, Record<string, SeedMeta>> = {};
 
     if (isMultiRegion) {
+        // pull from state so we get winnerSeed too
+        userRegs['Final']?.matchups; // just ensure Final exists
         data.final.games
-            .filter(g => g.roundNumber === 0)  // only the two semis
+            .filter(g => g.roundNumber === 0)
             .forEach(semi => {
                 const { gameNumber, sourceGame1, sourceGame2 } = semi;
                 if (!sourceGame1 || !sourceGame2) return;
 
                 const regionA = sourceGame1.region;
                 const regionB = sourceGame2.region;
-
-                // look up the very last picks array for each region
                 const lastA = userRegs[regionA].matchups;
                 const champMetaA = lastA[lastA.length - 1][sourceGame1.gameNumber].find(
                     (m): m is SeedMeta => m != null
@@ -88,12 +89,15 @@ const InnerBracket: React.FC<DynamicBracketProps> = ({
     const renderRow = (regions: string[]) => (
         <Row className="gy-md-5 mb-md-5 mx-0 mx-md-auto" key={regions.join('-')}>
             {regions.map((r, idx) => (
-                <Col xs={12} md={12/regionsPerRow} className="px-0 h-100" key={r}>
+                <Col xs={12} md={12 / regionsPerRow} className="px-0 h-100" key={r}>
                     <Region
                         name={r}
                         type={idx % 2 === 0 ? 'left' : 'right'}
-                        games={data.regions[r].games}
-                        userData={userRegs[r]}
+                        games={userRegs[r].games.flat()}
+                        userData={{
+                            matchups: userRegs[r].matchups,
+                            games:    userRegs[r].scores,
+                        }}
                         onAdvanceTeam={(game, round, gameIdx, pick: SeedMeta) =>
                             dispatch(
                                 advanceTeam({
@@ -118,32 +122,34 @@ const InnerBracket: React.FC<DynamicBracketProps> = ({
     return (
         <>
             {renderRow(regionKeys.slice(0, regionsPerRow))}
-            {regionKeys.length > regionsPerRow && renderRow(regionKeys.slice(regionsPerRow))}
+            {regionKeys.length > regionsPerRow &&
+                renderRow(regionKeys.slice(regionsPerRow))}
 
             {/* Final Four – desktop */}
             {!isMobile && isMultiRegion && (() => {
-                // 1) decide if it's a single final (2-region) or full Final Four (4-region)
-                const firstRoundGames = data.final.games.filter(g => g.roundNumber === 0);
-                const isSingleFinal   = firstRoundGames.length === 1;
+                const finalGamesFlat = userRegs['Final'].games.flat();
+                const semis = finalGamesFlat.filter(g => g.roundNumber === 0);
+                const isSingleFinal = semis.length === 1;
+                const gamesForFinal = isSingleFinal ? semis : finalGamesFlat;
 
-                // 2) pick which games to render
-                const gamesForFinal = isSingleFinal
-                    ? firstRoundGames     // just the one final
-                    : data.final.games;   // semis + final
-
-                // 3) pick the positioning style
                 const positionStyle: React.CSSProperties = isSingleFinal
                     ? { top: '20%', left: '50%', transform: 'translateX(-50%)' }
-                    : { top: 0, left: `${(100/regionsPerRow)/2}%`, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' };
+                    : {
+                        top: 0,
+                        left: `${(100 / regionsPerRow) / 2}%`,
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    };
 
-                // 4) render the single wrapper + Region
                 return (
                     <div
                         style={{
-                            position:     'absolute',
-                            width:        `${100/regionsPerRow}%`,
-                            pointerEvents:'none',
-                            zIndex:       1,
+                            position:      'absolute',
+                            width:         `${100 / regionsPerRow}%`,
+                            pointerEvents: 'none',
+                            zIndex:        1,
                             ...positionStyle,
                         }}
                     >
@@ -152,18 +158,23 @@ const InnerBracket: React.FC<DynamicBracketProps> = ({
                                 name="Final"
                                 type="left"
                                 games={gamesForFinal}
-                                userData={userRegs['Final']}
+                                userData={{
+                                    matchups: userRegs['Final'].matchups,
+                                    games:    userRegs['Final'].scores,
+                                }}
                                 isFinal
                                 semiSeedsMaps={semiSeedsMaps}
                                 onAdvanceTeam={(game, round, gameIdx, pick: SeedMeta) =>
-                                    dispatch(advanceTeam({
-                                        tournamentKey: keyString,
-                                        region:        'Final',
-                                        game,
-                                        round,
-                                        gameIdx,
-                                        pick,
-                                    }))
+                                    dispatch(
+                                        advanceTeam({
+                                            tournamentKey: keyString,
+                                            region:        'Final',
+                                            game,
+                                            round,
+                                            gameIdx,
+                                            pick,
+                                        })
+                                    )
                                 }
                                 renderRegionHeader={renderRegionHeader}
                                 renderGameHeader={renderGameHeader}
@@ -181,8 +192,11 @@ const InnerBracket: React.FC<DynamicBracketProps> = ({
                         <Region
                             name="Final"
                             type="left"
-                            games={data.final.games}
-                            userData={userRegs['Final']}
+                            games={userRegs['Final'].games.flat()}
+                            userData={{
+                                matchups: userRegs['Final'].matchups,
+                                games:    userRegs['Final'].scores,
+                            }}
                             isFinal
                             semiSeedsMaps={semiSeedsMaps}
                             onAdvanceTeam={(game, round, gameIdx, pick: SeedMeta) =>
