@@ -157,6 +157,7 @@ function buildYear(year: number): TournamentStructure {
             gameNumber: 0,
             sourceGame1: fromGame('Final', 0, 0),
             sourceGame2: fromGame('Final', 0, 1),
+            isFinal: true
         },
     ];
 

@@ -283,6 +283,7 @@ export function getUclTournamentData(year: number): TournamentStructure {
         region:'Final', roundNumber:0, gameNumber:0,
         sourceGame1: fromGame('SideA', 2, 0),
         sourceGame2: fromGame('SideB', 2, 0),
+        isFinal: true
     };
     const fm = uclFinalResults[year];
     const finalGame:GameData = {

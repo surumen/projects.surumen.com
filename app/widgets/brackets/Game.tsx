@@ -46,7 +46,7 @@ const Game: React.FC<GameProps> = ({
                 : 'rounded';
 
     const width = !isMobile && !game.isSeries ? '10rem' :
-        game.isSeries ? '12rem': '8rem';
+        !isMobile && game.isSeries ? '12rem': '10rem';
 
     return (
         <div className={`d-flex ${type === 'right' ? 'justify-content-end' : 'justify-content-start'}`}>
