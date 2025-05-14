@@ -138,16 +138,16 @@ $dark-border-subtle-dark:       rgba($dark,      .25) !default;
 // Body & semantic
 $body-color-dark:               $gray-01               !default;
 $body-bg-dark:                  $black                  !default;
-$body-secondary-color-dark:     rgba($body-color, .75)    !default;
-$body-secondary-bg-dark:        $secondary-bg             !default;
-$body-tertiary-color-dark:      rgba($body-color, .5)     !default;
-$body-tertiary-bg-dark:         $tertiary-bg              !default;
+$body-secondary-color-dark:     rgba($gray-01, .75)    !default;
+$body-secondary-bg-dark:        $gray-17             !default;
+$body-tertiary-color-dark:      rgba($gray-01, .5)     !default;
+$body-tertiary-bg-dark:         $gray-18              !default;
 $body-emphasis-color-dark:      $emphasis-color           !default;
 
 // Borders & headings
-$border-color-dark:             $border-color             !default;
+$border-color-dark:             $gray-16             !default;
 $border-color-translucent-dark:rgba($white, .15)          !default;
-$headings-color-dark:           $headings-color           !default;
+$headings-color-dark:           $white           !default;
 
 // Links & code & mark
 $link-color-dark:               tint-color($primary, 40%) !default;
@@ -165,6 +165,7 @@ $form-valid-color-dark:             $form-valid-color       !default;
 $form-valid-border-color-dark:      $form-valid-border-color!default;
 $form-invalid-color-dark:           $form-invalid-color     !default;
 $form-invalid-border-color-dark:    $form-invalid-border-color!default;
+$input-color:                       $gray-900 !default;
 
 // Accordion
 $accordion-icon-color-dark:         $primary-text-emphasis-dark !default;
