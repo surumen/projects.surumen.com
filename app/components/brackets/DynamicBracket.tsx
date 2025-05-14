@@ -16,7 +16,7 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({
                                                        }) => {
     const instanceKey = `${tournamentType}-${year}`;
     return (
-        <Container key={instanceKey} fluid className="tournament py-4 px-sm-0 px-md-2 position-relative">
+        <Container key={instanceKey} className="tournament py-4 px-0 position-relative">
             <InnerBracket
                 tournamentType={tournamentType}
                 year={year}
