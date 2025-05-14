@@ -10,7 +10,7 @@ import { changeSkin } from '@/store/appSlice';
 import LogoIcon from '@/widgets/icons/LogoIcon';
 
 
-const NavTop = (props) => {
+const NavTop = ({ showSearch, className }) => {
     const placeholder = useMemo(() => 'Ask me a question...', []);
 
     const defaultSkin = useSelector((state: any) => state.app.skin);
@@ -44,15 +44,17 @@ const NavTop = (props) => {
 
                 <div className='navbar-nav-wrap-content-start'>
                     <div className='d-none d-md-block'>
-                        <div className='input-group input-group-merge input-group-borderless navbar-input-group rounded-pill shadow-none'>
-                            <div className='input-group-prepend input-group-text'>
-                                <Search size={12} className='me-1'/>
+                        {showSearch && (
+                            <div className='input-group input-group-merge input-group-borderless navbar-input-group rounded'>
+                                <div className='input-group-prepend input-group-text'>
+                                    <Search size={12} className='me-1'/>
+                                </div>
+                                <input type='search' className='form-control focus rounded' placeholder={placeholder}/>
+                                <a className='input-group-append input-group-text d-none'>
+                                    <XLg size={12} />
+                                </a>
                             </div>
-                            <input type='search' className='form-control focus rounded' placeholder={placeholder}/>
-                            <a className='input-group-append input-group-text'>
-                                <XLg size={12} />
-                            </a>
-                        </div>
+                        )}
                     </div>
                 </div>
 
@@ -82,10 +84,11 @@ const NavTop = (props) => {
 };
 
 NavTop.defaultProps = {
-    className: null
+    showSearch: false
 };
 
 NavTop.propTypes = {
+    showSearch: PropTypes.bool,
     className: PropTypes.string,
 };
 
