@@ -72,7 +72,7 @@ const ProjectCard = ({ project, viewby }) => {
 
 	const offcanvasWidth = isMobile
 		? '100vw'
-		: 'calc(100vw - 8rem)';
+		: 'calc(100vw - 7.5rem)';
 
 	return (
 		<Fragment>
