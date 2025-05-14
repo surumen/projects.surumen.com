@@ -18,6 +18,7 @@ html[data-bs-theme="dark"] {
   --bs-emphasis-color-rgb:       #{red($body-emphasis-color-dark)}, #{green($body-emphasis-color-dark)}, #{blue($body-emphasis-color-dark)} !important;
 
   /* secondary & tertiary (new in v5.3) */
+  --bs-light-rgb:                #{red($gray-19)}, #{green($gray-19)}, #{blue($gray-19)} !important;
   --bs-secondary-color:          #{$body-secondary-color-dark}    !important;
   --bs-secondary-color-rgb:      #{red($body-secondary-color-dark)}, #{green($body-secondary-color-dark)}, #{blue($body-secondary-color-dark)} !important;
   --bs-secondary-bg:             #{$body-secondary-bg-dark}       !important;
