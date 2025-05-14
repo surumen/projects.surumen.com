@@ -16,7 +16,7 @@ const DynamicBracket: React.FC<DynamicBracketProps> = ({
                                                        }) => {
     const instanceKey = `${tournamentType}-${year}`;
     return (
-        <Container key={instanceKey} fluid className="tournament py-4 position-relative">
+        <Container key={instanceKey} fluid className="tournament py-4 px-sm-0 px-md-2 position-relative">
             <InnerBracket
                 tournamentType={tournamentType}
                 year={year}
@@ -92,7 +92,7 @@ const InnerBracket: React.FC<DynamicBracketProps> = ({
     }
 
     const renderRow = (regions: string[]) => (
-        <Row className="gy-md-5 mb-md-5" key={regions.join('-')}>
+        <Row className="gy-md-5 mb-md-5 mx-0 mx-md-auto" key={regions.join('-')}>
             {regions.map((r, idx) => (
                 <Col xs={12} md={12/regionsPerRow} className="px-0 h-100" key={r}>
                     <Region

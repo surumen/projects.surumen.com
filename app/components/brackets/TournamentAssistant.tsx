@@ -47,7 +47,7 @@ const TournamentAssistant: React.FC = () => {
 
     return (
         <Card className="border-0 shadow-none">
-            <Card.Header className="border-0 card-header-content-sm-between mb-4">
+            <Card.Header className="border-0 card-header-content-sm-between mb-4 px-0 px-md-2">
                 <Image
                     className="avatar avatar-lg"
                     src={Logo}

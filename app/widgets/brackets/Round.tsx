@@ -37,7 +37,6 @@ const Round: React.FC<RoundProps> = ({
             style={{
                 gridTemplateRows: 'auto 1fr',
                 rowGap: isMobile ? '2.5rem' : '1rem',
-                marginTop: verticalOffset,
             }}
         >
             <div>

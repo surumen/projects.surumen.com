@@ -5,10 +5,16 @@ import { Col, Row } from 'react-bootstrap';
 
 // import bootstrap icons
 import { SendFill, Pin, Heart, HeartFill, PinFill, StarFill } from 'react-bootstrap-icons';
+import useMounted from '@/hooks/useMounted';
+import { useMediaQuery } from 'react-responsive';
 
 
 
-const ProjectHeader = ({ project, viewby, isPreview }) => {
+const ProjectHeader = ({ project, isPreview }) => {
+
+    const hasMounted    = useMounted();
+    const isMobileQuery = useMediaQuery({ query: '(max-width: 767px)' });
+    const isMobile      = hasMounted && isMobileQuery;
 
     return (
         <Fragment>
@@ -44,30 +50,46 @@ const ProjectHeader = ({ project, viewby, isPreview }) => {
                         </div>
                     </Col>
 
-                    <Col sm={12} md={2} className="d-flex flex-column">
-                        <div className='vstack gap-6 mb-5 mb-md-0'>
-                            <div>
-                                <h6 className='card-subtitle fw-normal mb-2'>Completed</h6>
-                                <p className='article text-sm'>{project.completed}</p>
+                    <Col sm={12} md={2} className="mb-5 mb-md-0">
+                        <div
+                            className="d-flex flex-wrap d-md-grid"
+                            style={{
+                                height: '100%',
+                                gridTemplateRows: 'auto auto 1fr',
+                            }}
+                        >
+                            <div
+                                className="w-50 w-md-auto"
+                                style={{ alignSelf: 'start' }}
+                            >
+                                <h6 className="card-subtitle fw-normal mb-2">Completed</h6>
+                                <p className="article text-sm">{project.completed}</p>
                             </div>
-                            <div>
-                                <h6 className='card-subtitle fw-normal mb-2'>Collaborators</h6>
-                                <p className='article text-sm'>Individual Project</p>
+
+                            <div
+                                className="w-50 w-md-auto pt-md-4"
+                                style={{ alignSelf: 'start' }}
+                            >
+                                <h6 className="card-subtitle fw-normal mb-2">Collaborators</h6>
+                                <p className="article text-sm">Individual Project</p>
                             </div>
-                            <div>
-                                { isPreview ? (
-                                    <a target={'_blank'} href={`/project/${project.slug}`} className='btn btn-sm bg-primary-600 text-bg-primary shadow-none rounded-pill'>
-                                        <span className='me-2'>View Project</span>
-                                        <SendFill size={12} className='mb-1' />
+
+                            {isPreview && project.slug && (
+                                <div
+                                    className="w-100 pb-md-6 pt-md-0 pt-3"
+                                    style={{ alignSelf: 'end' }}
+                                >
+                                    <a
+                                        target="_blank"
+                                        rel="noopener"
+                                        href={`/project/${project.slug}`}
+                                        className={`btn btn-sm rounded-pill w-100 btn-soft-secondary`}
+                                    >
+                                        <SendFill size={12} className="mb-1" />
+                                        <span className="ms-2">View Project</span>
                                     </a>
-                                ) : ( isPreview ? (
-                                        <button disabled={true} className='btn btn-sm bg-primary-600 border-0 text-bg-primary shadow-none rounded-pill'>
-                                            <span className='me-2'>Coming Soon</span>
-                                            <SendFill size={12} className='mb-1' />
-                                        </button>
-                                    ) : (<span></span>)
-                                )}
-                            </div>
+                                </div>
+                            )}
                         </div>
                     </Col>
                 </Row>

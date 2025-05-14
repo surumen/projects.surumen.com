@@ -19,7 +19,9 @@ const Region: React.FC<RegionProps> = ({
     const hasMounted    = useMounted();
     const isMobileQuery = useMediaQuery({ query: '(max-width: 767px)' });
     const isMobile      = hasMounted && isMobileQuery;
-    const isRight    = type === 'right';
+
+    const effectiveType = isMobile ? 'left' : type;
+    const isRight      = effectiveType === 'right';
 
     // group games by round
     const roundsData = useMemo(() => {
@@ -55,7 +57,7 @@ const Region: React.FC<RegionProps> = ({
             <Connector
                 gameRefs={refsForConnector}
                 containerRef={containerRef}
-                type={type}
+                type={effectiveType}
                 isFinalRegion={false}
             />
 
@@ -80,7 +82,8 @@ const Region: React.FC<RegionProps> = ({
                     display:            'grid',
                     gridTemplateRows:   `repeat(${rowCount}, 1fr)`,
                     gridTemplateColumns:`repeat(${roundCount}, 1fr)`,
-                    columnGap:          isMobile ? '-1rem' : '-2rem',
+                    columnGap:          '0',
+                    rowGap:             isMobile ? '0rem' : '1rem',
                     alignContent:       'stretch',
                 }}
             >
@@ -90,10 +93,17 @@ const Region: React.FC<RegionProps> = ({
                         const rowStart = gameIdx * 2 ** (roundIdx + 1) + 2 ** roundIdx;
                         const pick     = userData?.matchups?.[roundIdx]?.[gameIdx];
 
-                        // pick column either left→right or right→left
+                        // base grid placement: either left→right or right→left
                         const col = isRight
                             ? roundCount - roundIdx
                             : roundIdx + 1;
+
+                        // how much to overlap per round (tweak 50px as needed)
+                        const overlapPx = 100;
+                        // on mobile, left‐regions shift left, right‐regions shift right
+                        const shift = isMobile
+                            ? (isRight ? roundIdx * overlapPx : -roundIdx * overlapPx)
+                            : 0;
 
                         return (
                             <div
@@ -102,13 +112,14 @@ const Region: React.FC<RegionProps> = ({
                                 style={{
                                     gridColumn:   col,
                                     gridRowStart: rowStart,
+                                    transform:    isMobile ? `translateX(${shift}px)` : undefined,
                                 }}
                             >
                                 <Round
                                     seeds={seeds}
                                     gamesData={[game]}
                                     number={roundIdx}
-                                    type={type}
+                                    type={effectiveType}
                                     pick={pick}
                                     rowCount={rowCount}
                                     spacing={spacing}
