@@ -16,7 +16,7 @@ const Team: React.FC<TeamProps> = ({
     const isLeft  = type === 'left';
     const displayName = team.shortName ?? team.name;
     const label = displayNamePredicted ?? displayName;
-    const color = team.color ?? 'secondary';
+    const color = team.color && isWinner ? team.color : 'light';
     const seed  = team.seed ?? 0;
 
     const borderSide = isRight
