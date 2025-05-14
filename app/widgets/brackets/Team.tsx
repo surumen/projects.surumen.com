@@ -64,9 +64,8 @@ const Team: React.FC<TeamProps> = ({
         'cursor-pointer',
     ].join(' ');
 
-    /** render either the seed (when displayNamePredicted) or the score+penalties */
     const renderSeedOrScore = () => {
-        if (displayNamePredicted) {
+        if (displayNamePredicted || !score) {
             return <span className="badge bg-transparent text-muted fw-light">{seed}</span>;
         }
 
