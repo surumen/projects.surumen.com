@@ -44,7 +44,8 @@ export function buildCustomRegion(
     region: string,
     seedsMap: Record<number, string>,
     teams: SeedMeta[],
-    initialPairings: [number, number][]
+    initialPairings: [number, number][],
+    isSeries: boolean = false
 ): { seeds: Record<number, string>; games: GameData[] } {
     const games: GameData[] = [];
 
@@ -58,6 +59,8 @@ export function buildCustomRegion(
             region,
             firstSeed:  { ...teamA, seed: a },
             secondSeed: { ...teamB, seed: b },
+            isSeries: isSeries,
+            isFinal: false
         });
     });
 
@@ -73,6 +76,8 @@ export function buildCustomRegion(
                 sourceGame2: fromGame(region, round - 1, i * 2 + 1),
                 firstSeed:  { ...EMPTY_SEED },
                 secondSeed: { ...EMPTY_SEED },
+                isSeries: isSeries,
+                isFinal: false
             });
         }
         prevCount /= 2;

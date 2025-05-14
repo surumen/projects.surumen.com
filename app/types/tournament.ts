@@ -30,6 +30,8 @@ export interface GameData {
     sourceGame1?: GameSource;
     sourceGame2?: GameSource;
     winnerSeed?: SeedMeta;
+    isSeries?: boolean;
+    isFinal?: boolean;
     finalScore?: [number, number];
     penalties?: [number, number];
 }
@@ -107,12 +109,10 @@ export interface GameSelectorProps {
     games?: number[];
     seeds?: Record<number, { name: string }>;
     gamesPredicted?: number;
-    type?: Orientation;
+    type?: string;
 }
 
 export interface GameProps {
-    /** Lookup map seed number → SeedMeta */
-    seeds: Record<number, SeedMeta>;
 
     /** Full metadata for this game */
     game: GameData;
@@ -123,22 +123,20 @@ export interface GameProps {
     /** [teamA, teamB] from Redux picks */
     participants: [SeedMeta, SeedMeta];
 
+    renderGameHeader?: (game: GameData, type: string) => React.ReactNode;
+    renderGameFooter?: (game: GameData, type: string) => React.ReactNode;
+
     /** Called when clicking a team */
     onSeedClick?: (pick: SeedMeta) => void;
 }
 
 export interface RoundProps {
-    /** seeds lookup (seed number → SeedMeta) */
-    seeds: Record<number, SeedMeta>;
 
     /** full metadata for every game in this round, in order */
     gamesData: GameData[];
 
     /** if true, renders in final (championship) style */
     final?: boolean;
-
-    /** this round’s index (0 = first round, etc) */
-    number: number;
 
     /** “left” or “right” facing layout */
     type?: 'left' | 'right' | 'center';
@@ -147,6 +145,9 @@ export interface RoundProps {
 
     /** refs for each rendered `<div>` around a game */
     gameRefs?: React.Ref<HTMLDivElement>[];
+
+    renderGameHeader?: (game: GameData, type: string) => React.ReactNode;
+    renderGameFooter?: (game: GameData, type: string) => React.ReactNode;
 
     /** click handler: (gameIndex, seed) */
     onSeedClick?: (seed: SeedMeta) => void;
@@ -158,9 +159,6 @@ export interface RegionProps {
 
     /** Layout direction */
     type?: 'left' | 'right';
-
-    /** Map seed number → team slug for lookup */
-    seeds: Record<number, SeedMeta>;
 
     /** Flat list of all games in this region (R64 → region final, or Final Four) */
     games: GameData[];
@@ -176,6 +174,10 @@ export interface RegionProps {
         /** unchanged: one [scoreA,scoreB] per game */
         games: [number,number][][];
     };
+
+    renderRegionHeader?: (name: string) => React.ReactNode
+    renderGameHeader?: (game: GameData, type: string) => React.ReactNode;
+    renderGameFooter?: (game: GameData, type: string) => React.ReactNode;
 
     /** When true, render in Final-region style */
     isFinal?: boolean;
@@ -196,4 +198,8 @@ export interface DynamicBracketProps {
     year?: number;
     regionsPerRow?: number;
     managerKey?: string;
+
+    renderRegionHeader?: (name: string) => React.ReactNode;
+    renderGameHeader?: (game: GameData, type: string) => React.ReactNode;
+    renderGameFooter?: (game: GameData, type: string) => React.ReactNode;
 }

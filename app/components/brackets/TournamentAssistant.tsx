@@ -2,6 +2,8 @@ import React, { useMemo, useState } from 'react';
 import { Card, Image } from 'react-bootstrap';
 import DynamicBracket from '@/components/brackets/DynamicBracket';
 import DynamicForm, { FieldConfig } from '@/widgets/forms/DynamicForm';
+import { GameData } from '@/types';
+import GameSelector from '@/widgets/brackets/GameSelector';
 
 const logos = {
     'ncaa': '/images/svg/ncaa.svg',
@@ -45,6 +47,32 @@ const TournamentAssistant: React.FC = () => {
     // dynamic logo component for selected league
     const Logo = logos[league];
 
+    const renderRegionHeader = (name: string) => {
+        if (league === 'ucl') return null;
+        return (
+            <h2
+                className="position-absolute text-uppercase text-muted"
+                style={{
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    zIndex:      1,
+                    pointerEvents:'none',
+                }}
+            >
+                {name}
+            </h2>
+        );
+    };
+
+    const renderGameFooter = (game: GameData, type: string) => {
+        if (league === 'ucl') return null;
+        if (league === 'ncaa') return null;
+        return (
+            <GameSelector type={type} />
+        );
+    };
+
     return (
         <Card className="border-0 shadow-none">
             <Card.Header className="border-0 card-header-content-sm-between mb-4 px-0 px-md-2">
@@ -69,6 +97,8 @@ const TournamentAssistant: React.FC = () => {
                 tournamentType={league}
                 year={year}
                 regionsPerRow={2}
+                renderRegionHeader={renderRegionHeader}
+                renderGameFooter={renderGameFooter}
             />
         </Card>
     );

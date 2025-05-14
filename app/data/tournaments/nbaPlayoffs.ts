@@ -123,7 +123,7 @@ function buildYear(year: number): TournamentStructure {
     const regions = Object.fromEntries(
         Object.entries(regionSeeds).map(([conf, map]) => [
             conf,
-            buildCustomRegion(conf, map, playoffs, initialQuarters),
+            buildCustomRegion(conf, map, playoffs, initialQuarters, true),
         ])
     ) as Record<string,{ seeds: Record<number,string>; games: GameData[] }>;
 
@@ -132,6 +132,8 @@ function buildYear(year: number): TournamentStructure {
         region: 'Final', roundNumber: 0, gameNumber: 0,
         sourceGame1: fromGame('West',2,0),
         sourceGame2: fromGame('East',2,0),
+        isSeries: true,
+        isFinal: true
     }];
     const finalSeeds: Record<string,SeedMeta> = {
         West: { name: '' }, East: { name: '' }

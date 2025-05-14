@@ -8,12 +8,13 @@ import Connector from '@/widgets/brackets/Connector';
 const Region: React.FC<RegionProps> = ({
                                            name,
                                            type = 'left',
-                                           seeds,
                                            games,
                                            userData,
                                            onAdvanceTeam,
                                            isFinal = false,
-                                           semiSeedsMaps,
+                                           renderRegionHeader,
+                                           renderGameHeader,
+                                           renderGameFooter
                                        }) => {
     const hasMounted    = useMounted();
     const isMobileQuery = useMediaQuery({ query: '(max-width: 767px)' });
@@ -69,34 +70,34 @@ const Region: React.FC<RegionProps> = ({
                 <div className="d-flex align-items-center justify-content-center h-100">
                     {hasTwoSemis && (
                         <Round
-                            seeds={seeds}
                             gamesData={[semiFinals[0]]}
-                            number={0}
                             type="left"
                             pick={getPick(0, 0)}
                             onSeedClick={p => onAdvanceTeam!(semiFinals[0],   0, 0, p)}
+                            renderGameHeader={renderGameHeader}
+                            renderGameFooter={renderGameFooter}
                         />
                     )}
 
                     <div className="mx-4">
                         <Round
-                            seeds={seeds}
                             gamesData={[finalGame]}
-                            number={hasTwoSemis ? 1 : 0}
                             type="left"
                             pick={getPick(hasTwoSemis ? 1 : 0, 0)}
                             onSeedClick={p => onAdvanceTeam!(finalGame, hasTwoSemis ? 1 : 0, 0, p)}
+                            renderGameHeader={renderGameHeader}
+                            renderGameFooter={renderGameFooter}
                         />
                     </div>
 
                     {hasTwoSemis && (
                         <Round
-                            seeds={seeds}
                             gamesData={[semiFinals[1]]}
-                            number={0}
                             type="right"
                             pick={getPick(0, 1)}
                             onSeedClick={p => onAdvanceTeam!(semiFinals[1],   0, 1, p)}
+                            renderGameHeader={renderGameHeader}
+                            renderGameFooter={renderGameFooter}
                         />
                     )}
                 </div>
@@ -114,19 +115,8 @@ const Region: React.FC<RegionProps> = ({
                 isFinalRegion={false}
             />
 
-            {!isMobile && (
-                <h2
-                    className="position-absolute text-uppercase text-muted"
-                    style={{
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        zIndex:      1,
-                        pointerEvents:'none',
-                    }}
-                >
-                    {name}
-                </h2>
+            {renderRegionHeader && (
+                renderRegionHeader(name)
             )}
 
             <div
@@ -142,7 +132,6 @@ const Region: React.FC<RegionProps> = ({
             >
                 {roundsData.map((gamesInRound, roundIdx) =>
                     gamesInRound.map((game, gameIdx) => {
-                        const spacing  = rowCount / (gamesInRound.length + 1);
                         const rowStart = gameIdx * 2 ** (roundIdx + 1) + 2 ** roundIdx;
                         const pick     = userData?.matchups?.[roundIdx]?.[gameIdx];
 
@@ -169,13 +158,13 @@ const Region: React.FC<RegionProps> = ({
                                 }}
                             >
                                 <Round
-                                    seeds={seeds}
                                     gamesData={[game]}
-                                    number={roundIdx}
                                     type={effectiveType}
                                     pick={pick}
                                     gameRefs={gameRefs.current![roundIdx]}
                                     onSeedClick={p => onAdvanceTeam!(game, roundIdx, gameIdx, p)}
+                                    renderGameHeader={renderGameHeader}
+                                    renderGameFooter={renderGameFooter}
                                 />
                             </div>
                         );

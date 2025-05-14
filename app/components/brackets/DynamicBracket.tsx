@@ -9,19 +9,11 @@ import useMounted from '@/hooks/useMounted';
 import { useMediaQuery } from 'react-responsive';
 import { TOURNEY_REGISTRY } from '@/data/tournaments';
 
-const DynamicBracket: React.FC<DynamicBracketProps> = ({
-                                                           tournamentType = 'ncaa',
-                                                           year = 2023,
-                                                           regionsPerRow = 2,
-                                                       }) => {
-    const instanceKey = `${tournamentType}-${year}`;
+const DynamicBracket: React.FC<DynamicBracketProps> = props => {
+    const instanceKey = `${props.tournamentType}-${props.year}`;
     return (
         <Container key={instanceKey} className="tournament py-4 px-0 position-relative">
-            <InnerBracket
-                tournamentType={tournamentType}
-                year={year}
-                regionsPerRow={regionsPerRow}
-            />
+            <InnerBracket {...props}/>
         </Container>
     );
 };
@@ -30,6 +22,9 @@ const InnerBracket: React.FC<DynamicBracketProps> = ({
                                                          tournamentType = 'ncaa',
                                                          year = 2025,
                                                          regionsPerRow = 2,
+                                                         renderRegionHeader,
+                                                         renderGameHeader,
+                                                         renderGameFooter
                                                      }) => {
     const dispatch = useAppDispatch();
     const keyString = `${tournamentType}-${year}`;
@@ -58,7 +53,6 @@ const InnerBracket: React.FC<DynamicBracketProps> = ({
 
     // flip to “any multi‐region (2 or 4)”
     const isMultiRegion = regionKeys.length > 1;
-    const isFourRegion = regionKeys.length === 4;
     const semiSeedsMaps: Record<number, Record<string, SeedMeta>> = {};
 
     if (isMultiRegion) {
@@ -98,7 +92,6 @@ const InnerBracket: React.FC<DynamicBracketProps> = ({
                     <Region
                         name={r}
                         type={idx % 2 === 0 ? 'left' : 'right'}
-                        seeds={regionSeedsMaps[r]}
                         games={data.regions[r].games}
                         userData={userRegs[r]}
                         onAdvanceTeam={(game, round, gameIdx, pick: SeedMeta) =>
@@ -113,6 +106,9 @@ const InnerBracket: React.FC<DynamicBracketProps> = ({
                                 })
                             )
                         }
+                        renderRegionHeader={renderRegionHeader}
+                        renderGameHeader={renderGameHeader}
+                        renderGameFooter={renderGameFooter}
                     />
                 </Col>
             ))}
@@ -155,7 +151,6 @@ const InnerBracket: React.FC<DynamicBracketProps> = ({
                             <Region
                                 name="Final"
                                 type="left"
-                                seeds={{}}
                                 games={gamesForFinal}
                                 userData={userRegs['Final']}
                                 isFinal
@@ -170,6 +165,9 @@ const InnerBracket: React.FC<DynamicBracketProps> = ({
                                         pick,
                                     }))
                                 }
+                                renderRegionHeader={renderRegionHeader}
+                                renderGameHeader={renderGameHeader}
+                                renderGameFooter={renderGameFooter}
                             />
                         </div>
                     </div>
@@ -183,7 +181,6 @@ const InnerBracket: React.FC<DynamicBracketProps> = ({
                         <Region
                             name="Final"
                             type="left"
-                            seeds={{}}
                             games={data.final.games}
                             userData={userRegs['Final']}
                             isFinal
@@ -200,6 +197,9 @@ const InnerBracket: React.FC<DynamicBracketProps> = ({
                                     })
                                 )
                             }
+                            renderRegionHeader={renderRegionHeader}
+                            renderGameHeader={renderGameHeader}
+                            renderGameFooter={renderGameFooter}
                         />
                     </Col>
                 </Row>

@@ -1,11 +1,7 @@
-// components/GameSelector.tsx
 import React from 'react';
 import type { GameSelectorProps } from '@/types';
 
 const GameSelector: React.FC<GameSelectorProps> = ({
-                                                       games = [],
-                                                       seeds = {},
-                                                       gamesPredicted = 0,
                                                        type = 'left',
                                                    }) => {
     const isRight = type === 'right';
@@ -13,20 +9,14 @@ const GameSelector: React.FC<GameSelectorProps> = ({
     // 1) build badges 1…7
     let options = Array.from({ length: 7 }, (_, idx) => {
         const seq = idx + 1;
-        const seed = games[idx];
-        const played = seed != null && seed in seeds;
-        const isPred = seq === gamesPredicted;
 
-        let cls = 'badge rounded-circle text-center';
-        cls += played
-            ? ' bg-soft-secondary text-secondary'
-            : ' bg-soft-secondary text-secondary';
-        if (isPred) cls += ' bg-soft-secondary text-primary';
+        let cls = 'badge rounded-circle text-center ';
+        cls += ' bg-secondary bg-opacity-10 small text-secondary';
 
         return (
-            <span key={idx} className={cls} data-value={seed ?? idx}>
-        {seq}
-      </span>
+            <span key={idx} className={cls} data-value={idx}>
+                {seq}
+            </span>
         );
     });
 

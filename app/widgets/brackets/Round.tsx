@@ -7,12 +7,12 @@ import Game from './Game';
 const EMPTY_SEED: SeedMeta = { name: '' };
 
 const Round: React.FC<RoundProps> = ({
-                                         seeds,
                                          gamesData,
-                                         number,
                                          type = 'left',
                                          pick,
                                          onSeedClick,
+                                         renderGameHeader,
+                                         renderGameFooter
                                      }) => {
     const hasMounted = useMounted();
     const isMobileQuery = useMediaQuery({ query: '(max-width: 767px)' });
@@ -29,7 +29,6 @@ const Round: React.FC<RoundProps> = ({
         ? [pick![0] ?? EMPTY_SEED, pick![1] ?? EMPTY_SEED]
         : [game.firstSeed ?? EMPTY_SEED, game.secondSeed ?? EMPTY_SEED];
 
-    const verticalOffset = `${(number ?? 0) * (isMobile ? 0.75 : 0.25)}rem`;
 
     return (
         <div
@@ -41,11 +40,12 @@ const Round: React.FC<RoundProps> = ({
         >
             <div>
                 <Game
-                    seeds={seeds}
                     game={game}
                     type={type}
                     participants={participants}
                     onSeedClick={onSeedClick}
+                    renderGameHeader={renderGameHeader}
+                    renderGameFooter={renderGameFooter}
                 />
             </div>
         </div>
