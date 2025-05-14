@@ -19,7 +19,9 @@ export const TOURNAMENTS: Record<TournamentKey, TournamentStructure> = Object.fr
 ) as Record<TournamentKey, TournamentStructure>;
 
 interface BracketState {
-    regions: Record<TournamentKey, Record<string, BracketRegion>>;
+    currentLeague: string;
+    currentYear:   number;
+    regions:       Record<TournamentKey, Record<string, BracketRegion>>;
 }
 
 /** Build empty BracketRegion map from TournamentStructure */
@@ -103,6 +105,8 @@ function getUpPath(
 }
 
 const initialState: BracketState = {
+    currentLeague: 'ncaa',
+    currentYear:   new Date().getFullYear(),
     regions: Object.fromEntries(
         Object.entries(TOURNAMENTS).map(([key, data]) => [
             key,
@@ -115,6 +119,12 @@ export const bracketSlice = createSlice({
     name: 'bracket',
     initialState,
     reducers: {
+        setLeague(state, action: PayloadAction<string>) {
+            state.currentLeague = action.payload;
+        },
+        setYear(state, action: PayloadAction<number>) {
+            state.currentYear = action.payload;
+        },
         advanceTeam(
             state,
             action: PayloadAction<{
@@ -221,5 +231,5 @@ export const bracketSlice = createSlice({
     },
 });
 
-export const { advanceTeam, resetBracket } = bracketSlice.actions;
+export const { setLeague, setYear, advanceTeam, resetBracket } = bracketSlice.actions;
 export default bracketSlice.reducer;

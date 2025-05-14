@@ -1,50 +1,49 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Card, Image } from 'react-bootstrap';
 import DynamicBracket from '@/components/brackets/DynamicBracket';
 import DynamicForm, { FieldConfig } from '@/widgets/forms/DynamicForm';
 import { GameData } from '@/types';
 import GameSelector from '@/widgets/brackets/GameSelector';
 
-const logos = {
-    'ncaa': '/images/svg/ncaa.svg',
-    'nba': '/images/svg/nba.svg',
-    'ucl': '/images/svg/ucl.svg'
-}
+import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import { setLeague, setYear } from '@/store/bracketSlice';
 
+const logos: Record<string, string> = {
+    ncaa: '/images/svg/ncaa.svg',
+    nba:  '/images/svg/nba.svg',
+    ucl:  '/images/svg/ucl.svg',
+};
 
 const TournamentAssistant: React.FC = () => {
-    // constants
-    const years = useMemo(() => [2022, 2023, 2024, 2025], []);
+    const dispatch = useAppDispatch();
+
+    const league = useAppSelector((state) => state.bracket.currentLeague);
+    const year   = useAppSelector((state) => state.bracket.currentYear);
+
+    const years   = useMemo(() => [2022, 2023, 2024, 2025], []);
     const leagues = useMemo(() => ['ncaa', 'nba', 'ucl'], []);
+    const yearOptions   = years.map((y) => ({ value: y, label: `${y}` }));
+    const leagueOptions = leagues.map((l) => ({ value: l, label: l.toUpperCase() }));
 
-    const yearOptions = years.map(y => ({ value: y, label: `${y}` }));
-    const leagueOptions = leagues.map(l => ({ value: l, label: l.toUpperCase() }));
-
-    // local state
-    const [league, setLeague] = useState<string>('ncaa');
-    const [year, setYear] = useState<number>(2025);
-
-    // form configuration
     const formFields: FieldConfig[] = [
         {
-            name: 'league',
-            label: 'League',
-            type: 'select',
-            options: leagueOptions,
-            required: true,
+            name:         'league',
+            label:        'League',
+            type:         'select',
+            options:      leagueOptions,
+            required:     true,
             initialValue: league,
         },
         {
-            name: 'year',
-            label: 'Year',
-            type: 'select',
-            options: yearOptions,
-            required: true,
+            name:         'year',
+            label:        'Year',
+            type:         'select',
+            options:      yearOptions,
+            required:     true,
             initialValue: year,
         },
     ];
 
-    // dynamic logo component for selected league
     const Logo = logos[league];
 
     const renderRegionHeader = (name: string) => {
@@ -53,11 +52,11 @@ const TournamentAssistant: React.FC = () => {
             <h2
                 className="position-absolute text-uppercase text-muted"
                 style={{
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    zIndex:      1,
-                    pointerEvents:'none',
+                    top:           '50%',
+                    left:          '50%',
+                    transform:     'translate(-50%, -50%)',
+                    zIndex:        1,
+                    pointerEvents: 'none',
                 }}
             >
                 {name}
@@ -65,28 +64,24 @@ const TournamentAssistant: React.FC = () => {
         );
     };
 
-    const renderGameFooter = (game: GameData, type: string) => {
-        if (league === 'ucl') return null;
-        if (league === 'ncaa') return null;
-        return (
-            <GameSelector type={type} />
-        );
+    const renderGameFooter = (_game: GameData) => {
+        // only show selector for NBA
+        if (league !== 'nba') return null;
+        return <GameSelector />;
     };
 
     return (
         <Card className="border-0 shadow-none">
             <Card.Header className="border-0 card-header-content-sm-between mb-4 px-0 px-md-2">
-                <Image
-                    className="avatar avatar-lg"
-                    src={Logo}
-                    alt={league}
-                />
+                <Image className="avatar avatar-lg" src={Logo} alt={league} />
+
                 <DynamicForm
                     formClassName="d-flex gap-3 align-items-end"
                     fields={formFields}
                     onFieldChange={({ league: l, year: y }) => {
-                        setLeague(l);
-                        setYear(Number(y));
+                        // 3) dispatch into Redux
+                        dispatch(setLeague(l));
+                        dispatch(setYear(Number(y)));
                     }}
                     submitLabel={null}
                     onSubmit={() => {}}
