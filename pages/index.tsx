@@ -1,56 +1,52 @@
 import Head from 'next/head';
-import { useEffect, Fragment } from "react";
-import Link from 'next/link';
+import { useEffect, Fragment } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-
-// import widget/custom components
 import { ProjectGridView } from '@/widgets';
-import { useDispatch, useSelector } from "react-redux";
-import useLocalStorage from "@/hooks/useLocalStorage";
-import { acceptCookies } from "@/store/appSlice";
+import useLocalStorage from '@/hooks/useLocalStorage';
+import { acceptCookies } from '@/store/appSlice';
 
 export default function Home() {
-
-    const acceptedCookies = useSelector((state: any) => state.app.acceptedCookies);
     const dispatch = useDispatch();
+    const acceptedCookies = useSelector((state: any) => state.app.acceptedCookies);
 
-    // useEffect(() => {
-    //     document.body.classList.add('bg-body-tertiary');
-    // });
-
+    // initialize storage with the current acceptedCookies flag
     const {
-        storageValue,
-        setStorageValue,
-        getStorageValue
-    } = useLocalStorage('cookieNotice', acceptedCookies);
+        storageValue,    // string | null
+        setStorageValue, // (val: string) => void
+    } = useLocalStorage('cookieNotice', acceptedCookies.toString());
 
+    // whenever storageValue flips to "true", fire acceptCookies()
     useEffect(() => {
-        if (storageValue) {
-            dispatch(acceptCookies(storageValue === 'true'));
+        if (storageValue === 'true' && !acceptedCookies) {
+            dispatch(acceptCookies());
         }
-    }, [dispatch, getStorageValue, storageValue]);
+    }, [dispatch, storageValue, acceptedCookies]);
 
     const dismissNotice = () => {
-      setStorageValue('true');
-      dispatch(acceptCookies(true));
-    }
+        setStorageValue('true');
+        if (!acceptedCookies) dispatch(acceptCookies());
+    };
 
     return (
         <Fragment>
             <Head>
-                <title>Projects - Moses Surumen</title>
-                <meta
-                    name="description"
-                    content="Moses Surumen's personal projects"
-                />
+                <title>Projects – Moses Surumen</title>
+                <meta name="description" content="Moses Surumen’s personal projects" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <ProjectGridView/>
 
-            { acceptedCookies ? (<span></span>) : (
-                <div className='card card-body shadow-4 rounded-1 border-light-subtle d-flex flex-row gap-2 align-items-center py-3 px-5 position-fixed bottom-0 end-0 mb-6 me-6'>
-                    <span className='text-sm'>This website uses cookies 🍪</span>
-                    <span onClick={() => dismissNotice()} className='text-sm text-decoration-underline text-primary-hover cursor-pointer'>Okay thanks</span>
+            <ProjectGridView />
+
+            {!acceptedCookies && (
+                <div className="card card-body shadow-4 rounded-1 border-light-subtle d-flex flex-row gap-2 align-items-center py-3 px-5 position-fixed bottom-0 end-0 mb-6 me-6">
+                    <span className="text-sm">This website uses cookies 🍪</span>
+                    <button
+                        onClick={dismissNotice}
+                        className="btn btn-link text-sm p-0 ms-2"
+                    >
+                        Okay thanks
+                    </button>
                 </div>
             )}
         </Fragment>
