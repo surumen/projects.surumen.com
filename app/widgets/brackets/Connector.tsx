@@ -14,44 +14,39 @@ const Connector: React.FC<ConnectorProps> = ({
                                                  isFinalRegion = false,
                                                  type = 'left',
                                              }) => {
-    // 1) Hooks always run
     const [paths, setPaths] = useState<JSX.Element[]>([]);
     const observerRef = useRef<ResizeObserver | null>(null);
 
-    // 2) draw logic wrapped in useCallback so it can be a stable dependency
     const draw = useCallback(() => {
-        if (!containerRef.current) return;
-        const containerRect = containerRef.current.getBoundingClientRect();
+        const cont = containerRef.current;
+        if (!cont) return;
+        const { left: cL, top: cT } = cont.getBoundingClientRect();
         const newPaths: JSX.Element[] = [];
 
+        // nothing to draw in edge‐case
         if (isFinalRegion && gameRefs.length < 2) {
-            // nothing to draw in this edge case
             setPaths([]);
             return;
         }
 
         if (isFinalRegion) {
-            // Final-region horizontal lines
+            // finals: just straight horizontals into the championship button
             const [semis, finals] = gameRefs;
-            const semiButtons = semis.map(r => r.current?.querySelector('button'));
             const finalBtn = finals[0].current?.querySelector('button');
             if (!finalBtn) {
                 setPaths([]);
                 return;
             }
-
-            const finalRect = finalBtn.getBoundingClientRect();
-            const finalX = (finalRect.left + finalRect.right) / 2 - containerRect.left;
-
-            semiButtons.forEach((btn, i) => {
+            const fR = finalBtn.getBoundingClientRect();
+            const finalX = ((fR.left + fR.right) / 2) - cL;
+            semis.forEach((refObj, i) => {
+                const btn = refObj.current?.querySelector('button');
                 if (!btn) return;
-                const r = btn.getBoundingClientRect();
-                const fromY = (r.top + r.bottom) / 2 - containerRect.top;
-                const fromX =
-                    type === 'left'
-                        ? r.right - containerRect.left
-                        : r.left - containerRect.left;
-
+                const bR = btn.getBoundingClientRect();
+                const fromY = ((bR.top + bR.bottom) / 2) - cT;
+                const fromX = type === 'left'
+                    ? bR.right - cL
+                    : bR.left  - cL;
                 newPaths.push(
                     <path
                         key={`final-h-${i}`}
@@ -63,66 +58,55 @@ const Connector: React.FC<ConnectorProps> = ({
                     />
                 );
             });
+
         } else {
-            // Non-final HV connectors
-            const totalRounds = gameRefs.length;
-            const roundIndexes =
-                type === 'left'
-                    ? [...Array(totalRounds - 1).keys()]
-                    : [...Array(totalRounds - 1).keys()].map(i => totalRounds - 1 - i);
+            // normal connectors with a quarter-circle elbow of radius R
+            const R = 15;
+            const rounds = gameRefs.length;
 
-            for (const round of roundIndexes) {
-                const current = gameRefs[round];
-                const nextIdx = type === 'left' ? round + 1 : round - 1;
-                const next = gameRefs[nextIdx];
+            for (let r = 0; r < rounds - 1; r++) {
+                const curr = gameRefs[r];
+                const nxt  = gameRefs[r + 1];
 
-                for (let i = 0; i < current.length; i++) {
-                    const outerDiv = current[i]?.current;
-                    if (!outerDiv) continue;
-                    const button = outerDiv.querySelector('button');
-                    if (!button) continue;
+                curr.forEach((refObj, i) => {
+                    const btn     = refObj.current?.querySelector('button');
+                    const nextBtn = nxt[Math.floor(i / 2)]?.current?.querySelector('button');
+                    if (!btn || !nextBtn) return;
 
-                    const bRect = button.getBoundingClientRect();
-                    const fromY = (bRect.top + bRect.bottom) / 2 - containerRect.top;
-                    const fromX =
-                        type === 'left'
-                            ? bRect.right - containerRect.left
-                            : bRect.left - containerRect.left;
+                    const bR = btn.getBoundingClientRect();
+                    const nR = nextBtn.getBoundingClientRect();
 
-                    const toX =
-                        type === 'left'
-                            ? fromX + bRect.width * 0.5
-                            : fromX - bRect.width * 0.5;
+                    // source in the middle of its side
+                    const fromY = ((bR.top + bR.bottom) / 2) - cT;
+                    const fromX = type === 'left'
+                        ? bR.right - cL
+                        : bR.left  - cL;
 
-                    const nextIndex = Math.floor(i / 2);
-                    const nextDiv = next?.[nextIndex]?.current;
-                    if (!nextDiv) continue;
-                    const nextBtn = nextDiv.querySelector('button');
-                    if (!nextBtn) continue;
+                    // target at top or bottom center
+                    const toCX = ((nR.left + nR.right) / 2) - cL;
+                    const down = (((nR.top + nR.bottom) / 2) > (bR.top + bR.bottom) / 2) ? 1 : -1;
+                    const toY  = down === 1
+                        ? nR.top  - cT
+                        : nR.bottom - cT;
+                    const toX  = toCX;
 
-                    const nRect = nextBtn.getBoundingClientRect();
-                    const toY = (nRect.top + nRect.bottom) / 2 - containerRect.top;
+                    // compute where straight horizontal ends and arc begins
+                    const elbowX = type === 'left'
+                        ? toX - R
+                        : toX + R;
 
-                    const radius = 15;
-                    const curveDown = toY > fromY;
-                    const vOffset = curveDown ? radius : -radius;
-                    const hOffset = type === 'left' ? radius : -radius;
-                    const arcSweep =
-                        type === 'left'
-                            ? curveDown
-                                ? 1
-                                : 0
-                            : curveDown
-                                ? 0
-                                : 1;
+                    // arc sweep flag: for left‐side elbows we sweep down=1→1,up=0→0; right side flips
+                    const sweep = type === 'left'
+                        ? (down === 1 ? 1 : 0)
+                        : (down === 1 ? 0 : 1);
 
                     newPaths.push(
                         <path
-                            key={`hv-${round}-${i}`}
+                            key={`hv-${r}-${i}`}
                             d={`
                 M${fromX},${fromY}
-                L${toX - hOffset},${fromY}
-                A${radius},${radius} 0 0,${arcSweep} ${toX},${fromY + vOffset}
+                L${elbowX},${fromY}
+                A${R},${R} 0 0,${sweep} ${elbowX + (type==='left'?R:-R)},${fromY + down*R}
                 L${toX},${toY}
               `}
                             stroke="var(--bs-border-color)"
@@ -131,31 +115,24 @@ const Connector: React.FC<ConnectorProps> = ({
                             strokeLinecap="round"
                         />
                     );
-                }
+                });
             }
         }
 
         setPaths(newPaths);
     }, [gameRefs, containerRef, isFinalRegion, type]);
 
-    // 3) Effect to redraw on resize
     useEffect(() => {
         if (!containerRef.current) return;
         draw();
         const obs = new ResizeObserver(draw);
         obs.observe(containerRef.current);
         observerRef.current = obs;
-        return () => {
-            obs.disconnect();
-        };
+        return () => { obs.disconnect(); };
     }, [containerRef, draw]);
 
-    // 4) Only now bail out if really nothing to render
-    if (isFinalRegion && gameRefs.length < 2) {
-        return null;
-    }
+    if (isFinalRegion && gameRefs.length < 2) return null;
 
-    // 5) Render SVG with computed paths
     return (
         <svg
             className="position-absolute"

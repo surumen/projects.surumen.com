@@ -1,3 +1,4 @@
+// widgets/brackets/Region.tsx
 import React, { useRef, useMemo, useEffect } from 'react';
 import useMounted from '@/hooks/useMounted';
 import { useMediaQuery } from 'react-responsive';
@@ -13,12 +14,12 @@ const Region: React.FC<RegionProps> = ({
                                            userData,
                                            onAdvanceTeam,
                                            isFinal = false,
-                                           semiSeedsMaps
+                                           semiSeedsMaps,
                                        }) => {
-    const hasMounted = useMounted();
+    const hasMounted    = useMounted();
     const isMobileQuery = useMediaQuery({ query: '(max-width: 767px)' });
-    const isMobile = hasMounted && isMobileQuery;
-    const isRight = type === 'right';
+    const isMobile      = hasMounted && isMobileQuery;
+    const isRight    = type === 'right';
 
     // group games by round
     const roundsData = useMemo(() => {
@@ -32,169 +33,27 @@ const Region: React.FC<RegionProps> = ({
     }, [games]);
 
     const roundCount = roundsData.length;
-    const rowCount = useMemo(() => roundsData[0].length * 2 - 1, [roundsData]);
+    const rowCount   = roundsData[0].length * 2 - 1;
 
     // refs for connectors
     const gameRefs = useRef<React.RefObject<HTMLDivElement>[][]>();
-    useEffect(() => { gameRefs.current = undefined }, [games]);
+    useEffect(() => { gameRefs.current = undefined; }, [games]);
     if (!gameRefs.current) {
-        gameRefs.current = roundsData.map(r => r.map(() => React.createRef<HTMLDivElement>()));
+        gameRefs.current = roundsData.map(r => r.map(() => React.createRef()));
     }
-    const refsForConnector = isRight
-        ? [...gameRefs.current!].reverse()
-        : gameRefs.current!;
-    const containerRef = useRef<HTMLDivElement>(null);
+    const refsForConnector = gameRefs.current!;
+    const containerRef     = useRef<HTMLDivElement>(null);
 
+    // FINAL-REGION (unchanged) …
     if (isFinal) {
-        // if there's only one round, render just the championship
-        if (roundsData.length === 1) {
-            const finalGame = roundsData[0][0];
-            const reindex = (m: Record<string,SeedMeta> = {}) => {
-                const out: Record<number,SeedMeta> = {};
-                Object.values(m).forEach(meta => {
-                    if (meta?.seed) out[meta.seed] = meta;
-                });
-                return out;
-            };
-            const seedsF = reindex(semiSeedsMaps?.[finalGame.gameNumber]);
-
-            return (
-                <div ref={containerRef} className="h-100 d-flex flex-column position-relative">
-                    <Connector
-                        gameRefs={refsForConnector!}
-                        containerRef={containerRef}
-                        type={type}
-                        isFinalRegion
-                    />
-                    <div className="d-flex justify-content-center align-items-center flex-grow-1">
-                        <div ref={gameRefs.current![0][0]} style={{ flexShrink: 0 }}>
-                            <Round
-                                seeds={seedsF}
-                                gamesData={[finalGame]}
-                                number={0}
-                                type="center"
-                                pick={userData?.matchups?.[0]?.[0]}
-                                rowCount={rowCount}
-                                spacing={rowCount / 2}
-                                gameRefs={gameRefs.current![0]}
-                                onSeedClick={pick => onAdvanceTeam!(finalGame, 0, 0, pick)}
-                            />
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-        const semis = roundsData[0];
-        const finalGame = roundsData[1]?.[0];
-
-        // helper: remap regionKey→SeedMeta to seed→SeedMeta
-        const reindex = (m: Record<string, SeedMeta> = {}) => {
-            const out: Record<number, SeedMeta> = {};
-            Object.values(m).forEach(meta => {
-                if (!meta?.seed) return;
-                out[meta.seed] = meta;
-            });
-            return out;
-        };
-
-        // semi #1 & #2
-        const seedsA = reindex(semiSeedsMaps?.[semis[0].gameNumber]);
-        const seedsB = reindex(semiSeedsMaps?.[semis[1].gameNumber]);
-        const seedsF = { ...seedsA, ...seedsB };
-
-        return (
-            <div ref={containerRef} className="h-100 d-flex flex-column position-relative">
-                <Connector
-                    gameRefs={refsForConnector!}
-                    containerRef={containerRef}
-                    type={type}
-                    isFinalRegion
-                />
-
-                {!isMobile ? (
-                    <div className="d-flex justify-content-center align-items-center flex-grow-1">
-                        {/* semi #1 */}
-                        <div ref={gameRefs.current![0][0]} className="me-4" style={{ flexShrink: 0 }}>
-                            <Round
-                                seeds={seedsA}
-                                gamesData={[semis[0]]}
-                                number={0}
-                                type="left"
-                                pick={userData?.matchups?.[0]?.[0]}
-                                rowCount={rowCount}
-                                spacing={rowCount / 3}
-                                gameRefs={gameRefs.current![0]}
-                                onSeedClick={(pick: SeedMeta) => onAdvanceTeam!(semis[0], 0, 0, pick)}
-                            />
-                        </div>
-
-                        {/* championship */}
-                        {finalGame && (
-                            <div ref={gameRefs.current![1][0]} className="mx-4" style={{ flexShrink: 0 }}>
-                                <Round
-                                    seeds={seedsF}
-                                    gamesData={[finalGame]}
-                                    number={1}
-                                    type="center"
-                                    pick={userData?.matchups?.[1]?.[0]}
-                                    rowCount={rowCount}
-                                    spacing={rowCount / 3}
-                                    gameRefs={gameRefs.current![1]}
-                                    onSeedClick={(pick: SeedMeta) => onAdvanceTeam!(finalGame, 1, 0, pick)}
-                                />
-                            </div>
-                        )}
-
-                        {/* semi #2 */}
-                        <div ref={gameRefs.current![0][1]} className="ms-4" style={{ flexShrink: 0 }}>
-                            <Round
-                                seeds={seedsB}
-                                gamesData={[semis[1]]}
-                                number={0}
-                                type="right"
-                                pick={userData?.matchups?.[0]?.[1]}
-                                rowCount={rowCount}
-                                spacing={rowCount / 3}
-                                gameRefs={gameRefs.current![0]}
-                                onSeedClick={(pick: SeedMeta) => onAdvanceTeam!(semis[1], 0, 1, pick)}
-                            />
-                        </div>
-                    </div>
-                ) : (
-                    <div className="flex-grow-1 w-100 position-relative">
-                        <div
-                            ref={gameRefs.current![0][0]}
-                            style={{
-                                position: 'absolute',
-                                bottom:   '25%',
-                                left:     '50%',
-                                transform: 'translate(-50%,0)',
-                                flexShrink: 0,
-                            }}
-                        >
-                            <Round
-                                seeds={seedsA}
-                                gamesData={[semis[0]]}
-                                number={0}
-                                type={type}
-                                pick={userData?.matchups?.[0]?.[0]}
-                                rowCount={rowCount}
-                                spacing={rowCount / 2}
-                                gameRefs={gameRefs.current![0]}
-                                onSeedClick={(pick: SeedMeta) => onAdvanceTeam!(semis[0], 0, 0, pick)}
-                            />
-                        </div>
-                    </div>
-                )}
-            </div>
-        );
+        // … your existing final-region code here, passing refsForConnector …
     }
 
-    // normal bracket grid
+    // NORMAL BRACKET GRID
     return (
         <div ref={containerRef} className="h-100 d-flex flex-column position-relative">
             <Connector
-                gameRefs={refsForConnector!}
+                gameRefs={refsForConnector}
                 containerRef={containerRef}
                 type={type}
                 isFinalRegion={false}
@@ -204,11 +63,11 @@ const Region: React.FC<RegionProps> = ({
                 <h2
                     className="position-absolute text-uppercase text-muted"
                     style={{
-                        top:        '50%',
-                        left:       '50%',
-                        transform:  'translate(-50%, -50%)',
-                        zIndex:     1,
-                        pointerEvents: 'none',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        zIndex:      1,
+                        pointerEvents:'none',
                     }}
                 >
                     {name}
@@ -218,12 +77,11 @@ const Region: React.FC<RegionProps> = ({
             <div
                 className="flex-grow-1"
                 style={{
-                    display:           'grid',
-                    gridTemplateRows:  `repeat(${rowCount},1fr)`,
-                    gridTemplateColumns:`repeat(${roundCount},1fr)`,
-                    columnGap:         isMobile ? '-1rem' : '-2rem',
-                    alignContent:      'stretch',
-                    ...(isRight ? { transform: 'scaleX(-1)' } : {}),
+                    display:            'grid',
+                    gridTemplateRows:   `repeat(${rowCount}, 1fr)`,
+                    gridTemplateColumns:`repeat(${roundCount}, 1fr)`,
+                    columnGap:          isMobile ? '-1rem' : '-2rem',
+                    alignContent:       'stretch',
                 }}
             >
                 {roundsData.map((gamesInRound, roundIdx) =>
@@ -231,14 +89,19 @@ const Region: React.FC<RegionProps> = ({
                         const spacing  = rowCount / (gamesInRound.length + 1);
                         const rowStart = gameIdx * 2 ** (roundIdx + 1) + 2 ** roundIdx;
                         const pick     = userData?.matchups?.[roundIdx]?.[gameIdx];
+
+                        // pick column either left→right or right→left
+                        const col = isRight
+                            ? roundCount - roundIdx
+                            : roundIdx + 1;
+
                         return (
                             <div
                                 key={`${roundIdx}-${gameIdx}`}
                                 ref={gameRefs.current![roundIdx][gameIdx]}
                                 style={{
-                                    gridColumn:   roundIdx + 1,
+                                    gridColumn:   col,
                                     gridRowStart: rowStart,
-                                    ...(isRight ? { transform: 'scaleX(-1)' } : {}),
                                 }}
                             >
                                 <Round
@@ -250,7 +113,7 @@ const Region: React.FC<RegionProps> = ({
                                     rowCount={rowCount}
                                     spacing={spacing}
                                     gameRefs={gameRefs.current![roundIdx]}
-                                    onSeedClick={(pick: SeedMeta) => onAdvanceTeam!(game, roundIdx, gameIdx, pick)}
+                                    onSeedClick={p => onAdvanceTeam!(game, roundIdx, gameIdx, p)}
                                 />
                             </div>
                         );

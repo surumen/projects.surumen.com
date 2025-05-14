@@ -31,6 +31,7 @@ export interface GameData {
     sourceGame2?: GameSource;
     winnerSeed?: SeedMeta;
     finalScore?: [number, number];
+    penalties?: [number, number];
 }
 
 export interface TournamentRegion {
@@ -90,34 +91,15 @@ export interface BracketData {
 type Orientation = 'left' | 'right' | 'center';
 
 export interface TeamProps {
-    /** Full slug name (for aria / keying) */
-    name?: string;
 
-    /** Seed number */
-    seed: number;
-
-    /** What to show as the main label */
-    displayName: string;
-
-    /** Optional override when you’re showing predictions */
-    displayNamePredicted?: string;
-
-    /** Current position in the game cell */
+    team: SeedMeta;
     position: 'top' | 'middle' | 'bottom';
-
-    /** Layout direction */
+    displayNamePredicted?: string;
     type?: Orientation;
+    score?: number;
+    isWinner?: boolean;
+    penaltyGoals?: number;
 
-    /** Optional Bootstrap color variant or CSS color */
-    color?: string;
-
-    /** Optional short abbreviation (e.g. “UO” for Oregon) */
-    abbreviation?: string;
-
-    /** Optional path or URL to a team logo image */
-    logo?: string;
-
-    /** Click handler */
     onClick?: () => void;
 }
 

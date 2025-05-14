@@ -1,82 +1,181 @@
-// app/data/tournaments/uefaChampionsLeague.ts
-
 import type { TournamentStructure, GameData, SeedMeta } from '@/types';
 import { buildCustomRegion, fromGame, getSeed }        from '@/utils/bracketBuilder';
 import { teamsData }                                  from '@/data/tournaments/teams/ucl';
 
 // ———————————————————————————————————————————————————————————————
-// Actual Round-of-16 draws for each season
+// 1) Raw match-by-match results for each season
 // ———————————————————————————————————————————————————————————————
-const uclR16Draws: Record<number, [string, string][]> = {
+interface MatchResult {
+    firstSeed:  { name: string; goals: number; penaltyGoals?: number; isWinner: boolean };
+    secondSeed: { name: string; goals: number; penaltyGoals?: number; isWinner: boolean };
+}
+
+const uclR16Results: Record<number, MatchResult[]> = {
     2022: [
-        ['sporting-cp',         'manchester-city'],
-        ['benfica',             'ajax'],
-        ['chelsea',             'lille'],
-        ['atletico-madrid',     'manchester-united'],
-        ['villarreal',          'juventus'],
-        ['inter-milan',         'liverpool'],
-        ['paris-saint-germain', 'real-madrid'],
-        ['bayern-munich',       'rb-salzburg'],
+        { firstSeed:{name:'sporting-cp',         goals:0, isWinner:false}, secondSeed:{name:'manchester-city', goals:5, isWinner:true } },
+        { firstSeed:{name:'benfica',             goals:3, isWinner:true }, secondSeed:{name:'ajax',            goals:2, isWinner:false} },
+        { firstSeed:{name:'chelsea',             goals:4, isWinner:true }, secondSeed:{name:'lille',           goals:1, isWinner:false} },
+        { firstSeed:{name:'atletico-madrid',     goals:2, isWinner:true }, secondSeed:{name:'manchester-united',goals:1, isWinner:false} },
+        { firstSeed:{name:'villarreal',          goals:4, isWinner:true }, secondSeed:{name:'juventus',        goals:1, isWinner:false} },
+        { firstSeed:{name:'inter-milan',         goals:1, isWinner:false}, secondSeed:{name:'liverpool',       goals:2, isWinner:true } },
+        { firstSeed:{name:'paris-saint-germain', goals:2, isWinner:false}, secondSeed:{name:'real-madrid',     goals:3, isWinner:true } },
+        { firstSeed:{name:'bayern-munich',       goals:8, isWinner:true }, secondSeed:{name:'rb-salzburg',     goals:2, isWinner:false} },
     ],
     2023: [
-        ['rb-leipzig',          'manchester-city'],
-        ['club-brugge',         'benfica'],
-        ['liverpool',           'real-madrid'],
-        ['milan',               'tottenham-hotspur'],
-        ['eintracht-frankfurt', 'napoli'],
-        ['borussia-dortmund',   'chelsea'],
-        ['inter-milan',         'porto'],
-        ['paris-saint-germain', 'bayern-munich'],
+        { firstSeed:{name:'rb-leipzig',          goals:1, isWinner:false}, secondSeed:{name:'manchester-city', goals:8, isWinner:true } },
+        { firstSeed:{name:'club-brugge',         goals:1, isWinner:false}, secondSeed:{name:'benfica',         goals:7, isWinner:true } },
+        { firstSeed:{name:'liverpool',           goals:2, isWinner:false}, secondSeed:{name:'real-madrid',     goals:6, isWinner:true } },
+        { firstSeed:{name:'milan',               goals:1, isWinner:true }, secondSeed:{name:'tottenham-hotspur',goals:0, isWinner:false} },
+        { firstSeed:{name:'eintracht-frankfurt', goals:0, isWinner:false}, secondSeed:{name:'napoli',          goals:5, isWinner:true } },
+        { firstSeed:{name:'borussia-dortmund',   goals:1, isWinner:false}, secondSeed:{name:'chelsea',         goals:2, isWinner:true } },
+        { firstSeed:{name:'inter-milan',         goals:1, isWinner:true }, secondSeed:{name:'porto',           goals:0, isWinner:false} },
+        { firstSeed:{name:'paris-saint-germain', goals:0, isWinner:false}, secondSeed:{name:'bayern-munich',    goals:3, isWinner:true } },
     ],
     2024: [
-        ['porto',               'arsenal'],
-        ['napoli',              'barcelona'],
-        ['paris-saint-germain', 'real-sociedad'],
-        ['inter-milan',         'atletico-madrid'],
-        ['psv-eindhoven',       'borussia-dortmund'],
-        ['lazio',               'bayern-munich'],
-        ['copenhagen',          'manchester-city'],
-        ['rb-leipzig',          'real-madrid'],
+        { firstSeed:{name:'porto',               goals:1, penaltyGoals:0, isWinner:false}, secondSeed:{name:'arsenal',          goals:1, penaltyGoals:4, isWinner:true } },
+        { firstSeed:{name:'napoli',              goals:2, isWinner:false},              secondSeed:{name:'barcelona',        goals:4, isWinner:true } },
+        { firstSeed:{name:'paris-saint-germain', goals:4, isWinner:true },             secondSeed:{name:'real-sociedad',    goals:1, isWinner:false} },
+        { firstSeed:{name:'inter-milan',         goals:2, isWinner:false},              secondSeed:{name:'atletico-madrid',  goals:2, penaltyGoals:3, isWinner:true } },
+        { firstSeed:{name:'psv-eindhoven',       goals:1, isWinner:false},              secondSeed:{name:'borussia-dortmund',goals:3, isWinner:true } },
+        { firstSeed:{name:'lazio',               goals:1, isWinner:false},              secondSeed:{name:'bayern-munich',    goals:3, isWinner:true } },
+        { firstSeed:{name:'copenhagen',          goals:2, isWinner:false},              secondSeed:{name:'manchester-city',  goals:6, isWinner:true } },
+        { firstSeed:{name:'rb-leipzig',          goals:1, isWinner:false},              secondSeed:{name:'real-madrid',      goals:2, isWinner:true } },
     ],
     2025: [
-        ['paris-saint-germain', 'liverpool'],
-        ['club-brugge',         'aston-villa'],
-        ['real-madrid',         'atletico-madrid'],
-        ['psv-eindhoven',       'arsenal'],
-        ['benfica',             'barcelona'],
-        ['borussia-dortmund',   'lille'],
-        ['bayern-munich',       'bayer-leverkusen'],
-        ['feyenoord',           'inter-milan'],
+        { firstSeed:{name:'paris-saint-germain', goals:1, penaltyGoals:4, isWinner:true }, secondSeed:{name:'liverpool',       goals:1, penaltyGoals:1, isWinner:false} },
+        { firstSeed:{name:'club-brugge',         goals:1, isWinner:false},               secondSeed:{name:'aston-villa',     goals:6, isWinner:true } },
+        { firstSeed:{name:'real-madrid',         goals:2, penaltyGoals:4, isWinner:true}, secondSeed:{name:'atletico-madrid', goals:2, penaltyGoals:2, isWinner:false } },
+        { firstSeed:{name:'psv-eindhoven',       goals:3, isWinner:false},               secondSeed:{name:'arsenal',         goals:9, isWinner:true } },
+        { firstSeed:{name:'benfica',             goals:1, isWinner:false},               secondSeed:{name:'barcelona',       goals:4, isWinner:true } },
+        { firstSeed:{name:'borussia-dortmund',   goals:3, isWinner:true },               secondSeed:{name:'lille',           goals:2, isWinner:false} },
+        { firstSeed:{name:'bayern-munich',       goals:5, isWinner:true },               secondSeed:{name:'bayer-leverkusen',goals:0, isWinner:false} },
+        { firstSeed:{name:'feyenoord',           goals:1, isWinner:false},               secondSeed:{name:'inter-milan',     goals:4, isWinner:true } },
     ],
 };
 
-// ———————————————————————————————————————————————————————————————
-// Actual Quarter-final draws for each season
-// ———————————————————————————————————————————————————————————————
-const uclQFDraws: Record<number, [string, string][]> = {
+const uclQFResults: Record<number, MatchResult[]> = {
     2022: [
-        ['manchester-city', 'atletico-madrid'],
-        ['chelsea',         'real-madrid'],
-        ['villarreal',      'bayern-munich'],
-        ['liverpool',       'benfica'],
+        { firstSeed:{name:'manchester-city',goals:1, isWinner:true }, secondSeed:{name:'atletico-madrid',goals:0, isWinner:false} },
+        { firstSeed:{name:'chelsea',        goals:4, isWinner:false}, secondSeed:{name:'real-madrid',     goals:5, isWinner:true } },
+        { firstSeed:{name:'villarreal',     goals:2, isWinner:true }, secondSeed:{name:'bayern-munich',   goals:1, isWinner:false} },
+        { firstSeed:{name:'liverpool',      goals:6, isWinner:true }, secondSeed:{name:'benfica',         goals:4, isWinner:false} },
     ],
     2023: [
-        ['manchester-city', 'bayern-munich'],
-        ['real-madrid',     'liverpool'],
-        ['club-brugge',     'milan'],
-        ['chelsea',         'inter-milan'],
+        { firstSeed:{name:'manchester-city',goals:8, isWinner:true }, secondSeed:{name:'bayern-munich',   goals:1, isWinner:false} },
+        { firstSeed:{name:'real-madrid',    goals:6, isWinner:true }, secondSeed:{name:'liverpool',       goals:2, isWinner:false} },
+        { firstSeed:{name:'club-brugge',    goals:1, isWinner:false}, secondSeed:{name:'milan',           goals:2, isWinner:true } },
+        { firstSeed:{name:'chelsea',        goals:1, isWinner:false}, secondSeed:{name:'inter-milan',     goals:2, isWinner:true } },
     ],
     2024: [
-        ['manchester-city',     'real-madrid'],
-        ['paris-saint-germain', 'barcelona'],
-        ['arsenal',             'bayern-munich'],
-        ['atletico-madrid',     'borussia-dortmund'],
+        { firstSeed:{name:'manchester-city',goals:3, penaltyGoals:3, isWinner:false}, secondSeed:{name:'real-madrid',  goals:4, penaltyGoals:3, isWinner:true } },
+        { firstSeed:{name:'paris-saint-germain',goals:2, isWinner:false},             secondSeed:{name:'barcelona',    goals:6, isWinner:true } },
+        { firstSeed:{name:'arsenal',         goals:2, isWinner:false},                 secondSeed:{name:'bayern-munich',goals:3, isWinner:true } },
+        { firstSeed:{name:'atletico-madrid', goals:4, isWinner:false},                 secondSeed:{name:'borussia-dortmund',goals:5,isWinner:true} },
     ],
     2025: [
-        ['paris-saint-germain', 'aston-villa'],
-        ['arsenal',             'real-madrid'],
-        ['barcelona',           'borussia-dortmund'],
-        ['bayern-munich',       'inter-milan'],
+        { firstSeed:{name:'paris-saint-germain',goals:5,isWinner:true},   secondSeed:{name:'aston-villa',  goals:4,isWinner:false} },
+        { firstSeed:{name:'arsenal',         goals:5,isWinner:true},      secondSeed:{name:'real-madrid',  goals:1,isWinner:false} },
+        { firstSeed:{name:'barcelona',       goals:5,isWinner:true},      secondSeed:{name:'borussia-dortmund',goals:3,isWinner:false} },
+        { firstSeed:{name:'bayern-munich',   goals:3,isWinner:false},     secondSeed:{name:'inter-milan',   goals:4,isWinner:true} },
+    ],
+};
+
+const uclSFResults: Record<number, MatchResult[]> = {
+    2022: [
+        { firstSeed:{name:'manchester-city',goals:5, isWinner:false}, secondSeed:{name:'real-madrid',goals:6, isWinner:true } },
+        { firstSeed:{name:'liverpool',      goals:5, isWinner:true }, secondSeed:{name:'bayern-munich',goals:2, isWinner:false} },
+    ],
+    2023: [
+        { firstSeed:{name:'manchester-city',goals:4, isWinner:false}, secondSeed:{name:'real-madrid',goals:5, isWinner:true} },
+        { firstSeed:{name:'milan',          goals:0, isWinner:false}, secondSeed:{name:'inter-milan',goals:3, isWinner:true} },
+    ],
+    2024: [
+        { firstSeed:{name:'real-madrid',    goals:3, isWinner:true},  secondSeed:{name:'barcelona',   goals:4, isWinner:false} },
+        { firstSeed:{name:'arsenal',        goals:1, isWinner:false}, secondSeed:{name:'borussia-dortmund',goals:3,isWinner:true} },
+    ],
+    2025: [
+        { firstSeed:{name:'paris-saint-germain',goals:2, isWinner:false}, secondSeed:{name:'real-madrid',goals:3, isWinner:true} },
+        { firstSeed:{name:'aston-villa',      goals:2, isWinner:false}, secondSeed:{name:'bayern-munich',goals:3, isWinner:true} },
+    ],
+};
+
+const uclFinalResults: Record<number, MatchResult> = {
+    2022: { firstSeed:{name:'liverpool',goals:0, isWinner:false}, secondSeed:{name:'real-madrid',goals:1, isWinner:true } },
+    2023: { firstSeed:{name:'manchester-city',goals:1, isWinner:true}, secondSeed:{name:'inter-milan',goals:0, isWinner:false} },
+    2024: { firstSeed:{name:'borussia-dortmund',goals:0, isWinner:false}, secondSeed:{name:'real-madrid',goals:2, isWinner:true } },
+    2025: { firstSeed:{name:'arsenal',goals:3, isWinner:true }, secondSeed:{name:'real-madrid',goals:2, isWinner:false} },
+};
+
+// ———————————————————————————————————————————————————————————————
+// 2) Original draws (R16→QF→SF) and Final
+// ———————————————————————————————————————————————————————————————
+const uclR16Draws: Record<number, [string,string][]> = {
+    2022: [
+        ['sporting-cp','manchester-city'],
+        ['benfica','ajax'],
+        ['chelsea','lille'],
+        ['atletico-madrid','manchester-united'],
+        ['villarreal','juventus'],
+        ['inter-milan','liverpool'],
+        ['paris-saint-germain','real-madrid'],
+        ['bayern-munich','rb-salzburg'],
+    ],
+    2023: [
+        ['rb-leipzig','manchester-city'],
+        ['club-brugge','benfica'],
+        ['liverpool','real-madrid'],
+        ['milan','tottenham-hotspur'],
+        ['eintracht-frankfurt','napoli'],
+        ['borussia-dortmund','chelsea'],
+        ['inter-milan','porto'],
+        ['paris-saint-germain','bayern-munich'],
+    ],
+    2024: [
+        ['porto','arsenal'],
+        ['napoli','barcelona'],
+        ['paris-saint-germain','real-sociedad'],
+        ['inter-milan','atletico-madrid'],
+        ['psv-eindhoven','borussia-dortmund'],
+        ['lazio','bayern-munich'],
+        ['copenhagen','manchester-city'],
+        ['rb-leipzig','real-madrid'],
+    ],
+    2025: [
+        ['paris-saint-germain','liverpool'],
+        ['club-brugge','aston-villa'],
+        ['real-madrid','atletico-madrid'],
+        ['psv-eindhoven','arsenal'],
+        ['benfica','barcelona'],
+        ['borussia-dortmund','lille'],
+        ['bayern-munich','bayer-leverkusen'],
+        ['feyenoord','inter-milan'],
+    ],
+};
+
+const uclQFDraws: Record<number, [string,string][]> = {
+    2022: [
+        ['manchester-city','atletico-madrid'],
+        ['chelsea','real-madrid'],
+        ['villarreal','bayern-munich'],
+        ['liverpool','benfica'],
+    ],
+    2023: [
+        ['manchester-city','bayern-munich'],
+        ['real-madrid','liverpool'],
+        ['club-brugge','milan'],
+        ['chelsea','inter-milan'],
+    ],
+    2024: [
+        ['manchester-city','real-madrid'],
+        ['paris-saint-germain','barcelona'],
+        ['arsenal','bayern-munich'],
+        ['atletico-madrid','borussia-dortmund'],
+    ],
+    2025: [
+        ['paris-saint-germain','aston-villa'],
+        ['arsenal','real-madrid'],
+        ['barcelona','borussia-dortmund'],
+        ['bayern-munich','inter-milan'],
     ],
 };
 
@@ -86,108 +185,121 @@ export function getUclTournamentData(year: number): TournamentStructure {
     if (!r16 || !qf) throw new Error(`Missing UCL data for ${year}`);
 
     // map slug → its R16 index
-    const slugToR16Idx: Record<string, number> = {};
-    r16.forEach((pair, idx) => {
-        slugToR16Idx[pair[0]] = idx;
-        slugToR16Idx[pair[1]] = idx;
+    const slugToR16Idx: Record<string,number> = {};
+    r16.forEach(([a,b],i)=>{ slugToR16Idx[a]=i; slugToR16Idx[b]=i });
+
+    // split QFs into SideA / SideB
+    const sideAQF = qf.slice(0,2);
+    const sideBQF = qf.slice(2,4);
+
+    // determine which R16 slots feed SideB
+    const sideBR16IdxSet = new Set<number>();
+    sideBQF.forEach(([a,b])=>{
+        sideBR16IdxSet.add(slugToR16Idx[a]);
+        sideBR16IdxSet.add(slugToR16Idx[b]);
     });
 
-    // split QFs into two sides
-    const sideAQFPairs = qf.slice(0, 2);
-    const sideBQFPairs = qf.slice(2, 4);
+    // build arrays of R16 indices
+    const allIdx        = r16.map((_,i)=>i);
+    const sideAR16Idx   = allIdx.filter(i=>!sideBR16IdxSet.has(i));
+    const sideBR16IdxArr = Array.from(sideBR16IdxSet).sort((a,b)=>a-b);
 
-    // determine which R16 matches feed SideB (from QF #3 & #4)
-    const sideBR16Idx = new Set<number>();
-    sideBQFPairs.forEach(([a, b]) => {
-        const ia = slugToR16Idx[a], ib = slugToR16Idx[b];
-        if (ia == null || ib == null) {
-            throw new Error(`QF slug not found in R16: ${a} or ${b}`);
-        }
-        sideBR16Idx.add(ia);
-        sideBR16Idx.add(ib);
-    });
-
-    // SideA = complement of SideB
-    const allIdx = Array.from(r16.keys());
-    const sideAR16Idx = allIdx.filter(i => !sideBR16Idx.has(i));
-    const sideBR16IdxArr = Array.from(sideBR16Idx).sort((a, b) => a - b);
-
-    // extract the slug-pairs for each side in bracket order
-    const sideAPairs = sideAR16Idx.map(i => r16[i]);
-    const sideBPairs = sideBR16IdxArr.map(i => r16[i]);
+    // extract the actual slug-pairs
+    const sideAR16 = sideAR16Idx.map(i=>r16[i]);
+    const sideBR16 = sideBR16IdxArr.map(i=>r16[i]);
 
     function buildSide(
-        sideLabel: 'SideA' | 'SideB',
-        r16Pairs: [string, string][],
-        qfPairs:  [string, string][],
-    ) {
-        // a) assign seeds 1–8 from R16 slugs
-        const teams: SeedMeta[] = r16Pairs.flat().map((slug, i) => {
-            const meta = teamsData.find(t => t.name === slug);
-            if (!meta) throw new Error(`Missing team metadata for "${slug}"`);
-            return { ...meta, seed: i + 1 };
+        sideLabel:'SideA'|'SideB',
+        r16Pairs:[string,string][],
+        qfPairs:[string,string][]
+    ): { seeds: Record<number,string>; games: GameData[] } {
+        // a) assign seeds & build map
+        const teams:SeedMeta[] = r16Pairs.flat().map((slug,i)=>{
+            const m = teamsData.find(t=>t.name===slug)!;
+            return { ...m, seed: i+1 };
         });
-        const seedMap: Record<number, string> = Object.fromEntries(
-            teams.map(t => [t.seed!, t.name])
+        const seedMap = Object.fromEntries(teams.map(t=>[t.seed!,t.name]));
+        const slugToSeed = (s:string) => teams.find(t=>t.name===s)!.seed!;
+
+        // b) Round-of-16
+        const r16Games = r16Pairs.map(([a,b],i) => ({
+            region: sideLabel, roundNumber:0, gameNumber:i,
+            firstSeed: getSeed(seedMap, teams, slugToSeed(a)),
+            secondSeed:getSeed(seedMap, teams, slugToSeed(b)),
+        })).map(g => {
+            const m = uclR16Results[year][g.gameNumber];
+            return {
+                ...g,
+                finalScore:[m.firstSeed.goals, m.secondSeed.goals] as [number,number],
+                penalties: m.firstSeed.penaltyGoals != null
+                    ? [m.firstSeed.penaltyGoals!, m.secondSeed.penaltyGoals!] as [number,number]
+                    : undefined,
+                winnerSeed: m.firstSeed.isWinner ? g.firstSeed! : g.secondSeed!,
+            };
+        });
+
+        // c) Quarter-finals + Semi-finals
+        const region = buildCustomRegion(
+            sideLabel,
+            seedMap,
+            teams,
+            qfPairs.map(([a,b])=>[slugToSeed(a), slugToSeed(b)] as [number,number])
         );
 
-        // helper: slug → seed number
-        const slugToSeed = (slug: string) => {
-            const m = teams.find(t => t.name === slug);
-            if (!m) throw new Error(`Slug "${slug}" not in ${sideLabel}`);
-            return m.seed!;
-        };
+        const qfGames = region.games.filter(g=>g.roundNumber===0)
+            .map((g,i) => {
+                const m = uclQFResults[year][i];
+                return {
+                    ...g, roundNumber:1,
+                    finalScore:[m.firstSeed.goals, m.secondSeed.goals] as [number,number],
+                    penalties: m.firstSeed.penaltyGoals != null
+                        ? [m.firstSeed.penaltyGoals!, m.secondSeed.penaltyGoals!] as [number,number]
+                        : undefined,
+                    winnerSeed: m.firstSeed.isWinner ? g.firstSeed! : g.secondSeed!,
+                };
+            }) as GameData[];
 
-        // b) Round-of-16 games (round = 0), manually only these 4
-        const r16SeedPairs: [number, number][] = r16Pairs.map(
-            ([a, b]) => [slugToSeed(a), slugToSeed(b)]
-        );
-        const r16Games: GameData[] = r16SeedPairs.map(([sa, sb], idx) => ({
-            region:      sideLabel,
-            roundNumber: 0,
-            gameNumber:  idx,
-            firstSeed:   getSeed(seedMap, teams, sa),
-            secondSeed:  getSeed(seedMap, teams, sb),
-        }));
+        const sfGames = region.games.filter(g=>g.roundNumber===1)
+            .map((g,i) => {
+                const m = uclSFResults[year][i];
+                return {
+                    ...g, roundNumber:2,
+                    finalScore:[m.firstSeed.goals, m.secondSeed.goals] as [number,number],
+                    penalties: m.firstSeed.penaltyGoals != null
+                        ? [m.firstSeed.penaltyGoals!, m.secondSeed.penaltyGoals!] as [number,number]
+                        : undefined,
+                    winnerSeed: m.firstSeed.isWinner ? g.firstSeed! : g.secondSeed!,
+                };
+            }) as GameData[];
 
-        // c) Quarter-finals + Semi-finals via buildCustomRegion on just 2 ties
-        const qfSeedPairs: [number, number][] = qfPairs.map(
-            ([a, b]) => [slugToSeed(a), slugToSeed(b)]
-        );
-        const qfRegion = buildCustomRegion(sideLabel, seedMap, teams, qfSeedPairs);
-
-        // extract qf games (orig round 0) → make them round 1
-        const qfGames = qfRegion.games
-            .filter(g => g.roundNumber === 0)
-            .map(g => ({ ...g, roundNumber: 1 } as GameData));
-
-        // extract semi game (orig round 1) → make it round 2
-        const sfGames = qfRegion.games
-            .filter(g => g.roundNumber === 1)
-            .map(g => ({ ...g, roundNumber: 2 } as GameData));
-
-        return {
-            seeds: seedMap,
-            games: [...r16Games, ...qfGames, ...sfGames],
-        };
+        return { seeds: seedMap, games: [...r16Games, ...qfGames, ...sfGames] };
     }
 
-    const regionA = buildSide('SideA', sideAPairs, sideAQFPairs);
-    const regionB = buildSide('SideB', sideBPairs, sideBQFPairs);
+    const regionA = buildSide('SideA', sideAR16, sideAQF);
+    const regionB = buildSide('SideB', sideBR16, sideBQF);
 
-    // Final between the two semi winners (round = 3)
-    const finalGame: GameData = {
-        region:      'Final',
-        roundNumber: 0,
-        gameNumber:  0,
+    // Final
+    const rawFinal:GameData = {
+        region:'Final', roundNumber:0, gameNumber:0,
         sourceGame1: fromGame('SideA', 2, 0),
         sourceGame2: fromGame('SideB', 2, 0),
+    };
+    const fm = uclFinalResults[year];
+    const finalGame:GameData = {
+        ...rawFinal,
+        finalScore:[fm.firstSeed.goals, fm.secondSeed.goals] as [number,number],
+        penalties: fm.firstSeed.penaltyGoals != null
+            ? [fm.firstSeed.penaltyGoals!, fm.secondSeed.penaltyGoals!] as [number,number]
+            : undefined,
+        winnerSeed: fm.firstSeed.isWinner
+            ? { name: fm.firstSeed.name }
+            : { name: fm.secondSeed.name },
     };
 
     return {
         regions: { SideA: regionA, SideB: regionB },
-        final:   {
-            seeds: { SideA: { name: '' }, SideB: { name: '' } },
+        final: {
+            seeds: { SideA:{name:''}, SideB:{name:''} },
             games: [finalGame],
         },
     };

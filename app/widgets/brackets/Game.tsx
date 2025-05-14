@@ -12,11 +12,19 @@ const Game: React.FC<GameProps> = ({
                                        type = 'left',
                                        onSeedClick,
                                    }) => {
-    // participants is guaranteed to always be [SeedMeta, SeedMeta]
     const [teamA, teamB]: [SeedMeta, SeedMeta] = participants;
 
-    const seedA = teamA.seed!;
-    const seedB = teamB.seed!;
+    // Extract scores & penalties (if present)
+    const scoreA = game.finalScore?.[0] ?? 0;
+    const scoreB = game.finalScore?.[1] ?? 0;
+    const penA   = game.penalties?.[0];
+    const penB   = game.penalties?.[1];
+
+    // Determine winners based on the game.winnerSeed
+    const winnerSeed = game.winnerSeed?.seed;
+    const isWinnerA  = teamA.seed === winnerSeed;
+    const isWinnerB  = teamB.seed === winnerSeed;
+
 
     const textClass =
         type === 'right'
@@ -39,23 +47,21 @@ const Game: React.FC<GameProps> = ({
                 style={{ minWidth: '10rem', maxWidth: '10rem' }}
             >
                 <Team
-                    name={teamA.name}
-                    seed={seedA}
-                    displayName={teamA.shortName ?? teamA.name}
+                    team={teamA}
                     position="top"
                     type={type}
-                    logo={teamA.logo}
-                    color={teamA.color}
+                    score={scoreA}
+                    isWinner={isWinnerA}
+                    penaltyGoals={penA}
                     onClick={() => onSeedClick?.(teamA)}
                 />
                 <Team
-                    name={teamB.name}
-                    seed={seedB}
-                    displayName={teamB.shortName ?? teamB.name}
+                    team={teamB}
                     position="bottom"
                     type={type}
-                    logo={teamB.logo}
-                    color={teamB.color}
+                    score={scoreB}
+                    isWinner={isWinnerB}
+                    penaltyGoals={penB}
                     onClick={() => onSeedClick?.(teamB)}
                 />
             </button>
