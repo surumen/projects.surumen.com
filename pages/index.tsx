@@ -39,7 +39,7 @@ export default function Home() {
             <ProjectGridView />
 
             {!acceptedCookies && (
-                <div className="card card-body shadow-4 rounded-1 border-light-subtle d-flex flex-row gap-2 align-items-center py-3 px-5 position-fixed bottom-0 end-0 mb-6 me-6">
+                <div className="card card-body shadow-4 bg-body rounded-1 border-light d-flex flex-row gap-2 align-items-center py-3 px-5 position-fixed bottom-0 end-0 mb-6 me-6">
                     <span className="text-sm">This website uses cookies 🍪</span>
                     <button
                         onClick={dismissNotice}
