@@ -8,7 +8,7 @@ const nextConfig = {
 
   // Tell the Sass compiler where to look for your partials
   sassOptions: {
-    includePaths: [path.join(__dirname, 'assets/style')],
+    includePaths: [path.join(__dirname, 'style')],
   },
 
   webpack: (config) => {
