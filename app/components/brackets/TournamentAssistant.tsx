@@ -68,7 +68,12 @@ const TournamentAssistant: React.FC = () => {
         if (league !== 'nba') return null;
 
         const winner = _game.winnerSeed;
-        const cls = winner ? `bg-accent-${winner.color} text-${winner.color}` : ''
+        const variants: string[] = ['primary', 'secondary', 'success', 'info', 'warning', 'danger', 'dark'];
+        const cls = winner?.color
+            ? variants.includes(winner.color)
+                ? `bg-${winner.color} text-light fw-light`
+                : `bg-accent-${winner.color} text-light fw-light`
+            : '';
         return (
             <GameSelector
                 type={_type}
