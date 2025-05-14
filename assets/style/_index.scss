@@ -1,18 +1,26 @@
-// theme.scss
+// assets/style/_index.scss
 
+// 1) core functions & variables
 @import "~bootstrap/scss/functions";
 @import "themes/_default";
 @import "components/variables";
-@import "~bootstrap/scss/mixins";
-@import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 @import "themes/_variables-dark";
 @import "~bootstrap/scss/variables-dark";
 
+// 2) bootstrap maps (colors, spacers, etc)
 @import "~bootstrap/scss/maps";
+
+// 3) bootstrap’s _utilities.scss defines the $utilities map
+@import "~bootstrap/scss/_utilities";
+
+// 4) merge in custom entries
+@import "components/utilities";
+
+// 5) generate all utility classes (including bg-accent-*)
 @import "~bootstrap/scss/utilities";
+
+// 6) rest of Bootstrap + own components
 @import "~bootstrap/scss/bootstrap";
 @import "components/index";
-
-// finally, layer on your CSS-custom-prop overrides:
 @import "themes/_darkmode";
