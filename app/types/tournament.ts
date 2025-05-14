@@ -140,13 +140,6 @@ export interface RoundProps {
     /** this round’s index (0 = first round, etc) */
     number: number;
 
-    /** total number of rounds in this region */
-    maxRounds?: number;
-
-    rowCount?: number;
-    spacing:  number;
-    totalRows?: number;
-
     /** “left” or “right” facing layout */
     type?: 'left' | 'right' | 'center';
 
