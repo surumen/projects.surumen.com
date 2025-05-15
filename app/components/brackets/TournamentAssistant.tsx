@@ -65,8 +65,6 @@ const TournamentAssistant: React.FC = () => {
     };
 
     const renderGameFooter = (_game: GameData, _type: string) => {
-        if (league !== 'nba') return null;
-
         const winner = _game.winnerSeed;
         const variants: string[] = ['primary', 'secondary', 'success', 'info', 'warning', 'danger', 'dark'];
         const cls = winner?.color
@@ -77,6 +75,7 @@ const TournamentAssistant: React.FC = () => {
         return (
             <GameSelector
                 type={_type}
+                game={_game}
                 className={cls}
             />
         );

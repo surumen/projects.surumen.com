@@ -107,11 +107,9 @@ export interface TeamProps {
 }
 
 export interface GameSelectorProps {
+    game: GameData,
     type: string;
     className?: string;
-    games?: number[];
-    seeds?: Record<number, { name: string }>;
-    gamesPredicted?: number;
 }
 
 export interface GameProps {
@@ -136,9 +134,6 @@ export interface RoundProps {
 
     /** full metadata for every game in this round, in order */
     gamesData: GameData[];
-
-    /** if true, renders in final (championship) style */
-    final?: boolean;
 
     /** “left” or “right” facing layout */
     type?: 'left' | 'right' | 'center';
