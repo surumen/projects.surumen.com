@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
     getLeague,
     getLeagueStandings,
@@ -8,17 +8,9 @@ import {
     getManagerTransfers,
     getPlayerById
 } from '@/data/apis/fplApi';
-import type { PremierLeaguePlayer } from '@/types/PremierLeaguePlayer';
+import { fetchManagerStrategy } from '@/data/apis/fplRecommender';
+import type { PremierLeaguePlayer, ManagerStrategy, ManagerHistoryEntry } from '@/types';
 
-interface ManagerHistoryEntry {
-    managerName: string;
-    entryId: number;
-    history: {
-        event: number;
-        total_points: number;
-        [key: string]: any;
-    }[];
-}
 
 interface FPLState {
     league: any;
@@ -32,6 +24,10 @@ interface FPLState {
     allPlayers: PremierLeaguePlayer[];
     loading: boolean;
     error: string | null | undefined;
+    // new strategy fields
+    strategy?: ManagerStrategy;
+    strategyLoading: 'idle' | 'pending' | 'succeeded' | 'failed';
+    strategyError?: string;
 }
 
 const initialState: FPLState = {
@@ -46,48 +42,55 @@ const initialState: FPLState = {
     allPlayers: [],
     loading: false,
     error: null,
+    strategyLoading: 'idle',
 };
 
-export const fetchLeagueData = createAsyncThunk('fpl/fetchLeagueData', async (leagueId: number) => {
-    const league = await getLeague(leagueId);
-    const standings = await getLeagueStandings(leagueId);
-    return { league, standings };
-});
+export const fetchLeagueData = createAsyncThunk(
+    'fpl/fetchLeagueData',
+    async (leagueId: number) => {
+        const league = await getLeague(leagueId);
+        const standings = await getLeagueStandings(leagueId);
+        return { league, standings };
+    }
+);
 
-export const fetchManagerData = createAsyncThunk('fpl/fetchManagerData', async (managerId: number) => {
-    const [managerInfo, managerHistory, managerTransfers] = await Promise.all([
-        getManagerInfo(managerId),
-        getManagerHistory(managerId),
-        getManagerTransfers(managerId)
-    ]);
-    return { managerInfo, managerHistory, managerTransfers };
-});
+export const fetchManagerData = createAsyncThunk(
+    'fpl/fetchManagerData',
+    async (managerId: number) => {
+        const [managerInfo, managerHistory, managerTransfers] = await Promise.all([
+            getManagerInfo(managerId),
+            getManagerHistory(managerId),
+            getManagerTransfers(managerId),
+        ]);
+        return { managerInfo, managerHistory, managerTransfers };
+    }
+);
 
 export const fetchManagerTeam = createAsyncThunk(
     'fpl/fetchManagerTeam',
-    async ({ managerId, gameweek }: { managerId: number, gameweek: number }, thunkAPI) => {
+    async (
+        { managerId, gameweek }: { managerId: number; gameweek: number },
+        thunkAPI
+    ) => {
         const team = await getManagerTeam(managerId, gameweek);
         const picks = team.picks;
-
-        const uniquePlayerIds: number[] = [...new Set<number>(picks.map(p => p.element))];
+        const uniquePlayerIds: number[] = [
+            ...new Set<number>(picks.map((p) => p.element)),
+        ];
 
         const players = await Promise.all(
             uniquePlayerIds.map(async (id) => {
                 const player = await getPlayerById(id);
-                const pick   = picks.find(p => p.element === id)!;
-
+                const pick = picks.find((p) => p.element === id)!;
                 return {
                     ...player,
-                    is_captain:      pick.is_captain,
+                    is_captain: pick.is_captain,
                     is_vice_captain: pick.is_vice_captain,
                 };
             })
         );
 
-
-        // Add to state using a reducer
         thunkAPI.dispatch(setAllPlayers(players));
-
         return team;
     }
 );
@@ -101,7 +104,7 @@ export const fetchAllManagerHistories = createAsyncThunk(
                 return {
                     managerName: manager.entry_name,
                     entryId: manager.entry,
-                    history: history.current
+                    history: history.current,
                 };
             })
         );
@@ -109,17 +112,34 @@ export const fetchAllManagerHistories = createAsyncThunk(
     }
 );
 
+// new thunk for the strategy tool
+export const planManagerStrategy = createAsyncThunk<
+    ManagerStrategy,
+    number,
+    { rejectValue: string }
+>(
+    'fpl/planManagerStrategy',
+    async (managerId, thunkAPI) => {
+        try {
+            return await fetchManagerStrategy(managerId);
+        } catch (err: any) {
+            return thunkAPI.rejectWithValue(err.message);
+        }
+    }
+);
+
 const fplSlice = createSlice({
     name: 'fpl',
     initialState,
     reducers: {
-        setAllPlayers: (state, action) => {
+        setAllPlayers: (state, action: PayloadAction<PremierLeaguePlayer[]>) => {
             state.allPlayers = action.payload;
-        }
+        },
     },
-    extraReducers: builder => {
+    extraReducers: (builder) => {
         builder
-            .addCase(fetchLeagueData.pending, state => {
+            // fetchLeagueData
+            .addCase(fetchLeagueData.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
@@ -132,7 +152,9 @@ const fplSlice = createSlice({
                 state.loading = false;
                 state.error = action.error.message;
             })
-            .addCase(fetchManagerData.pending, state => {
+
+            // fetchManagerData
+            .addCase(fetchManagerData.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
@@ -146,6 +168,8 @@ const fplSlice = createSlice({
                 state.loading = false;
                 state.error = action.error.message;
             })
+
+            // fetchAllManagerHistories
             .addCase(fetchAllManagerHistories.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -154,11 +178,13 @@ const fplSlice = createSlice({
                 state.allManagerHistories = action.payload;
                 state.loading = false;
             })
-            .addCase(fetchAllManagerHistories.rejected, (state, action) => {
+            .addCase(fetchAllManagerHistories.rejected, (state) => {
                 state.loading = false;
                 state.error = 'Failed to fetch manager histories';
             })
-            .addCase(fetchManagerTeam.pending, state => {
+
+            // fetchManagerTeam
+            .addCase(fetchManagerTeam.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
@@ -169,10 +195,26 @@ const fplSlice = createSlice({
             .addCase(fetchManagerTeam.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message;
+            })
+
+            // planManagerStrategy
+            .addCase(planManagerStrategy.pending, (state) => {
+                state.strategyLoading = 'pending';
+                state.strategyError = undefined;
+            })
+            .addCase(
+                planManagerStrategy.fulfilled,
+                (state, action: PayloadAction<ManagerStrategy>) => {
+                    state.strategyLoading = 'succeeded';
+                    state.strategy = action.payload;
+                }
+            )
+            .addCase(planManagerStrategy.rejected, (state, action) => {
+                state.strategyLoading = 'failed';
+                state.strategyError = action.payload;
             });
     },
 });
 
 export const { setAllPlayers } = fplSlice.actions;
-
 export default fplSlice.reducer;

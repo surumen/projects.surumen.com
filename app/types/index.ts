@@ -2,6 +2,15 @@ import { Project } from './Project';
 import { PremierLeaguePlayer } from './PremierLeaguePlayer';
 import { PremierLeagueTeam } from './PremierLeagueTeam';
 import {
+    UpcomingFixture,
+    TransferInCandidate,
+    TransferOutCandidate,
+    ManagerStrategy,
+    ManagerHistoryEntry
+} from './fplRecommender';
+
+
+import {
     TournamentRegion,
     FinalRegion,
     TournamentStructure,
@@ -37,5 +46,10 @@ export type {
     GameProps,
     RoundProps,
     RegionProps,
-    DynamicBracketProps
+    DynamicBracketProps,
+    UpcomingFixture,
+    TransferInCandidate,
+    TransferOutCandidate,
+    ManagerStrategy,
+    ManagerHistoryEntry
 }

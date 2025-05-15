@@ -1,17 +1,28 @@
+// app/hooks/useFPL.ts
 import { useSelector } from 'react-redux';
+import type { RootState } from '@/store/store';
 
 const useFPL = () => {
-    const league = useSelector((state: any) => state.fpl.league);
-    const standings = useSelector((state: any) => state.fpl.standings);
-    const entry = useSelector((state: any) => state.fpl.entry);
-    const managerInfo = useSelector((state: any) => state.fpl.managerInfo);
-    const managerHistory = useSelector((state: any) => state.fpl.managerHistory);
-    const managerTransfers = useSelector((state: any) => state.fpl.managerTransfers);
-    const managerTeam = useSelector((state: any) => state.fpl.managerTeam);
-    const allManagerHistories = useSelector((state: any) => state.fpl.allManagerHistories);
-    const allPlayers = useSelector((state: any) => state.fpl.allPlayers);
-    const loading = useSelector((state: any) => state.fpl.loading);
-    const error = useSelector((state: any) => state.fpl.error);
+    const league = useSelector((state: RootState) => state.fpl.league);
+    const standings = useSelector((state: RootState) => state.fpl.standings);
+    const entry = useSelector((state: RootState) => state.fpl.entry);
+    const managerInfo = useSelector((state: RootState) => state.fpl.managerInfo);
+    const managerHistory = useSelector((state: RootState) => state.fpl.managerHistory);
+    const managerTransfers = useSelector((state: RootState) => state.fpl.managerTransfers);
+    const managerTeam = useSelector((state: RootState) => state.fpl.managerTeam);
+    const allManagerHistories = useSelector((state: RootState) => state.fpl.allManagerHistories);
+    const allPlayers = useSelector((state: RootState) => state.fpl.allPlayers);
+    const loading = useSelector((state: RootState) => state.fpl.loading);
+    const error = useSelector((state: RootState) => state.fpl.error);
+
+    // -> new selectors for strategy
+    const strategy = useSelector((state: RootState) => state.fpl.strategy);
+    const strategyLoading = useSelector(
+        (state: RootState) => state.fpl.strategyLoading
+    );
+    const strategyError = useSelector(
+        (state: RootState) => state.fpl.strategyError
+    );
 
     return {
         league,
@@ -24,7 +35,11 @@ const useFPL = () => {
         allManagerHistories,
         allPlayers,
         loading,
-        error
+        error,
+        // new
+        strategy,
+        strategyLoading,
+        strategyError,
     };
 };
 
