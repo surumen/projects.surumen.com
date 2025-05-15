@@ -90,7 +90,6 @@ const TournamentAssistant: React.FC = () => {
                     formClassName="d-flex gap-3 align-items-end"
                     fields={formFields}
                     onFieldChange={({ league: l, year: y }) => {
-                        // 3) dispatch into Redux
                         dispatch(setLeague(l));
                         dispatch(setYear(Number(y)));
                     }}

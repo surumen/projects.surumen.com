@@ -64,6 +64,7 @@ const Game: React.FC<GameProps> = ({
                     score={scoreA}
                     isWinner={isWinnerA}
                     penaltyGoals={penA}
+                    isFinalGame={game.isFinal}
                     onClick={() => onSeedClick?.(teamA)}
                 />
                 <Team
@@ -73,6 +74,7 @@ const Game: React.FC<GameProps> = ({
                     score={scoreB}
                     isWinner={isWinnerB}
                     penaltyGoals={penB}
+                    isFinalGame={game.isFinal}
                     onClick={() => onSeedClick?.(teamB)}
                 />
                 {renderGameFooter && (

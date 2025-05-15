@@ -25,7 +25,8 @@ const GameSelector: React.FC<GameSelectorProps> = ({
     // 2) if right, flip the order -> [7,6,…,1]
     if (isRight) seriesGames = seriesGames.reverse();
 
-    const border = game.isFinal && game.winnerSeed ? 'border-0' : 'border-0 border-5 border-light';
+    const border = game.isFinal ? 'border-0' : 'border-0 border-5 border-light';
+    const borderEdge = game.isFinal ? '' : isRight ? 'border-end' : 'border-start';
     const textColor = game.isFinal && game.winnerSeed ? '' : 'text-body';
     const justify = game.isFinal && game.winnerSeed ? 'justify-content-center' : isRight ? 'justify-content-end' : 'justify-content-start';
 
@@ -39,7 +40,7 @@ const GameSelector: React.FC<GameSelectorProps> = ({
         'rounded-0',
         isRight ? 'rounded-bottom-start' : 'rounded-bottom-end',
         textColor,
-        isRight ? 'border-end' : 'border-start',
+        borderEdge,
         border,
         'px-2',
         'py-2',

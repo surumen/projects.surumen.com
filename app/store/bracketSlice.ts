@@ -194,8 +194,6 @@ export const bracketSlice = createSlice({
                     const g = reg.games[rr][gi];
                     if (isSameSeed(g.winnerSeed, loserMeta)) {
                         g.winnerSeed = undefined;
-                    } else {
-                        break; // once you hit a non‐loser, upstream ones can stay
                     }
                 }
 

@@ -10,6 +10,7 @@ const Team: React.FC<TeamProps> = ({
                                        displayNamePredicted,
                                        position,
                                        type = 'left',
+                                       isFinalGame,
                                        onClick,
                                    }) => {
     const isRight = type === 'right';
@@ -24,6 +25,7 @@ const Team: React.FC<TeamProps> = ({
         : isLeft
             ? 'border-start'
             : '';
+    const border = isFinalGame ? 'ps-2' : `border-5 border-${color} ${borderSide}`
     const roundTop = position === 'top'
         ? isRight
             ? 'rounded-top-start'
@@ -53,9 +55,7 @@ const Team: React.FC<TeamProps> = ({
         'bg-light',
         'text-body',
         'border-0',
-        borderSide,
-        'border-5',
-        `border-${color}`,
+        border,
         isLeft || isRight ? 'rounded-0' : 'rounded',
         roundTop,
         roundBottom,

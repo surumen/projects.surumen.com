@@ -102,6 +102,7 @@ export interface TeamProps {
     score?: number;
     isWinner?: boolean;
     penaltyGoals?: number;
+    isFinalGame?: boolean;
 
     onClick?: () => void;
 }
