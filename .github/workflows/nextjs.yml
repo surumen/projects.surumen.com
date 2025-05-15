@@ -35,6 +35,7 @@ jobs:
       NEXT_PUBLIC_FPL_USERNAME: ${{ secrets.FPL_USERNAME }}
       NEXT_PUBLIC_FPL_PASSWORD: ${{ secrets.FPL_PASSWORD }}
       NEXT_PUBLIC_FPL_API_URL: ${{ secrets.FPL_API_URL }}
+      NEXT_PUBLIC_MCP_API_BASE: ${{ secrets.MCP_API_BASE }}
 
     steps:
       - name: Checkout
