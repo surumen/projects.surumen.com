@@ -119,6 +119,19 @@ function getUpPath(
     return path;
 }
 
+function isSameSeed(a?: SeedMeta|null, b?: SeedMeta|null): b is SeedMeta {
+    return (
+        a !== null &&
+        b !== null &&
+        !!a &&
+        !!b &&
+        a.seed       === b.seed &&
+        a.name       === b.name &&
+        a.conference === b.conference
+    );
+}
+
+
 const initialState: BracketState = {
     currentLeague: 'ncaa',
     currentYear:   new Date().getFullYear(),
@@ -171,6 +184,33 @@ export const bracketSlice = createSlice({
 
             const loserSlot = (thisSlot ^ 1) as 0 | 1
             const loserSeed = reg.matchups[round][gameIdx][loserSlot]?.seed
+
+            const loserMeta = reg.matchups[round][gameIdx][loserSlot];
+            if (loserMeta) {
+                // 1) Clear in *this* region’s deeper rounds:
+                const path = getUpPath(totalRounds, round, gameIdx);
+                for (let i = 1; i < path.length; i++) {
+                    const { round: rr, gameIdx: gi } = path[i];
+                    const g = reg.games[rr][gi];
+                    if (isSameSeed(g.winnerSeed, loserMeta)) {
+                        g.winnerSeed = undefined;
+                    } else {
+                        break; // once you hit a non‐loser, upstream ones can stay
+                    }
+                }
+
+                // 2) Clear in the Final region (any round/game):
+                const finalReg = state.regions[tournamentKey]!['Final'];
+                if (finalReg) {
+                    finalReg.games.forEach(roundGames =>
+                        roundGames.forEach(g => {
+                            if (isSameSeed(g.winnerSeed, loserMeta)) {
+                                g.winnerSeed = undefined;
+                            }
+                        })
+                    );
+                }
+            }
 
             // 2) WRITE YOUR PICK (skip writing into the Final-region semis)
             if (!(region === 'Final' && round === 0)) {
