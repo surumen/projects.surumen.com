@@ -1,5 +1,3 @@
-// app/types/fplRecommender.ts
-
 export interface UpcomingFixture {
     gw: number;
     turf: 'Home' | 'Away';
@@ -83,4 +81,14 @@ export interface ManagerStrategy {
     bank: number;
     transfer_out_candidates: TransferOutCandidate[];
     transfer_in_candidates: TransferInCandidate[];
+}
+
+export interface ManagerHistoryEntry {
+    managerName: string;
+    entryId: number;
+    history: {
+        event: number;
+        total_points: number;
+        [key: string]: any;
+    }[];
 }
