@@ -73,7 +73,7 @@ $overlay-soft-bg-color:                                     rgba($dark, .25) !de
 $secondary-bg-color:                                        transparent !default;
 $secondary-hover-bg-color:                                  rgba($primary, .1) !default;
 $active-bg-color:                                           $primary !default;
-$disabled-bg-color:                                         rgba($gray-300, .5) !default;
+$disabled-bg-color:                                         rgba($gray-100, .5) !default;
 $primary-soft-bg-color:                                     rgba(lighten($primary, 12%), .1) !default;
 
 // Shadows
@@ -1947,7 +1947,7 @@ $table-hover-bg:                                            rgba($gray-300, .4) 
 
 // Borders
 $table-border-width:                                        $border-width !default;
-$table-border-color:                                        $border-color !default;
+$table-border-color:                                        $gray-100 !default;
 $table-thead-border-color:                                  $table-border-color !default;
 $table-group-separator-color:                               $gray-300 !default;
 

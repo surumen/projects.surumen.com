@@ -9,3 +9,7 @@
 .form-select-borderless {
   border-width: 0;
 }
+
+.form-select:disabled {
+  background-color: $disabled-bg-color;
+}

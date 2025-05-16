@@ -15,8 +15,8 @@ const Pitch: FC = () => (
         style={{
             transform: 'perspective(26.25rem) rotateX(17deg) translateY(-2rem)',
             padding: '0 .625rem .625rem',
-            background: '#67a633',
-            filter: 'drop-shadow(0 0 1rem rgba(0, 0, 0, .2))',
+            background: '#2d7a02',
+            // filter: 'drop-shadow(0 0 1rem rgba(0, 0, 0, .2))',
             borderBottomLeftRadius: 'var(--rounded-corner)',
             borderBottomRightRadius: 'var(--rounded-corner)',
         }}
@@ -116,7 +116,7 @@ const MatchLineupFormation: FC<MatchLineupFormationProps> = ({
     )
 
     return (
-        <div className={`bg-success rounded bg-opacity-10 pb-3 ${className}`}>
+        <div className={`rounded pb-3 ${className}`}>
             {/* —— Pitch + on-pitch overlay —— */}
             <div className="position-relative w-100 overflow-hidden">
                 <Pitch />
