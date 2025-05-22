@@ -20,7 +20,7 @@ const DefaultLayout = (props) => {
 			<nav className={`'d-sm-none d-block flex-none navbar navbar-vertical navbar-expand-lg navbar-light bg-transparent show vh-lg-100 px-0 py-2'}`}>
 				<Sidebar />
 			</nav>
-			<div className='vh-100'>
+			<div className='vh-100 vw-100'>
 				<NavTop showSearch={true}/>
 				<div className='main'>
 					<div className='content container-fluid'>

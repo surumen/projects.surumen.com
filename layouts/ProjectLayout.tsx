@@ -22,7 +22,7 @@ const ProjectLayout = (props) => {
             <nav className={`${isMobile ? 'd-none' : 'flex-none navbar navbar-vertical navbar-expand-lg navbar-light bg-transparent show vh-lg-100 px-0 py-2'}`}>
                 <Sidebar />
             </nav>
-            <div className='vh-100'>
+            <div className='vh-100 vw-100'>
                 <NavTop />
                 <div className='main'>
                     {props.children}
