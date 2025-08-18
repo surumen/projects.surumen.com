@@ -1,7 +1,7 @@
 // import node module libraries
-import App, { AppContext, AppProps } from 'next/app';
+import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { Fragment, createContext } from 'react';
+import { Fragment } from 'react';
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 
@@ -15,13 +15,15 @@ import 'style/_index.scss';
 // import default layouts
 import DefaultLayout from '../layouts/DefaultLayout';
 import ProjectLayout from '../layouts/ProjectLayout';
-import { Project } from "@/types";
-import AllProjectsData from "@/data/projects/AllProjectsData";
 
+// Extend AppProps to include Layout property
+type AppPropsWithLayout = AppProps & {
+  Component: AppProps['Component'] & {
+    Layout?: React.ComponentType<any>;
+  };
+};
 
-export const ProjectsContext = createContext([]);
-
-function MyProjectsApp({ Component, pageProps, projects }) {
+function MyProjectsApp({ Component, pageProps }: AppPropsWithLayout) {
   const router = useRouter();
   const pageURL = process.env.baseURL + router.pathname;
   const title = `Moses Surumen`;
@@ -51,26 +53,11 @@ function MyProjectsApp({ Component, pageProps, projects }) {
         />
         <Provider store={store} >
           <Layout>
-              <ProjectsContext.Provider value={projects}>
-                  <Component {...pageProps} />
-              </ProjectsContext.Provider>
+            <Component {...pageProps} />
           </Layout>
         </Provider>
       </Fragment>
   )
 }
-
-MyProjectsApp.getInitialProps = async (context: AppContext) => {
-    const ctx = await App.getInitialProps(context);
-    const projects: Project[] = [];
-    for (const project of AllProjectsData) {
-        if (project.contentType === 'blog') {
-            const { default: data } = await import(`../app/data/projects/md/${project.slug}.md`);
-            //project.content = data;
-        }
-        projects.push(project);
-    }
-    return { ...ctx, projects: projects };
-};
 
 export default MyProjectsApp;

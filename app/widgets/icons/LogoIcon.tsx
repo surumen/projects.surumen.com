@@ -7,7 +7,7 @@ const LogoIcon = (props) => {
 
     return (
         <Fragment>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,256,256" width="100%" height="auto">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,256,256" width="100%" height="100%">
                 <g fill="none" fillRule="nonzero" stroke="none" strokeWidth="1" strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit="10" strokeDasharray="" strokeDashoffset="0" fontFamily="none" fontWeight="none" fontSize="none" textAnchor="none">
                     <g transform="scale(2,2)">
                         <path d="M76,12c-3.86599,0 -7,3.13401 -7,7c0,3.86599 3.13401,7 7,7c3.86599,0 7,-3.13401 7,-7c0,-3.86599 -3.13401,-7 -7,-7zM76,102c-3.86599,0 -7,3.13401 -7,7c0,3.86599 3.13401,7 7,7c3.86599,0 7,-3.13401 7,-7c0,-3.86599 -3.13401,-7 -7,-7zM58,26.2c0,-5 -4,-9 -9,-9c-5,0 -9,4 -9,9v0c-1.7,-1.3 -3.7,-2 -6,-2c-5.5,0 -10,4.5 -10,10c0,1.1 0.2,2.1 0.5,3c-0.2,0 -0.3,0 -0.5,0c-6.1,0 -11,4.9 -11,11c0,2.4 0.7,4.5 2,6.3c-4.2,2.7 -7,7.3 -7,12.7c0,5.3 2.8,10 6.9,12.6c-1.2,2.2 -1.9,4.7 -1.9,7.4c0,8.3 6.7,15 15,15c0.3,0 0.6,0 0.9,0c2,5.8 7.6,10 14.1,10c8.3,0 15,-6.7 15,-15c0,-8.2 0,-66 0,-71z" fill="#ffffff"></path>

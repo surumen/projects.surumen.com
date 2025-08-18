@@ -65,7 +65,7 @@ export const AllProjectsData: Project[] = [
 			<p>Spend less time crunching numbers and more time celebrating wins—Fantasy Manager Assistant handles the heavy lifting so you can dominate your league all season long.</p>
 		`,
 		hasDemo: true,
-		hasBlog: true,
+		hasBlog: false,
 		content: ``
 	},
 	{
@@ -74,7 +74,7 @@ export const AllProjectsData: Project[] = [
 		frameworks: ['D3.js'],
 		technologyAreas: ['D3.js', 'Next.js'],
 		title: 'Data Visualization with D3 and Next.js',
-		slug: 'data-visualizations-d3',
+		slug: 'data-visualization-d3-next-js',
 		shortDescription:
 			'Creating interactive dashboards and data visualizations with D3.js and Next.js.',
 		status: 'Pending',

@@ -1,89 +1,148 @@
-import Head from 'next/head';
-import { useEffect, Fragment } from 'react';
-import dynamic from 'next/dynamic';
-import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
+import { GetStaticProps, GetStaticPaths } from 'next';
+import { Fragment } from 'react';
+import { NextSeo } from 'next-seo';
 
-// import lib/widget/custom components
-import { getProjectBySlug, getAllProjects, getProjectBlogBySlug } from '../../lib/getProjectBySlug';
-import { Project } from "@/types";
-import { NextSeo } from "next-seo";
+import ProjectSummary from '@/widgets/projects/ProjectSummary';
+import { getAllProjects, getProjectBySlug, getProjectBlogBySlug } from '../../lib/getProjectBySlug';
+import { Project } from '@/types';
 
+interface ProjectPageProps {
+  project: Project;
+  blog: string | null;
+}
 
-const ProjectSingle = ({project, blog}) => {
+export default function ProjectPage({ project, blog }: ProjectPageProps) {
+  // Generate structured data for better SEO
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: project.title,
+    description: project.shortDescription,
+    author: {
+      '@type': 'Person',
+      name: 'Moses Surumen',
+    },
+    programmingLanguage: project.languages,
+    tool: project.frameworks,
+    dateCreated: project.completed,
+  };
 
-    const router = useRouter();
+  return (
+    <Fragment>
+      <NextSeo
+        title={`${project.title} | Moses Surumen`}
+        description={project.shortDescription}
+        canonical={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://projects.surumen.com'}/project/${project.slug}`}
+        openGraph={{
+          title: project.title,
+          description: project.shortDescription,
+          type: 'article',
+          url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://projects.surumen.com'}/project/${project.slug}`,
+          siteName: 'Moses Surumen Projects',
+          article: {
+            authors: ['Moses Surumen'],
+            tags: [...project.languages, ...project.frameworks],
+          },
+        }}
+        additionalMetaTags={[
+          {
+            name: 'keywords',
+            content: [...project.languages, ...project.frameworks, ...project.technologyAreas].join(', '),
+          },
+          {
+            name: 'author',
+            content: 'Moses Surumen',
+          },
+        ]}
+      />
 
-    if (!router.isFallback && !project?.slug) {
+      {/* Structured Data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData),
+        }}
+      />
 
+      <main className="container-fluid py-5">
+        <ProjectSummary 
+          project={project} 
+          blog={blog} 
+          isPreview={false} 
+        />
+      </main>
+    </Fragment>
+  );
+}
+
+export const getStaticProps: GetStaticProps<ProjectPageProps> = async ({ params }) => {
+  const slug = params?.slug as string;
+
+  if (!slug) {
+    return {
+      notFound: true,
+    };
+  }
+
+  try {
+    const project = getProjectBySlug(slug);
+
+    if (!project) {
+      return {
+        notFound: true,
+      };
     }
 
-    // useEffect(() => {
-    //     document.body.classList.add('bg-body-tertiary');
-    // });
+    let blog: string | null = null;
 
-    const ProjectSummary = dynamic(() => import('@/widgets/projects/ProjectSummary'), {
-        ssr: false,
-    });
-
-    return (
-        <Fragment>
-            <NextSeo
-                title={project.title}
-                description={project.description}
-                openGraph={{
-                    title: project.title,
-                    description: project.description,
-                    site_name: process.env.siteName,
-                }}
-            />
-            <main className='container-fluid py-5'>
-                {project ? (
-                    <ProjectSummary project={project} blog={blog} isPreview={false} />
-                ) : (<span></span>)}
-            </main>
-        </Fragment>
-    );
-}
-
-ProjectSingle.propTypes = {
-    project: PropTypes.object,
-    blog: PropTypes.string
-}
-
-export default ProjectSingle;
-
-
-export const getStaticProps = async ({ params, previewData = {} }) => {
-
-    const project: Project = getProjectBySlug(params.slug);
-    let blog = '';
-    
-    // Only try to load blog content if project has blog enabled
-    if (project && project.hasBlog) {
-        blog = getProjectBlogBySlug(params.slug);
+    // Only load blog content if the project has blog enabled
+    if (project.hasBlog) {
+      try {
+        blog = getProjectBlogBySlug(slug);
+        // Handle empty blog content gracefully
+        if (!blog || blog.trim().length === 0) {
+          blog = null;
+        }
+      } catch (error) {
+        // Don't fail the entire page if blog loading fails
+        blog = null;
+      }
     }
 
     return {
-        props: {
-            project: project,
-            blog: blog,
-            key: params.slug,
-        },
-        revalidate: 60,
+      props: {
+        project,
+        blog,
+      },
+      revalidate: 60, // Revalidate every minute for content updates
     };
+  } catch (error) {
+    return {
+      notFound: true,
+    };
+  }
 };
 
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
+  try {
     const projects = getAllProjects();
+
+    const paths = projects
+      .filter(project => project.slug) // Only include projects with valid slugs
+      .map(project => ({
+        params: { 
+          slug: project.slug 
+        },
+      }));
+
     return {
-        paths: projects.map((project) => {
-            return {
-                params: {
-                    slug: project.slug
-                },
-            }
-        }),
-        fallback: false,
-    }
-}
+      paths,
+      fallback: false, // Return 404 for unknown slugs
+    };
+  } catch (error) {
+    return {
+      paths: [],
+      fallback: false,
+    };
+  }
+};

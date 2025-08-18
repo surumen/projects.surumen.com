@@ -7,33 +7,48 @@ import { AllProjectsData } from '@/data/projects/AllProjectsData';
 
 const projectsDirectory = join(process.cwd(), 'app/data/projects/md');
 
-
-export function getProjectsSlugs() {
-    return fs.readdirSync(projectsDirectory)
+export function getProjectsSlugs(): string[] {
+    try {
+        return fs.readdirSync(projectsDirectory);
+    } catch (error) {
+        return [];
+    }
 }
 
+export function getProjectBySlug(slug: string): Project | null {
+    if (!slug) {
+        return null;
+    }
 
-export function getProjectBySlug(slug: string) {
-    return AllProjectsData.filter(p => p.slug === slug)[0];
+    const project = AllProjectsData.find(p => p.slug === slug);
+    return project || null;
 }
 
-export function getProjectBlogBySlug(slug: string) {
-    const fullPath = join(projectsDirectory, `${slug}.md`)
+export function getProjectBlogBySlug(slug: string): string {
+    if (!slug) {
+        throw new Error('Slug is required');
+    }
+
+    const fullPath = join(projectsDirectory, `${slug}.md`);
     
     try {
-        const fileContents = fs.readFileSync(fullPath, 'utf8')
-        const { data, content } = matter(fileContents);
+        const fileContents = fs.readFileSync(fullPath, 'utf8');
+        const { content } = matter(fileContents);
+        
+        if (!content || content.trim().length === 0) {
+            return '';
+        }
+        
         return content;
-    } catch (error) {
-        // Return empty string if markdown file doesn't exist
-        return '';
+    } catch (error: any) {
+        if (error?.code === 'ENOENT') {
+            throw new Error(`Blog file not found for slug: ${slug}`);
+        }
+        throw new Error(`Failed to read blog content for ${slug}: ${error?.message || 'Unknown error'}`);
     }
 }
 
 export function getAllProjects(): Project[] {
-    // const slugs = getProjectsSlugs();
-    // return slugs
-    //     .map((slug) => getProjectBySlug(slug));
-    return AllProjectsData;
+    return AllProjectsData.filter(project => project.slug); // Only return projects with valid slugs
 }
 

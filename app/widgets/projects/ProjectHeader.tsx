@@ -1,21 +1,12 @@
 // import node module libraries
-import React, {Fragment, useState} from 'react';
+import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
 import { Col, Row } from 'react-bootstrap';
 
 // import bootstrap icons
-import { SendFill, Pin, Heart, HeartFill, PinFill, StarFill } from 'react-bootstrap-icons';
-import useMounted from '@/hooks/useMounted';
-import { useMediaQuery } from 'react-responsive';
-
-
+import { SendFill } from 'react-bootstrap-icons';
 
 const ProjectHeader = ({ project, isPreview }) => {
-
-    const hasMounted    = useMounted();
-    const isMobileQuery = useMediaQuery({ query: '(max-width: 767px)' });
-    const isMobile      = hasMounted && isMobileQuery;
-
     return (
         <Fragment>
                 <Row className={`page-header align-items-stretch mb-0`}>
@@ -40,13 +31,12 @@ const ProjectHeader = ({ project, isPreview }) => {
                     <Col sm={12} md={6} className="align-self-start">
                         <div className='vstack gap-4 mb-5 mb-0'>
                             <h6 className='card-subtitle fw-normal'>Project Description</h6>
-                            <p className='article mb-0'>
-							<span
+                            <div 
+                                className='article mb-0'
                                 dangerouslySetInnerHTML={{
                                     __html: project.description
                                 }}
-                            ></span>
-                            </p>
+                            />
                         </div>
                     </Col>
 

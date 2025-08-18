@@ -127,13 +127,13 @@ const TransferTable: React.FC<TransferTableProps> = ({ title, candidates, recomm
 
 const FantasyAssistant: React.FC = () => {
     const dispatch = useAppDispatch();
-    const [managerId, setManagerId] = useState<number>(6888211);
-    const [activeGameweek, setActiveGameweek] = useState<number>(35);
+    const [managerId, setManagerId] = useState<number>(8025532);
+    const [activeGameweek, setActiveGameweek] = useState<number>(1);
     const [showRecs, setShowRecs] = useState<boolean>(true);
 
     const weekOptions = useMemo<FieldConfig['options']>(
         () =>
-            Array.from({ length: 36 }, (_, i) => ({
+            Array.from({ length: 38 }, (_, i) => ({
                 value: i + 1,
                 label: `GW ${i + 1}`,
             })),
