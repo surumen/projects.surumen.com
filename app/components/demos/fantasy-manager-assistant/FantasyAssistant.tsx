@@ -125,7 +125,7 @@ const TransferTable: React.FC<TransferTableProps> = ({ title, candidates, recomm
     </Card>
 );
 
-const Assistant: React.FC = () => {
+const FantasyAssistant: React.FC = () => {
     const dispatch = useAppDispatch();
     const [managerId, setManagerId] = useState<number>(6888211);
     const [activeGameweek, setActiveGameweek] = useState<number>(35);
@@ -271,4 +271,4 @@ const Assistant: React.FC = () => {
     );
 };
 
-export default Assistant;
+export default FantasyAssistant;

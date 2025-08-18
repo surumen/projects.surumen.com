@@ -18,12 +18,16 @@ export function getProjectBySlug(slug: string) {
 }
 
 export function getProjectBlogBySlug(slug: string) {
-    const realSlug = slug.replace(/\.md$/, '')
-    const fullPath = join(projectsDirectory, `${realSlug}.md`)
-    const fileContents = fs.readFileSync(fullPath, 'utf8')
-    const { data, content } = matter(fileContents);
-
-    return content;
+    const fullPath = join(projectsDirectory, `${slug}.md`)
+    
+    try {
+        const fileContents = fs.readFileSync(fullPath, 'utf8')
+        const { data, content } = matter(fileContents);
+        return content;
+    } catch (error) {
+        // Return empty string if markdown file doesn't exist
+        return '';
+    }
 }
 
 export function getAllProjects(): Project[] {

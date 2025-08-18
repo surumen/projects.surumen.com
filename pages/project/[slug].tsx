@@ -58,7 +58,9 @@ export const getStaticProps = async ({ params, previewData = {} }) => {
 
     const project: Project = getProjectBySlug(params.slug);
     let blog = '';
-    if (project.contentType === 'blog') {
+    
+    // Only try to load blog content if project has blog enabled
+    if (project && project.hasBlog) {
         blog = getProjectBlogBySlug(params.slug);
     }
 

@@ -38,9 +38,8 @@ export const AllProjectsData: Project[] = [
 			  <li><strong>Offers “what-if” bracket simulations</strong> for March Madness, letting you explore alternative championship scenarios.</li>
 			</ul>
 		`,
-		contentType: 'app',
-		component: 'tournament',
-		hasWriteUp: false,
+		hasDemo: true,
+		hasBlog: true,
 		content: ``
 	},
 	{
@@ -65,9 +64,8 @@ export const AllProjectsData: Project[] = [
 			</ul>
 			<p>Spend less time crunching numbers and more time celebrating wins—Fantasy Manager Assistant handles the heavy lifting so you can dominate your league all season long.</p>
 		`,
-		contentType: 'app',
-		component: 'fplAssistant',
-		hasWriteUp: false,
+		hasDemo: true,
+		hasBlog: true,
 		content: ``
 	},
 	{
@@ -76,7 +74,7 @@ export const AllProjectsData: Project[] = [
 		frameworks: ['D3.js'],
 		technologyAreas: ['D3.js', 'Next.js'],
 		title: 'Data Visualization with D3 and Next.js',
-		slug: 'data-visualization-d3-next-js',
+		slug: 'data-visualizations-d3',
 		shortDescription:
 			'Creating interactive dashboards and data visualizations with D3.js and Next.js.',
 		status: 'Pending',
@@ -93,9 +91,8 @@ export const AllProjectsData: Project[] = [
 		you can write more concise and readable code, and share logic across components with ease.
 		</p>
         `,
-		contentType: 'app',
-		component: 'fpl',
-		hasWriteUp: false,
+		hasDemo: true,
+		hasBlog: false,
 		content: ``
 	},
 ];

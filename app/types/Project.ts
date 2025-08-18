@@ -9,12 +9,11 @@ export interface Project {
     slug?: string;
     shortDescription: string;
     description: string;
-    contentType: string;
     content: string;
-    hasWriteUp: boolean;
+    hasDemo: boolean;
+    hasBlog: boolean;
 
     completed?: string;
-    component?: any;
     status?: string;
     level?: string;
     image?: string;

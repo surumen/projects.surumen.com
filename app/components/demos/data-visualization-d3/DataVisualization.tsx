@@ -16,7 +16,7 @@ import {
 } from '@/store/fplSlice';
 import { reshapeFPLHistory } from '@/utils';
 
-const FantasyPremierLeague = () => {
+const DataVisualization = () => {
     const [data, setData] = useState<any[]>([]);
     const [tickDuration, setTickDuration] = useState<number>(1500);
     const [topN, setTopN] = useState<number>(10);
@@ -97,4 +97,4 @@ const FantasyPremierLeague = () => {
     );
 };
 
-export default FantasyPremierLeague;
+export default DataVisualization;
