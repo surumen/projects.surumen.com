@@ -1,20 +1,39 @@
-// import node module libraries
-import { useSelector } from 'react-redux'
+import { useProjectsStore } from '@/store/store';
+import { AllProjectsData } from '@/data/projects/AllProjectsData';
 
 const useProjects = () => {
-    const projects = useSelector((state: any) => state.projects.projects);
-    const languages = useSelector((state: any) => state.projects.languages);
-    const filters = useSelector((state: any) => state.projects.filters);
-    const activeFilters = useSelector((state: any) => state.projects.activeFilters);
-    const search = useSelector((state: any) => state.projects.search);
+  const { activeFilters, search } = useProjectsStore();
+  
+  // Get static project data
+  const projects = AllProjectsData;
+  
+  // Extract unique technologies for filtering
+  const allTechnologies = projects.flatMap(p => [
+    ...(p.languages || []),
+    ...(p.frameworks || []),
+    ...(p.technologyAreas || [])
+  ]);
+  
+  const filters = [...new Set(allTechnologies)].sort();
 
-    return {
-        projects,
-        languages,
-        filters,
-        activeFilters,
-        search
-    };
+  // Apply search filter if search term exists
+  const searchFilteredProjects = search 
+    ? projects.filter(project => 
+        project.title.toLowerCase().includes(search.toLowerCase()) ||
+        project.shortDescription?.toLowerCase().includes(search.toLowerCase()) ||
+        project.description.toLowerCase().includes(search.toLowerCase())
+      )
+    : projects;
+
+  return {
+    projects: searchFilteredProjects,
+    filters,
+    activeFilters,
+    search,
+    // Computed values
+    totalProjects: projects.length,
+    filteredCount: searchFilteredProjects.length
+  };
 };
 
 export default useProjects;

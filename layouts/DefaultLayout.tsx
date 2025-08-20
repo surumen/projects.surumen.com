@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Sidebar, NavTop } from '@/widgets';
+import { NavTop, Sidebar } from '@/widgets';
 import { useMediaQuery } from 'react-responsive';
 
 const DefaultLayout = (props) => {

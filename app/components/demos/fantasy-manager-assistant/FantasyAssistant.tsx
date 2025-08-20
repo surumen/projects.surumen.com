@@ -2,18 +2,15 @@ import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { Alert, Card, Col, Row, Spinner, Table, Image } from 'react-bootstrap';
 import { CursorFill } from 'react-bootstrap-icons';
 
-import { useAppDispatch } from '@/store/hooks';
-import { fetchManagerData, fetchManagerTeam, planManagerStrategy } from '@/store/fplSlice';
-import { premierLeagueTeams } from '@/data/tournaments/teams/premierLeague';
+import { premierLeagueTeams } from '@/data/teams/premierLeague';
 import useFPL from '@/hooks/useFPL';
-import { DynamicForm } from '@/widgets';
-import { FieldConfig } from '@/widgets/forms/DynamicForm';
-import { MatchLineupFormation } from '@/widgets';
-import {
+import { DynamicForm, PlayerFormation } from '@/widgets';
+import type { 
+    FieldConfig, 
     TransferOutCandidate,
     TransferInCandidate,
     PremierLeaguePlayer,
-    UpcomingFixture,
+    UpcomingFixture 
 } from '@/types';
 
 const positionMap = {
@@ -126,7 +123,6 @@ const TransferTable: React.FC<TransferTableProps> = ({ title, candidates, recomm
 );
 
 const FantasyAssistant: React.FC = () => {
-    const dispatch = useAppDispatch();
     const [managerId, setManagerId] = useState<number>(8025532);
     const [activeGameweek, setActiveGameweek] = useState<number>(1);
     const [showRecs, setShowRecs] = useState<boolean>(true);
@@ -144,42 +140,110 @@ const FantasyAssistant: React.FC = () => {
         managerTeam,
         allPlayers,
         error,
+        loading,
         strategy,
         strategyLoading,
         strategyError,
+        fetchManagerTeam,
+        planManagerStrategy,
     } = useFPL();
 
+    // Load initial data on component mount
     useEffect(() => {
-        dispatch(fetchManagerData(managerId));
-        dispatch(fetchManagerTeam({ managerId, gameweek: activeGameweek }));
-        if (showRecs) {
-            dispatch(planManagerStrategy(managerId));
-        }
-    }, [dispatch, managerId, activeGameweek, showRecs]);
+        const loadInitialData = async () => {
+            await fetchManagerTeam(managerId, activeGameweek);
+            
+            // Also fetch recommendations if enabled
+            if (showRecs) {
+                await planManagerStrategy(managerId);
+            }
+        };
+        
+        loadInitialData();
+    }, [fetchManagerTeam, planManagerStrategy, managerId, activeGameweek, showRecs]);
 
-    const handleFormSubmit = useCallback((vals: Record<string, any>) => {
-        setManagerId(Number(vals.managerId));
-        setActiveGameweek(Number(vals.gameweek));
-        setShowRecs(Boolean(vals.showTransferRecommendations));
-    }, []);
+    const handleFormSubmit = useCallback(async (vals: Record<string, any>) => {
+        const newManagerId = Number(vals.managerId);
+        const newGameweek = Number(vals.gameweek);
+        const newShowRecs = Boolean(vals.showTransferRecommendations);
+        
+        setManagerId(newManagerId);
+        setActiveGameweek(newGameweek);
+        setShowRecs(newShowRecs);
+        
+        // Fetch manager team data for the selected gameweek
+        await fetchManagerTeam(newManagerId, newGameweek);
+        
+        // Fetch transfer recommendations if requested
+        if (newShowRecs) {
+            await planManagerStrategy(newManagerId);
+        }
+    }, [fetchManagerTeam, planManagerStrategy]);
+
+    if (loading) {
+        return (
+            <Row>
+                <Col>
+                    <div className="text-center mt-4">
+                        <Spinner animation="border" className="me-2" />
+                        <span>Loading team and player data…</span>
+                    </div>
+                </Col>
+            </Row>
+        );
+    }
 
     if (error) {
         return (
             <Row>
                 <Col>
                     <Alert variant="danger" className="alert-soft-danger text-center mt-4">
-                        {error}
+                        <strong>Error:</strong> {error}
                     </Alert>
+                    <div className="text-center">
+                        <button 
+                            className="btn btn-primary" 
+                            onClick={() => fetchManagerTeam(managerId, activeGameweek)}
+                        >
+                            Retry
+                        </button>
+                    </div>
                 </Col>
             </Row>
         );
     }
 
-    if (!managerTeam?.picks || !allPlayers) {
+    if (!managerTeam?.picks || !allPlayers || allPlayers.length === 0) {
+        // Check if we have team data but no picks
+        if (managerTeam && managerTeam.picks && managerTeam.picks.length === 0) {
+            return (
+                <Row>
+                    <Col>
+                        <div className="text-center mt-4">
+                            <Alert variant="warning" className="alert-soft-warning">
+                                <strong>No team data found</strong> for Manager {managerId} in Gameweek {activeGameweek}.
+                                <br />
+                                <small className="text-muted">
+                                    This could mean the manager hasn't set a team for this gameweek, 
+                                    or the gameweek data isn't available yet.
+                                </small>
+                            </Alert>
+                            <p className="text-muted">Try a different manager ID or gameweek.</p>
+                        </div>
+                    </Col>
+                </Row>
+            );
+        }
+        
         return (
             <Row>
                 <Col>
-                    <p className="text-center mt-4">Loading team and player data…</p>
+                    <div className="text-center mt-4">
+                        <p>No team data available. Click "Start" to load data.</p>
+                        <p className="text-muted small">
+                            Manager ID: {managerId} | Gameweek: {activeGameweek}
+                        </p>
+                    </div>
                 </Col>
             </Row>
         );
@@ -199,7 +263,7 @@ const FantasyAssistant: React.FC = () => {
                 <Col lg={9} className="order-2 order-lg-1 ps-lg-0 pt-4">
                     <Row className="align-items-center pb-4">
                         <Col>
-                            <MatchLineupFormation players={playersOnPitch} />
+                            <PlayerFormation players={playersOnPitch} />
                         </Col>
                     </Row>
 

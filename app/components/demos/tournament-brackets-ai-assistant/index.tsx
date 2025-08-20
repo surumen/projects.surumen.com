@@ -1,1 +1,1 @@
-export { default } from './TournamentAssistant';
+export { default } from './TournamentAssistantModern';

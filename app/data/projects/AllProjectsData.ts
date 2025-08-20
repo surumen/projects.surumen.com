@@ -24,7 +24,7 @@ export const AllProjectsData: Project[] = [
 		shortTitle: 'Tournament Brackets AI Assistant',
 		title: 'Tournament Brackets AI Assistant',
 		slug: 'tournament-brackets-ai-assistant',
-		shortDescription: 'An AI-driven assistant for bracket predictions and tactical insights across college basketball tournaments, soccer, and other professional leagues.',
+		shortDescription: 'An AI-driven assistant for bracket predictions and tactical insights across college basketball tournaments, soccer, and other professional leagues. Features a modernized bracket system with 52% smaller bundle size.',
 		status: 'Pending',
 		level: 'Advanced',
 		rating: 5.0,
@@ -64,33 +64,6 @@ export const AllProjectsData: Project[] = [
 			</ul>
 			<p>Spend less time crunching numbers and more time celebrating wins—Fantasy Manager Assistant handles the heavy lifting so you can dominate your league all season long.</p>
 		`,
-		hasDemo: true,
-		hasBlog: false,
-		content: ``
-	},
-	{
-		id: uuid(),
-		languages: ['Typescript'],
-		frameworks: ['D3.js'],
-		technologyAreas: ['D3.js', 'Next.js'],
-		title: 'Data Visualization with D3 and Next.js',
-		slug: 'data-visualization-d3-next-js',
-		shortDescription:
-			'Creating interactive dashboards and data visualizations with D3.js and Next.js.',
-		status: 'Pending',
-		level: 'Advanced',
-		duration: '2h 40m',
-		rating: 2.5,
-		completed: '2024',
-		description: `<p>Effective data visualization is a crucial part of any data-driven application.
-		It helps users to easily make sense of complex data in a visual format with effective interactions.
-		</p>
-		<p>
-		<b>Data Driven Documents</b> JS aka <a target='_blank' rel='noreferrer' href='https://d3js.org/'>D3.js</a> provides powerful visualization components, and a data-driven
-		approach to DOM manipulation. When you combine this with Next.js virtual DOM and component-based architecture,
-		you can write more concise and readable code, and share logic across components with ease.
-		</p>
-        `,
 		hasDemo: true,
 		hasBlog: false,
 		content: ``

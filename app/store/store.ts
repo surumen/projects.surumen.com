@@ -1,18 +1,79 @@
 // app/store/store.ts
-import { configureStore } from '@reduxjs/toolkit';
-import appSlice from '@/store/appSlice';
-import projectsSlice from '@/store/projectsSlice';
-import fplSlice from '@/store/fplSlice';
-import bracketSlice from '@/store/bracketSlice';
+import { create } from 'zustand';
+import { immer } from 'zustand/middleware/immer';
+import { persist } from 'zustand/middleware';
 
-export const store = configureStore({
-    reducer: {
-        app: appSlice,
-        projects: projectsSlice,
-        fpl: fplSlice,
-        bracket: bracketSlice,
-    },
-});
+// ========================
+// TYPE DEFINITIONS
+// ========================
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+interface AppState {
+  skin: 'light' | 'dark';
+  acceptedCookies: boolean;
+  changeSkin: (skin: 'light' | 'dark') => void;
+  acceptCookies: () => void;
+}
+
+interface ProjectsState {
+  activeFilters: string[];
+  search: string;
+  
+  toggleFilter: (filter: string) => void;
+  clearFilters: () => void;
+  setSearch: (search: string) => void;
+}
+
+// ========================
+// STORE IMPLEMENTATIONS
+// ========================
+
+export const useAppStore = create<AppState>()(
+  persist(
+    immer((set) => ({
+      skin: 'light',
+      acceptedCookies: false,
+      
+      changeSkin: (skin) => set((state) => {
+        state.skin = skin;
+      }),
+      
+      acceptCookies: () => set((state) => {
+        state.acceptedCookies = true;
+      })
+    })),
+    {
+      name: 'app-storage'
+    }
+  )
+);
+
+export const useProjectsStore = create<ProjectsState>()(
+  immer((set) => ({
+    activeFilters: [],
+    search: '',
+    
+    toggleFilter: (filter) => set((state) => {
+      const index = state.activeFilters.indexOf(filter);
+      if (index > -1) {
+        state.activeFilters.splice(index, 1);
+      } else {
+        state.activeFilters.push(filter);
+      }
+    }),
+    
+    clearFilters: () => set((state) => {
+      state.activeFilters = [];
+    }),
+    
+    setSearch: (search) => set((state) => {
+      state.search = search;
+    })
+  }))
+);
+
+// ========================
+// STORE RE-EXPORTS
+// ========================
+
+export { useBracketStore } from './bracketStore';
+export { useFPLStore } from './fplStore';

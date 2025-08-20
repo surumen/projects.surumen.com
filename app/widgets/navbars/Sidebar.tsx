@@ -2,7 +2,7 @@ import { Fragment, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Image, Navbar, Container, Nav } from 'react-bootstrap';
 
-import LogoIcon from '@/widgets/icons/LogoIcon'
+import LogoIcon from '@/widgets/components/LogoIcon'
 import { useMediaQuery } from 'react-responsive';
 
 

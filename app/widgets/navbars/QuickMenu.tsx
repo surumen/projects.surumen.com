@@ -1,28 +1,13 @@
 import { Fragment, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
 import { useMediaQuery } from 'react-responsive'
 import { Nav } from 'react-bootstrap'
 import { Sun, MoonFill, Person, Linkedin } from 'react-bootstrap-icons'
-
-import { changeSkin } from '@/store/appSlice'
-import useLocalStorage from '@/hooks/useLocalStorage'
+import { useAppStore } from '@/store/store'
 import useMounted from '@/hooks/useMounted'
 
-type RootState = { app: { skin: 'light' | 'dark' } }
-
 const QuickMenu = () => {
-    const skin = useSelector((state: RootState) => state.app.skin)
-    const dispatch = useDispatch()
+    const { skin, changeSkin } = useAppStore()
     const hasMounted = useMounted()
-
-    const { storageValue: storedSkin, setStorageValue } =
-        useLocalStorage('skin', skin)
-
-    useEffect(() => {
-        if (storedSkin !== skin) {
-            dispatch(changeSkin(storedSkin))
-        }
-    }, [storedSkin, skin, dispatch])
 
     useEffect(() => {
         const root = document.documentElement
@@ -30,7 +15,7 @@ const QuickMenu = () => {
     }, [skin])
 
     const toggleTheme = () => {
-        setStorageValue(skin === 'light' ? 'dark' : 'light')
+        changeSkin(skin === 'light' ? 'dark' : 'light')
     }
 
     if (!hasMounted) return null

@@ -2,53 +2,72 @@
 import ProjectCard from './projects/ProjectCard';
 import ProjectGridView from './projects/ProjectGridView';
 import ProjectSummary from './projects/ProjectSummary';
-import ProjectFilter from './projects/ProjectFilters';
+import ProjectFilters from './projects/ProjectFilters';
 import ProjectHeader from './projects/ProjectHeader';
-
-// import widget/custom components from highlight-code folder 
-import HighlightCode from './highlight-code/HighlightCode';
+import ProjectSearch from './projects/ProjectSearch';
 
 // import widget/custom components from navbars folder
 import Sidebar from './navbars/Sidebar';
-import ProjectFilters from './projects/ProjectFilters';
 import NavTop from './navbars/NavTop';
 
-// import widget/custom components from form-select folder
-import ReactQuillEditor from './editor/ReactQuillEditor';
+// import bracket components
+import Bracket from './brackets/Bracket';
+import Region from './brackets/Region';
+import Round from './brackets/Round';
+import Game from './brackets/Game';
+import Team from './brackets/Team';
+import Connector from './brackets/Connector';
+import Final from './brackets/FinalRegion';
 
-// import widget/custom components from advance-table folder
-import Pagination from './advance-table/Pagination';
+// import chart components
+import RacingBarChart from './charts/BarChart';
 
-// import widget/custom components from live-chart folder
-import RacingBarChart from '@/widgets/charts/BarChart';
+// import football components
+import PlayerFormation from './football/PlayerFormation';
+import Pitch from './football/Pitch';
 
-// import widget/custom components from football folder
-import MatchLineupFormation from '@/widgets/football/MatchLineupFormation';
+// import form components
+import DynamicForm from './forms/DynamicForm';
 
-// import widget/custom components from forms folder
-import DynamicForm from '@/widgets/forms/DynamicForm';
-
-// import widget/custom components from components folder
-import Region from '@/widgets/brackets/Region';
-
-// import widget/custom components from components folder
-import TabPane from '@/widgets/components/TabPane';
+// import general components
+import TabPane from './components/TabPane';
+import Pagination from './components/Pagination';
+import LogoIcon from './components/LogoIcon';
 
 export {
+   // Projects
    ProjectCard,
    ProjectGridView,
    ProjectSummary,
    ProjectHeader,
-   ProjectFilter,
-   Sidebar,
    ProjectFilters,
+   ProjectSearch,
+   
+   // Navigation
+   Sidebar,
    NavTop,
-   HighlightCode,
-   Pagination,
-   ReactQuillEditor,
+   
+   // Charts
    RacingBarChart,
-   MatchLineupFormation,
+   
+   // Football
+   PlayerFormation,
+   Pitch,
+   
+   // Forms
    DynamicForm,
+   
+   // Brackets
+   Region,
+   Bracket,
+   Round,
+   Game,
+   Team,
+   Connector,
+   Final,
+   
+   // Components
    TabPane,
-   Region
+   Pagination,
+   LogoIcon
 };

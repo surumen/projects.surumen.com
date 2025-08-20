@@ -1,15 +1,9 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
+import React, { useMemo } from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
-import { Linkedin, Person, Search, XLg, Github, MoonFill, Sun } from 'react-bootstrap-icons';
-
-import useLocalStorage from '@/hooks/useLocalStorage';
-import { changeSkin } from '@/store/appSlice';
-import LogoIcon from '@/widgets/icons/LogoIcon';
+import { Search, XLg } from 'react-bootstrap-icons';
+import LogoIcon from '@/widgets/components/LogoIcon';
 import QuickMenu from '@/widgets/navbars/QuickMenu';
-
 
 const NavTop = ({ showSearch, className }) => {
     const placeholder = useMemo(() => 'Ask me a question...', []);
@@ -55,6 +49,5 @@ NavTop.propTypes = {
     showSearch: PropTypes.bool,
     className: PropTypes.string,
 };
-
 
 export default NavTop;

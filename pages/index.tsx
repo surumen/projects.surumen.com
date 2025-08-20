@@ -1,38 +1,20 @@
 import Head from 'next/head';
-import { useEffect, Fragment } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
+import { Fragment } from 'react';
 import { ProjectGridView } from '@/widgets';
-import useLocalStorage from '@/hooks/useLocalStorage';
-import { acceptCookies } from '@/store/appSlice';
+import { useAppStore } from '@/store/store';
 
 export default function Home() {
-    const dispatch = useDispatch();
-    const acceptedCookies = useSelector((state: any) => state.app.acceptedCookies);
-
-    // initialize storage with the current acceptedCookies flag
-    const {
-        storageValue,    // string | null
-        setStorageValue, // (val: string) => void
-    } = useLocalStorage('cookieNotice', acceptedCookies.toString());
-
-    // whenever storageValue flips to "true", fire acceptCookies()
-    useEffect(() => {
-        if (storageValue === 'true' && !acceptedCookies) {
-            dispatch(acceptCookies());
-        }
-    }, [dispatch, storageValue, acceptedCookies]);
+    const { acceptedCookies, acceptCookies } = useAppStore();
 
     const dismissNotice = () => {
-        setStorageValue('true');
-        if (!acceptedCookies) dispatch(acceptCookies());
+        acceptCookies();
     };
 
     return (
         <Fragment>
             <Head>
                 <title>Projects – Moses Surumen</title>
-                <meta name="description" content="Moses Surumen’s personal projects" />
+                <meta name="description" content="Moses Surumen's personal projects" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 

@@ -1,43 +1,14 @@
-import React, { useState, FormEvent, ReactNode } from 'react';
+import React, { useState, FormEvent } from 'react';
 import { Form, Button } from 'react-bootstrap';
-
-export type Option = { value: string | number; label: string };
-export type FieldType = 'input' | 'select' | 'switch';
-
-export interface FieldConfig {
-    name: string;
-    label: string;
-    type: FieldType;
-    inputType?: React.HTMLInputTypeAttribute;     // only for type="input"
-    options?: Option[];                           // only for type="select"
-    required?: boolean;
-    readOnly?: boolean;
-    validate?: (val: any) => boolean;             // return false = invalid
-    initialValue?: any;
-    /** Optional class for the Form.Group wrapper */
-    groupClassName?: string;
-    /** Optional class for the input/select control */
-    controlClassName?: string;
-}
-
-export interface DynamicFormProps {
-    fields: FieldConfig[];
-    onSubmit: (values: Record<string, any>) => void;
-    /** can be text, icon, JSX; `null` to hide submit button */
-    submitLabel?: ReactNode | null;
-    /** called on every field change with current values */
-    onFieldChange?: (values: Record<string, any>) => void;
-    /** Optional className for the <Form> element */
-    formClassName?: string;
-}
+import type { FieldConfig, DynamicFormProps } from '@/types';
 
 const DynamicForm: React.FC<DynamicFormProps> = ({
-                                                     fields,
-                                                     onSubmit,
-                                                     submitLabel = 'Submit' as ReactNode,
-                                                     onFieldChange,
-                                                     formClassName,
-                                                 }) => {
+    fields,
+    onSubmit,
+    submitLabel = 'Submit',
+    onFieldChange,
+    formClassName,
+}) => {
     const initialState = fields.reduce((acc, f) => {
         acc[f.name] = f.initialValue ?? (f.type === 'switch' ? false : '');
         return acc;

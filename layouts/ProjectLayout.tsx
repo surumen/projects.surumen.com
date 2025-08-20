@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 
 // import sub components
-import { NavTop, Sidebar } from '@/widgets';
+import { Sidebar } from '@/widgets';
 import { useMediaQuery } from 'react-responsive';
 
 const ProjectLayout = (props) => {
@@ -23,7 +23,7 @@ const ProjectLayout = (props) => {
                 <Sidebar />
             </nav>
             <div className='vh-100 vw-100'>
-                <NavTop />
+                {/* NavTop temporarily removed - uses Redux */}
                 <div className='main'>
                     {props.children}
                 </div>

@@ -1,6 +1,4 @@
-import type {
-    ManagerStrategy
-} from '@/types/fplRecommender';
+import type { ManagerStrategy } from '@/types';
 
 export async function fetchManagerStrategy(
     managerId: number

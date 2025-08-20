@@ -1,55 +1,71 @@
-import { Project } from './Project';
-import { PremierLeaguePlayer } from './PremierLeaguePlayer';
-import { PremierLeagueTeam } from './PremierLeagueTeam';
-import {
-    UpcomingFixture,
-    TransferInCandidate,
-    TransferOutCandidate,
-    ManagerStrategy,
-    ManagerHistoryEntry
-} from './fplRecommender';
+// app/types/index.ts
+// Centralized type exports
 
-
-import {
-    TournamentRegion,
-    FinalRegion,
-    TournamentStructure,
-    BracketRegion,
-    BracketFinal,
-    BracketData,
-    SeedMeta,
-    GameSource,
-    GameData,
-    TeamProps,
-    GameSelectorProps,
-    GameProps,
-    RoundProps,
-    RegionProps,
-    DynamicBracketProps
-} from './tournament';
-
+// ========================
+// PROJECT & FORMS
+// ========================
 export type {
+    // Project types
     Project,
-    PremierLeaguePlayer,
+    
+    // Form types
+    Option,
+    FieldType,
+    FieldConfig,
+    DynamicFormProps
+} from './project/project';
+
+// ========================
+// FANTASY PREMIER LEAGUE
+// ========================
+export type {
+    // Team & Player types
     PremierLeagueTeam,
-    TournamentRegion,
-    FinalRegion,
-    TournamentStructure,
-    BracketRegion,
-    BracketFinal,
-    BracketData,
-    SeedMeta,
-    GameSource,
-    GameData,
-    TeamProps,
-    GameSelectorProps,
-    GameProps,
-    RoundProps,
-    RegionProps,
-    DynamicBracketProps,
+    PremierLeaguePlayer,
+    
+    // Strategy & Transfer types
     UpcomingFixture,
+    Fixture,
+    CandidateBase,
     TransferInCandidate,
     TransferOutCandidate,
     ManagerStrategy,
     ManagerHistoryEntry
-}
+} from './fpl/fpl';
+
+// ========================
+// TOURNAMENT BRACKETS
+// ========================
+export type {
+    // Core tournament types
+    Team,
+    GameDefinition,
+    Round,
+    RegionDefinition,
+    AdvancementRule,
+    TournamentDefinition,
+    GamePick,
+    BracketUserState,
+    BracketGameView,
+    BracketRegionView,
+    BracketView,
+    TournamentConfig,
+    RegionConfig,
+    FinalConfig,
+    SeedingStrategy,
+    DrawRule,
+    BracketEvent,
+    ValidationResult,
+    TournamentValidation,
+    TournamentType,
+    RegionType,
+    
+    // Component prop types
+    BracketProps,
+    RegionProps,
+    RoundProps,
+    GameProps,
+    TeamProps,
+    ConnectorProps,
+    FinalProps
+} from './brackets/brackets';

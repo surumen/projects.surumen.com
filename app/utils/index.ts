@@ -1,13 +1,36 @@
-import { sortAlphanumerically } from './string';
-import { precisionRound, returnEven, returnOdd } from './numbers';
-import { makeFinals } from './makeFinals';
-import { reshapeFPLHistory } from './reshapeManagerHistory';
+// app/utils/index.ts
+// Centralized utility exports
+
+// ========================
+// BRACKETS UTILITIES
+// ========================
+export { TournamentBuilder } from './brackets/tournament';
+
+export { 
+  buildBracketView,
+  getAvailableGames
+} from './brackets/views';
 
 export {
-    sortAlphanumerically,
-    precisionRound,
-    returnEven,
-    returnOdd,
-    makeFinals,
-    reshapeFPLHistory
-}
+  createGameId,
+  createGameReference,
+  buildSingleEliminationGames,
+  buildSeriesGames,
+  buildFinalGames,
+  validateGameTree
+} from './brackets/games';
+
+// ========================
+// FPL UTILITIES
+// ========================
+export { reshapeFPLHistory } from './fpl/history';
+
+// ========================
+// HOOKS RE-EXPORTS
+// ========================
+// Re-export bracket hooks for convenience
+export {
+  useBracket,
+  useBracketController,
+  useTournamentController
+} from '@/hooks/useBrackets';

@@ -5,9 +5,8 @@ import { Fragment } from 'react';
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 
-// import provider and store from redux state management.
-import { Provider } from 'react-redux'
-import { store } from '@/store/store'
+// Zustand stores are auto-initialized, no provider needed
+// import { useAppStore } from '@/store/store'
 
 // Styles
 import 'style/_index.scss';
@@ -51,11 +50,9 @@ function MyProjectsApp({ Component, pageProps }: AppPropsWithLayout) {
               site_name: process.env.siteName,
             }}
         />
-        <Provider store={store} >
           <Layout>
             <Component {...pageProps} />
           </Layout>
-        </Provider>
       </Fragment>
   )
 }
