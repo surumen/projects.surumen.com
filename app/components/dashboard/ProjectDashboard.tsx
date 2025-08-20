@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Col, Container, Navbar, Offcanvas, Row } from 'react-bootstrap';
-import { Search, X, XLg } from 'react-bootstrap-icons';
+import { ChevronLeft, Search, X, XLg } from 'react-bootstrap-icons';
 import useProjects from '@/hooks/useProjects';
 import { useProjectsStore } from '@/store/store';
 import { Project } from '@/types';
@@ -31,7 +31,7 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
   const finalFilteredProjects = activeFilters.length === 0 
     ? projects
     : projects.filter(project => 
-        project.technologyAreas.some(area => activeFilters.includes(area))
+        project.technologies.some(tech => activeFilters.includes(tech))
       );
 
   const hasActiveFiltersOrSearch = activeFilters.length > 0 || search.length > 0;
@@ -232,9 +232,9 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
           <Offcanvas.Header className="justify-content-end border-bottom">
             <button
                 onClick={handleClosePreview}
-                className="btn d-inline-flex btn-sm btn-neutral shadow-none rounded-pill"
+                className="btn btn-ghost-secondary btn-icon border rounded-circle"
             >
-              <span>Back to Projects</span>
+              <ChevronLeft size={16} />
             </button>
           </Offcanvas.Header>
 

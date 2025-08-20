@@ -24,15 +24,23 @@ const ProjectHeader: React.FC<ProjectHeaderProps> = ({
         </h1>
 
         <div className="d-flex gap-2 flex-wrap mt-auto mb-6">
-          {project.technologyAreas.map((category, index) => (
+          {project.technologies.slice(0, 6).map((tech, index) => (
             <span
               key={index}
               className="btn btn-sm btn-outline-info rounded-pill shadow-none"
               style={{ pointerEvents: 'none' }}
             >
-              {category}
+              {tech}
             </span>
           ))}
+          {project.technologies.length > 6 && (
+            <span
+                className="btn btn-sm btn-outline-secondary rounded-pill shadow-none text-muted"
+                style={{ pointerEvents: 'none' }}
+            >
+              +{project.technologies.length - 6} more
+            </span>
+          )}
         </div>
       </Col>
 
@@ -53,7 +61,7 @@ const ProjectHeader: React.FC<ProjectHeaderProps> = ({
         >
           <div className="w-50 w-md-auto" style={{ alignSelf: 'start' }}>
             <h6 className="card-subtitle fw-normal mb-2">Completed</h6>
-            <p className="article text-sm">{project.completed}</p>
+            <p className="article text-sm">{project.year}</p>
           </div>
 
           <div className="w-50 w-md-auto pt-md-4" style={{ alignSelf: 'start' }}>

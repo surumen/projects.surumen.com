@@ -8,25 +8,15 @@ import { ReactNode } from 'react';
 // ========================
 
 export interface Project {
-    id: string;
-    languages: string[];
-    frameworks: string[];
-    technologyAreas: string[];
-    title: string;
-    shortTitle?: string;
-    slug?: string;
-    shortDescription: string;
-    description: string;
-    content: string;
-    hasDemo: boolean;
-    hasBlog: boolean;
-
-    completed?: string;
-    status?: string;
-    level?: string;
-    image?: string;
-    duration?: string;
-    rating?: any;
+    slug: string;                    // Primary identifier
+    title: string;                   // Project title
+    shortDescription: string;        // For dashboard/list view
+    description: string;             // For detailed project header
+    technologies: string[];          // Unified tech stack
+    year: number;                    // Project completion year
+    category: string;                // Project category
+    demo?: string;                   // Optional demo URL or component name
+    blog?: string;                   // Optional blog slug
 }
 
 // ========================

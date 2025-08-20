@@ -8,11 +8,7 @@ const useProjects = () => {
   const projects = AllProjectsData;
   
   // Extract unique technologies for filtering
-  const allTechnologies = projects.flatMap(p => [
-    ...(p.languages || []),
-    ...(p.frameworks || []),
-    ...(p.technologyAreas || [])
-  ]);
+  const allTechnologies = projects.flatMap(p => p.technologies || []);
   
   const filters = [...new Set(allTechnologies)].sort();
 
@@ -22,9 +18,7 @@ const useProjects = () => {
         project.title.toLowerCase().includes(search.toLowerCase()) ||
         project.shortDescription?.toLowerCase().includes(search.toLowerCase()) ||
         project.description.toLowerCase().includes(search.toLowerCase()) ||
-        project.frameworks.some(f => f.toLowerCase().includes(search.toLowerCase())) ||
-        project.languages.some(l => l.toLowerCase().includes(search.toLowerCase())) ||
-        project.technologyAreas.some(t => t.toLowerCase().includes(search.toLowerCase()))
+        project.technologies.some(t => t.toLowerCase().includes(search.toLowerCase()))
       )
     : projects;
 

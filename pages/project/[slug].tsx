@@ -23,9 +23,9 @@ export default function ProjectPage({ project, blog }: ProjectPageProps) {
       '@type': 'Person',
       name: 'Moses Surumen',
     },
-    programmingLanguage: project.languages,
-    tool: project.frameworks,
-    dateCreated: project.completed,
+    programmingLanguage: project.technologies,
+    tool: project.technologies,
+    dateCreated: project.year,
   };
 
   return (
@@ -42,13 +42,13 @@ export default function ProjectPage({ project, blog }: ProjectPageProps) {
           siteName: 'Moses Surumen Projects',
           article: {
             authors: ['Moses Surumen'],
-            tags: [...project.languages, ...project.frameworks],
+            tags: project.technologies,
           },
         }}
         additionalMetaTags={[
           {
             name: 'keywords',
-            content: [...project.languages, ...project.frameworks, ...project.technologyAreas].join(', '),
+            content: project.technologies.join(', '),
           },
           {
             name: 'author',
@@ -70,7 +70,7 @@ export default function ProjectPage({ project, blog }: ProjectPageProps) {
         <ProjectHeader project={project} />
 
         {/* Project Content */}
-        {blog && project.hasBlog ? (
+        {blog && project.blog ? (
           <Container className="mw-screen-xxl py-5">
             <Row>
               <Col>
@@ -119,7 +119,7 @@ export const getStaticProps: GetStaticProps<ProjectPageProps> = async ({ params 
     let blog: string | null = null;
 
     // Only load blog content if the project has blog enabled
-    if (project.hasBlog) {
+    if (project.blog) {
       try {
         blog = getProjectBlogBySlug(slug);
         // Handle empty blog content gracefully

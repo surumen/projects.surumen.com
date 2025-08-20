@@ -30,10 +30,10 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({ project }) => {
 
   // Get the demo component using truly dynamic import
   const getDemoComponent = () => {
-    if (!project.hasDemo || !showDemo || !project.slug) return null;
+    if (!project.demo || !showDemo || !project.slug) return null;
 
     const DemoComponent = dynamic(
-      () => import(`@/components/demos/${project.slug}`),
+      () => import(`@/components/demos/${project.demo}`),
       {
         ssr: false,
         loading: () => (
@@ -92,7 +92,7 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({ project }) => {
       <ProjectHeader project={project} isPreview={true} />
 
       {/* Interactive Demo Section */}
-      {project.hasDemo && (
+      {project.demo && (
         <section className="demo-section">
           {!showDemo ? (
             <div className="container border rounded py-5 my-5 bg-light text-center">
@@ -124,8 +124,8 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({ project }) => {
                     )}
                   </div>
                   <small className="text-muted d-block mt-3">
-                    Built with {project.frameworks.slice(0, 3).join(', ')}
-                    {project.frameworks.length > 3 && ` +${project.frameworks.length - 3} more`}
+                    Built with {project.technologies.slice(0, 3).join(', ')}
+                    {project.technologies.length > 3 && ` +${project.technologies.length - 3} more`}
                   </small>
                 </div>
               </div>
@@ -141,7 +141,7 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({ project }) => {
       )}
 
       {/* No Demo State */}
-      {!project.hasDemo && (
+      {!project.demo && (
         <div className="container py-5">
           <div className="text-center text-muted">
             <p>Interactive demo coming soon for this project.</p>

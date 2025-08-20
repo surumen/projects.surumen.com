@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, Row, Nav } from 'react-bootstrap';
 import { SendFill, Heart } from 'react-bootstrap-icons';
 import { Project } from '@/types';
-import { LanguageColorMap } from '@/data/colorMap';
+import { getTechnologyScheme } from '@/utils/technologyColors';
 
 interface ProjectListProps {
   projects: Project[];
@@ -24,9 +24,8 @@ const ProjectList: React.FC<ProjectListProps> = ({
   onClearSearch
 }) => {
 
-  const getLanguageScheme = (language: string) => {
-    const colorMap = LanguageColorMap.find(map => map.color === language);
-    return colorMap?.scheme || 'primary';
+  const getTechScheme = (technology: string) => {
+    return getTechnologyScheme(technology);
   };
 
   if (projects.length === 0) {
@@ -37,7 +36,7 @@ const ProjectList: React.FC<ProjectListProps> = ({
     <div className="projects-list">
       {projects.map((project, index) => (
         <Nav.Link 
-          key={project.id || index}
+          key={project.slug || index}
           className="card card-hover shadow-none rounded border-0 border-bottom card-dotted mb-0"
           onClick={() => onProjectClick(project)}
           style={{ cursor: 'pointer' }}
@@ -57,12 +56,17 @@ const ProjectList: React.FC<ProjectListProps> = ({
                     <p className="text-muted">{project.shortDescription}</p>
                     
                     <div className="row fs-6 text-body gap-2">
-                      {project.frameworks.map((framework, index) => (
+                      {project.technologies.slice(0, 4).map((tech, index) => (
                         <div key={index} className="col-auto">
-                          <span className={`legend-indicator bg-accent-${getLanguageScheme(framework)}`} />
-                          {framework}
+                          <span className={`legend-indicator bg-accent-${getTechScheme(tech)}`} />
+                          {tech}
                         </div>
                       ))}
+                      {project.technologies.length > 4 && (
+                        <div className="col-auto">
+                          <span className="text-muted">+{project.technologies.length - 4} more</span>
+                        </div>
+                      )}
                     </div>
                   </Col>
                   
