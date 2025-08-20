@@ -4,7 +4,7 @@ export const AllProjectsData: Project[] = [
 	{
 		slug: 'tournament-brackets-ai-assistant',
 		title: 'Tournament Brackets AI Assistant',
-		shortDescription: 'An AI-driven assistant for bracket predictions and tactical insights across college basketball tournaments, soccer, and other professional leagues. Features a modernized bracket system with 52% smaller bundle size.',
+		shortDescription: 'An AI-driven assistant for bracket predictions and tactical insights across college basketball tournaments, soccer, and other professional leagues.',
 		description: `
 			<p>The <strong>Multi-Tournament AI Assistant</strong> is your one-stop, data-driven bracket predictor and tactical adviser for tournaments like <strong>NCAA March Madness</strong>, NBA Playoffs, and the UEFA Champions League.</p>
 			<p>Under the hood, it:</p>
