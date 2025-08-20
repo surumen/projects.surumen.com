@@ -185,11 +185,14 @@ export class TournamentBuilder {
    * Build UEFA Champions League tournament
    */
   static ucl(year: number, teamsData: Team[]): TournamentDefinition {
-    // Organize by side
-    const sideATeams = teamsData.filter(t => t.conference === 'SideA').slice(0, 8);
-    const sideBTeams = teamsData.filter(t => t.conference === 'SideB').slice(0, 8);
+    // UCL uses draw-based structure, split teams into two sides based on seeding
+    const sortedTeams = [...teamsData].sort((a, b) => (a.seed || 999) - (b.seed || 999));
     
-    // UCL knockout pairings (based on draw - using simple sequential for now)
+    // Split teams into two sides (8 teams each for Round of 16)
+    const sideATeams = sortedTeams.slice(0, 8);
+    const sideBTeams = sortedTeams.slice(8, 16);
+    
+    // UCL knockout pairings (drawn matchups)
     const uclPairings: [number, number][] = [
       [1, 2], [3, 4], [5, 6], [7, 8]
     ];
@@ -197,8 +200,8 @@ export class TournamentBuilder {
     const allGames: GameDefinition[] = [];
     const regions: Record<string, RegionDefinition> = {};
     
-    // Build Side A
-    if (sideATeams.length >= 8) {
+    // Build Side A (Top half of the bracket)
+    if (sideATeams.length >= 4) {
       const sideAGames = buildSingleEliminationGames('SideA', sideATeams, uclPairings);
       allGames.push(...sideAGames);
       regions['SideA'] = {
@@ -208,8 +211,8 @@ export class TournamentBuilder {
       };
     }
     
-    // Build Side B
-    if (sideBTeams.length >= 8) {
+    // Build Side B (Bottom half of the bracket)
+    if (sideBTeams.length >= 4) {
       const sideBGames = buildSingleEliminationGames('SideB', sideBTeams, uclPairings);
       allGames.push(...sideBGames);
       regions['SideB'] = {

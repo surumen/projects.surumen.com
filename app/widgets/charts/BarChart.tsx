@@ -52,7 +52,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         marginBottom: 0,
         marginTimeAxis: 30,
         valueLabelAdjust: 20
-    }), [windowDimensions.height, wrapperRef?.current?.offsetWidth]);
+    }), [windowDimensions.height]); // Removed the problematic dependency
 
     const columnNames = useMemo(() => Object.keys(data[0]).slice(1, ), [data]);
     const timeIndex = useMemo(() => Object.keys(data[0])[0], [data]);

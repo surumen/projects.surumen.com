@@ -1,5 +1,6 @@
 import React, { useMemo, useEffect } from 'react';
-import { Card, Image } from 'react-bootstrap';
+import { Card, Image, Button } from 'react-bootstrap';
+import { ArrowClockwise, Trash } from 'react-bootstrap-icons';
 import { DynamicForm } from '@/widgets';
 import type { FieldConfig } from '@/types';
 import useMounted from '@/hooks/useMounted';
@@ -23,7 +24,7 @@ const logos: Record<string, string> = {
 
 const TournamentAssistantModern: React.FC = () => {
     const { activeTournament, switchTo, currentLeague, currentYear } = useTournamentController();
-    const { advanceTeam } = useBracketController();
+    const { advanceTeam, clearAllPicks, resetBracket } = useBracketController();
     
     const hasMounted = useMounted();
 
@@ -112,6 +113,16 @@ const TournamentAssistantModern: React.FC = () => {
         advanceTeam(gameId, teamId);
     };
 
+    // Handle clearing all picks
+    const handleClearPicks = () => {
+        clearAllPicks();
+    };
+
+    // Handle resetting bracket to original state
+    const handleResetBracket = () => {
+        resetBracket();
+    };
+
     // Loading state
     if (!hasMounted) {
         return (
@@ -130,8 +141,26 @@ const TournamentAssistantModern: React.FC = () => {
             <Card className="border-0 shadow-none">
                 <Card.Header className="border-0 card-header-content-sm-between mb-4 px-0 px-md-2">
                     <Image className="avatar avatar-lg" src={logoSrc} alt={currentLeague} />
-                    <div>Loading tournament data...</div>
+
+                    <DynamicForm
+                        formClassName="d-flex gap-3 align-items-end"
+                        fields={formFields}
+                        onFieldChange={handleFormChange}
+                        submitLabel={null}
+                        onSubmit={() => {}}
+                    />
                 </Card.Header>
+                <Card.Body>
+                    <div className="text-center">
+                        <div className="alert alert-info alert-soft-info">
+                            <strong>Loading tournament data...</strong>
+                            <br />
+                            <small className="text-muted">
+                                Please wait while we load the {currentLeague.toUpperCase()} {currentYear} tournament bracket.
+                            </small>
+                        </div>
+                    </div>
+                </Card.Body>
             </Card>
         );
     }
@@ -142,16 +171,43 @@ const TournamentAssistantModern: React.FC = () => {
             <Card className="border-0 shadow-none">
                 <Card.Header className="border-0 card-header-content-sm-between mb-4 px-0 px-md-2">
                     <Image className="avatar avatar-lg" src={logoSrc} alt={currentLeague} />
-                    <div className="text-danger">Failed to load tournament data</div>
+
+                    <DynamicForm
+                        formClassName="d-flex gap-3 align-items-end"
+                        fields={formFields}
+                        onFieldChange={handleFormChange}
+                        submitLabel={null}
+                        onSubmit={() => {}}
+                    />
                 </Card.Header>
                 <Card.Body>
-                    <p>No tournament data available for {currentLeague.toUpperCase()} {currentYear}</p>
-                    <p>Available tournaments:</p>
-                    <ul>
-                        {allTournaments.map(t => (
-                            <li key={t.id}>{t.league.toUpperCase()} {t.year}</li>
-                        ))}
-                    </ul>
+                    <div className="text-center">
+                        <div className="alert alert-warning alert-soft-warning">
+                            <strong>No tournament data available</strong> for {currentLeague.toUpperCase()} {currentYear}
+                            <br />
+                            <small className="text-muted">
+                                Try selecting a different league and year combination using the form above.
+                            </small>
+                        </div>
+                        <details className="mt-3">
+                            <summary className="btn btn-link btn-sm">View available tournaments</summary>
+                            <div className="mt-2 text-start">
+                                <small className="text-muted">Available combinations:</small>
+                                <ul className="list-unstyled mt-2">
+                                    {allTournaments.map(t => (
+                                        <li key={t.id} className="mb-1">
+                                            <button 
+                                                className="btn btn-link btn-sm p-0 text-decoration-underline"
+                                                onClick={() => switchTo(t.id)}
+                                            >
+                                                {t.league.toUpperCase()} {t.year}
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
                 </Card.Body>
             </Card>
         );
@@ -162,7 +218,34 @@ const TournamentAssistantModern: React.FC = () => {
     return (
         <Card className="border-0 shadow-none">
             <Card.Header className="border-0 card-header-content-sm-between mb-4 px-0 px-md-2">
-                <Image className="avatar avatar-lg" src={logoSrc} alt={currentLeague} />
+                <div className="d-flex align-items-center gap-2">
+                    <Image className="avatar avatar-lg" src={logoSrc} alt={currentLeague} />
+                    
+                    {/* Action buttons - only show when bracket is fully loaded */}
+                    <div className="d-flex gap-2 ms-3">
+                        <Button
+                            variant="outline-secondary"
+                            size="sm"
+                            onClick={handleClearPicks}
+                            className="d-flex align-items-center gap-1"
+                            title="Clear all your picks"
+                        >
+                            <Trash size={14} />
+                            <span className="d-none d-sm-inline">Clear Picks</span>
+                        </Button>
+                        
+                        <Button
+                            variant="outline-primary"
+                            size="sm"
+                            onClick={handleResetBracket}
+                            className="d-flex align-items-center gap-1"
+                            title="Reset bracket to original state"
+                        >
+                            <ArrowClockwise size={14} />
+                            <span className="d-none d-sm-inline">Reset Bracket</span>
+                        </Button>
+                    </div>
+                </div>
 
                 <DynamicForm
                     formClassName="d-flex gap-3 align-items-end"

@@ -120,7 +120,7 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
                       <div>
                         {finalFilteredProjects.length > 0 ? (
                           <p className="text-muted mb-0">
-                            Showing {finalFilteredProjects.length} of {totalProjects} projects for "{search}"
+                            Showing {finalFilteredProjects.length} of {totalProjects} projects for &ldquo;{search}&rdquo;
                             {activeFilters.length > 0 && (
                               <span> with {activeFilters.length} filter{activeFilters.length !== 1 ? 's' : ''} applied</span>
                             )}
@@ -128,7 +128,7 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
                         ) : (
                           <div>
                             <p className="text-muted mb-2">
-                              No projects found for "{search}"
+                              No projects found for &ldquo;{search}&rdquo;
                               {activeFilters.length > 0 && <span> with current filters</span>}
                             </p>
                             <small className="text-muted">

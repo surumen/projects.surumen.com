@@ -195,57 +195,143 @@ const FantasyAssistant: React.FC = () => {
 
     if (error) {
         return (
-            <Row>
-                <Col>
-                    <Alert variant="danger" className="alert-soft-danger text-center mt-4">
-                        <strong>Error:</strong> {error}
-                    </Alert>
-                    <div className="text-center">
-                        <button 
-                            className="btn btn-primary" 
-                            onClick={() => fetchManagerTeam(managerId, activeGameweek)}
-                        >
-                            Retry
-                        </button>
-                    </div>
-                </Col>
-            </Row>
+            <>
+                <Row>
+                    <Col lg={9} className="order-2 order-lg-1 ps-lg-0 pt-4">
+                        <Alert variant="danger" className="alert-soft-danger text-center mt-4">
+                            <strong>Error:</strong> {error}
+                        </Alert>
+                        <div className="text-center">
+                            <button 
+                                className="btn btn-primary" 
+                                onClick={() => fetchManagerTeam(managerId, activeGameweek)}
+                            >
+                                Retry
+                            </button>
+                        </div>
+                    </Col>
+
+                    <Col lg={3} className="order-1 order-lg-2">
+                        <div className="sticky-top pt-4" style={{ top: '5%' }}>
+                            <DynamicForm
+                                fields={[
+                                    {
+                                        name: 'competition',
+                                        label: 'Competition',
+                                        type: 'select',
+                                        options: [{ value: 'Premier League', label: 'Premier League' }],
+                                        initialValue: 'Premier League',
+                                        readOnly: true,
+                                    },
+                                    {
+                                        name: 'managerId',
+                                        label: 'Manager ID',
+                                        type: 'input',
+                                        inputType: 'text',
+                                        required: true,
+                                        validate: v => /^\d+$/.test(v),
+                                        initialValue: String(managerId),
+                                    },
+                                    {
+                                        name: 'showTransferRecommendations',
+                                        label: 'Show transfer recommendations',
+                                        type: 'switch',
+                                        initialValue: showRecs,
+                                    },
+                                    {
+                                        name: 'gameweek',
+                                        label: 'Gameweek',
+                                        type: 'select',
+                                        options: weekOptions,
+                                        required: true,
+                                        initialValue: activeGameweek,
+                                    },
+                                ]}
+                                submitLabel={<><CursorFill className="me-1" /> Start</>}
+                                onSubmit={handleFormSubmit}
+                            />
+                        </div>
+                    </Col>
+                </Row>
+            </>
         );
     }
 
     if (!managerTeam?.picks || !allPlayers || allPlayers.length === 0) {
-        // Check if we have team data but no picks
-        if (managerTeam && managerTeam.picks && managerTeam.picks.length === 0) {
-            return (
+        // Always render the form in the right column, even when there's no data
+        return (
+            <>
                 <Row>
-                    <Col>
+                    <Col lg={9} className="order-2 order-lg-1 ps-lg-0 pt-4">
                         <div className="text-center mt-4">
-                            <Alert variant="warning" className="alert-soft-warning">
-                                <strong>No team data found</strong> for Manager {managerId} in Gameweek {activeGameweek}.
-                                <br />
-                                <small className="text-muted">
-                                    This could mean the manager hasn&apos;t set a team for this gameweek, 
-                                    or the gameweek data isn&apos;t available yet.
-                                </small>
-                            </Alert>
-                            <p className="text-muted">Try a different manager ID or gameweek.</p>
+                            {managerTeam && managerTeam.picks && managerTeam.picks.length === 0 ? (
+                                <Alert variant="warning" className="alert-soft-warning">
+                                    <strong>No team data found</strong> for Manager {managerId} in Gameweek {activeGameweek}.
+                                    <br />
+                                    <small className="text-muted">
+                                        This could mean the manager hasn&apos;t set a team for this gameweek, 
+                                        or the gameweek data isn&apos;t available yet.
+                                    </small>
+                                    <br />
+                                    <small className="text-muted">
+                                        Try a different manager ID or gameweek using the form on the right.
+                                    </small>
+                                </Alert>
+                            ) : (
+                                <Alert variant="info" className="alert-soft-info">
+                                    <strong>Ready to start</strong>
+                                    <br />
+                                    <small className="text-muted">
+                                        Use the form on the right to enter a Manager ID and Gameweek to load team data.
+                                    </small>
+                                </Alert>
+                            )}
+                        </div>
+                    </Col>
+
+                    <Col lg={3} className="order-1 order-lg-2">
+                        <div className="sticky-top pt-4" style={{ top: '5%' }}>
+                            <DynamicForm
+                                fields={[
+                                    {
+                                        name: 'competition',
+                                        label: 'Competition',
+                                        type: 'select',
+                                        options: [{ value: 'Premier League', label: 'Premier League' }],
+                                        initialValue: 'Premier League',
+                                        readOnly: true,
+                                    },
+                                    {
+                                        name: 'managerId',
+                                        label: 'Manager ID',
+                                        type: 'input',
+                                        inputType: 'text',
+                                        required: true,
+                                        validate: v => /^\d+$/.test(v),
+                                        initialValue: String(managerId),
+                                    },
+                                    {
+                                        name: 'showTransferRecommendations',
+                                        label: 'Show transfer recommendations',
+                                        type: 'switch',
+                                        initialValue: showRecs,
+                                    },
+                                    {
+                                        name: 'gameweek',
+                                        label: 'Gameweek',
+                                        type: 'select',
+                                        options: weekOptions,
+                                        required: true,
+                                        initialValue: activeGameweek,
+                                    },
+                                ]}
+                                submitLabel={<><CursorFill className="me-1" /> Start</>}
+                                onSubmit={handleFormSubmit}
+                            />
                         </div>
                     </Col>
                 </Row>
-            );
-        }
-        
-        return (
-            <Row>
-                <Col>
-                    <div className="text-center mt-4">
-                        <p>No team data available. Click &quot;Start&quot; to load data.</p>
-                        <p className="text-muted small">
-                            Manager ID: {managerId} | Gameweek: {activeGameweek}
-                        </p>
-                    </div>
-                </Col>
-            </Row>
+            </>
         );
     }
 
