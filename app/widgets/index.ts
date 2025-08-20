@@ -1,14 +1,10 @@
 // import widget/custom components from projects folder
-import ProjectCard from './projects/ProjectCard';
-import ProjectGridView from './projects/ProjectGridView';
-import ProjectSummary from './projects/ProjectSummary';
-import ProjectFilters from './projects/ProjectFilters';
+import ProjectPreview from './projects/ProjectPreview';
 import ProjectHeader from './projects/ProjectHeader';
-import ProjectSearch from './projects/ProjectSearch';
+import Markdown from './projects/Markdown';
 
 // import widget/custom components from navbars folder
 import Sidebar from './navbars/Sidebar';
-import NavTop from './navbars/NavTop';
 
 // import bracket components
 import Bracket from './brackets/Bracket';
@@ -36,16 +32,12 @@ import LogoIcon from './components/LogoIcon';
 
 export {
    // Projects
-   ProjectCard,
-   ProjectGridView,
-   ProjectSummary,
+   ProjectPreview,
    ProjectHeader,
-   ProjectFilters,
-   ProjectSearch,
+   Markdown,
    
    // Navigation
    Sidebar,
-   NavTop,
    
    // Charts
    RacingBarChart,

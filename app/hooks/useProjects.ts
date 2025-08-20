@@ -21,7 +21,10 @@ const useProjects = () => {
     ? projects.filter(project => 
         project.title.toLowerCase().includes(search.toLowerCase()) ||
         project.shortDescription?.toLowerCase().includes(search.toLowerCase()) ||
-        project.description.toLowerCase().includes(search.toLowerCase())
+        project.description.toLowerCase().includes(search.toLowerCase()) ||
+        project.frameworks.some(f => f.toLowerCase().includes(search.toLowerCase())) ||
+        project.languages.some(l => l.toLowerCase().includes(search.toLowerCase())) ||
+        project.technologyAreas.some(t => t.toLowerCase().includes(search.toLowerCase()))
       )
     : projects;
 

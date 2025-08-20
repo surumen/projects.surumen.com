@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { Fragment } from 'react';
-import { ProjectGridView } from '@/widgets';
+import { ProjectDashboard } from '@/components';
 import { useAppStore } from '@/store/store';
 
 export default function Home() {
@@ -18,7 +18,7 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <ProjectGridView />
+            <ProjectDashboard />
 
             {!acceptedCookies && (
                 <div className="card card-body shadow-4 bg-body rounded-1 border-light d-flex flex-row gap-2 align-items-center py-3 px-5 position-fixed bottom-0 end-0 mb-6 me-6">

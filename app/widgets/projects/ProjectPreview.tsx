@@ -1,16 +1,13 @@
 import React, { Fragment, Suspense, useState, useEffect } from 'react';
 import { Col, Row, Button, Alert } from 'react-bootstrap';
-import { PlayCircle, Code } from 'react-bootstrap-icons';
+import { PlayCircle, Code, SendFill } from 'react-bootstrap-icons';
+import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
-
-import MarkdownDisplay from './Markdown';
 import ProjectHeader from './ProjectHeader';
 import { Project } from '@/types';
 
-interface ProjectSummaryProps {
+interface ProjectPreviewProps {
   project: Project;
-  blog: string | null;
-  isPreview: boolean;
 }
 
 // Error Boundary for Demo Components
@@ -26,37 +23,10 @@ const DemoErrorFallback = ({ error, retry }: { error: Error; retry: () => void }
   </Alert>
 );
 
-const ProjectSummary: React.FC<ProjectSummaryProps> = ({ project, blog, isPreview }) => {
+const ProjectPreview: React.FC<ProjectPreviewProps> = ({ project }) => {
+  const router = useRouter();
   const [showDemo, setShowDemo] = useState(true);
   const [demoError, setDemoError] = useState<Error | null>(null);
-  const [navContent, setNavContent] = useState<string[]>([]);
-  const [isMounted, setIsMounted] = useState(false);
-
-  // Handle client-side mounting to prevent hydration issues
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  // Generate navigation from blog headings (client-side only to prevent hydration issues)
-  useEffect(() => {
-    if (isMounted && blog && project.hasBlog) {
-      try {
-        const headings = blog.match(/#{1,2}.+/g) || [];
-        const processedNavContent: string[] = [];
-        
-        headings.forEach(header => {
-          const numHashes = (header.match(/#/g) || []).length;
-          if (numHashes > 0 && numHashes < 3) {
-            processedNavContent.push(header.replace(/#/g, '').trim());
-          }
-        });
-        
-        setNavContent(processedNavContent);
-      } catch (error) {
-        setNavContent([]);
-      }
-    }
-  }, [isMounted, blog, project.hasBlog]);
 
   // Get the demo component using truly dynamic import
   const getDemoComponent = () => {
@@ -111,19 +81,15 @@ const ProjectSummary: React.FC<ProjectSummaryProps> = ({ project, blog, isPrevie
     setTimeout(() => setShowDemo(true), 100);
   };
 
-  const handleScrollToArticle = () => {
-    const article = document.querySelector('.article');
-    if (article) {
-      article.scrollIntoView({ behavior: 'smooth' });
+  const handleViewFullProject = () => {
+    if (project.slug) {
+      router.push(`/project/${project.slug}`);
     }
   };
 
-  // Don't render navigation on server to prevent hydration mismatch
-  const shouldShowNavigation = isMounted && navContent.length > 0;
-
   return (
     <Fragment>
-      <ProjectHeader project={project} isPreview={isPreview} />
+      <ProjectHeader project={project} isPreview={true} />
 
       {/* Interactive Demo Section */}
       {project.hasDemo && (
@@ -147,13 +113,13 @@ const ProjectSummary: React.FC<ProjectSummaryProps> = ({ project, blog, isPrevie
                       <PlayCircle size={20} />
                       Launch Demo
                     </Button>
-                    {project.hasBlog && (
+                    {project.slug && (
                       <Button 
                         variant="outline-secondary"
-                        onClick={handleScrollToArticle}
+                        onClick={handleViewFullProject}
                       >
                         <Code size={16} className="me-1" />
-                        Read Documentation
+                        View Full Project
                       </Button>
                     )}
                   </div>
@@ -174,44 +140,20 @@ const ProjectSummary: React.FC<ProjectSummaryProps> = ({ project, blog, isPrevie
         </section>
       )}
 
-      {/* Blog Content Section */}
-      {!isPreview && project.hasBlog && blog ? (
-          <section className="container mw-screen-xxl py-5 m-5">
-            <Row className="pt-4">
-              {shouldShowNavigation && (
-                  <Col md={3}>
-                    <nav className="position-lg-sticky top-lg-6" style={{ top: '2rem' }}>
-                      <h6 className="text-muted text-uppercase mb-3">Contents</h6>
-                      <ul className="nav flex-column">
-                        {navContent.map((navigation, index) => (
-                            <li key={index} className="nav-item">
-                              <a
-                                  className="nav-link px-0 text-decoration-none"
-                                  href={`#${navigation.replace(/ /g, '-').toLowerCase()}`}
-                              >
-                                {navigation}
-                              </a>
-                            </li>
-                        ))}
-                      </ul>
-                    </nav>
-                  </Col>
-              )}
-              <Col md={shouldShowNavigation ? 9 : 12}>
-                <article className="article">
-                  <MarkdownDisplay content={blog} />
-                </article>
-              </Col>
-            </Row>
-          </section>
-      ) : null}
-
-      {/* Empty State */}
-      {!project.hasBlog && !project.hasDemo && (
+      {/* No Demo State */}
+      {!project.hasDemo && (
         <div className="container py-5">
           <div className="text-center text-muted">
-            <p>This project is still being documented.</p>
-            <p>Check back soon for more details!</p>
+            <p>Interactive demo coming soon for this project.</p>
+            {project.slug && (
+              <Button 
+                variant="outline-primary"
+                onClick={handleViewFullProject}
+                className="mt-3"
+              >
+                View Project Details
+              </Button>
+            )}
           </div>
         </div>
       )}
@@ -219,4 +161,4 @@ const ProjectSummary: React.FC<ProjectSummaryProps> = ({ project, blog, isPrevie
   );
 };
 
-export default ProjectSummary;
+export default ProjectPreview;

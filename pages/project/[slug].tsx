@@ -1,8 +1,9 @@
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { Fragment } from 'react';
 import { NextSeo } from 'next-seo';
+import { Container, Row, Col } from 'react-bootstrap';
 
-import ProjectSummary from '@/widgets/projects/ProjectSummary';
+import { ProjectHeader, Markdown } from '@/widgets';
 import { getAllProjects, getProjectBySlug, getProjectBlogBySlug } from '../../lib/getProjectBySlug';
 import { Project } from '@/types';
 
@@ -65,11 +66,33 @@ export default function ProjectPage({ project, blog }: ProjectPageProps) {
       />
 
       <main className="container-fluid py-5">
-        <ProjectSummary 
-          project={project} 
-          blog={blog} 
-          isPreview={false} 
-        />
+        {/* Project Header */}
+        <ProjectHeader project={project} />
+
+        {/* Project Content */}
+        {blog && project.hasBlog ? (
+          <Container className="mw-screen-xxl py-5">
+            <Row>
+              <Col>
+                <article className="article">
+                  <Markdown content={blog} />
+                </article>
+              </Col>
+            </Row>
+          </Container>
+        ) : (
+          <Container className="py-5">
+            <Row>
+              <Col>
+                <div className="text-center text-muted">
+                  <h4>Project Documentation</h4>
+                  <p>Detailed documentation for this project is coming soon.</p>
+                  <p>Check back later for technical details, implementation notes, and insights.</p>
+                </div>
+              </Col>
+            </Row>
+          </Container>
+        )}
       </main>
     </Fragment>
   );

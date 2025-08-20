@@ -5,16 +5,16 @@ import { Project } from '@/types';
 
 interface ProjectHeaderProps {
   project: Project;
-  isPreview?: boolean;
   free?: boolean;
   viewby?: string;
+  isPreview?: boolean;
 }
 
 const ProjectHeader: React.FC<ProjectHeaderProps> = ({ 
   project, 
-  isPreview = true,
   free = false,
-  viewby = 'stack'
+  viewby = 'stack',
+  isPreview = false
 }) => {
   return (
     <Row className="page-header align-items-stretch mb-0">
@@ -62,7 +62,10 @@ const ProjectHeader: React.FC<ProjectHeaderProps> = ({
           </div>
 
           {isPreview && project.slug && (
-            <div className="w-100 pb-md-6 pt-md-0 pt-3" style={{ alignSelf: 'end' }}>
+            <div
+              className="w-100 pb-md-6 pt-md-0 pt-3"
+              style={{ alignSelf: 'end' }}
+            >
               <a
                 target="_blank"
                 rel="noopener"
@@ -70,7 +73,7 @@ const ProjectHeader: React.FC<ProjectHeaderProps> = ({
                 className="btn btn-sm rounded-pill w-100 btn-soft-secondary"
               >
                 <SendFill size={12} className="mb-1" />
-                <span className="ms-2">View Project</span>
+                <span className="ms-2">View Documentation</span>
               </a>
             </div>
           )}

@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
-
-import { NavTop, Sidebar } from '@/widgets';
+import { Sidebar } from '@/widgets';
 import { useMediaQuery } from 'react-responsive';
 
 const DefaultLayout = (props) => {
-
 	const isMobile = useMediaQuery({ maxWidth: 767 });
 
 	useEffect(() => {
@@ -21,14 +19,10 @@ const DefaultLayout = (props) => {
 				<Sidebar />
 			</nav>
 			<div className='vh-100 vw-100'>
-				<NavTop showSearch={true}/>
-				<div className='main'>
-					<div className='content container-fluid'>
-						{props.children}
-					</div>
-				</div>
+				{props.children}
 			</div>
 		</div>
 	);
 };
+
 export default DefaultLayout;
