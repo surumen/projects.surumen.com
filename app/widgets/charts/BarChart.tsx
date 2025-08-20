@@ -43,7 +43,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
     const windowDimensions = useWindowSize();
     const [iteration, setIteration] = useState<number>(0);
 
-    const dimensions: any = {
+    const dimensions = useMemo(() => ({
         height: windowDimensions.height,
         width: Math.abs(wrapperRef?.current?.offsetWidth),
         marginTop: 20,
@@ -52,7 +52,7 @@ const RacingBarChart = ({data, topN, tickDuration, colorScale, dateFormat}) => {
         marginBottom: 0,
         marginTimeAxis: 30,
         valueLabelAdjust: 20
-    };
+    }), [windowDimensions.height, wrapperRef?.current?.offsetWidth]);
 
     const columnNames = useMemo(() => Object.keys(data[0]).slice(1, ), [data]);
     const timeIndex = useMemo(() => Object.keys(data[0])[0], [data]);

@@ -224,8 +224,8 @@ const FantasyAssistant: React.FC = () => {
                                 <strong>No team data found</strong> for Manager {managerId} in Gameweek {activeGameweek}.
                                 <br />
                                 <small className="text-muted">
-                                    This could mean the manager hasn't set a team for this gameweek, 
-                                    or the gameweek data isn't available yet.
+                                    This could mean the manager hasn&apos;t set a team for this gameweek, 
+                                    or the gameweek data isn&apos;t available yet.
                                 </small>
                             </Alert>
                             <p className="text-muted">Try a different manager ID or gameweek.</p>
@@ -239,7 +239,7 @@ const FantasyAssistant: React.FC = () => {
             <Row>
                 <Col>
                     <div className="text-center mt-4">
-                        <p>No team data available. Click "Start" to load data.</p>
+                        <p>No team data available. Click &quot;Start&quot; to load data.</p>
                         <p className="text-muted small">
                             Manager ID: {managerId} | Gameweek: {activeGameweek}
                         </p>
