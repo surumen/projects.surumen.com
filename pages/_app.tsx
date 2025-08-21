@@ -6,21 +6,20 @@ import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo';
 import { AuthProvider } from '../lib/firebase/AuthContext';
 
-// Zustand stores are auto-initialized, no provider needed
-// import { useAppStore } from '@/store/store'
+// Layout system imports
+import { 
+  getLayoutForRoute, 
+  getLayoutByName, 
+  LayoutComponent,
+  PageWithLayout
+} from '../lib/layoutMapping';
 
 // Styles
 import 'style/_index.scss';
 
-// import default layouts
-import DefaultLayout from '../layouts/DefaultLayout';
-import ProjectLayout from '../layouts/ProjectLayout';
-
 // Extend AppProps to include Layout property
 type AppPropsWithLayout = AppProps & {
-  Component: AppProps['Component'] & {
-    Layout?: React.ComponentType<any>;
-  };
+  Component: AppProps['Component'] & PageWithLayout;
 };
 
 function MyProjectsApp({ Component, pageProps }: AppPropsWithLayout) {
@@ -30,8 +29,28 @@ function MyProjectsApp({ Component, pageProps }: AppPropsWithLayout) {
   const description = `Moses Surumen's Projects`;
   const keywords = 'Software engineer, resume, projects';
 
-  // Identify the layout, which will be applied conditionally
-  const Layout = Component.Layout || (router.pathname.includes('project') ? ProjectLayout : DefaultLayout);
+  /**
+   * Enhanced Layout Assignment Logic
+   * Priority:
+   * 1. Component.Layout (explicit override)
+   * 2. Route-based automatic assignment
+   * 3. Default layout fallback
+   */
+  const getPageLayout = (): LayoutComponent => {
+    // Check if component specifies a layout
+    if (Component.Layout) {
+      // Handle both component and string layout specifications
+      if (typeof Component.Layout === 'string') {
+        return getLayoutByName(Component.Layout);
+      }
+      return Component.Layout;
+    }
+    
+    // Use route-based automatic assignment
+    return getLayoutForRoute(router.pathname);
+  };
+
+  const Layout = getPageLayout();
 
   return (
     <AuthProvider>

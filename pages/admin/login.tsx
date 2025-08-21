@@ -1,14 +1,15 @@
 import { GetServerSideProps } from 'next';
-import { Container, Row, Col, Card, Button, Form, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Card, Alert } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
 import { auth, actionCodeSettings, isAdminEmail } from '../../lib/firebase/config';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/firebase/AuthContext';
+import { DynamicForm } from '@/widgets';
+import type { FieldConfig } from '@/types';
 
 export default function AdminLogin() {
-  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState<'success' | 'danger'>('success');
@@ -64,17 +65,26 @@ export default function AdminLogin() {
     }
   }, [router]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Define form fields for DynamicForm
+  const loginFields: FieldConfig[] = [
+    {
+      name: 'email',
+      label: 'Email',
+      type: 'input',
+      inputType: 'email',
+      required: true,
+      validate: (email: string) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email) && isAdminEmail(email);
+      },
+      initialValue: ''
+    }
+  ];
+
+  const handleFormSubmit = async (values: Record<string, any>) => {
+    const { email } = values;
     setLoading(true);
     setMessage('');
-
-    if (!isAdminEmail(email)) {
-      setMessage('Access denied. This email is not authorized to access the admin panel.');
-      setMessageType('danger');
-      setLoading(false);
-      return;
-    }
 
     try {
       const actionCodeSettingsWithEmail = {
@@ -111,63 +121,39 @@ export default function AdminLogin() {
         <title>Admin Login | Moses Surumen</title>
       </Head>
       
-      <Container className="py-5">
-        <Row className="justify-content-center">
-          <Col md={6} lg={4}>
-            <Card>
-              <Card.Body className="p-4">
+      <div className="content container">
+        <div className="row justify-content-lg-center pt-lg-5 pt-xl-10">
+          <div className="col-lg-9">
+            <div className="card shadow-none">
+              <div className="card-body">
                 <div className="text-center mb-4">
                   <h2>Admin Login</h2>
                   <p className="text-muted">Firebase Magic Link Authentication</p>
                 </div>
 
-                <Alert variant="info" className="small">
-                  <strong>Secure Login:</strong> Enter your admin email to receive a magic link. 
-                  Click the link in your email to sign in securely.
-                </Alert>
-
-                <Form onSubmit={handleSubmit}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Admin Email</Form.Label>
-                    <Form.Control
-                      type="email"
-                      placeholder="Enter your admin email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      disabled={loading}
-                    />
-                    <Form.Text className="text-muted">
-                      Must be configured in ADMIN_EMAILS environment variable
-                    </Form.Text>
-                  </Form.Group>
-
-                  <Button 
-                    variant="primary" 
-                    type="submit" 
-                    className="w-100"
-                    disabled={loading}
-                  >
-                    {loading ? 'Sending Magic Link...' : 'Send Magic Link'}
-                  </Button>
-                </Form>
-
                 {message && (
-                  <Alert variant={messageType} className="mt-3 small">
+                  <Alert variant={messageType} className="small mb-3">
                     {message}
                   </Alert>
                 )}
+
+                <DynamicForm
+                  fields={loginFields}
+                  onSubmit={handleFormSubmit}
+                  submitLabel={loading ? 'Sending Magic Link...' : 'Send Magic Link'}
+                  formClassName="mb-3"
+                />
 
                 <div className="text-center mt-3">
                   <small className="text-muted">
                     Only authorized administrators can access the CMS
                   </small>
                 </div>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
