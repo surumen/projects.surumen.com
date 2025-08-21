@@ -2,6 +2,7 @@
 // Project and form-related types
 
 import { ReactNode } from 'react';
+import { CMSSettings } from '../cms';
 
 // ========================
 // PROJECT TYPES
@@ -16,7 +17,8 @@ export interface Project {
     year: number;                    // Project completion year
     category: string;                // Project category
     demo?: string;                   // Optional demo URL or component name
-    blog?: string;                   // Optional blog slug
+    blog?: string;                   // Optional blog slug (legacy)
+    cms?: CMSSettings;               // CMS configuration
 }
 
 // ========================

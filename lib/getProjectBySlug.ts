@@ -1,18 +1,8 @@
-import fs from 'fs'
-import { join } from 'path';
-import matter from 'gray-matter';
-import { Project } from '@/types';
-
-import { AllProjectsData } from '@/data/projects/AllProjectsData';
-
-const projectsDirectory = join(process.cwd(), 'app/data/projects/md');
+import { Project } from '../app/types';
+import { AllProjectsData } from '../app/data/projects/AllProjectsData';
 
 export function getProjectsSlugs(): string[] {
-    try {
-        return fs.readdirSync(projectsDirectory);
-    } catch (error) {
-        return [];
-    }
+    return AllProjectsData.map(project => project.slug);
 }
 
 export function getProjectBySlug(slug: string): Project | null {
@@ -24,31 +14,59 @@ export function getProjectBySlug(slug: string): Project | null {
     return project || null;
 }
 
-export function getProjectBlogBySlug(slug: string): string {
+export async function getProjectBlogBySlug(slug: string): Promise<string | null> {
     if (!slug) {
-        throw new Error('Slug is required');
+        return null;
     }
 
-    const fullPath = join(projectsDirectory, `${slug}.md`);
-    
     try {
-        const fileContents = fs.readFileSync(fullPath, 'utf8');
-        const { content } = matter(fileContents);
-        
-        if (!content || content.trim().length === 0) {
-            return '';
+        // Check if we're in a server environment (no Firebase client SDK on server)
+        if (typeof window === 'undefined') {
+            // Server-side: use admin SDK
+            const { adminDb } = await import('./firebase/admin');
+            
+            const postsRef = adminDb.collection('posts');
+            const querySnapshot = await postsRef
+                .where('projectSlug', '==', slug)
+                .where('published', '==', true)
+                .limit(1)
+                .get();
+            
+            if (!querySnapshot.empty) {
+                const doc = querySnapshot.docs[0];
+                const post = doc.data();
+                return post.content || '';
+            }
+        } else {
+            // Client-side: use client SDK
+            const { db } = await import('./firebase/config');
+            const { collection, query, where, getDocs, limit } = await import('firebase/firestore');
+            
+            const postsRef = collection(db, 'posts');
+            const q = query(
+                postsRef, 
+                where('projectSlug', '==', slug), 
+                where('published', '==', true),
+                limit(1)
+            );
+            
+            const querySnapshot = await getDocs(q);
+            
+            if (!querySnapshot.empty) {
+                const doc = querySnapshot.docs[0];
+                const post = doc.data();
+                return post.content || '';
+            }
         }
         
-        return content;
-    } catch (error: any) {
-        if (error?.code === 'ENOENT') {
-            throw new Error(`Blog file not found for slug: ${slug}`);
-        }
-        throw new Error(`Failed to read blog content for ${slug}: ${error?.message || 'Unknown error'}`);
+        return null; // No content found
+    } catch (error) {
+        console.error('Failed to fetch blog content:', error);
+        return null;
     }
 }
 
 export function getAllProjects(): Project[] {
-    return AllProjectsData.filter(project => project.slug); // Only return projects with valid slugs
+    return AllProjectsData.filter(project => project.slug);
 }
 

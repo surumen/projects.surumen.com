@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Production builds
+.next/
+out/
+dist/
+
+# Environment files
+.env*
+
+# Logs
+*.log
+
+# Cache
+.eslintcache
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# CMS implementation files (temporary)
+CMS_*.md
+IMPLEMENTATION.md

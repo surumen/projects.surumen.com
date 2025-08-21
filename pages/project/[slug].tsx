@@ -3,9 +3,10 @@ import { Fragment } from 'react';
 import { NextSeo } from 'next-seo';
 import { Container, Row, Col } from 'react-bootstrap';
 
-import { ProjectHeader, Markdown } from '@/widgets';
+import { ProjectHeader } from '@/widgets';
+import Markdown from '../../app/widgets/projects/Markdown';
 import { getAllProjects, getProjectBySlug, getProjectBlogBySlug } from '../../lib/getProjectBySlug';
-import { Project } from '@/types';
+import { Project } from '../../app/types';
 
 interface ProjectPageProps {
   project: Project;
@@ -70,7 +71,7 @@ export default function ProjectPage({ project, blog }: ProjectPageProps) {
         <ProjectHeader project={project} />
 
         {/* Project Content */}
-        {blog && project.blog ? (
+        {blog ? (
           <Container className="mw-screen-xxl py-5">
             <Row>
               <Col>
@@ -118,16 +119,17 @@ export const getStaticProps: GetStaticProps<ProjectPageProps> = async ({ params 
 
     let blog: string | null = null;
 
-    // Only load blog content if the project has blog enabled
-    if (project.blog) {
+    // Check if project has CMS content enabled
+    if (project.cms?.blogEnabled) {
       try {
-        blog = getProjectBlogBySlug(slug);
+        blog = await getProjectBlogBySlug(slug);
         // Handle empty blog content gracefully
         if (!blog || blog.trim().length === 0) {
           blog = null;
         }
       } catch (error) {
         // Don't fail the entire page if blog loading fails
+        console.error('Failed to load blog content:', error);
         blog = null;
       }
     }

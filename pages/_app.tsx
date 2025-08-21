@@ -3,7 +3,8 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Fragment } from 'react';
 import { useRouter } from 'next/router'
-import { NextSeo } from 'next-seo'
+import { NextSeo } from 'next-seo';
+import { AuthProvider } from '../lib/firebase/AuthContext';
 
 // Zustand stores are auto-initialized, no provider needed
 // import { useAppStore } from '@/store/store'
@@ -33,6 +34,7 @@ function MyProjectsApp({ Component, pageProps }: AppPropsWithLayout) {
   const Layout = Component.Layout || (router.pathname.includes('project') ? ProjectLayout : DefaultLayout);
 
   return (
+    <AuthProvider>
       <Fragment>
         <Head>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -54,6 +56,7 @@ function MyProjectsApp({ Component, pageProps }: AppPropsWithLayout) {
             <Component {...pageProps} />
           </Layout>
       </Fragment>
+    </AuthProvider>
   )
 }
 

@@ -1,4 +1,4 @@
-import { Project } from '@/types';
+import { Project } from '../../types';
 
 export const AllProjectsData: Project[] = [
 	{
@@ -26,7 +26,11 @@ export const AllProjectsData: Project[] = [
 		year: 2025,
 		category: 'AI/ML',
 		demo: 'tournament-brackets-ai-assistant',
-		blog: 'tournament-brackets-ai-assistant'
+		cms: {
+			blogEnabled: true,
+			hasContent: false,  // Will be true when content is added to CMS
+			contentType: 'none'
+		}
 	},
 	{
 		slug: 'fantasy-manager-assistant',
@@ -50,8 +54,12 @@ export const AllProjectsData: Project[] = [
 		],
 		year: 2025,
 		category: 'AI/ML',
-		demo: 'fantasy-manager-assistant'
-		// No blog for this project yet
+		demo: 'fantasy-manager-assistant',
+		cms: {
+			blogEnabled: true,
+			hasContent: false,
+			contentType: 'none'
+		}
 	},
 ];
 

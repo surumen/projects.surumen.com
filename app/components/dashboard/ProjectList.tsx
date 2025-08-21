@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, Row, Nav } from 'react-bootstrap';
 import { SendFill, Heart } from 'react-bootstrap-icons';
 import { Project } from '@/types';
-import { getTechnologyScheme } from '@/utils/technologyColors';
+import { getTechnologyScheme } from '../../utils';
 
 interface ProjectListProps {
   projects: Project[];
