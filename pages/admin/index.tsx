@@ -1,13 +1,12 @@
 import { Container, Row, Col, Card, Table, Button, Badge } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
+import { Eye, FileEarmark, Pencil, Plus, Trash2 } from 'react-bootstrap-icons';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useCMSStore } from '../../app/store/cmsStore';
+import { useCMSStore } from '@/store/cmsStore';
 import { SmartForm } from '@/widgets';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import type { FieldConfig } from '@/types/forms/advanced';
-import type { Project } from '../../app/types';
-import { Eye, FileEarmark, Pencil, Plus, Trash2 } from 'react-bootstrap-icons';
-import ProtectedRoute from '../../app/components/auth/ProtectedRoute';
 
 function ProjectsManagementPage() {
   const { projects, loading, error, fetchProjects, deleteProject } = useCMSStore();

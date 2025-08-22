@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { db } from '../../../../../lib/firebase/config';
-import { collection, getDocs, addDoc, query, orderBy, serverTimestamp } from 'firebase/firestore';
+import { adminDb } from '../../../../../lib/firebase/admin';
 import { BlogPost } from '../../../../../app/types/cms';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -12,9 +11,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (req.method === 'GET') {
     try {
-      const blogRef = collection(db, 'projects', projectId, 'blog');
-      const q = query(blogRef, orderBy('createdAt', 'desc'));
-      const querySnapshot = await getDocs(q);
+      const blogRef = adminDb.collection('projects').doc(projectId).collection('blog');
+      const querySnapshot = await blogRef.orderBy('createdAt', 'desc').get();
       
       const blogPosts: BlogPost[] = [];
       querySnapshot.forEach((doc) => {
@@ -30,6 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       
       res.status(200).json(blogPosts);
     } catch (error: any) {
+      console.error('Error fetching blog posts:', error);
       res.status(500).json({ error: 'Failed to fetch blog posts' });
     }
   } 
@@ -39,23 +38,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const postData = {
         ...req.body,
         projectId,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      };
-      
-      const blogRef = collection(db, 'projects', projectId, 'blog');
-      const docRef = await addDoc(blogRef, postData);
-      
-      const newPost = {
-        id: docRef.id,
-        projectId,
-        ...req.body,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
       
+      const blogRef = adminDb.collection('projects').doc(projectId).collection('blog');
+      const docRef = await blogRef.add(postData);
+      
+      const newPost = {
+        id: docRef.id,
+        ...postData,
+      };
+      
       res.status(201).json(newPost);
     } catch (error: any) {
+      console.error('Error creating blog post:', error);
       res.status(500).json({ error: 'Failed to create blog post' });
     }
   } 

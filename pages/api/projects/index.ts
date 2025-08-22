@@ -1,14 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { db } from '../../../lib/firebase/config';
-import { collection, getDocs, addDoc, query, orderBy, serverTimestamp } from 'firebase/firestore';
+import { adminDb } from '../../../lib/firebase/admin';
 import type { Project } from '../../../app/types';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     try {
-      const projectsRef = collection(db, 'projects');
-      const q = query(projectsRef, orderBy('createdAt', 'desc'));
-      const querySnapshot = await getDocs(q);
+      const projectsRef = adminDb.collection('projects');
+      const querySnapshot = await projectsRef.orderBy('createdAt', 'desc').get();
       
       const projects: Project[] = [];
       querySnapshot.forEach((doc) => {
@@ -23,6 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       
       res.status(200).json(projects);
     } catch (error: any) {
+      console.error('Error fetching projects:', error);
       res.status(500).json({ error: 'Failed to fetch projects' });
     }
   } 
@@ -31,23 +30,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const projectData = {
         ...req.body,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      };
-      
-      const projectsRef = collection(db, 'projects');
-      const docRef = await addDoc(projectsRef, projectData);
-      
-      const newProject = {
-        id: docRef.id,
-        ...req.body,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
       
+      const projectsRef = adminDb.collection('projects');
+      const docRef = await projectsRef.add(projectData);
+      
+      const newProject = {
+        id: docRef.id,
+        ...projectData,
+      };
+      
       res.status(201).json(newProject);
     } catch (error: any) {
-      res.status(500).json({ error: 'Failed to create project' });
+      console.error('Error creating project:', error);
+      res.status(500).json({ 
+        error: 'Failed to create project',
+        details: error.message
+      });
     }
   } 
   

@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { db } from '../../../lib/firebase/config';
-import { doc, getDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
+import { adminDb } from '../../../lib/firebase/admin';
 import type { Project } from '../../../app/types';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -12,50 +11,53 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (req.method === 'GET') {
     try {
-      const projectRef = doc(db, 'projects', id);
-      const projectSnap = await getDoc(projectRef);
+      const projectRef = adminDb.collection('projects').doc(id);
+      const projectDoc = await projectRef.get();
       
-      if (!projectSnap.exists()) {
+      if (!projectDoc.exists) {
         return res.status(404).json({ error: 'Project not found' });
       }
       
-      const data = projectSnap.data();
+      const data = projectDoc.data();
       const project: Project = {
-        id: projectSnap.id,
+        id: projectDoc.id,
         ...data,
-        createdAt: data.createdAt?.toDate() || new Date(),
-        updatedAt: data.updatedAt?.toDate() || new Date(),
+        createdAt: data?.createdAt?.toDate() || new Date(),
+        updatedAt: data?.updatedAt?.toDate() || new Date(),
       } as Project;
       
       res.status(200).json(project);
     } catch (error: any) {
+      console.error('Error fetching project:', error);
       res.status(500).json({ error: 'Failed to fetch project' });
     }
   }
   
   else if (req.method === 'PUT') {
     try {
-      const projectRef = doc(db, 'projects', id);
+      const projectRef = adminDb.collection('projects').doc(id);
       const updateData = {
         ...req.body,
-        updatedAt: serverTimestamp(),
+        updatedAt: new Date(),
       };
       
-      await updateDoc(projectRef, updateData);
+      await projectRef.update(updateData);
       
       res.status(200).json({ message: 'Project updated successfully' });
     } catch (error: any) {
+      console.error('Error updating project:', error);
       res.status(500).json({ error: 'Failed to update project' });
     }
   }
   
   else if (req.method === 'DELETE') {
     try {
-      const projectRef = doc(db, 'projects', id);
-      await deleteDoc(projectRef);
+      const projectRef = adminDb.collection('projects').doc(id);
+      await projectRef.delete();
       
       res.status(200).json({ message: 'Project deleted successfully' });
     } catch (error: any) {
+      console.error('Error deleting project:', error);
       res.status(500).json({ error: 'Failed to delete project' });
     }
   }

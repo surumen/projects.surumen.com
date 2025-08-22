@@ -127,8 +127,9 @@ const FormContent: React.FC<{
   fields: FieldConfig[];
   template?: any;
   onFieldChange?: (name: string, value: any, allValues: Record<string, any>) => void;
+  onValidationChange?: (isValid: boolean, errors: Record<string, string>) => void;
   renderSubmitButton?: any;
-}> = ({ fields, template, onFieldChange, renderSubmitButton }) => {
+}> = ({ fields, template, onFieldChange, onValidationChange, renderSubmitButton }) => {
   const {
     values,
     errors,
@@ -140,6 +141,13 @@ const FormContent: React.FC<{
   } = useFormContext();
   
   const { isSubmitting, isDirty, isValid } = useFormStatus();
+
+  // Call validation callback when validation state changes
+  React.useEffect(() => {
+    if (onValidationChange) {
+      onValidationChange(isValid, errors);
+    }
+  }, [isValid, errors, onValidationChange]);
 
   // Handle field change with callback
   const handleFieldChange = useCallback((name: string, value: any) => {
@@ -283,6 +291,7 @@ const SmartForm: React.FC<SmartFormProps> = ({
         fields={config.fields}
         template={template}
         onFieldChange={onFieldChange}
+        onValidationChange={onValidationChange}
         renderSubmitButton={renderSubmitButton}
       />
     </FormProvider>
