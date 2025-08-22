@@ -1,35 +1,37 @@
-import { GetServerSideProps } from 'next';
-import { Container, Row, Col, Card, Table, Button, Badge, Form } from 'react-bootstrap';
+import { Container, Row, Col, Card, Table, Button, Badge } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useCMSStore } from '../../app/store/cmsStore';
-import { BlogPost } from '../../app/types/cms';
-import { Eye, FileEarmark, Lock, Pencil, Plus, Trash, Trash2 } from 'react-bootstrap-icons';
+import { SmartForm } from '@/widgets';
+import type { FieldConfig } from '@/types/forms/advanced';
+import type { Project } from '../../app/types';
+import { Eye, FileEarmark, Pencil, Plus, Trash2 } from 'react-bootstrap-icons';
+import ProtectedRoute from '../../app/components/auth/ProtectedRoute';
 
-export default function PostsManagementPage() {
-  const { posts, loading, error, fetchPosts, deletePost } = useCMSStore();
+function ProjectsManagementPage() {
+  const { projects, loading, error, fetchProjects, deleteProject } = useCMSStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<'all' | 'published' | 'draft'>('all');
 
   useEffect(() => {
-    fetchPosts();
-  }, [fetchPosts]);
+    fetchProjects();
+  }, [fetchProjects]);
 
-  const filteredPosts = posts.filter(post => {
-    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredProjects = projects.filter(project => {
+    const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         project.technologies.some(tech => tech.toLowerCase().includes(searchTerm.toLowerCase()));
     
     const matchesFilter = filterStatus === 'all' || 
-                         (filterStatus === 'published' && post.published) ||
-                         (filterStatus === 'draft' && !post.published);
+                         (filterStatus === 'published' && project.published) ||
+                         (filterStatus === 'draft' && !project.published);
     
     return matchesSearch && matchesFilter;
   });
 
-  const handleDeletePost = async (id: string, title: string) => {
+  const handleDeleteProject = async (id: string, title: string) => {
     if (window.confirm(`Are you sure you want to delete "${title}"?`)) {
-      await deletePost(id);
+      await deleteProject(id);
     }
   };
 
@@ -41,8 +43,36 @@ export default function PostsManagementPage() {
     });
   };
 
+  // Form fields for filters
+  const filterFields: FieldConfig[] = [
+    {
+      name: 'search',
+      label: 'Search Projects',
+      type: 'input',
+      inputType: 'text',
+      placeholder: 'Search projects...',
+      initialValue: searchTerm
+    },
+    {
+      name: 'status',
+      label: 'Filter by Status',
+      type: 'select',
+      options: [
+        { value: 'all', label: 'All Projects' },
+        { value: 'published', label: 'Published' },
+        { value: 'draft', label: 'Drafts' }
+      ],
+      initialValue: filterStatus
+    }
+  ];
+
+  const handleFilterSubmit = (values: Record<string, any>) => {
+    setSearchTerm(values.search || '');
+    setFilterStatus(values.status || 'all');
+  };
+
   return (
-    <>
+    <ProtectedRoute>
       <Head>
         <title>Admin | Manage Projects</title>
       </Head>
@@ -64,27 +94,26 @@ export default function PostsManagementPage() {
             <Card>
               <Card.Header>
                 <Row className="align-items-center">
-                  <Col md={6}>
-                    <Form.Control
-                      type="text"
-                      placeholder="Search projects..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                  <Col md={8}>
+                    <SmartForm
+                      config={{
+                        fields: filterFields,
+                        onSubmit: handleFilterSubmit
+                      }}
+                      onFieldChange={(name, value) => {
+                        // Real-time filtering
+                        if (name === 'search') {
+                          setSearchTerm(value || '');
+                        } else if (name === 'status') {
+                          setFilterStatus(value || 'all');
+                        }
+                      }}
+                      renderSubmitButton={() => null} // No submit button needed for real-time filtering
                     />
                   </Col>
-                  <Col md={3}>
-                    <Form.Select
-                      value={filterStatus}
-                      onChange={(e) => setFilterStatus(e.target.value as any)}
-                    >
-                      <option value="all">All Projects</option>
-                      <option value="published">Published</option>
-                      <option value="draft">Drafts</option>
-                    </Form.Select>
-                  </Col>
-                  <Col md={3} className="text-end">
+                  <Col md={4} className="text-end">
                     <small className="text-muted">
-                      {filteredPosts.length} of {posts.length} projects
+                      {filteredProjects.length} of {projects.length} projects
                     </small>
                   </Col>
                 </Row>
@@ -101,17 +130,17 @@ export default function PostsManagementPage() {
                   <div className="alert alert-danger m-3">
                     <strong>Error:</strong> {error}
                   </div>
-                ) : filteredPosts.length === 0 ? (
+                ) : filteredProjects.length === 0 ? (
                   <div className="text-center py-5 text-muted">
                     <FileEarmark size={24} />
-                    <h5 className="mt-3">No posts found</h5>
+                    <h5 className="mt-3">No projects found</h5>
                     <p>
-                      {posts.length === 0 
-                        ? "You haven't created any posts yet." 
-                        : "No posts match your current filters."
+                      {projects.length === 0 
+                        ? "You haven't created any projects yet." 
+                        : "No projects match your current filters."
                       }
                     </p>
-                    {posts.length === 0 && (
+                    {projects.length === 0 && (
                       <Link href="/admin/project/new" passHref>
                         <button className="btn btn-outline-primary">
                           Create Your First Project
@@ -124,58 +153,57 @@ export default function PostsManagementPage() {
                     <thead className="bg-light">
                       <tr>
                         <th>Title</th>
-                        <th>Project</th>
+                        <th>Slug</th>
                         <th>Status</th>
-                        <th>Tags</th>
+                        <th>Technologies</th>
                         <th>Created</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredPosts.map((post) => (
-                        <tr key={post.id}>
+                      {filteredProjects.map((project) => (
+                        <tr key={project.id}>
                           <td>
                             <div>
-                              <strong>{post.title}</strong>
-                              {post.excerpt && (
-                                <div className="text-muted small">
-                                  {post.excerpt.substring(0, 100)}...
-                                </div>
-                              )}
+                              <strong>{project.title}</strong>
+                              <div className="text-muted small">
+                                {project.shortDescription.substring(0, 60)}...
+                              </div>
                             </div>
                           </td>
                           <td>
-                            {post.projectSlug ? (
-                              <Badge bg="info">{post.projectSlug}</Badge>
-                            ) : (
-                              <span className="text-muted">—</span>
-                            )}
+                            <Badge bg="info">{project.slug}</Badge>
                           </td>
                           <td>
-                            <Badge bg={post.published ? 'success' : 'warning'}>
-                              {post.published ? 'Published' : 'Draft'}
+                            <Badge bg={project.published ? 'success' : 'warning'}>
+                              {project.published ? 'Published' : 'Draft'}
                             </Badge>
                           </td>
                           <td>
-                            {post.tags.map((tag) => (
-                              <Badge key={tag} bg="secondary" className="me-1">
-                                {tag}
+                            {project.technologies.slice(0, 3).map((tech) => (
+                              <Badge key={tech} bg="secondary" className="me-1">
+                                {tech}
                               </Badge>
                             ))}
+                            {project.technologies.length > 3 && (
+                              <Badge bg="light" className="text-dark">
+                                +{project.technologies.length - 3}
+                              </Badge>
+                            )}
                           </td>
                           <td className="text-muted">
-                            {formatDate(post.createdAt)}
+                            {formatDate(project.createdAt)}
                           </td>
                           <td>
                             <div className="d-flex gap-1">
-                              {post.published && post.projectSlug && (
-                                <Link href={`/project/${post.projectSlug}`} passHref>
+                              {project.published && (
+                                <Link href={`/project/${project.slug}`} passHref>
                                   <Button size="sm" variant="outline-primary">
-                                    <Eye />
+                                    <Eye size={12} />
                                   </Button>
                                 </Link>
                               )}
-                              <Link href={`/admin/project/${post.id}/edit`} passHref>
+                              <Link href={`/admin/project/${project.id}/edit`} passHref>
                                 <Button size="sm" variant="outline-secondary">
                                   <Pencil size={12} />
                                 </Button>
@@ -183,7 +211,7 @@ export default function PostsManagementPage() {
                               <Button
                                 size="sm"
                                 variant="outline-danger"
-                                onClick={() => handleDeletePost(post.id, post.title)}
+                                onClick={() => handleDeleteProject(project.id, project.title)}
                               >
                                 <Trash2 size={12} />
                               </Button>
@@ -199,46 +227,8 @@ export default function PostsManagementPage() {
           </Col>
         </Row>
       </Container>
-    </>
+    </ProtectedRoute>
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  // Check if logged in using our simple cookie system
-  const adminSession = context.req.cookies['admin-session'];
-  const adminEmail = context.req.cookies['admin-email'];
-  
-  if (!adminSession || !adminEmail) {
-    return {
-      redirect: {
-        destination: '/admin/login',
-        permanent: false,
-      },
-    };
-  }
-
-  try {
-    const decodedEmail = Buffer.from(adminSession, 'base64').toString();
-    const adminEmails = (process.env.ADMIN_EMAILS || '').split(',').map(email => email.trim());
-
-    if (decodedEmail !== adminEmail || !adminEmails.includes(adminEmail)) {
-      return {
-        redirect: {
-          destination: '/admin/login',
-          permanent: false,
-        },
-      };
-    }
-  } catch (error) {
-    return {
-      redirect: {
-        destination: '/admin/login',
-        permanent: false,
-      },
-    };
-  }
-  
-  return {
-    props: {},
-  };
-};
+export default ProjectsManagementPage;

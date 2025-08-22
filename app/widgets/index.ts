@@ -5,6 +5,7 @@ import Markdown from './projects/Markdown';
 
 // import widget/custom components from navbars folder
 import Sidebar from './navbars/Sidebar';
+import QuickMenu from './navbars/QuickMenu';
 
 // import bracket components
 import Bracket from './brackets/Bracket';
@@ -23,7 +24,10 @@ import PlayerFormation from './football/PlayerFormation';
 import Pitch from './football/Pitch';
 
 // import form components
-import DynamicForm from './forms/DynamicForm';
+import { SmartForm, FormIcons } from './forms';
+
+// import theme components  
+import { ThemeProvider } from './theme';
 
 // import general components
 import TabPane from './components/TabPane';
@@ -38,6 +42,7 @@ export {
    
    // Navigation
    Sidebar,
+   QuickMenu,
    
    // Charts
    RacingBarChart,
@@ -47,7 +52,11 @@ export {
    Pitch,
    
    // Forms
-   DynamicForm,
+   SmartForm,
+   FormIcons,
+   
+   // Theme
+   ThemeProvider,
    
    // Brackets
    Region,

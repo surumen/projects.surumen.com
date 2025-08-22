@@ -1,23 +1,11 @@
 export interface BlogPost {
   id: string;
+  projectId: string;
   title: string;
-  slug: string;
-  content: string;         // Markdown with custom components
-  excerpt: string;
-  projectSlug?: string;    // Link to project
-  tags: string[];
+  content: string;
   published: boolean;
   createdAt: Date;
   updatedAt: Date;
-  author: string;
-  seoTitle?: string;
-  seoDescription?: string;
-}
-
-export interface CMSSettings {
-  blogEnabled: boolean;
-  hasContent: boolean;
-  contentType: 'rich' | 'simple' | 'none';
 }
 
 export interface CustomComponent {

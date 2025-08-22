@@ -5,6 +5,7 @@ import { Fragment } from 'react';
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo';
 import { AuthProvider } from '../lib/firebase/AuthContext';
+import { ThemeProvider } from '../app/widgets';
 
 // Layout system imports
 import { 
@@ -54,27 +55,29 @@ function MyProjectsApp({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <AuthProvider>
-      <Fragment>
-        <Head>
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <meta name="keywords" content={keywords} />
-          <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-        </Head>
-        <NextSeo
-            title={title}
-            description={description}
-            canonical={pageURL}
-            openGraph={{
-              url: pageURL,
-              title: title,
-              description: description,
-              site_name: process.env.siteName,
-            }}
-        />
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-      </Fragment>
+      <ThemeProvider>
+        <Fragment>
+          <Head>
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <meta name="keywords" content={keywords} />
+            <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+          </Head>
+          <NextSeo
+              title={title}
+              description={description}
+              canonical={pageURL}
+              openGraph={{
+                url: pageURL,
+                title: title,
+                description: description,
+                site_name: process.env.siteName,
+              }}
+          />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+        </Fragment>
+      </ThemeProvider>
     </AuthProvider>
   )
 }

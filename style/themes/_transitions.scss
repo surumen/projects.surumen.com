@@ -1,0 +1,42 @@
+// Theme transition animations for smooth theme switching
+:root {
+  --theme-transition: none; // Will be set by ThemeProvider when appropriate
+}
+
+// Apply transitions to all elements when enabled
+* {
+  transition: var(--theme-transition);
+}
+
+// Specific smooth transitions for key UI elements
+html, body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.card, .navbar, .btn, .form-control, .form-select, .dropdown-menu {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nav-link, .navbar-brand, .navbar-nav .nav-link {
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+// Alert and badge transitions
+.alert, .badge {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+// Table transitions
+.table, .table td, .table th {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+// Disable transitions on page load to prevent flash
+.theme-transition-disabled * {
+  transition: none !important;
+}
+
+// Logo and SVG transitions
+svg, .logo-icon {
+  transition: fill 0.3s ease, stroke 0.3s ease;
+}

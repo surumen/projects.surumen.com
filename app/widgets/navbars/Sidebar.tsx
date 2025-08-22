@@ -1,10 +1,8 @@
 import { Fragment, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Image, Navbar, Container, Nav } from 'react-bootstrap';
-
 import LogoIcon from '@/widgets/components/LogoIcon'
 import { useMediaQuery } from 'react-responsive';
-
 
 const Sidebar = (props) => {
 	const year = useMemo(() => new Date().getFullYear(), []);
@@ -55,6 +53,5 @@ Sidebar.defaultProps = {
 Sidebar.propTypes = {
 	className: PropTypes.string,
 };
-
 
 export default Sidebar;

@@ -1,10 +1,10 @@
 import React, { ReactNode } from 'react';
-import { Container, Nav, Navbar, Button } from 'react-bootstrap';
+import { Container, Nav, Navbar } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAuth } from '../lib/firebase/AuthContext';
-import { LogoIcon } from '@/widgets';
-import { ArrowLeft, Book, ChevronLeft, List, Lock, PlusCircle, X } from 'react-bootstrap-icons';
+import { LogoIcon, QuickMenu } from '@/widgets';
+import { ArrowLeft, Lock } from 'react-bootstrap-icons';
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -40,7 +40,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
 
             {/* Secondary Content */}
             <div className="navbar-nav-wrap-secondary-content ms-auto">
-              <Nav className="navbar-nav">
+              <Nav className="navbar-nav align-items-center">
+                <QuickMenu />
+                
                 <Nav.Item>
                   <button
                     onClick={handleBackToSite}

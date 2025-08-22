@@ -2,18 +2,65 @@
 // Centralized type exports
 
 // ========================
-// PROJECT & FORMS
+// PROJECT TYPES
 // ========================
 export type {
     // Project types
-    Project,
-    
-    // Form types
+    Project
+} from './project/project';
+
+// ========================
+// FORM TYPES
+// ========================
+export type {
+    // Basic form field types
     Option,
     FieldType,
+    
+    // Advanced form types (current)
     FieldConfig,
-    DynamicFormProps
-} from './project/project';
+    FormTemplate,
+    FormDraft,
+    FormSubmission,
+    ValidationRule,
+    AsyncValidationRule,
+    ConditionalLogic,
+    SmartFormProps,
+    FormConfig,
+    FormActions,
+    FormState,
+    
+    // Advanced field configurations
+    DateFieldConfig,
+    FileUploadFieldConfig,
+    TagInputFieldConfig,
+    InputFieldConfig,
+    SelectFieldConfig,
+    TextareaFieldConfig,
+    SwitchFieldConfig
+} from './forms';
+
+// ========================
+// FORM STYLING SYSTEM
+// ========================
+export type {
+    FieldStyling,
+    InputGroupConfig,
+    InputGroupAddon,
+    FieldState,
+    ClassMap,
+    FieldTemplate,
+    TemplateConfig
+} from './forms/styling';
+
+// ========================
+// CMS TYPES
+// ========================
+export type {
+    BlogPost,
+    CustomComponent,
+    ParsedComponent
+} from './cms';
 
 // ========================
 // FANTASY PREMIER LEAGUE

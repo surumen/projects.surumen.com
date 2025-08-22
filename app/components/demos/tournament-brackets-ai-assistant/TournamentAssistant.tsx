@@ -1,8 +1,8 @@
 import React, { useMemo, useEffect } from 'react';
 import { Card, Image, Button } from 'react-bootstrap';
 import { ArrowClockwise, Trash } from 'react-bootstrap-icons';
-import { DynamicForm } from '@/widgets';
-import type { FieldConfig } from '@/types';
+import { SmartForm } from '@/widgets';
+import type { FieldConfig } from '@/types/forms/advanced';
 import useMounted from '@/hooks/useMounted';
 import { Bracket } from '@/widgets';
 
@@ -22,7 +22,7 @@ const logos: Record<string, string> = {
     ucl:  '/images/svg/ucl.svg',
 };
 
-const TournamentAssistantModern: React.FC = () => {
+const TournamentAssistant: React.FC = () => {
     const { activeTournament, switchTo, currentLeague, currentYear } = useTournamentController();
     const { advanceTeam, clearAllPicks, resetBracket } = useBracketController();
     
@@ -49,24 +49,32 @@ const TournamentAssistantModern: React.FC = () => {
     const yearOptions = availableYears.map((y) => ({ value: y, label: `${y}` }));
     const leagueOptions = availableLeagues.map((l) => ({ value: l, label: l.toUpperCase() }));
 
-    const formFields: FieldConfig[] = [
-        {
-            name: 'league',
-            label: 'League',
-            type: 'select',
-            options: leagueOptions,
-            required: true,
-            initialValue: currentLeague,
-        },
-        {
-            name: 'year',
-            label: 'Year',
-            type: 'select',
-            options: yearOptions,
-            required: true,
-            initialValue: currentYear,
-        },
-    ];
+    // Memoize form config with fields inside
+    const formConfig = useMemo(() => {
+        const formFields: FieldConfig[] = [
+            {
+                name: 'league',
+                label: 'League',
+                type: 'select',
+                options: leagueOptions,
+                required: true,
+                initialValue: currentLeague
+            },
+            {
+                name: 'year',
+                label: 'Year',
+                type: 'select',
+                options: yearOptions,
+                required: true,
+                initialValue: currentYear
+            },
+        ];
+
+        return {
+            fields: formFields,
+            onSubmit: () => {}
+        };
+    }, [leagueOptions, yearOptions, currentLeague, currentYear]);
 
     const logoSrc = logos[currentLeague] || logos.ncaa;
 
@@ -142,12 +150,11 @@ const TournamentAssistantModern: React.FC = () => {
                 <Card.Header className="border-0 card-header-content-sm-between mb-4 px-0 px-md-2">
                     <Image className="avatar avatar-lg" src={logoSrc} alt={currentLeague} />
 
-                    <DynamicForm
-                        formClassName="d-flex gap-3 align-items-end"
-                        fields={formFields}
-                        onFieldChange={handleFormChange}
-                        submitLabel={null}
-                        onSubmit={() => {}}
+                    <SmartForm
+                        config={formConfig}
+                        className="d-flex gap-3 align-items-end"
+                        onFieldChange={(name, value, allValues) => handleFormChange(allValues)}
+                        renderSubmitButton={() => null}
                     />
                 </Card.Header>
                 <Card.Body>
@@ -172,12 +179,11 @@ const TournamentAssistantModern: React.FC = () => {
                 <Card.Header className="border-0 card-header-content-sm-between mb-4 px-0 px-md-2">
                     <Image className="avatar avatar-lg" src={logoSrc} alt={currentLeague} />
 
-                    <DynamicForm
-                        formClassName="d-flex gap-3 align-items-end"
-                        fields={formFields}
-                        onFieldChange={handleFormChange}
-                        submitLabel={null}
-                        onSubmit={() => {}}
+                    <SmartForm
+                        config={formConfig}
+                        className="d-flex gap-3 align-items-end"
+                        onFieldChange={(name, value, allValues) => handleFormChange(allValues)}
+                        renderSubmitButton={() => null}
                     />
                 </Card.Header>
                 <Card.Body>
@@ -247,12 +253,11 @@ const TournamentAssistantModern: React.FC = () => {
                     </div>
                 </div>
 
-                <DynamicForm
-                    formClassName="d-flex gap-3 align-items-end"
-                    fields={formFields}
-                    onFieldChange={handleFormChange}
-                    submitLabel={null}
-                    onSubmit={() => {}}
+                <SmartForm
+                    config={formConfig}
+                    className="d-flex gap-3 align-items-end"
+                    onFieldChange={(name, value, allValues) => handleFormChange(allValues)}
+                    renderSubmitButton={() => null}
                 />
             </Card.Header>
 
@@ -270,4 +275,4 @@ const TournamentAssistantModern: React.FC = () => {
     );
 };
 
-export default TournamentAssistantModern;
+export default TournamentAssistant;

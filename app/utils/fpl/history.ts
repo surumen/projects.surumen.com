@@ -1,13 +1,6 @@
-type ManagerHistory = {
-    managerName: string;
-    entryId: number;
-    history: {
-        event: number;
-        total_points: number;
-    }[];
-};
+import type { ManagerHistoryEntry } from '@/types';
 
-export const reshapeFPLHistory = (allHistories: ManagerHistory[]) => {
+export const reshapeFPLHistory = (allHistories: ManagerHistoryEntry[]) => {
     const eventMap: { [event: number]: any } = {};
 
     allHistories.forEach(({ managerName, history }) => {

@@ -1,15 +1,15 @@
-import { GetServerSideProps } from 'next';
-import { Container, Row, Col, Card, Alert } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
 import { auth, actionCodeSettings, isAdminEmail } from '../../lib/firebase/config';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/firebase/AuthContext';
-import { DynamicForm } from '@/widgets';
-import type { FieldConfig } from '@/types';
+import { SmartForm, LogoIcon } from '@/widgets';
+import type { FieldConfig } from '@/types/forms/advanced';
+import BlankLayout from '../../layouts/BlankLayout';
 
-export default function AdminLogin() {
+function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState<'success' | 'danger'>('success');
@@ -23,13 +23,14 @@ export default function AdminLogin() {
     }
   }, [user, authLoading, router]);
 
-  // Handle magic link authentication
+  // Handle magic link authentication when user returns from email
   useEffect(() => {
     if (isSignInWithEmailLink(auth, window.location.href)) {
       setLoading(true);
       setMessage('Processing magic link...');
       setMessageType('success');
       
+      // Get email from localStorage or URL params
       let emailForSignIn = window.localStorage.getItem('emailForSignIn');
       
       if (!emailForSignIn) {
@@ -48,6 +49,8 @@ export default function AdminLogin() {
             setMessage('Sign-in successful! Redirecting to admin dashboard...');
             setMessageType('success');
             
+            // Clean up URL and redirect
+            window.history.replaceState({}, document.title, '/admin/login');
             setTimeout(() => {
               router.push('/admin');
             }, 1500);
@@ -65,19 +68,31 @@ export default function AdminLogin() {
     }
   }, [router]);
 
-  // Define form fields for DynamicForm
+  // Form fields for email input
   const loginFields: FieldConfig[] = [
     {
       name: 'email',
-      label: 'Email',
+      label: 'Your email',
       type: 'input',
       inputType: 'email',
       required: true,
-      validate: (email: string) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email) && isAdminEmail(email);
+      validate: [
+        {
+          test: (email: string) => {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email) && isAdminEmail(email);
+          },
+          message: 'Please enter a valid admin email address'
+        }
+      ],
+      initialValue: '',
+      styling: {
+        size: 'lg',
+        customClasses: {
+          control: 'form-control-lg'
+        }
       },
-      initialValue: ''
+      placeholder: 'Enter your email address'
     }
   ];
 
@@ -87,12 +102,7 @@ export default function AdminLogin() {
     setMessage('');
 
     try {
-      const actionCodeSettingsWithEmail = {
-        ...actionCodeSettings,
-        url: `${actionCodeSettings.url}?email=${encodeURIComponent(email)}`
-      };
-      
-      await sendSignInLinkToEmail(auth, email, actionCodeSettingsWithEmail);
+      await sendSignInLinkToEmail(auth, email, actionCodeSettings);
       window.localStorage.setItem('emailForSignIn', email);
       setMessage('Magic link sent! Check your email to sign in.');
       setMessageType('success');
@@ -107,11 +117,15 @@ export default function AdminLogin() {
   // Show loading while checking auth state
   if (authLoading) {
     return (
-      <Container className="py-5 text-center">
-        <div className="spinner-border" role="status">
-          <span className="visually-hidden">Loading...</span>
+      <main id="content" role="main" className="main">
+        <div className="container py-5 py-sm-7">
+          <div className="text-center">
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
         </div>
-      </Container>
+      </main>
     );
   }
 
@@ -121,43 +135,53 @@ export default function AdminLogin() {
         <title>Admin Login | Moses Surumen</title>
       </Head>
       
-      <div className="content container">
-        <div className="row justify-content-lg-center pt-lg-5 pt-xl-10">
-          <div className="col-lg-9">
-            <div className="card shadow-none">
+      <main id="content" role="main" className="main">
+        <div className="container py-5 py-sm-7">
+          <div className="d-flex justify-content-center mb-5">
+            <div style={{ width: '8rem', height: '8rem' }}>
+              <LogoIcon primary="#377dff" dark="#132144" />
+            </div>
+          </div>
+          
+          <div className="mx-auto" style={{ maxWidth: '30rem' }}>
+            <div className="card card-lg mb-5">
               <div className="card-body">
-                <div className="text-center mb-4">
-                  <h2>Admin Login</h2>
-                  <p className="text-muted">Firebase Magic Link Authentication</p>
+                <div className="text-center mb-5">
+                  <h1 className="display-5">Admin Login</h1>
                 </div>
 
                 {message && (
-                  <Alert variant={messageType} className="small mb-3">
+                  <Alert variant={messageType} className="mb-4">
                     {message}
                   </Alert>
                 )}
 
-                <DynamicForm
-                  fields={loginFields}
-                  onSubmit={handleFormSubmit}
-                  submitLabel={loading ? 'Sending Magic Link...' : 'Send Magic Link'}
-                  formClassName="mb-3"
+                <SmartForm
+                  config={{
+                    fields: loginFields,
+                    onSubmit: handleFormSubmit
+                  }}
+                  renderSubmitButton={({ isValid, submit }) => (
+                    <div className="d-grid gap-2">
+                      <button 
+                        type="button"
+                        onClick={submit}
+                        className="btn btn-primary btn-lg"
+                        disabled={loading || !isValid}
+                      >
+                        {loading ? 'Sending Magic Link...' : 'Send Magic Link'}
+                      </button>
+                    </div>
+                  )}
                 />
-
-                <div className="text-center mt-3">
-                  <small className="text-muted">
-                    Only authorized administrators can access the CMS
-                  </small>
-                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </>
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  return { props: {} };
-};
+AdminLogin.Layout = BlankLayout;
+export default AdminLogin;
