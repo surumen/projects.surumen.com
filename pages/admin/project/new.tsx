@@ -253,7 +253,7 @@ function NewProjectPage() {
         router.push('/admin');
       }
     } catch (error) {
-      console.error('Failed to create project:', error);
+      // Error handling can be improved with user-friendly notifications
     }
   };
 

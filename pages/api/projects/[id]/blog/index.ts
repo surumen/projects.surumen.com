@@ -28,7 +28,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       
       res.status(200).json(blogPosts);
     } catch (error: any) {
-      console.error('Error fetching blog posts:', error);
       res.status(500).json({ error: 'Failed to fetch blog posts' });
     }
   } 
@@ -52,7 +51,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       
       res.status(201).json(newPost);
     } catch (error: any) {
-      console.error('Error creating blog post:', error);
       res.status(500).json({ error: 'Failed to create blog post' });
     }
   } 

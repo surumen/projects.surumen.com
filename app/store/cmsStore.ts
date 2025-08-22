@@ -67,7 +67,6 @@ export const useCMSStore = create<CMSStore>((set, get) => ({
       }
       return null;
     } catch (error) {
-      console.error('Error fetching project by slug:', error);
       return null;
     }
   },
@@ -166,7 +165,6 @@ export const useCMSStore = create<CMSStore>((set, get) => ({
       }
       return null;
     } catch (error) {
-      console.error('Error fetching blog post:', error);
       return null;
     }
   },

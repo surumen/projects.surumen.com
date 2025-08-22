@@ -29,7 +29,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       
       res.status(200).json(post);
     } catch (error: any) {
-      console.error('Error fetching blog post:', error);
       res.status(500).json({ error: 'Failed to fetch blog post' });
     }
   }
@@ -46,7 +45,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       
       res.status(200).json({ message: 'Blog post updated successfully' });
     } catch (error: any) {
-      console.error('Error updating blog post:', error);
       res.status(500).json({ error: 'Failed to update blog post' });
     }
   }
@@ -58,7 +56,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       
       res.status(200).json({ message: 'Blog post deleted successfully' });
     } catch (error: any) {
-      console.error('Error deleting blog post:', error);
       res.status(500).json({ error: 'Failed to delete blog post' });
     }
   }

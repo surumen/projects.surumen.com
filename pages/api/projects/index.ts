@@ -21,7 +21,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       
       res.status(200).json(projects);
     } catch (error: any) {
-      console.error('Error fetching projects:', error);
       res.status(500).json({ error: 'Failed to fetch projects' });
     }
   } 
@@ -44,7 +43,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       
       res.status(201).json(newProject);
     } catch (error: any) {
-      console.error('Error creating project:', error);
       res.status(500).json({ 
         error: 'Failed to create project',
         details: error.message

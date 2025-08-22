@@ -28,7 +28,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       
       res.status(200).json(project);
     } catch (error: any) {
-      console.error('Error fetching project:', error);
       res.status(500).json({ error: 'Failed to fetch project' });
     }
   }
@@ -45,7 +44,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       
       res.status(200).json({ message: 'Project updated successfully' });
     } catch (error: any) {
-      console.error('Error updating project:', error);
       res.status(500).json({ error: 'Failed to update project' });
     }
   }
@@ -57,7 +55,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       
       res.status(200).json({ message: 'Project deleted successfully' });
     } catch (error: any) {
-      console.error('Error deleting project:', error);
       res.status(500).json({ error: 'Failed to delete project' });
     }
   }
