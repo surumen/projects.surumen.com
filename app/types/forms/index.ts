@@ -6,3 +6,6 @@ export * from './advanced';
 // Export styling system
 export * from './styling';
 
+// Export coordinator types
+export * from './coordinator';
+

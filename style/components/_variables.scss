@@ -79,15 +79,15 @@ $primary-soft-bg-color:                                     rgba(lighten($primar
 // Shadows
 $box-shadow:                                                0rem .375rem 1.5rem 0rem rgba($gray-600, .125) !default;
 //$box-shadow:                                                0px 3px 3px -1px rgba(10 22 70 / 10%), 0px 0px 1px 0px rgb(10 22 70 / 6%) !default;
-//$box-shadow-sm:                                             0rem .375rem .75rem rgba($gray-600, .075) !default;
-$box-shadow-sm:                                             0px 1px 1px 0px rgba(10 22 70 / 10%), 0px 0px 1px 0px rgb(10 22 70 / 6%) !default;
+$box-shadow-sm:                                             0rem .375rem .75rem rgba($gray-300, .075) !default;
+//$box-shadow-sm:                                             0px 1px 1px 0px rgba(10 22 70 / 10%), 0px 0px 1px 0px rgb(10 22 70 / 6%) !default;
 $box-shadow-sm-hover:                                       0px .1875rem .75rem rgba($gray-600, .25) !default;
 $box-shadow-lg:                                             0rem .6125rem 2.5rem .6125rem rgba($gray-600, .175) !default;
 $box-shadow-xl:                                             0rem 3.75rem 5rem 0rem rgba($gray-600, .3) !default;
 
 // Borders
 $border-width:                                              .0625rem !default;
-$border-color:                                              rgba($gray-02, 1) !default;
+$border-color:                                              rgba($gray-100, 1) !default;
 
 // Border Radius
 $border-radius:                                             .5rem !default;

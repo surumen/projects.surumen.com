@@ -308,12 +308,6 @@ const TagInputField: React.FC<TagInputFieldProps> = ({
           {field.helpText && (
             <Form.Text className="text-muted">{field.helpText}</Form.Text>
           )}
-          
-          {separators.length > 0 && (
-            <Form.Text className="text-muted">
-              <small>Use {separators.join(', ')} to separate multiple tags</small>
-            </Form.Text>
-          )}
         </div>
         
         {field.maxTags && (

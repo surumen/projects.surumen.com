@@ -1,35 +1,57 @@
-import React, { useState, useMemo } from 'react';
-import { Container, Row, Col, Button, Breadcrumb } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Container, Row, Col, Button, Breadcrumb, Card } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import Link from 'next/link';
-import { SmartForm } from '@/widgets';
+import { FormCardSection } from '@/widgets/forms';
 import { validationRules } from '@/widgets/forms';
+import { useFormCoordinator } from '@/hooks/useFormCoordinator';
 import { useCMSStore } from '@/store/cmsStore';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
-import type { FieldConfig, FormConfig } from '@/types/forms/advanced';
+import type { FieldConfig } from '@/types/forms/advanced';
 import type { Project } from '@/types';
+
+// Project-specific slug generation
+const generateSlug = (title: string): string => {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .trim();
+};
 
 function NewProjectPage() {
   const router = useRouter();
   const { createProject, loading } = useCMSStore();
-  const [formValues, setFormValues] = useState<Record<string, any>>({});
-  const [isValid, setIsValid] = useState(false);
-  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-  const [formKey, setFormKey] = useState(0); // Key to force form re-render
-  const [showResetConfirm, setShowResetConfirm] = useState(false);
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-  // Form field configuration
-  const projectFields: FieldConfig[] = [
+  // Project-specific configuration
+  const requiredFields = ['title', 'shortDescription', 'description', 'technologies', 'year', 'category'];
+  
+  // Project-specific value change handler (for slug generation)
+  const handleValueChange = (name: string, value: any, allValues: Record<string, any>) => {
+    // Auto-generate slug from title if slug is empty
+    if (name === 'title' && value && !allValues.slug) {
+      coordinator.updateValues({ slug: generateSlug(value) });
+    }
+  };
+
+  // Initialize form coordinator with project-specific config
+  const coordinator = useFormCoordinator({
+    initialValues: {},
+    requiredFields,
+    onValueChange: handleValueChange
+  });
+
+  // Project-specific field configurations
+  const basicInfoFields: FieldConfig[] = [
     {
       name: 'title',
-      label: 'Project Name',
+      label: 'Project name',
       type: 'input',
       inputType: 'text',
       required: true,
-      placeholder: 'Tournament Brackets AI Assistant, Fantasy Manager, etc.',
-      helpText: 'The main title of your project',
+      placeholder: 'Enter project name here',
+      helpText: 'The main title of your project displayed publicly',
       validate: [
         validationRules.required('Project name'),
         validationRules.minLength(3),
@@ -37,13 +59,49 @@ function NewProjectPage() {
       ]
     },
     {
+      name: 'category',
+      label: 'Category',
+      type: 'select',
+      required: true,
+      placeholder: 'Select category',
+      options: [
+        { value: 'Web Development', label: 'Web Development' },
+        { value: 'Mobile App', label: 'Mobile App' },
+        { value: 'AI/ML', label: 'AI/ML' },
+        { value: 'Data Science', label: 'Data Science' },
+        { value: 'DevOps', label: 'DevOps' },
+        { value: 'API/Backend', label: 'API/Backend' },
+        { value: 'Frontend', label: 'Frontend' },
+        { value: 'Full Stack', label: 'Full Stack' },
+        { value: 'Automation', label: 'Automation' },
+        { value: 'Other', label: 'Other' }
+      ],
+      validate: [
+        validationRules.required('Category')
+      ]
+    },
+    {
+      name: 'year',
+      label: 'Year Completed',
+      type: 'select',
+      required: true,
+      placeholder: 'Select year',
+      initialValue: new Date().getFullYear(),
+      options: Array.from({ length: 10 }, (_, i) => {
+        const year = new Date().getFullYear() - i;
+        return { value: year, label: year.toString() };
+      }),
+      validate: [
+        validationRules.required('Completion year')
+      ]
+    },
+    {
       name: 'slug',
       label: 'URL Slug',
       type: 'input',
       inputType: 'text',
-      required: false,
-      placeholder: 'auto-generated-from-title',
-      helpText: 'URL-friendly identifier (auto-generated from title if left empty)',
+      placeholder: 'generated-from-project-name',
+      helpText: 'Auto-generated from title if left empty',
       validate: [
         validationRules.pattern(
           /^[a-z0-9-]*$/,
@@ -52,33 +110,24 @@ function NewProjectPage() {
       ]
     },
     {
-      name: 'shortDescription',
-      label: 'Short Description',
-      type: 'textarea',
-      required: true,
-      rows: 3,
-      placeholder: 'A brief summary for dashboard and list views...',
-      helpText: 'Brief description shown in project listings',
-      validate: [
-        validationRules.required('Short description'),
-        validationRules.minLength(10),
-        validationRules.maxLength(200)
-      ]
+      name: 'blog',
+      label: 'Blog',
+      type: 'input',
+      inputType: 'text',
+      placeholder: 'blog-post-slug',
+      helpText: 'Optional: Link to related blog post'
     },
     {
-      name: 'description',
-      label: 'Full Description',
-      type: 'richtext',
-      required: true,
-      placeholder: 'Enter detailed description for the project...',
-      helpText: 'Rich HTML content for detailed project page (supports formatting)',
-      toolbar: 'full',
-      height: 300,
-      validate: [
-        validationRules.required('Full description'),
-        validationRules.minLength(50)
-      ]
-    },
+      name: 'demo',
+      label: 'Demo URL',
+      type: 'input',
+      inputType: 'text',
+      placeholder: 'https://demo.example.com',
+      helpText: 'Optional: URL to live demo'
+    }
+  ];
+
+  const technicalFields: FieldConfig[] = [
     {
       name: 'technologies',
       label: 'Technologies',
@@ -97,179 +146,77 @@ function NewProjectPage() {
       validate: [
         validationRules.required('Technologies')
       ]
-    },
-    {
-      name: 'year',
-      label: 'Completion Year',
-      type: 'select',
-      required: true,
-      placeholder: 'Select completion year',
-      initialValue: new Date().getFullYear(),
-      helpText: 'Year the project was completed',
-      options: Array.from(
-        { length: new Date().getFullYear() - 2015 + 1 }, 
-        (_, i) => {
-          const year = new Date().getFullYear() - i;
-          return { value: year, label: year.toString() };
-        }
-      ),
-      validate: [
-        validationRules.required('Completion year')
-      ]
-    },
-    {
-      name: 'category',
-      label: 'Category',
-      type: 'select',
-      required: true,
-      placeholder: 'Select project category',
-      options: [
-        { value: 'Web Development', label: 'Web Development' },
-        { value: 'Mobile App', label: 'Mobile App' },
-        { value: 'AI/ML', label: 'AI/ML' },
-        { value: 'Data Science', label: 'Data Science' },
-        { value: 'DevOps', label: 'DevOps' },
-        { value: 'API/Backend', label: 'API/Backend' },
-        { value: 'Frontend', label: 'Frontend' },
-        { value: 'Full Stack', label: 'Full Stack' },
-        { value: 'Automation', label: 'Automation' },
-        { value: 'Other', label: 'Other' }
-      ],
-      validate: [
-        validationRules.required('Category')
-      ]
-    },
-    {
-      name: 'demo',
-      label: 'Demo URL or Component',
-      type: 'input',
-      inputType: 'text',
-      placeholder: 'https://demo.example.com or component-name',
-      helpText: 'Optional: URL to live demo or custom component name'
-    },
-    {
-      name: 'blog',
-      label: 'Blog URL/Slug',
-      type: 'input',
-      inputType: 'text',
-      placeholder: 'blog-post-slug',
-      helpText: 'Optional: Link to related blog post or documentation'
-    },
-    {
-      name: 'published',
-      label: 'Published',
-      type: 'switch',
-      initialValue: false,
-      helpText: 'Make this project visible to the public'
     }
   ];
 
-  // Auto-generate slug from title
-  const handleFieldChange = (name: string, value: any, allValues: Record<string, any>) => {
-    setFormValues(allValues);
-    setLastUpdated(new Date());
-    
-    // Auto-generate slug from title if slug is empty
-    if (name === 'title' && value) {
-      const generatedSlug = generateSlug(value);
-      
-      // Update slug field if it's empty
-      if (!allValues.slug || allValues.slug.trim() === '') {
-        setFormValues(prev => ({ ...prev, slug: generatedSlug }));
-      }
+  const contentFields: FieldConfig[] = [
+    {
+      name: 'shortDescription',
+      label: 'Short description',
+      type: 'textarea',
+      required: true,
+      rows: 3,
+      placeholder: 'Short description',
+      helpText: 'Brief summary for project listings',
+      validate: [
+        validationRules.required('Short description'),
+        validationRules.minLength(10),
+        validationRules.maxLength(200)
+      ]
+    },
+    {
+      name: 'description',
+      label: 'Full description',
+      type: 'richtext',
+      required: true,
+      placeholder: 'Enter detailed description...',
+      toolbar: 'full',
+      height: 300,
+      validate: [
+        validationRules.required('Full description'),
+        validationRules.minLength(50)
+      ]
     }
-  };
+  ];
 
-  // Check if form has minimum required fields
-  const isFormValid = useMemo(() => {
-    const requiredFields = ['title', 'shortDescription', 'description', 'technologies', 'year', 'category'];
-    return requiredFields.every(field => {
-      const value = formValues[field];
-      if (field === 'technologies') {
-        return Array.isArray(value) && value.length > 0;
-      }
-      if (field === 'year') {
-        return value && (typeof value === 'number' || !isNaN(Number(value)));
-      }
-      return value && value.toString().trim().length > 0;
-    });
-  }, [formValues]);
+  const publishingFields: FieldConfig[] = [
+    {
+      name: 'published',
+      label: 'Confirm you want to publish this project',
+      type: 'switch',
+      initialValue: false,
+      helpText: 'Publishing this project will show it to the public immediately'
+    }
+  ];
 
-  // Handle validation changes
-  const handleValidationChange = (valid: boolean, errors: Record<string, string>) => {
-    setIsValid(valid);
-    setFormErrors(errors);
-  };
+  // Handle final form submission
+  const handleSubmit = async () => {
+    if (!coordinator.canSubmit) return;
 
-  // Reset form function
-  const handleResetForm = () => {
-    setShowResetConfirm(true);
-  };
-
-  const confirmResetForm = () => {
-    setFormValues({});
-    setIsValid(false);
-    setFormErrors({});
-    setLastUpdated(null);
-    setFormKey(prev => prev + 1); // Force form re-render with initial values
-    setShowResetConfirm(false);
-  };
-
-  const cancelResetForm = () => {
-    setShowResetConfirm(false);
-  };
-
-  // Use ONLY the basic form validity check for enabling submit
-  const canSubmit = isFormValid;
-    const generateSlug = (title: string): string => {
-    return title
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .trim();
-  };
-
-  // Form submission
-  const handleSubmit = async (values: Record<string, any>) => {
     try {
-      // Auto-generate slug if empty
-      const finalSlug = values.slug && values.slug.trim() !== '' 
-        ? values.slug 
-        : generateSlug(values.title);
-
       const projectData: Partial<Project> = {
-        title: values.title,
-        slug: finalSlug,
-        shortDescription: values.shortDescription,
-        description: values.description,
-        technologies: values.technologies || [],
-        year: parseInt(values.year),
-        category: values.category,
-        demo: values.demo || undefined,
-        blog: values.blog || undefined,
-        published: values.published || false
+        title: coordinator.values.title,
+        slug: coordinator.values.slug || generateSlug(coordinator.values.title),
+        shortDescription: coordinator.values.shortDescription,
+        description: coordinator.values.description,
+        technologies: coordinator.values.technologies || [],
+        year: parseInt(coordinator.values.year),
+        category: coordinator.values.category,
+        demo: coordinator.values.demo || undefined,
+        blog: coordinator.values.blog || undefined,
+        published: coordinator.values.published || false
       };
 
       const newProject = await createProject(projectData);
-      
       if (newProject) {
         router.push('/admin');
       }
     } catch (error) {
-      // Error handling can be improved with user-friendly notifications
+      console.error('Project creation failed:', error);
     }
   };
 
-  // Form configuration
-  const formConfig: FormConfig = {
-    fields: projectFields,
-    onSubmit: handleSubmit,
-    validation: {
-      mode: 'onChange',
-      revalidateMode: 'onChange'
-    }
-  };
+  // Status icon helper - removed since we're keeping it simple
 
   return (
     <ProtectedRoute>
@@ -279,94 +226,127 @@ function NewProjectPage() {
       
       <Container fluid className="py-4">
         {/* Page Header */}
-        <div className="page-header mb-4">
+        <div className="page-header">
           <div className="row align-items-center">
             <div className="col-sm mb-2 mb-sm-0">
-              <Breadcrumb className="breadcrumb-no-gutter">
-                <Breadcrumb.Item href="/admin">
-                  Projects
-                </Breadcrumb.Item>
+              <Breadcrumb className="breadcrumb breadcrumb-no-gutter">
+                <Breadcrumb.Item href="/admin">Projects</Breadcrumb.Item>
                 <Breadcrumb.Item active>Add Project</Breadcrumb.Item>
               </Breadcrumb>
-
-              <h1 className="page-header-title">Add Project</h1>
+              <h1 className="page-header-title">Create New Project</h1>
             </div>
           </div>
         </div>
 
         <Row>
-          {/* Main Form Column */}
-          <Col lg={8} className="mb-3 mb-lg-0">
-            <div className="card mb-3 mb-lg-5">
-              <div className="card-header">
-                <h4 className="card-header-title">Project Information</h4>
-              </div>
-              <div className="card-body">
-                <SmartForm
-                  key={formKey} // Force re-render when form is reset
-                  config={formConfig}
-                  onFieldChange={handleFieldChange}
-                  onValidationChange={handleValidationChange}
-                  renderSubmitButton={() => null} // We'll handle submit in the sidebar
-                />
-              </div>
+          <Col lg={8}>
+            <div className="d-grid gap-3 gap-lg-5">
+              
+              {/* Basic Information Section */}
+              <FormCardSection
+                sectionId="basic"
+                title="Project Details"
+                fields={basicInfoFields}
+                coordinator={coordinator}
+              />
+
+              {/* Technologies Section */}
+              <FormCardSection
+                sectionId="technical"
+                title="Technologies"
+                fields={technicalFields}
+                coordinator={coordinator}
+              />
+
+              {/* Description Section */}
+              <FormCardSection
+                sectionId="content"
+                title="Description"
+                fields={contentFields}
+                coordinator={coordinator}
+              />
+
+              {/* Publishing Section */}
+              <FormCardSection
+                sectionId="publishing"
+                title="Publish"
+                fields={publishingFields}
+                coordinator={coordinator}
+              >
+              </FormCardSection>
+
             </div>
           </Col>
 
-          {/* Sidebar Column */}
+          {/* Sidebar */}
           <Col lg={4}>
-            <div className="card mb-3 mb-lg-5">
-              <div className="card-header d-flex justify-content-between align-items-center">
-                <h4 className="card-header-title mb-0">Live Preview</h4>
-                <div className="d-flex align-items-center gap-2">
-                  {lastUpdated && (
-                    <small className="text-muted">
-                      <i className="bi bi-clock-history me-1"></i>
-                      {new Date(lastUpdated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </small>
-                  )}
-                  {formValues.title && (
-                    <span className="badge bg-soft-primary">
-                      {Object.keys(formValues).filter(key => formValues[key] && formValues[key] !== '').length} / {projectFields.length}
-                    </span>
-                  )}
+            {/* Progress Card */}
+            <Card className="card-body mb-3 mb-lg-5">
+              <h5>Progress</h5>
+              <div className="d-flex justify-content-between align-items-center">
+                <div className="progress flex-grow-1">
+                  <div 
+                    className="progress-bar bg-primary" 
+                    style={{ width: `${coordinator.progress}%` }}
+                    aria-valuenow={coordinator.progress}
+                  />
                 </div>
+                <span className="ms-4">{Math.round(coordinator.progress)}%</span>
               </div>
-              <div className="card-body">
-                {/* Project Preview */}
-                {formValues.title ? (
+              
+              <div className="mt-3">
+                <div className="d-flex justify-content-between text-sm">
+                  <span>Completed sections:</span>
+                  <span>{coordinator.completedSections.length} / {Object.keys(coordinator.sectionValidation).length}</span>
+                </div>
+                {coordinator.totalErrors > 0 && (
+                  <div className="d-flex justify-content-between text-sm text-warning">
+                    <span>Total errors:</span>
+                    <span>{coordinator.totalErrors}</span>
+                  </div>
+                )}
+              </div>
+            </Card>
+
+            {/* Preview Card */}
+            <Card className="mb-3 mb-lg-5">
+              <Card.Header>
+                <h4 className="card-header-title">Preview</h4>
+              </Card.Header>
+              <Card.Body>
+                {coordinator.values.title ? (
                   <div className="project-preview">
                     {/* Header Section */}
                     <div className="mb-4">
                       <div className="d-flex justify-content-between align-items-start mb-2">
-                        <h5 className="mb-0 fw-bold">{formValues.title}</h5>
-                        {formValues.year && (
+                        <h5 className="mb-0 fw-bold">{coordinator.values.title}</h5>
+                        {coordinator.values.year && (
                           <span className="badge bg-soft-secondary fs-6">
-                            {formValues.year}
+                            {coordinator.values.year}
                           </span>
                         )}
                       </div>
                       
-                      {formValues.category && (
+                      {coordinator.values.category && (
                         <div className="mb-2">
                           <span className="badge bg-soft-info me-2">
-                            {formValues.category}
+                            {coordinator.values.category}
                           </span>
-                          <span className={`badge ${formValues.published ? 'bg-soft-success' : 'bg-soft-warning'}`}>
-                            {formValues.published ? 'Published' : 'Draft'}
+                          <span className={`badge ${coordinator.values.published ? 'bg-soft-success' : 'bg-soft-warning'}`}>
+                            {coordinator.values.published ? 'Published' : 'Draft'}
                           </span>
                         </div>
                       )}
                       
-                      {formValues.shortDescription && (
+                      {coordinator.values.shortDescription && (
                         <p className="text-muted mb-2 lh-sm">
-                          {formValues.shortDescription}
+                          {coordinator.values.shortDescription}
                         </p>
                       )}
                     </div>
 
                     {/* Rich Description Preview */}
-                    {formValues.description && (
+                    {coordinator.values.description && (
                       <div className="mb-3">
                         <h6 className="text-muted small text-uppercase mb-2">Description</h6>
                         <div 
@@ -377,17 +357,17 @@ function NewProjectPage() {
                             fontSize: '0.875rem',
                             lineHeight: '1.4'
                           }}
-                          dangerouslySetInnerHTML={{ __html: formValues.description }}
+                          dangerouslySetInnerHTML={{ __html: coordinator.values.description }}
                         />
                       </div>
                     )}
 
                     {/* Technologies */}
-                    {formValues.technologies && formValues.technologies.length > 0 && (
+                    {coordinator.values.technologies && coordinator.values.technologies.length > 0 && (
                       <div className="mb-3">
                         <h6 className="text-muted small text-uppercase mb-2">Technologies</h6>
                         <div className="d-flex gap-1 flex-wrap">
-                          {formValues.technologies.map((tech: string, index: number) => (
+                          {coordinator.values.technologies.map((tech: string, index: number) => (
                             <span key={index} className="badge bg-primary">
                               {tech}
                             </span>
@@ -397,20 +377,20 @@ function NewProjectPage() {
                     )}
 
                     {/* Links Section */}
-                    {(formValues.demo || formValues.blog) && (
+                    {(coordinator.values.demo || coordinator.values.blog) && (
                       <div className="mb-3">
                         <h6 className="text-muted small text-uppercase mb-2">Links</h6>
                         <div className="d-flex flex-column gap-1">
-                          {formValues.demo && (
+                          {coordinator.values.demo && (
                             <div className="d-flex align-items-center">
                               <i className="bi bi-play-circle me-2 text-primary"></i>
-                              <small className="text-truncate">{formValues.demo}</small>
+                              <small className="text-truncate">{coordinator.values.demo}</small>
                             </div>
                           )}
-                          {formValues.blog && (
+                          {coordinator.values.blog && (
                             <div className="d-flex align-items-center">
                               <i className="bi bi-journal-text me-2 text-info"></i>
-                              <small className="text-truncate">{formValues.blog}</small>
+                              <small className="text-truncate">{coordinator.values.blog}</small>
                             </div>
                           )}
                         </div>
@@ -418,12 +398,12 @@ function NewProjectPage() {
                     )}
 
                     {/* URL Preview */}
-                    {(formValues.slug || formValues.title) && (
+                    {(coordinator.values.slug || coordinator.values.title) && (
                       <div className="mb-3">
                         <h6 className="text-muted small text-uppercase mb-2">URL</h6>
                         <div className="bg-soft-secondary p-2 rounded">
                           <code className="small text-muted">
-                            /project/{formValues.slug || generateSlug(formValues.title)}
+                            /project/{coordinator.values.slug || generateSlug(coordinator.values.title)}
                           </code>
                         </div>
                       </div>
@@ -431,7 +411,6 @@ function NewProjectPage() {
                   </div>
                 ) : (
                   <div className="text-center py-5">
-                    <i className="bi bi-eye-slash fs-1 text-muted mb-3 d-block"></i>
                     <p className="text-muted mb-0">
                       Start filling out the form to see a live preview
                     </p>
@@ -440,112 +419,61 @@ function NewProjectPage() {
                     </small>
                   </div>
                 )}
-
-                <hr className="my-4" />
-
-                {/* Completion Status */}
-                <div className="progress-completion">
-                  <div className="d-flex justify-content-between align-items-center mb-2">
-                    <h6 className="mb-0 small text-uppercase text-muted">Completion</h6>
-                    <span className="small text-muted">
-                      {Math.round((Object.keys(formValues).filter(key => formValues[key] && formValues[key] !== '').length / projectFields.length) * 100)}%
-                    </span>
-                  </div>
-                  <div className="progress" style={{ height: '6px' }}>
-                    <div 
-                      className="progress-bar bg-primary"
-                      style={{ 
-                        width: `${Math.round((Object.keys(formValues).filter(key => formValues[key] && formValues[key] !== '').length / projectFields.length) * 100)}%`,
-                        transition: 'width 0.3s ease'
-                      }}
-                    />
-                  </div>
-                  <div className="mt-2">
-                    <small className="text-muted">
-                      {canSubmit ? (
-                        <><i className="bi bi-check-circle text-success me-1"></i>Ready to save</>
-                      ) : (
-                        <><i className="bi bi-exclamation-circle text-warning me-1"></i>Complete required fields</>
-                      )}
-                    </small>
-                  </div>
-                </div>
-              </div>
-            </div>
+              </Card.Body>
+            </Card>
           </Col>
         </Row>
 
         {/* Fixed Bottom Actions */}
         <div className="position-fixed start-50 bottom-0 translate-middle-x w-100" style={{ zIndex: 99, marginBottom: '1rem', maxWidth: '40rem' }}>
-          <div className="card card-sm bg-dark border-dark mx-2">
-            <div className="card-body">
-              {showResetConfirm ? (
-                // Reset Confirmation State
-                <Row className="justify-content-center align-items-center">
-                  <Col>
-                    <span className="text-light">
-                      <i className="bi bi-exclamation-triangle me-2"></i>
-                      Reset form? All unsaved changes will be lost.
-                    </span>
-                  </Col>
-                  <Col xs="auto">
-                    <div className="d-flex gap-3">
-                      <Button 
-                        variant="ghost-light"
-                        onClick={cancelResetForm}
-                        disabled={loading}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        variant="danger"
-                        onClick={confirmResetForm}
-                        disabled={loading}
-                      >
-                        Yes, Reset
-                      </Button>
-                    </div>
-                  </Col>
-                </Row>
-              ) : (
-                // Normal State
-                <Row className="justify-content-center justify-content-sm-between">
-                  <Col>
+          <Card className="card-sm bg-dark border-dark mx-2">
+            <Card.Body>
+              <div className="row justify-content-center justify-content-sm-between">
+                <div className="col">
+                  <Button 
+                    variant="ghost-danger" 
+                    disabled={loading}
+                    onClick={() => coordinator.resetForm()}
+                  >
+                    Reset All
+                  </Button>
+                </div>
+                <div className="col-auto">
+                  <div className="d-flex gap-3">
                     <Button 
-                      variant="ghost-danger" 
+                      variant="ghost-light"
+                      onClick={() => router.push('/admin')}
                       disabled={loading}
-                      onClick={handleResetForm}
                     >
-                      Reset Form
+                      Discard
                     </Button>
-                  </Col>
-                  <Col xs="auto">
-                    <div className="d-flex gap-3">
-                      <Button 
-                        variant="ghost-light"
-                        onClick={() => router.push('/admin')}
-                        disabled={loading}
-                      >
-                        Discard
-                      </Button>
-                      <Button
-                        variant="primary"
-                        disabled={!canSubmit || loading}
-                        onClick={() => {
-                          const form = document.querySelector('form');
-                          if (form) {
-                            form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
-                          }
-                        }}
-                      >
-                        {loading ? 'Saving...' : 'Save'}
-                      </Button>
-                    </div>
-                  </Col>
-                </Row>
+                    <Button
+                      variant="primary"
+                      disabled={!coordinator.canSubmit || loading}
+                      onClick={handleSubmit}
+                    >
+                      {loading ? 'Saving...' : 'Save'}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Validation Status */}
+              {!coordinator.canSubmit && coordinator.progress > 0 && (
+                <div className="row mt-2">
+                  <div className="col">
+                    <small className="text-light opacity-75">
+                      {coordinator.sectionsWithErrors.length > 0 ? (
+                        <>Complete required fields to save</>
+                      ) : (
+                        <>Complete required fields to save</>
+                      )}
+                    </small>
+                  </div>
+                </div>
               )}
-            </div>
-          </div>
+            </Card.Body>
+          </Card>
         </div>
       </Container>
     </ProtectedRoute>
