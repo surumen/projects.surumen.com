@@ -321,7 +321,7 @@ export const BUTTON_CONFIGS: Record<ToolbarItem, ButtonConfig> = {
       { value: { rows: 4, cols: 4 }, label: '4x4 Table' },
       { value: { rows: 5, cols: 5 }, label: '5x5 Table' }
     ],
-    getCurrentValue: () => 'Table',
+    getCurrentValue: () => '', // Return empty string to show icon only
     onSelect: (editor, value) => {
       // TODO: Implement table insertion
       console.log('Insert table:', value);
