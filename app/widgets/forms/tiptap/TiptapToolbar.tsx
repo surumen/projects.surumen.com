@@ -273,7 +273,7 @@ const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor, config, disabled 
                     }}
                   />
                 )}
-                {option.label}
+                {option.display || option.label}
               </button>
             </li>
           ))}

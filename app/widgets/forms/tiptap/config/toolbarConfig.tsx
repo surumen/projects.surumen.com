@@ -1,5 +1,6 @@
 // Clean toolbar configuration - source of truth
 
+import React from 'react';
 import type { Editor } from '@tiptap/core';
 
 export type ControlType = 'toggle' | 'action' | 'dropdown' | 'dialog';
@@ -31,7 +32,8 @@ export type ToolbarItem =
 
 export interface DropdownOption {
   value: any;
-  label: string;
+  label?: string;
+  display?: React.ReactNode;
   color?: string;  // For color options
 }
 
@@ -104,13 +106,13 @@ export const BUTTON_CONFIGS: Record<ToolbarItem, ButtonConfig> = {
     icon: 'bi-type-h1',
     title: 'Text Style',
     getOptions: () => [
-      { value: null, label: 'Paragraph' },
-      { value: 1, label: 'Heading 1' },
-      { value: 2, label: 'Heading 2' },
-      { value: 3, label: 'Heading 3' },
-      { value: 4, label: 'Heading 4' },
-      { value: 5, label: 'Heading 5' },
-      { value: 6, label: 'Heading 6' }
+      { value: null, display: <p className="mb-0">Paragraph</p> },
+      { value: 1, display: <h1 className="mb-0">Heading 1</h1> },
+      { value: 2, display: <h2 className="mb-0">Heading 2</h2> },
+      { value: 3, display: <h3 className="mb-0">Heading 3</h3> },
+      { value: 4, display: <h4 className="mb-0">Heading 4</h4> },
+      { value: 5, display: <h5 className="mb-0">Heading 5</h5> },
+      { value: 6, display: <h6 className="mb-0">Heading 6</h6> }
     ],
     getCurrentValue: (editor) => {
       if (editor.isActive('paragraph')) return 'Paragraph';
