@@ -51,6 +51,11 @@ export interface DateFieldConfig {
   helpText?: string;
   conditionalLogic?: ConditionalLogic[];
   
+  // Layout configuration
+  row?: {
+    columns: 1 | 2 | 3 | 4 | 6 | 12;
+  };
+  
   // Date-specific options
   minDate?: string | Date;
   maxDate?: string | Date;
@@ -73,6 +78,11 @@ export interface FileUploadFieldConfig {
   initialValue?: File | File[] | string | string[];
   helpText?: string;
   conditionalLogic?: ConditionalLogic[];
+  
+  // Layout configuration
+  row?: {
+    columns: 1 | 2 | 3 | 4 | 6 | 12;
+  };
   
   // File-specific options
   multiple?: boolean;
@@ -100,6 +110,11 @@ export interface TagInputFieldConfig {
   helpText?: string;
   conditionalLogic?: ConditionalLogic[];
   
+  // Layout configuration
+  row?: {
+    columns: 1 | 2 | 3 | 4 | 6 | 12;
+  };
+  
   // Tag-specific options
   suggestions?: string[] | (() => Promise<string[]>);
   allowCustomTags?: boolean;
@@ -123,6 +138,11 @@ export interface RichTextFieldConfig {
   placeholder?: string;
   helpText?: string;
   conditionalLogic?: ConditionalLogic[];
+  
+  // Layout configuration
+  row?: {
+    columns: 1 | 2 | 3 | 4 | 6 | 12;
+  };
   
   // Rich text specific options
   height?: number;
@@ -150,6 +170,11 @@ export interface InputFieldConfig {
   helpText?: string;
   conditionalLogic?: ConditionalLogic[];
   
+  // Layout configuration
+  row?: {
+    columns: 1 | 2 | 3 | 4 | 6 | 12;
+  };
+  
   // Input-specific options
   inputType?: React.HTMLInputTypeAttribute;
   mask?: string; // Input masking pattern
@@ -176,6 +201,11 @@ export interface SelectFieldConfig {
   helpText?: string;
   conditionalLogic?: ConditionalLogic[];
   
+  // Layout configuration
+  row?: {
+    columns: 1 | 2 | 3 | 4 | 6 | 12;
+  };
+  
   // Select-specific options
   options: Option[] | (() => Promise<Option[]>);
   multiple?: boolean;
@@ -201,6 +231,11 @@ export interface TextareaFieldConfig {
   helpText?: string;
   conditionalLogic?: ConditionalLogic[];
   
+  // Layout configuration
+  row?: {
+    columns: 1 | 2 | 3 | 4 | 6 | 12;
+  };
+  
   // Textarea-specific options
   rows?: number;
   maxLength?: number;
@@ -220,6 +255,11 @@ export interface SwitchFieldConfig {
   initialValue?: boolean;
   helpText?: string;
   conditionalLogic?: ConditionalLogic[];
+  
+  // Layout configuration
+  row?: {
+    columns: 1 | 2 | 3 | 4 | 6 | 12;
+  };
   
   // Switch-specific options
   size?: 'sm' | 'md' | 'lg';

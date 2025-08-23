@@ -203,14 +203,51 @@ const FormContent: React.FC<{
 
   // Get field wrapper classes
   const getFieldWrapperClasses = (field: FieldConfig) => {
+    // Row fields are handled differently - no wrapper classes needed
+    if (field.row) {
+      return '';
+    }
+    
     if (template?.styling?.layout === 'grid') {
       return 'col mb-3';
     }
     if (template?.styling?.layout === 'horizontal') {
       return 'col-md-6 mb-3';
     }
-    return '';
+    return 'mb-4';
   };
+
+  // Process fields into renderables (handles row grouping)
+  const processFields = () => {
+    const fieldsToRender = [];
+    let currentRow = [];
+    
+    fields.forEach((field, index) => {
+      if (field.row) {
+        // Add field to current row
+        currentRow.push(field);
+        
+        // Check if we should close the row (when we reach 12 columns or it's the last field)
+        const totalColumns = currentRow.reduce((sum, f) => sum + (f.row?.columns || 12), 0);
+        if (totalColumns >= 12 || index === fields.length - 1) {
+          fieldsToRender.push({ type: 'row', fields: [...currentRow] });
+          currentRow = [];
+        }
+      } else {
+        // Close any open row first
+        if (currentRow.length > 0) {
+          fieldsToRender.push({ type: 'row', fields: [...currentRow] });
+          currentRow = [];
+        }
+        // Add as single field (full width)
+        fieldsToRender.push(field);
+      }
+    });
+    
+    return fieldsToRender;
+  };
+
+  const renderableItems = processFields();
 
   return (
     <Form onSubmit={(e) => { e.preventDefault(); submit(); }}>
@@ -227,19 +264,41 @@ const FormContent: React.FC<{
 
       {/* Fields */}
       <div className={getLayoutClasses()}>
-        {fields.map((field) => (
-          <div key={field.name} className={getFieldWrapperClasses(field)}>
-            <SmartFieldRenderer
-              field={field}
-              value={values[field.name]}
-              error={errors[field.name]}
-              touched={touched[field.name]}
-              isValidating={asyncValidating[field.name]}
-              onChange={(value) => handleFieldChange(field.name, value)}
-              onBlur={() => handleFieldBlur(field.name)}
-            />
-          </div>
-        ))}
+        {renderableItems.map((item, index) => {
+          if (item.type === 'row') {
+            return (
+              <div key={`row-${index}`} className="row">
+                {item.fields.map((field) => (
+                  <div key={field.name} className={`col-sm-${field.row.columns} mb-4`}>
+                    <SmartFieldRenderer
+                      field={field}
+                      value={values[field.name]}
+                      error={errors[field.name]}
+                      touched={touched[field.name]}
+                      isValidating={asyncValidating[field.name]}
+                      onChange={(value) => handleFieldChange(field.name, value)}
+                      onBlur={() => handleFieldBlur(field.name)}
+                    />
+                  </div>
+                ))}
+              </div>
+            );
+          } else {
+            return (
+              <div key={item.name} className={getFieldWrapperClasses(item)}>
+                <SmartFieldRenderer
+                  field={item}
+                  value={values[item.name]}
+                  error={errors[item.name]}
+                  touched={touched[item.name]}
+                  isValidating={asyncValidating[item.name]}
+                  onChange={(value) => handleFieldChange(item.name, value)}
+                  onBlur={() => handleFieldBlur(item.name)}
+                />
+              </div>
+            );
+          }
+        })}
       </div>
 
       {/* Submit button */}

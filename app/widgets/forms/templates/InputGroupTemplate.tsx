@@ -120,7 +120,7 @@ const InputGroupTemplate: React.FC<InputGroupTemplateProps> = ({
       <label htmlFor={fieldId} className={classes.label}>
         {field.label}
         {shouldShowOptionalText(field) && (
-          <span className="form-label-secondary">(Optional)</span>
+          <span className="form-label-secondary ms-1">(Optional)</span>
         )}
       </label>
       

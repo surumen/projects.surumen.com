@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { FormCardSection } from '@/widgets/forms';
 import { validationRules } from '@/widgets/forms';
+import { FormIcons } from '@/widgets/forms';
 import { useFormCoordinator } from '@/hooks/useFormCoordinator';
 import { useCMSStore } from '@/store/cmsStore';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
@@ -52,6 +53,14 @@ function NewProjectPage() {
       required: true,
       placeholder: 'Enter project name here',
       helpText: 'The main title of your project displayed publicly',
+      styling: {
+        inputGroup: {
+          prepend: {
+            icon: FormIcons.briefcase
+          },
+          merge: true
+        }
+      },
       validate: [
         validationRules.required('Project name'),
         validationRules.minLength(3),
@@ -64,6 +73,7 @@ function NewProjectPage() {
       type: 'select',
       required: true,
       placeholder: 'Select category',
+      row: { columns: 6 },
       options: [
         { value: 'Web Development', label: 'Web Development' },
         { value: 'Mobile App', label: 'Mobile App' },
@@ -87,6 +97,7 @@ function NewProjectPage() {
       required: true,
       placeholder: 'Select year',
       initialValue: new Date().getFullYear(),
+      row: { columns: 6 },
       options: Array.from({ length: 10 }, (_, i) => {
         const year = new Date().getFullYear() - i;
         return { value: year, label: year.toString() };
@@ -102,6 +113,15 @@ function NewProjectPage() {
       inputType: 'text',
       placeholder: 'generated-from-project-name',
       helpText: 'Auto-generated from title if left empty',
+      row: { columns: 6 },
+      styling: {
+        inputGroup: {
+          prepend: {
+            icon: FormIcons.clipboard
+          },
+          merge: true
+        }
+      },
       validate: [
         validationRules.pattern(
           /^[a-z0-9-]*$/,
@@ -115,15 +135,15 @@ function NewProjectPage() {
       type: 'input',
       inputType: 'text',
       placeholder: 'blog-post-slug',
-      helpText: 'Optional: Link to related blog post'
-    },
-    {
-      name: 'demo',
-      label: 'Demo URL',
-      type: 'input',
-      inputType: 'text',
-      placeholder: 'https://demo.example.com',
-      helpText: 'Optional: URL to live demo'
+      row: { columns: 6 },
+      styling: {
+        inputGroup: {
+          prepend: {
+            icon: FormIcons.text
+          },
+          merge: true
+        }
+      }
     }
   ];
 
@@ -202,7 +222,6 @@ function NewProjectPage() {
         technologies: coordinator.values.technologies || [],
         year: parseInt(coordinator.values.year),
         category: coordinator.values.category,
-        demo: coordinator.values.demo || undefined,
         blog: coordinator.values.blog || undefined,
         published: coordinator.values.published || false
       };
@@ -372,27 +391,6 @@ function NewProjectPage() {
                               {tech}
                             </span>
                           ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Links Section */}
-                    {(coordinator.values.demo || coordinator.values.blog) && (
-                      <div className="mb-3">
-                        <h6 className="text-muted small text-uppercase mb-2">Links</h6>
-                        <div className="d-flex flex-column gap-1">
-                          {coordinator.values.demo && (
-                            <div className="d-flex align-items-center">
-                              <i className="bi bi-play-circle me-2 text-primary"></i>
-                              <small className="text-truncate">{coordinator.values.demo}</small>
-                            </div>
-                          )}
-                          {coordinator.values.blog && (
-                            <div className="d-flex align-items-center">
-                              <i className="bi bi-journal-text me-2 text-info"></i>
-                              <small className="text-truncate">{coordinator.values.blog}</small>
-                            </div>
-                          )}
                         </div>
                       </div>
                     )}

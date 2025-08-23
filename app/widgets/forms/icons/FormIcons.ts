@@ -38,6 +38,8 @@ import {
   FileTextFill,
   Image,
   ImageFill,
+  Clipboard,
+  ClipboardFill,
   
   // Location Icons
   GeoAlt,
@@ -118,6 +120,8 @@ export const FormIcons = {
   textFill: FileTextFill,
   image: Image,
   imageFill: ImageFill,
+  clipboard: Clipboard,
+  clipboardFill: ClipboardFill,
   
   // Location & Address
   location: GeoAlt,
@@ -168,7 +172,7 @@ export const IconCategories = {
   financial: ['dollar', 'creditCard', 'creditCardFill'],
   location: ['location', 'locationFill', 'home', 'homeFill'],
   business: ['building', 'buildingFill', 'briefcase', 'briefcaseFill'],
-  content: ['text', 'textFill', 'image', 'imageFill'],
+  content: ['text', 'textFill', 'image', 'imageFill', 'clipboard', 'clipboardFill'],
   actions: ['add', 'addCircle', 'remove', 'close', 'check', 'checkCircle'],
   feedback: ['warning', 'info', 'help'],
   social: ['website', 'linkedin', 'twitter', 'facebook', 'instagram'],
