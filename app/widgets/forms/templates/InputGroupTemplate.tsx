@@ -9,7 +9,8 @@ import {
   generateFieldId,
   buildAriaDescribedBy,
   shouldShowOptionalText,
-  renderAddon
+  renderAddon,
+  renderLabelIcon
 } from '../utils';
 
 interface InputGroupTemplateProps {
@@ -118,9 +119,15 @@ const InputGroupTemplate: React.FC<InputGroupTemplateProps> = ({
   return (
     <div className={classes.group}>
       <label htmlFor={fieldId} className={classes.label}>
+        {field.styling?.labelIcon?.position === 'before' && field.styling.labelIcon && (
+          renderLabelIcon(field.styling.labelIcon)
+        )}
         {field.label}
         {shouldShowOptionalText(field) && (
           <span className="form-label-secondary ms-1">(Optional)</span>
+        )}
+        {(!field.styling?.labelIcon?.position || field.styling.labelIcon.position === 'after') && field.styling?.labelIcon && (
+          renderLabelIcon(field.styling.labelIcon)
         )}
       </label>
       

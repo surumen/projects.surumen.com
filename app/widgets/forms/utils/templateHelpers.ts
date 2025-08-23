@@ -2,7 +2,7 @@
 // Helper functions for template rendering
 
 import React from 'react';
-import type { InputGroupAddon } from '@/types/forms/styling';
+import type { InputGroupAddon, LabelIconConfig } from '@/types/forms/styling';
 
 /**
  * Render input group addon content (icon, text, or custom content)
@@ -24,6 +24,37 @@ export const renderAddon = (addon: InputGroupAddon): React.ReactNode => {
   }
   
   return null;
+};
+
+/**
+ * Render label icon with optional tooltip
+ */
+export const renderLabelIcon = (labelIcon: LabelIconConfig): React.ReactNode => {
+  if (!labelIcon.icon) return null;
+  
+  const IconComponent = labelIcon.icon;
+  const defaultProps = { size: 14 };
+  const iconProps = { ...defaultProps, ...labelIcon.iconProps };
+  
+  const defaultClasses = 'text-body ms-1';
+  const className = labelIcon.className || defaultClasses;
+  
+  const iconElement = React.createElement(IconComponent, { 
+    ...iconProps, 
+    className: className 
+  });
+  
+  // Add tooltip support if specified
+  if (labelIcon.tooltip) {
+    return React.cloneElement(iconElement, {
+      'data-bs-toggle': 'tooltip',
+      'data-bs-placement': 'top',
+      title: labelIcon.tooltip,
+      style: { cursor: 'help' }
+    });
+  }
+  
+  return iconElement;
 };
 
 /**

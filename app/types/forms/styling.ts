@@ -22,6 +22,18 @@ export interface InputGroupConfig {
 }
 
 // ========================
+// LABEL ICON CONFIGURATION
+// ========================
+
+export interface LabelIconConfig {
+  icon?: ComponentType<any>;
+  iconProps?: Record<string, any>;
+  tooltip?: string;
+  position?: 'after' | 'before';
+  className?: string;
+}
+
+// ========================
 // FIELD STYLING CONFIGURATION
 // ========================
 
@@ -34,6 +46,9 @@ export interface FieldStyling {
   
   // Input group configuration
   inputGroup?: InputGroupConfig;
+  
+  // Label icon configuration
+  labelIcon?: LabelIconConfig;
   
   // Layout options
   inline?: boolean; // For checkboxes/radios

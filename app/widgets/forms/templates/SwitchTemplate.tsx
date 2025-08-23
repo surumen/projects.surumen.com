@@ -7,7 +7,8 @@ import type { FieldState } from '@/types/forms/styling';
 import {
   buildSwitchTemplateClasses,
   generateFieldId,
-  shouldShowOptionalText
+  shouldShowOptionalText,
+  renderLabelIcon
 } from '../utils';
 
 interface SwitchTemplateProps {
@@ -54,9 +55,15 @@ const SwitchTemplate: React.FC<SwitchTemplateProps> = ({
         <label htmlFor={fieldId} className="row form-check form-switch">
           <span className="col-8 col-sm-9 ms-0">
             <span className="text-dark">
+              {field.styling?.labelIcon?.position === 'before' && field.styling.labelIcon && (
+                renderLabelIcon(field.styling.labelIcon)
+              )}
               {field.label}
               {shouldShowOptionalText(field) && (
                 <span className="form-label-secondary ms-1">(Optional)</span>
+              )}
+              {(!field.styling?.labelIcon?.position || field.styling.labelIcon.position === 'after') && field.styling?.labelIcon && (
+                renderLabelIcon(field.styling.labelIcon)
               )}
             </span>
           </span>
@@ -112,9 +119,15 @@ const SwitchTemplate: React.FC<SwitchTemplateProps> = ({
       />
       
       <label htmlFor={fieldId} className={classes.label}>
+        {field.styling?.labelIcon?.position === 'before' && field.styling.labelIcon && (
+          renderLabelIcon(field.styling.labelIcon)
+        )}
         {field.label}
         {shouldShowOptionalText(field) && (
           <span className="form-label-secondary ms-1">(Optional)</span>
+        )}
+        {(!field.styling?.labelIcon?.position || field.styling.labelIcon.position === 'after') && field.styling?.labelIcon && (
+          renderLabelIcon(field.styling.labelIcon)
         )}
       </label>
       

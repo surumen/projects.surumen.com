@@ -59,6 +59,11 @@ function NewProjectPage() {
             icon: FormIcons.briefcase
           },
           merge: true
+        },
+        labelIcon: {
+          icon: FormIcons.help,
+          tooltip: 'Displayed on public forums, portfolios, and project listings',
+          position: 'after'
         }
       },
       validate: [

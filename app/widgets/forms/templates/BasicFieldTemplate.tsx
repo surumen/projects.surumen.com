@@ -9,7 +9,8 @@ import {
   generateFieldId,
   buildAriaDescribedBy,
   shouldShowOptionalText,
-  getCommonControlProps
+  getCommonControlProps,
+  renderLabelIcon
 } from '../utils';
 
 interface BasicFieldTemplateProps {
@@ -114,9 +115,15 @@ const BasicFieldTemplate: React.FC<BasicFieldTemplateProps> = ({
   return (
     <div className={classes.group}>
       <label htmlFor={fieldId} className={classes.label}>
+        {field.styling?.labelIcon?.position === 'before' && field.styling.labelIcon && (
+          renderLabelIcon(field.styling.labelIcon)
+        )}
         {field.label}
         {shouldShowOptionalText(field) && (
           <span className="form-label-secondary ms-1">(Optional)</span>
+        )}
+        {(!field.styling?.labelIcon?.position || field.styling.labelIcon.position === 'after') && field.styling?.labelIcon && (
+          renderLabelIcon(field.styling.labelIcon)
         )}
       </label>
       
