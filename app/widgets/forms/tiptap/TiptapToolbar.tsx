@@ -234,7 +234,7 @@ const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor, config, disabled 
             {currentHeading.label}
           </button>
           
-          <ul className={`dropdown-menu ${showHeadingDropdown ? 'show' : ''}`} aria-labelledby="headingDropdown">
+          <ul className={`dropdown-menu mt-6 ${showHeadingDropdown ? 'show' : ''}`} aria-labelledby="headingDropdown">
             {headingOptions.map((option) => (
               <li key={option.level}>
                 <button
