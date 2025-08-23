@@ -1,6 +1,5 @@
-import { Container, Row, Col, Table, Button, Badge } from 'react-bootstrap';
 import React, { useState, useEffect, useMemo } from 'react';
-import { Eye, FileEarmark, Pencil, Plus, Trash2, Search, Filter } from 'react-bootstrap-icons';
+import { Search, Filter, Plus, Eye, Pencil, Trash3 } from 'react-bootstrap-icons';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useCMSStore } from '@/store/cmsStore';
@@ -8,171 +7,196 @@ import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { SmartTable } from '@/widgets';
 import type { ColumnConfig, SelectionConfig } from '@/types';
 
+// Constants
+const FILTER_OPTIONS = {
+  ALL: 'all',
+  PUBLISHED: 'published', 
+  DRAFT: 'draft'
+} as const;
+
+const STATUS_CONFIG = {
+  published: { label: 'Published', color: 'primary' },
+  drafts: { label: 'Drafts', color: 'success' },
+  archived: { label: 'Archived', color: 'secondary' }
+};
+
+// Navigation helpers
+const navigateTo = (url: string) => window.location.href = url;
+const openInNewTab = (url: string) => window.open(url, '_blank');
+
+// Column definitions
+const createColumns = (handleDeleteProject: (project: any) => void, deleteInProgress: boolean): ColumnConfig[] => [
+  {
+    key: 'project',
+    header: 'Project',
+    renderer: 'custom',
+    customConfig: {
+      render: (value, row) => (
+        <div className="d-flex align-items-center">
+          <div className="avatar avatar-soft-primary avatar-circle me-3">
+            <span className="avatar-initials">
+              {row.title.charAt(0).toUpperCase()}
+            </span>
+          </div>
+          <div>
+            <span className="d-block h5 text-inherit mb-0">{row.title}</span>
+            <span className="d-block fs-6 text-body">
+              {row.shortDescription.length > 50 
+                ? `${row.shortDescription.substring(0, 50)}...` 
+                : row.shortDescription
+              }
+            </span>
+          </div>
+        </div>
+      )
+    }
+  },
+  {
+    key: 'status',
+    header: 'Status',
+    renderer: 'custom',
+    customConfig: {
+      render: (value, row) => (
+        <>
+          <span className={`legend-indicator ${row.published ? 'bg-success' : 'bg-warning'} me-2`}></span>
+          {row.published ? 'Published' : 'Draft'}
+        </>
+      )
+    }
+  },
+  {
+    key: 'technologies',
+    header: 'Technologies',
+    renderer: 'badge'
+  },
+  {
+    key: 'category',
+    header: 'Category',
+    renderer: 'badge',
+    badgeConfig: {
+      colorMap: {
+        'web development': 'info',
+        'data science': 'primary',
+        'mobile': 'success'
+      }
+    }
+  },
+  {
+    key: 'createdAt',
+    header: 'Created',
+    format: 'date'
+  },
+  {
+    key: 'actions',
+    header: 'Actions',
+    renderer: 'custom',
+    customConfig: {
+      render: (value, row) => (
+        <div className="btn-group" role="group">
+          {row.published && (
+            <button
+              type="button"
+              className="btn btn-white btn-sm"
+              onClick={() => openInNewTab(`/project/${row.slug}`)}
+            >
+              <Eye size={12} className='me-1' /> View
+            </button>
+          )}
+          <button
+            type="button"
+            className="btn btn-white btn-sm"
+            onClick={() => navigateTo(`/admin/project/${row.id}/edit`)}
+          >
+            <Pencil size={12} className='me-1' /> Edit
+          </button>
+          <button
+            type="button"
+            className="btn btn-white text-danger btn-sm"
+            onClick={() => handleDeleteProject(row)}
+            disabled={deleteInProgress}
+          >
+            <Trash3 size={12} className='me-1'/> Delete
+          </button>
+        </div>
+      )
+    }
+  }
+];
+
 function ProjectsManagementPage() {
   const { projects, loading, error, fetchProjects, deleteProject } = useCMSStore();
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState<'all' | 'published' | 'draft'>('all');
+  const [filterStatus, setFilterStatus] = useState<'all' | 'published' | 'draft'>(FILTER_OPTIONS.ALL);
   const [selectedProjects, setSelectedProjects] = useState<any[]>([]);
-  const [deleteConfirm, setDeleteConfirm] = useState<{id: string, title: string} | null>(null);
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchProjects();
   }, [fetchProjects]);
 
-  // Calculate project statistics
+  // Calculate project statistics with status configurations
   const projectStats = useMemo(() => {
     const published = projects.filter(p => p.published).length;
     const drafts = projects.filter(p => !p.published).length;
     const total = projects.length;
     
-    return {
+    const stats = {
       total,
       published,
       drafts,
       archived: 0, // Future feature
-      publishedPercentage: total > 0 ? (published / total) * 100 : 0,
-      draftsPercentage: total > 0 ? (drafts / total) * 100 : 0
+    };
+    
+    // Calculate percentages
+    const statuses = Object.keys(STATUS_CONFIG).map(key => ({
+      key,
+      ...STATUS_CONFIG[key],
+      count: stats[key],
+      percentage: total > 0 ? (stats[key] / total) * 100 : 0
+    }));
+
+    return {
+      ...stats,
+      statuses
     };
   }, [projects]);
 
-  const filteredProjects = projects.filter(project => {
-    const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         project.technologies.some(tech => tech.toLowerCase().includes(searchTerm.toLowerCase()));
-    
-    const matchesFilter = filterStatus === 'all' || 
-                         (filterStatus === 'published' && project.published) ||
-                         (filterStatus === 'draft' && !project.published);
-    
-    return matchesSearch && matchesFilter;
-  });
-
-  const handleDeleteProject = async (project: any) => {
-    setDeleteConfirm({ id: project.id, title: project.title });
-  };
-
-  const confirmDelete = async () => {
-    if (deleteConfirm) {
-      await deleteProject(deleteConfirm.id);
-      setDeleteConfirm(null);
-    }
-  };
-
-  const cancelDelete = () => {
-    setDeleteConfirm(null);
-  };
-
-  const formatDate = (date: Date) => {
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
+  // Filtered projects based on search and filter
+  const filteredProjects = useMemo(() => {
+    return projects.filter(project => {
+      const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           project.technologies.some(tech => tech.toLowerCase().includes(searchTerm.toLowerCase()));
+      
+      const matchesFilter = filterStatus === FILTER_OPTIONS.ALL || 
+                           (filterStatus === FILTER_OPTIONS.PUBLISHED && project.published) ||
+                           (filterStatus === FILTER_OPTIONS.DRAFT && !project.published);
+      
+      return matchesSearch && matchesFilter;
     });
-  };
+  }, [projects, searchTerm, filterStatus]);
 
-  // SmartTable column configuration
-  const columns: ColumnConfig[] = [
-    {
-      key: 'project',
-      header: 'Project',
-      renderer: 'custom',
-      customConfig: {
-        render: (value, row) => (
-          <div className="d-flex align-items-center">
-            <div className="avatar avatar-soft-primary avatar-circle me-3">
-              <span className="avatar-initials">
-                {row.title.charAt(0).toUpperCase()}
-              </span>
-            </div>
-            <div>
-              <span className="d-block h5 text-inherit mb-0">{row.title}</span>
-              <span className="d-block fs-6 text-body">
-                {row.shortDescription.length > 50 
-                  ? `${row.shortDescription.substring(0, 50)}...` 
-                  : row.shortDescription
-                }
-              </span>
-            </div>
-          </div>
-        )
-      }
-    },
-    {
-      key: 'status',
-      header: 'Status',
-      renderer: 'custom',
-      customConfig: {
-        render: (value, row) => (
-          <>
-            <span className={`legend-indicator ${row.published ? 'bg-success' : 'bg-warning'} me-2`}></span>
-            {row.published ? 'Published' : 'Draft'}
-          </>
-        )
-      }
-    },
-    {
-      key: 'technologies',
-      header: 'Technologies',
-      renderer: 'technologies'
-    },
-    {
-      key: 'category',
-      header: 'Category',
-      renderer: 'badge',
-      badgeConfig: {
-        colorMap: {
-          'web development': 'info',
-          'data science': 'primary',
-          'mobile': 'success'
-        }
-      }
-    },
-    {
-      key: 'createdAt',
-      header: 'Created',
-      renderer: 'custom',
-      customConfig: {
-        render: (value) => (
-          <span className="text-muted">
-            {formatDate(value)}
-          </span>
-        )
-      }
-    },
-    {
-      key: 'actions',
-      header: 'Actions',
-      renderer: 'custom',
-      customConfig: {
-        render: (value, row) => (
-          <div className="d-flex gap-1">
-            {row.published && (
-              <Link href={`/project/${row.slug}`}>
-                <Button size="sm" variant="outline-primary" title="View Project">
-                  <Eye size={12} />
-                </Button>
-              </Link>
-            )}
-            <Link href={`/admin/project/${row.id}/edit`}>
-              <Button size="sm" variant="outline-secondary" title="Edit Project">
-                <Pencil size={12} />
-              </Button>
-            </Link>
-            <Button
-              size="sm"
-              variant="outline-danger"
-              onClick={() => handleDeleteProject(row)}
-              title="Delete Project"
-              disabled={!!deleteConfirm}
-            >
-              <Trash2 size={12} />
-            </Button>
-          </div>
-        )
-      }
+  // Find project being deleted
+  const deleteTarget = useMemo(() => 
+    deleteTargetId ? projects.find(p => p.id === deleteTargetId) : null,
+    [deleteTargetId, projects]
+  );
+
+  // Event handlers
+  const handleDeleteProject = (project: any) => setDeleteTargetId(project.id);
+  const confirmDelete = async () => {
+    if (deleteTargetId) {
+      await deleteProject(deleteTargetId);
+      setDeleteTargetId(null);
     }
-  ];
+  };
+  const cancelDelete = () => setDeleteTargetId(null);
 
-  // Selection configuration
+  // Table configuration
+  const columns = useMemo(() => 
+    createColumns(handleDeleteProject, !!deleteTargetId), 
+    [deleteTargetId]
+  );
+
   const selectionConfig: SelectionConfig = {
     mode: 'multiple',
     selectedRows: selectedProjects,
@@ -202,7 +226,7 @@ function ProjectsManagementPage() {
         </div>
 
         {/* Stats Card */}
-        <div className="card mb-3 mb-lg-5">
+        <div className="card shadow-none mb-3 mb-lg-5">
           <div className="card-body">
             <div className="d-flex align-items-md-center">
               <div className="flex-shrink-0">
@@ -216,39 +240,26 @@ function ProjectsManagementPage() {
                   </div>
 
                   <div className="col-md-9 col-lg-10 column-md-divider px-md-4">
+                    {/* Status Legend */}
                     <div className="row justify-content-start mb-2">
-                      <div className="col-auto">
-                        <span className="legend-indicator bg-primary"></span>
-                        Published ({projectStats.published})
-                      </div>
-                      <div className="col-auto">
-                        <span className="legend-indicator bg-success"></span>
-                        Drafts ({projectStats.drafts})
-                      </div>
-                      <div className="col-auto">
-                        <span className="legend-indicator"></span>
-                        Archived ({projectStats.archived})
-                      </div>
+                      {projectStats.statuses.map((status) => (
+                        <div key={status.key} className="col-auto">
+                          <span className={`legend-indicator bg-${status.color}`}></span>
+                          {status.label} ({status.count})
+                        </div>
+                      ))}
                     </div>
 
-                    {/* Progress */}
+                    {/* Progress Bar */}
                     <div className="progress rounded-pill">
-                      <div 
-                        className="progress-bar" 
-                        role="progressbar" 
-                        style={{ width: `${projectStats.publishedPercentage}%` }}
-                        aria-valuenow={projectStats.publishedPercentage} 
-                        aria-valuemin={0} 
-                        aria-valuemax={100}
-                      ></div>
-                      <div 
-                        className="progress-bar bg-success" 
-                        role="progressbar" 
-                        style={{ width: `${projectStats.draftsPercentage}%` }}
-                        aria-valuenow={projectStats.draftsPercentage} 
-                        aria-valuemin={0} 
-                        aria-valuemax={100}
-                      ></div>
+                      {projectStats.statuses.map((status, index) => (
+                        <div
+                          key={status.key}
+                          className={`progress-bar ${index === 0 ? '' : `bg-${status.color}`}`}
+                          role="progressbar"
+                          style={{ width: `${status.percentage}%` }}
+                        ></div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -282,66 +293,62 @@ function ProjectsManagementPage() {
 
             <div className="d-grid d-sm-flex justify-content-md-end align-items-sm-center gap-2">
               {/* Selection Actions */}
-              {selectedProjects.length > 0 && (
+              {selectedProjects.length > 0 ? (
                 <div className="d-flex align-items-center">
                   <span className="fs-6 me-3">
                     {selectedProjects.length} selected
                   </span>
-                  <Button size="sm" variant="outline-danger">
-                    <Trash2 size={12} className="me-1" />
+                  <button type="button" className="btn btn-outline-danger btn-sm">
+                    <Trash3 size={12} className="me-1" />
                     Delete Selected
-                  </Button>
+                  </button>
                 </div>
-              )}
-
-              {/* Delete Confirmation */}
-              {deleteConfirm && (
+              ) : deleteTarget ? (
+                /* Delete Confirmation */
                 <div className="d-flex align-items-center">
                   <span className="fs-6 me-3 text-danger">
-                    Delete "{deleteConfirm.title}"?
+                    Delete "{deleteTarget.title}"?
                   </span>
                   <div className="d-flex gap-2">
-                    <Button size="sm" variant="outline-secondary" onClick={cancelDelete}>
+                    <button type="button" className="btn btn-outline-secondary btn-sm" onClick={cancelDelete}>
                       Cancel
-                    </Button>
-                    <Button size="sm" variant="danger" onClick={confirmDelete}>
+                    </button>
+                    <button type="button" className="btn btn-danger btn-sm" onClick={confirmDelete}>
                       Delete
-                    </Button>
+                    </button>
                   </div>
                 </div>
-              )}
-
-              {/* Filter Dropdown */}
-              {!deleteConfirm && selectedProjects.length === 0 && (
+              ) : (
+                /* Filter Dropdown */
                 <div className="dropdown">
                   <button 
                     type="button" 
-                    className="btn btn-white btn-sm w-100" 
+                    className="btn btn-ghost-white btn-sm w-100"
                     data-bs-toggle="dropdown" 
                     aria-expanded="false"
                   >
                     <Filter size={16} className="me-1" /> Filter
-                    {filterStatus !== 'all' && (
+                    {filterStatus !== FILTER_OPTIONS.ALL && (
                       <span className="badge bg-soft-dark text-dark rounded-circle ms-1">1</span>
                     )}
                   </button>
 
                   <div className="dropdown-menu dropdown-menu-end">
                     <button 
-                      className={`dropdown-item ${filterStatus === 'all' ? 'active' : ''}`}
-                      onClick={() => setFilterStatus('all')}
+                      className={`dropdown-item ${filterStatus === FILTER_OPTIONS.ALL ? 'active' : ''}`}
+                      onClick={() => setFilterStatus(FILTER_OPTIONS.ALL)}
                     >
                       All Projects
                     </button>
                     <button 
-                      className={`dropdown-item ${filterStatus === 'published' ? 'active' : ''}`}
-                      onClick={() => setFilterStatus('published')}
+                      className={`dropdown-item ${filterStatus === FILTER_OPTIONS.PUBLISHED ? 'active' : ''}`}
+                      onClick={() => setFilterStatus(FILTER_OPTIONS.PUBLISHED)}
                     >
                       Published Only
                     </button>
                     <button 
-                      className={`dropdown-item ${filterStatus === 'draft' ? 'active' : ''}`}
-                      onClick={() => setFilterStatus('draft')}
+                      className={`dropdown-item ${filterStatus === FILTER_OPTIONS.DRAFT ? 'active' : ''}`}
+                      onClick={() => setFilterStatus(FILTER_OPTIONS.DRAFT)}
                     >
                       Drafts Only
                     </button>
@@ -352,38 +359,35 @@ function ProjectsManagementPage() {
           </div>
 
           {/* Smart Table */}
-          <div className="table-responsive datatable-custom">
-            <SmartTable
-              data={filteredProjects}
-              columns={columns}
-              variant="basic"
-              selection={selectionConfig}
-              styling={{
-                size: 'lg',
-                theme: 'borderless',
-                headerLight: true,
-                nowrap: true,
-                verticalAlign: 'middle',
-                className: 'card-table'
-              }}
-              loading={{
-                show: loading,
-                rowCount: 5,
-                message: 'Loading projects...'
-              }}
-              emptyState={{
-                show: !loading && filteredProjects.length === 0,
-                message: projects.length === 0 
-                  ? "You haven't created any projects yet." 
-                  : "No projects match your current filters.",
-                icon: 'folder',
-                action: projects.length === 0 ? {
-                  label: 'Create Your First Project',
-                  onClick: () => window.location.href = '/admin/project/new'
-                } : undefined
-              }}
-            />
-          </div>
+          <SmartTable
+            data={filteredProjects}
+            columns={columns}
+            selection={selectionConfig}
+            styling={{
+              size: 'lg',
+              theme: 'borderless',
+              headerLight: true,
+              nowrap: true,
+              verticalAlign: 'middle',
+              className: 'card-table'
+            }}
+            loading={{
+              show: loading,
+              rowCount: 5,
+              message: 'Loading projects...'
+            }}
+            emptyState={{
+              show: !loading && filteredProjects.length === 0,
+              message: projects.length === 0 
+                ? "You haven't created any projects yet." 
+                : "No projects match your current filters.",
+              icon: 'folder',
+              action: projects.length === 0 ? {
+                label: 'Create Your First Project',
+                onClick: () => navigateTo('/admin/project/new')
+              } : undefined
+            }}
+          />
 
           {/* Footer */}
           {filteredProjects.length > 0 && (
@@ -392,9 +396,9 @@ function ProjectsManagementPage() {
                 <div className="col-sm mb-2 mb-sm-0">
                   <div className="d-flex justify-content-center justify-content-sm-start align-items-center">
                     <span className="me-2">Showing:</span>
-                    <span className="fw-semibold">{filteredProjects.length}</span>
+                    <span>{filteredProjects.length}</span>
                     <span className="text-secondary mx-2">of</span>
-                    <span id="datatableWithPaginationInfoTotalQty">{projects.length}</span>
+                    <span>{projects.length}</span>
                     <span className="text-secondary ms-1">projects</span>
                   </div>
                 </div>

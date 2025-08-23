@@ -77,8 +77,8 @@ $disabled-bg-color:                                         rgba($gray-100, .5) 
 $primary-soft-bg-color:                                     rgba(lighten($primary, 12%), .1) !default;
 
 // Shadows
-//$box-shadow:                                                0rem .375rem 1.5rem 0rem rgba($gray-600, .125) !default;
-$box-shadow:                                                0px 3px 3px -1px rgba(10 22 70 / 10%), 0px 0px 1px 0px rgb(10 22 70 / 6%) !default;
+$box-shadow:                                                0rem .375rem 1.5rem 0rem rgba($gray-600, .125) !default;
+//$box-shadow:                                                0px 3px 3px -1px rgba(10 22 70 / 10%), 0px 0px 1px 0px rgb(10 22 70 / 6%) !default;
 //$box-shadow-sm:                                             0rem .375rem .75rem rgba($gray-600, .075) !default;
 $box-shadow-sm:                                             0px 1px 1px 0px rgba(10 22 70 / 10%), 0px 0px 1px 0px rgb(10 22 70 / 6%) !default;
 $box-shadow-sm-hover:                                       0px .1875rem .75rem rgba($gray-600, .25) !default;
@@ -87,7 +87,7 @@ $box-shadow-xl:                                             0rem 3.75rem 5rem 0r
 
 // Borders
 $border-width:                                              .0625rem !default;
-$border-color:                                              rgba($gray-200, .7) !default;
+$border-color:                                              rgba($gray-02, 1) !default;
 
 // Border Radius
 $border-radius:                                             .5rem !default;
@@ -1941,7 +1941,7 @@ $table-thead-th-color:                                      $body-color !default
 $table-body-color:                                          $body-color !default;
 
 // Background
-$table-thead-light-bg:                                      $gray-200 !default;
+$table-thead-light-bg:                                      $gray-02 !default;
 $table-striped-bg:                                          $gray-100 !default;
 $table-hover-bg:                                            rgba($gray-300, .4) !default;
 

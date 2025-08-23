@@ -1,8 +1,9 @@
 // app/widgets/tables/cellRenderers/BadgeCell.tsx
-// Badge/status cell renderer
+// Badge/status cell renderer with technologies support
 
 import React from 'react';
 import type { TableCellProps } from '@/types';
+import { getTechnologyScheme } from '@/utils';
 
 // Map accent colors to closest Bootstrap soft colors
 const accentToSoftColorMap: Record<string, string> = {
@@ -32,6 +33,47 @@ const BadgeCell: React.FC<TableCellProps> = ({ value, row, column }) => {
   }
 
   const config = column.badgeConfig || {};
+
+  // Handle array of technologies (merged from TechnologiesBadgeCell)
+  if (Array.isArray(value)) {
+    const technologies: string[] = value;
+    const maxVisible = config.maxVisible || 2;
+    const showMoreText = config.showMoreText !== false;
+    
+    if (technologies.length === 0) {
+      return <span className="text-muted">—</span>;
+    }
+
+    const visibleTechs = technologies.slice(0, maxVisible);
+    const remainingCount = technologies.length - maxVisible;
+
+    return (
+      <div className="d-flex flex-wrap gap-1">
+        {visibleTechs.map((tech: string) => {
+          const accentColor = getTechnologyScheme(tech);
+          const softColor = accentToSoftColorMap[accentColor] || 'secondary';
+          
+          return (
+            <span 
+              key={tech} 
+              className={`badge bg-soft-${softColor} text-${softColor}`}
+            >
+              <span className={`legend-indicator bg-accent-${accentColor} me-1`}></span>
+              {tech}
+            </span>
+          );
+        })}
+        
+        {remainingCount > 0 && showMoreText && (
+          <span className="badge bg-light text-dark small">
+            +{remainingCount} more
+          </span>
+        )}
+      </div>
+    );
+  }
+
+  // Handle single value (original BadgeCell functionality)
   const valueStr = String(value).toLowerCase();
   
   // Default color mapping for statuses
@@ -55,7 +97,7 @@ const BadgeCell: React.FC<TableCellProps> = ({ value, row, column }) => {
   let softVariant = 'secondary';
   let indicatorColor = 'secondary';
 
-  // Check if using custom color function (for technologies)
+  // Check if using custom color function
   if (config.colorFunction) {
     const accentColor = config.colorFunction(String(value));
     softVariant = accentToSoftColorMap[accentColor] || 'secondary';

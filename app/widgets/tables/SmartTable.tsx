@@ -8,18 +8,14 @@ import TableRow from './TableRow';
 const SmartTable: React.FC<SmartTableProps> = ({
   data,
   columns,
-  variant = 'basic',
   styling = {},
-  title,
   selection,
   onRowClick,
   onRowDoubleClick,
   loading,
   emptyState,
   className = '',
-  id,
-  dataTable = false,
-  dataTableOptions = {}
+  id
 }) => {
   // Build table classes
   const tableClasses = [
@@ -27,12 +23,11 @@ const SmartTable: React.FC<SmartTableProps> = ({
     styling.theme === 'borderless' ? 'table-borderless' : '',
     styling.theme === 'hover' ? 'table-hover' : '',
     styling.theme === 'striped' ? 'table-striped' : '',
-    'table-thead-bordered', // Common in your examples
+    'table-thead-bordered',
     styling.nowrap ? 'table-nowrap' : '',
     styling.textAlign ? `table-text-${styling.textAlign}` : '',
     styling.verticalAlign ? `table-align-${styling.verticalAlign}` : 'table-align-middle',
     styling.size ? `table-${styling.size}` : '',
-    variant === 'card' ? 'card-table' : '',
     styling.className
   ].filter(Boolean).join(' ');
 
@@ -114,93 +109,63 @@ const SmartTable: React.FC<SmartTableProps> = ({
     </tr>
   );
 
-  // Table content
-  const tableContent = (
-    <table 
-      className={tableClasses}
-      id={id}
-      data-hs-datatables-options={dataTable ? JSON.stringify(dataTableOptions) : undefined}
-    >
-      <thead className={styling.headerLight !== false ? 'thead-light' : ''}>
-        <tr>
-          {/* Selection header */}
-          {selection && selection.mode === 'multiple' && (
-            <th className="table-column-pe-0">
-              <div className="form-check">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  checked={isAllSelected || false}
-                  onChange={handleSelectAll}
-                />
-                <label className="form-check-label"></label>
-              </div>
-            </th>
-          )}
-          {selection && selection.mode === 'single' && (
-            <th className="table-column-pe-0" style={{ width: '24px' }}></th>
-          )}
+  return (
+    <div className={`table-responsive ${className}`}>
+      <table className={tableClasses} id={id}>
+        <thead className={styling.headerLight !== false ? 'thead-light' : ''}>
+          <tr>
+            {/* Selection header */}
+            {selection && selection.mode === 'multiple' && (
+              <th className="table-column-pe-0">
+                <div className="form-check">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    checked={isAllSelected || false}
+                    onChange={handleSelectAll}
+                  />
+                  <label className="form-check-label"></label>
+                </div>
+              </th>
+            )}
+            {selection && selection.mode === 'single' && (
+              <th className="table-column-pe-0" style={{ width: '24px' }}></th>
+            )}
 
-          {/* Column headers */}
-          {visibleColumns.map((column) => (
-            <th 
-              key={column.key}
-              className={column.className}
-              style={{ width: column.width, minWidth: column.minWidth }}
-            >
-              {column.header}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {loading?.show ? (
-          renderLoadingSkeleton()
-        ) : data.length === 0 ? (
-          emptyState?.show !== false && renderEmptyState()
-        ) : (
-          data.map((row, index) => (
-            <TableRow
-              key={row.id || index}
-              row={row}
-              index={index}
-              columns={visibleColumns}
-              selection={selection}
-              onRowClick={onRowClick}
-              onRowDoubleClick={onRowDoubleClick}
-            />
-          ))
-        )}
-      </tbody>
-    </table>
+            {/* Column headers */}
+            {visibleColumns.map((column) => (
+              <th 
+                key={column.key}
+                className={column.className}
+                style={{ width: column.width, minWidth: column.minWidth }}
+              >
+                {column.header}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {loading?.show ? (
+            renderLoadingSkeleton()
+          ) : data.length === 0 ? (
+            emptyState?.show !== false && renderEmptyState()
+          ) : (
+            data.map((row, index) => (
+              <TableRow
+                key={row.id || index}
+                row={row}
+                index={index}
+                columns={visibleColumns}
+                selection={selection}
+                onRowClick={onRowClick}
+                onRowDoubleClick={onRowDoubleClick}
+              />
+            ))
+          )}
+        </tbody>
+      </table>
+    </div>
   );
-
-  // Wrap based on variant
-  if (variant === 'card') {
-    return (
-      <div className={`card ${className}`}>
-        {title && (
-          <div className="card-header">
-            <h5 className="card-header-title mb-0">{title}</h5>
-          </div>
-        )}
-        <div className="table-responsive datatable-custom">
-          {tableContent}
-        </div>
-      </div>
-    );
-  }
-
-  if (variant === 'responsive') {
-    return (
-      <div className={`table-responsive ${className}`}>
-        {tableContent}
-      </div>
-    );
-  }
-
-  // Basic variant
-  return <div className={className}>{tableContent}</div>;
 };
 
 export default SmartTable;

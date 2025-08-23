@@ -4,6 +4,7 @@
 
 .card {
   box-shadow: $card-box-shadow;
+  border: $card-border-width solid $card-border-color;
 
   table {
     tr th {
@@ -35,6 +36,7 @@
 .card-header {
   padding-top: $card-header-padding-y;
   padding-bottom: $card-header-padding-y;
+  border-bottom: $card-border-width solid $card-border-color;
 }
 
 .card-header-title {

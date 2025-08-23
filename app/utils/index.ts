@@ -13,6 +13,11 @@ export {
 } from './technologyColors';
 
 // ========================
+// FORMATTING UTILITIES
+// ========================
+export { formatValue } from './formatting';
+
+// ========================
 // BRACKETS UTILITIES
 // ========================
 export { TournamentBuilder } from './brackets/tournament';

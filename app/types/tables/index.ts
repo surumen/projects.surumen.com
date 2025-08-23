@@ -4,13 +4,13 @@
 // Column types
 export type {
   ColumnRenderer,
+  FormatType,
+  DateTimeFormatOptions,
+  NumberFormatOptions,
+  FormatConfig,
+  ColumnFormat,
   LinkRendererConfig,
   BadgeRendererConfig,
-  AvatarRendererConfig,
-  PaymentMethodRendererConfig,
-  ActionButton,
-  ActionDropdownItem,
-  ActionsRendererConfig,
   CustomRendererConfig,
   ColumnConfig,
   ColumnToggleItem,
@@ -19,7 +19,6 @@ export type {
 
 // Table types
 export type {
-  TableVariant,
   TableSize,
   TableTheme,
   SelectionMode,

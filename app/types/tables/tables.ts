@@ -5,10 +5,8 @@ import { ReactNode } from 'react';
 import { ColumnConfig } from './columns';
 
 // ========================
-// TABLE VARIANTS
+// TABLE TYPES
 // ========================
-
-export type TableVariant = 'basic' | 'card' | 'responsive';
 
 export type TableSize = 'sm' | 'md' | 'lg';
 
@@ -71,9 +69,7 @@ export interface SmartTableProps {
   columns: ColumnConfig[];
   
   // Table styling
-  variant?: TableVariant;
   styling?: TableStyling;
-  title?: string; // For card variant
   
   // Selection
   selection?: SelectionConfig;
@@ -89,10 +85,6 @@ export interface SmartTableProps {
   // Additional props
   className?: string;
   id?: string;
-  
-  // DataTables.js integration (optional)
-  dataTable?: boolean; // Enable DataTables.js features
-  dataTableOptions?: Record<string, any>; // DataTables configuration
 }
 
 // ========================

@@ -123,20 +123,19 @@ export type {
 export type {
     // Column types
     ColumnRenderer,
+    FormatType,
+    DateTimeFormatOptions,
+    NumberFormatOptions,
+    FormatConfig,
+    ColumnFormat,
     LinkRendererConfig,
     BadgeRendererConfig,
-    AvatarRendererConfig,
-    PaymentMethodRendererConfig,
-    ActionButton,
-    ActionDropdownItem,
-    ActionsRendererConfig,
     CustomRendererConfig,
     ColumnConfig,
     ColumnToggleItem,
     ColumnVisibilityMap,
     
     // Table types
-    TableVariant,
     TableSize,
     TableTheme,
     SelectionMode,
