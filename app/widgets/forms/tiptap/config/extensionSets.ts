@@ -1,11 +1,19 @@
 // Predefined extension sets for different use cases
 
 import StarterKit from '@tiptap/starter-kit';
+import TextAlign from '@tiptap/extension-text-align';
+import Subscript from '@tiptap/extension-subscript';
+import Superscript from '@tiptap/extension-superscript';
+import HorizontalRule from '@tiptap/extension-horizontal-rule';
+import Link from '@tiptap/extension-link';
+import Color from '@tiptap/extension-color';
+import Highlight from '@tiptap/extension-highlight';
+import { TextStyle } from '@tiptap/extension-text-style';
 import type { Extension } from '@tiptap/core';
 
 export type ExtensionSet = 'minimal' | 'basic' | 'standard' | 'full';
 
-export const extensionSets: Record<ExtensionSet, Extension[]> = {
+export const extensionSets: Record<ExtensionSet, any[]> = {
   minimal: [
     StarterKit.configure({
       heading: {
@@ -35,7 +43,12 @@ export const extensionSets: Record<ExtensionSet, Extension[]> = {
         keepMarks: true,
         keepAttributes: false
       }
-    })
+    }),
+    TextAlign.configure({
+      types: ['heading', 'paragraph'],
+      alignments: ['left', 'center', 'right']
+    }),
+    HorizontalRule
   ],
   
   standard: [
@@ -51,8 +64,20 @@ export const extensionSets: Record<ExtensionSet, Extension[]> = {
         keepMarks: true,
         keepAttributes: false
       }
+    }),
+    TextAlign.configure({
+      types: ['heading', 'paragraph'],
+      alignments: ['left', 'center', 'right', 'justify']
+    }),
+    HorizontalRule,
+    Subscript,
+    Superscript,
+    Link.configure({
+      openOnClick: false,
+      HTMLAttributes: {
+        class: 'text-primary'
+      }
     })
-    // Additional extensions will be added here as we install them
   ],
   
   full: [
@@ -68,15 +93,34 @@ export const extensionSets: Record<ExtensionSet, Extension[]> = {
         keepMarks: true,
         keepAttributes: false
       }
+    }),
+    TextAlign.configure({
+      types: ['heading', 'paragraph'],
+      alignments: ['left', 'center', 'right', 'justify']
+    }),
+    HorizontalRule,
+    Subscript,
+    Superscript,
+    Link.configure({
+      openOnClick: false,
+      HTMLAttributes: {
+        class: 'text-primary'
+      }
+    }),
+    TextStyle,
+    Color.configure({
+      types: ['textStyle']
+    }),
+    Highlight.configure({
+      multicolor: true
     })
-    // Additional extensions will be added here as we install them
   ]
 };
 
 export const getExtensions = (
   extensionSet: ExtensionSet = 'basic',
-  customExtensions: Extension[] = []
-): Extension[] => {
+  customExtensions: any[] = []
+): any[] => {
   const baseExtensions = extensionSets[extensionSet] || extensionSets.basic;
   return [...baseExtensions, ...customExtensions];
 };

@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
 import type { Editor } from '@tiptap/core';
-import { ToolbarConfig, getToolbarConfig, ToolbarItem, ToolbarGroupConfig } from './config/toolbarConfig';
+import { 
+  ToolbarConfig, 
+  getToolbarConfig, 
+  ToolbarItem, 
+  ToolbarGroupConfig, 
+  BUTTON_CONFIGS, 
+  ButtonConfig 
+} from './config/toolbarConfig';
+import LinkModal from './components/LinkModal';
+import ImageModal from './components/ImageModal';
+import EmbedModal from './components/EmbedModal';
 import {
   // History
   ArrowCounterclockwise, ArrowClockwise,
@@ -10,16 +20,18 @@ import {
   Palette, BucketFill,
   // Alignment
   TextLeft, TextCenter, TextRight, JustifyLeft,
+  // Indentation
+  TextIndentLeft, TextIndentRight,
   // Lists
   ListUl, ListOl,
   // Insert
-  Link45deg, Image, Table, Hr,
-  // Media & Special
-  PlayBtnFill, Calculator, Quote,
+  Link45deg, Image, Table, Hr, PlayBtnFill, Calculator,
   // Code
   Code, CodeSquare,
+  // Blocks
+  Quote,
   // Tools
-  Eraser, Fullscreen, Printer, TextParagraph
+  Eraser, Fullscreen, TextParagraph
 } from 'react-bootstrap-icons';
 
 interface TiptapToolbarProps {
@@ -30,240 +42,283 @@ interface TiptapToolbarProps {
 
 const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor, config, disabled = false }) => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [activeModal, setActiveModal] = useState<string | null>(null);
   const toolbarGroups = getToolbarConfig(config);
 
-  // Heading dropdown options
-  const headingOptions = [
-    { level: 0, label: 'Paragraph' },
-    { level: 1, label: 'Heading 1' },
-    { level: 2, label: 'Heading 2' },
-    { level: 3, label: 'Heading 3' },
-    { level: 4, label: 'Heading 4' },
-    { level: 5, label: 'Heading 5' },
-    { level: 6, label: 'Heading 6' }
-  ];
-
-  const getCurrentHeading = () => {
-    if (editor.isActive('paragraph')) return headingOptions[0];
-    for (let i = 1; i <= 6; i++) {
-      if (editor.isActive('heading', { level: i })) {
-        return headingOptions[i];
-      }
+  // Get icon component or text representation
+  const getIcon = (iconName: string, size: number = 16) => {
+    switch (iconName) {
+      // History
+      case 'bi-arrow-counterclockwise': return <ArrowCounterclockwise size={size} />;
+      case 'bi-arrow-clockwise': return <ArrowClockwise size={size} />;
+      // Text Formatting
+      case 'bi-type-bold': return <TypeBold size={size} />;
+      case 'bi-type-italic': return <TypeItalic size={size} />;
+      case 'bi-type-underline': return <TypeUnderline size={size} />;
+      case 'bi-type-strikethrough': return <TypeStrikethrough size={size} />;
+      case 'subscript-text': return <span style={{ fontSize: '14px', fontFamily: 'monospace' }}>X₂</span>;
+      case 'superscript-text': return <span style={{ fontSize: '14px', fontFamily: 'monospace' }}>X²</span>;
+      // Colors
+      case 'bi-palette': return <Palette size={size} />;
+      case 'bi-paint-bucket': return <BucketFill size={size} />;
+      // Alignment
+      case 'bi-text-left': return <TextLeft size={size} />;
+      case 'bi-text-center': return <TextCenter size={size} />;
+      case 'bi-text-right': return <TextRight size={size} />;
+      case 'bi-justify': return <JustifyLeft size={size} />;
+      // Indentation
+      case 'bi-indent': return <TextIndentRight size={size} />;
+      case 'bi-outdent': return <TextIndentLeft size={size} />;
+      // Lists
+      case 'bi-list-ul': return <ListUl size={size} />;
+      case 'bi-list-ol': return <ListOl size={size} />;
+      // Insert
+      case 'bi-link-45deg': return <Link45deg size={size} />;
+      case 'bi-image': return <Image size={size} />;
+      case 'bi-table': return <Table size={size} />;
+      case 'bi-hr': return <Hr size={size} />;
+      case 'bi-play-btn-fill': return <PlayBtnFill size={size} />;
+      case 'bi-calculator': return <Calculator size={size} />;
+      // Code
+      case 'bi-code': return <Code size={size} />;
+      case 'bi-code-square': return <CodeSquare size={size} />;
+      // Blocks
+      case 'bi-quote': return <Quote size={size} />;
+      // Tools
+      case 'bi-eraser': return <Eraser size={size} />;
+      case 'bi-fullscreen': return <Fullscreen size={size} />;
+      case 'line-height-text': return <span style={{ fontSize: '12px', fontFamily: 'monospace' }}>1.5</span>;
+      // Default
+      default: return <TextParagraph size={size} />;
     }
-    return headingOptions[0];
   };
 
-  const renderDropdown = (item: ToolbarItem, buttonContent: React.ReactNode, dropdownItems: React.ReactNode) => {
-    const isOpen = activeDropdown === item;
+  // Check if button is active
+  const isButtonActive = (buttonConfig: ButtonConfig): boolean => {
+    if (!('activeCheck' in buttonConfig) || !buttonConfig.activeCheck) return false;
     
-    return (
-      <div key={item} className="btn-group" role="group">
-        <button
-          type="button"
-          className={`btn btn-sm btn-outline-secondary dropdown-toggle ${isOpen ? 'show' : ''}`}
-          onClick={() => setActiveDropdown(isOpen ? null : item)}
-          aria-expanded={isOpen}
-          disabled={disabled}
-          style={{ minWidth: '110px' }}
-        >
-          {buttonContent}
-        </button>
-        
-        <ul className={`dropdown-menu mt-6 ${isOpen ? 'show' : ''}`}>
-          {dropdownItems}
-        </ul>
-      </div>
-    );
+    if (typeof buttonConfig.activeCheck === 'string') {
+      if (buttonConfig.activeCheck.includes('.')) {
+        const [attr, prop] = buttonConfig.activeCheck.split('.');
+        return !!editor.getAttributes(attr)[prop];
+      }
+      return editor.isActive(buttonConfig.activeCheck);
+    } else if (typeof buttonConfig.activeCheck === 'object') {
+      return editor.isActive(buttonConfig.activeCheck);
+    }
+    return false;
   };
 
-  const renderToolbarItem = (item: ToolbarItem) => {
-    // Icon mapping
-    const getIcon = (item: ToolbarItem) => {
-      switch (item) {
-        case 'undo': return ArrowCounterclockwise;
-        case 'redo': return ArrowClockwise;
-        case 'bold': return TypeBold;
-        case 'italic': return TypeItalic;
-        case 'underline': return TypeUnderline;
-        case 'strikethrough': return TypeStrikethrough;
-        case 'subscript': return Code;
-        case 'superscript': return Code;
-        case 'textColor': return Palette;
-        case 'highlightColor': return BucketFill;
-        case 'alignLeft': return TextLeft;
-        case 'alignCenter': return TextCenter;
-        case 'alignRight': return TextRight;
-        case 'alignJustify': return JustifyLeft;
-        case 'indent': return TextRight;
-        case 'outdent': return TextLeft;
-        case 'bulletList': return ListUl;
-        case 'orderedList': return ListOl;
-        case 'link': return Link45deg;
-        case 'unlink': return Link45deg;
-        case 'image': return Image;
-        case 'table': return Table;
-        case 'hr': return Hr;
-        case 'embed': return PlayBtnFill;
-        case 'math': return Calculator;
-        case 'blockquote': return Quote;
-        case 'codeInline': return Code;
-        case 'codeBlock': return CodeSquare;
-        case 'clearFormatting': return Eraser;
-        case 'fullscreen': return Fullscreen;
-        case 'print': return Printer;
-        case 'lineHeight': return TextParagraph;
-        case 'paragraph': return Code;
-        default: return Code;
-      }
-    };
+  // Handle toggle controls
+  const handleToggle = (buttonConfig: ButtonConfig) => () => {
+    if (buttonConfig.controlType !== 'toggle') return;
     
-    const IconComponent = getIcon(item);
+    if ('params' in buttonConfig && buttonConfig.params) {
+      (editor.chain().focus() as any)[buttonConfig.command](buttonConfig.params).run();
+    } else {
+      (editor.chain().focus() as any)[buttonConfig.command]().run();
+    }
+  };
 
-    const getButtonProps = () => {
-      switch (item) {
-        // History
-        case 'undo':
-          return {
-            onClick: () => editor.chain().focus().undo().run(),
-            isActive: false,
-            disabled: !editor.can().undo(),
-            title: 'Undo'
-          };
-        case 'redo':
-          return {
-            onClick: () => editor.chain().focus().redo().run(),
-            isActive: false,
-            disabled: !editor.can().redo(),
-            title: 'Redo'
-          };
-          
-        // Text Formatting
-        case 'bold':
-          return {
-            onClick: () => editor.chain().focus().toggleBold().run(),
-            isActive: editor.isActive('bold'),
-            title: 'Bold'
-          };
-        case 'italic':
-          return {
-            onClick: () => editor.chain().focus().toggleItalic().run(),
-            isActive: editor.isActive('italic'),
-            title: 'Italic'
-          };
-        case 'underline':
-          return {
-            onClick: () => editor.chain().focus().toggleUnderline().run(),
-            isActive: editor.isActive('underline'),
-            title: 'Underline'
-          };
-        case 'strikethrough':
-          return {
-            onClick: () => editor.chain().focus().toggleStrike().run(),
-            isActive: editor.isActive('strike'),
-            title: 'Strikethrough'
-          };
-          
-        // Lists
-        case 'bulletList':
-          return {
-            onClick: () => editor.chain().focus().toggleBulletList().run(),
-            isActive: editor.isActive('bulletList'),
-            title: 'Bullet List'
-          };
-        case 'orderedList':
-          return {
-            onClick: () => editor.chain().focus().toggleOrderedList().run(),
-            isActive: editor.isActive('orderedList'),
-            title: 'Numbered List'
-          };
-          
-        // Blocks
-        case 'blockquote':
-          return {
-            onClick: () => editor.chain().focus().toggleBlockquote().run(),
-            isActive: editor.isActive('blockquote'),
-            title: 'Quote'
-          };
-        case 'codeBlock':
-          return {
-            onClick: () => editor.chain().focus().toggleCodeBlock().run(),
-            isActive: editor.isActive('codeBlock'),
-            title: 'Code Block'
-          };
-          
-        // Paragraph
-        case 'paragraph':
-          return {
-            onClick: () => editor.chain().focus().setParagraph().run(),
-            isActive: editor.isActive('paragraph'),
-            title: 'Paragraph',
-            useText: 'P'
-          };
-          
-        // Not yet implemented - placeholder buttons
-        default:
-          return {
-            onClick: () => console.log(`${item} not implemented yet`),
-            isActive: false,
-            disabled: true,
-            title: `${item.charAt(0).toUpperCase() + item.slice(1)} (Coming Soon)`
-          };
+  // Handle action controls
+  const handleAction = (buttonConfig: ButtonConfig) => () => {
+    if (buttonConfig.controlType !== 'action') return;
+
+    // Special handling for undo/redo
+    if (buttonConfig.command === 'undo' || buttonConfig.command === 'redo') {
+      if (editor.can()[buttonConfig.command]()) {
+        (editor.chain().focus() as any)[buttonConfig.command]().run();
       }
-    };
-
-    // Special handling for dropdown items
-    if (item === 'headingDropdown') {
-      const currentHeading = getCurrentHeading();
-      
-      const dropdownItems = headingOptions.map((option) => (
-        <li key={option.level}>
-          <button
-            type="button"
-            className={`dropdown-item ${
-              (option.level === 0 && editor.isActive('paragraph')) ||
-              (option.level > 0 && editor.isActive('heading', { level: option.level }))
-                ? 'active' : ''
-            }`}
-            onClick={(e) => {
-              e.preventDefault();
-              if (option.level === 0) {
-                editor.chain().focus().setParagraph().run();
-              } else {
-                editor.chain().focus().toggleHeading({ level: option.level as 1 | 2 | 3 | 4 | 5 | 6 }).run();
-              }
-              setActiveDropdown(null);
-            }}
-          >
-            {option.label}
-          </button>
-        </li>
-      ));
-
-      return renderDropdown(item, currentHeading.label, dropdownItems);
+      return;
     }
 
-    const props = getButtonProps();
-    if (!props) return null;
+    // Special handling for clear formatting
+    if (buttonConfig.command === 'clearNodes') {
+      editor.chain().focus().clearNodes().unsetAllMarks().run();
+      return;
+    }
+
+    // Special handling for text alignment
+    if (buttonConfig.command === 'setTextAlign') {
+      editor.chain().focus().setTextAlign(buttonConfig.params).run();
+      return;
+    }
+
+    // Regular action handling
+    if ('params' in buttonConfig && buttonConfig.params) {
+      (editor.chain().focus() as any)[buttonConfig.command](buttonConfig.params).run();
+    } else {
+      (editor.chain().focus() as any)[buttonConfig.command]().run();
+    }
+  };
+
+  // Handle dropdown selection
+  const handleDropdownSelect = (buttonConfig: ButtonConfig, value: any) => {
+    if (buttonConfig.controlType !== 'dropdown') return;
+    
+    setActiveDropdown(null);
+    buttonConfig.onSelect(editor, value);
+  };
+
+  // Handle dialog opening
+  const handleDialog = (buttonConfig: ButtonConfig) => () => {
+    if (buttonConfig.controlType !== 'dialog') return;
+    
+    // Handle different dialog types
+    if (buttonConfig.title === 'Insert Link') {
+      setActiveModal('link');
+    } else if (buttonConfig.title === 'Insert Image') {
+      setActiveModal('image');
+    } else if (buttonConfig.title === 'Embed Media') {
+      setActiveModal('embed');
+    } else {
+      // For other dialogs, call the original openDialog method for now
+      buttonConfig.openDialog(editor);
+    }
+  };
+
+  // Render toggle button
+  const renderToggleButton = (item: ToolbarItem, buttonConfig: ButtonConfig) => {
+    if (buttonConfig.controlType !== 'toggle') return null;
+
+    const isActive = isButtonActive(buttonConfig);
+    const isDisabled = disabled || buttonConfig.disabled;
 
     return (
       <button
         key={item}
         type="button"
-        className={`btn btn-sm ${props.isActive ? 'btn-primary' : 'btn-outline-secondary'}`}
-        onClick={props.onClick}
-        disabled={disabled || props.disabled}
-        title={props.title}
+        className={`btn btn-sm ${isActive ? 'btn-primary' : 'btn-outline-secondary'}`}
+        onClick={handleToggle(buttonConfig)}
+        disabled={isDisabled}
+        title={buttonConfig.title}
       >
-        {props.useText ? (
-          <span className="fw-bold">{props.useText}</span>
-        ) : (
-          <IconComponent size={16} />
-        )}
+        {getIcon(buttonConfig.icon)}
       </button>
     );
   };
 
-  const renderToolbarGroup = (group: ToolbarGroupConfig, groupIndex: number) => {
+  // Render action button
+  const renderActionButton = (item: ToolbarItem, buttonConfig: ButtonConfig) => {
+    if (buttonConfig.controlType !== 'action') return null;
+
+    let isDisabled = disabled || buttonConfig.disabled;
+    
+    // Special disabled logic for history buttons
+    if (buttonConfig.command === 'undo') {
+      isDisabled = isDisabled || !editor.can().undo();
+    } else if (buttonConfig.command === 'redo') {
+      isDisabled = isDisabled || !editor.can().redo();
+    }
+
+    return (
+      <button
+        key={item}
+        type="button"
+        className="btn btn-sm btn-outline-secondary"
+        onClick={handleAction(buttonConfig)}
+        disabled={isDisabled}
+        title={buttonConfig.title}
+      >
+        {getIcon(buttonConfig.icon)}
+      </button>
+    );
+  };
+
+  // Render dropdown button
+  const renderDropdownButton = (item: ToolbarItem, buttonConfig: ButtonConfig) => {
+    if (buttonConfig.controlType !== 'dropdown') return null;
+
+    const isOpen = activeDropdown === item;
+    const currentValue = buttonConfig.getCurrentValue(editor);
+    const options = buttonConfig.getOptions(editor);
+
+    // Show icon if currentValue is empty, otherwise show text
+    const showIcon = currentValue === '';
+    const buttonContent = showIcon ? getIcon(buttonConfig.icon) : currentValue;
+
+    return (
+      <div key={item} className="btn-group" role="group">
+        <button
+          type="button"
+          className={`btn btn-sm btn-outline-secondary dropdown-toggle`}
+          onClick={() => setActiveDropdown(isOpen ? null : item)}
+          aria-expanded={isOpen}
+          disabled={disabled || buttonConfig.disabled}
+          title={buttonConfig.title}
+          style={showIcon ? {} : { minWidth: '120px' }}
+        >
+          {buttonContent}
+        </button>
+        
+        <ul className={`dropdown-menu ${isOpen ? 'show' : ''}`}>
+          {options.map((option, index) => (
+            <li key={index}>
+              <button
+                type="button"
+                className="dropdown-item d-flex align-items-center"
+                onClick={() => handleDropdownSelect(buttonConfig, option.value)}
+              >
+                {option.color && (
+                  <span 
+                    className="d-inline-block me-2"
+                    style={{ 
+                      width: '16px', 
+                      height: '16px', 
+                      backgroundColor: option.color,
+                      border: '1px solid #dee2e6',
+                      borderRadius: '2px'
+                    }}
+                  />
+                )}
+                {option.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
+
+  // Render dialog button
+  const renderDialogButton = (item: ToolbarItem, buttonConfig: ButtonConfig) => {
+    if (buttonConfig.controlType !== 'dialog') return null;
+
+    return (
+      <button
+        key={item}
+        type="button"
+        className="btn btn-sm btn-outline-secondary"
+        onClick={handleDialog(buttonConfig)}
+        disabled={disabled || buttonConfig.disabled}
+        title={buttonConfig.title}
+      >
+        {getIcon(buttonConfig.icon)}
+      </button>
+    );
+  };
+
+  // Render toolbar item based on control type
+  const renderToolbarItem = (item: ToolbarItem) => {
+    const buttonConfig = BUTTON_CONFIGS[item];
+    if (!buttonConfig) return null;
+
+    switch (buttonConfig.controlType) {
+      case 'toggle':
+        return renderToggleButton(item, buttonConfig);
+      case 'action':
+        return renderActionButton(item, buttonConfig);
+      case 'dropdown':
+        return renderDropdownButton(item, buttonConfig);
+      case 'dialog':
+        return renderDialogButton(item, buttonConfig);
+      default:
+        return null;
+    }
+  };
+
+  // Render toolbar group
+  const renderToolbarGroup = (group: ToolbarGroupConfig) => {
     return (
       <div 
         key={group.id}
@@ -293,7 +348,24 @@ const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor, config, disabled 
 
   return (
     <div className="btn-toolbar bg-light p-2 flex-wrap">
-      {toolbarGroups.map((group, index) => renderToolbarGroup(group, index))}
+      {toolbarGroups.map(group => renderToolbarGroup(group))}
+      
+      {/* Modals */}
+      <LinkModal 
+        isOpen={activeModal === 'link'}
+        onClose={() => setActiveModal(null)}
+        editor={editor}
+      />
+      <ImageModal 
+        isOpen={activeModal === 'image'}
+        onClose={() => setActiveModal(null)}
+        editor={editor}
+      />
+      <EmbedModal 
+        isOpen={activeModal === 'embed'}
+        onClose={() => setActiveModal(null)}
+        editor={editor}
+      />
     </div>
   );
 };
