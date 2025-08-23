@@ -4,12 +4,8 @@ import { ToolbarConfig, getToolbarConfig, ToolbarItem, ToolbarGroupConfig } from
 import {
   // History
   ArrowCounterclockwise, ArrowClockwise,
-  // Headings - trying different naming
-  Type, TypeH1, TypeH2, TypeH3, Paragraph,
   // Text Formatting
   TypeBold, TypeItalic, TypeUnderline, TypeStrikethrough,
-  // Script - if they exist
-  // Subscript, Superscript,
   // Colors
   Palette, BucketFill,
   // Alignment
@@ -33,7 +29,7 @@ interface TiptapToolbarProps {
 }
 
 const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor, config, disabled = false }) => {
-  const [showHeadingDropdown, setShowHeadingDropdown] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const toolbarGroups = getToolbarConfig(config);
 
   // Heading dropdown options
@@ -57,6 +53,29 @@ const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor, config, disabled 
     return headingOptions[0];
   };
 
+  const renderDropdown = (item: ToolbarItem, buttonContent: React.ReactNode, dropdownItems: React.ReactNode) => {
+    const isOpen = activeDropdown === item;
+    
+    return (
+      <div key={item} className="btn-group" role="group">
+        <button
+          type="button"
+          className={`btn btn-sm btn-outline-secondary dropdown-toggle ${isOpen ? 'show' : ''}`}
+          onClick={() => setActiveDropdown(isOpen ? null : item)}
+          aria-expanded={isOpen}
+          disabled={disabled}
+          style={{ minWidth: '110px' }}
+        >
+          {buttonContent}
+        </button>
+        
+        <ul className={`dropdown-menu mt-6 ${isOpen ? 'show' : ''}`}>
+          {dropdownItems}
+        </ul>
+      </div>
+    );
+  };
+
   const renderToolbarItem = (item: ToolbarItem) => {
     // Icon mapping
     const getIcon = (item: ToolbarItem) => {
@@ -67,16 +86,16 @@ const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor, config, disabled 
         case 'italic': return TypeItalic;
         case 'underline': return TypeUnderline;
         case 'strikethrough': return TypeStrikethrough;
-        case 'subscript': return Code; // Fallback since Subscript may not exist
-        case 'superscript': return Code; // Fallback since Superscript may not exist
+        case 'subscript': return Code;
+        case 'superscript': return Code;
         case 'textColor': return Palette;
         case 'highlightColor': return BucketFill;
         case 'alignLeft': return TextLeft;
         case 'alignCenter': return TextCenter;
         case 'alignRight': return TextRight;
         case 'alignJustify': return JustifyLeft;
-        case 'indent': return TextRight; // Use text-right as fallback for indent
-        case 'outdent': return TextLeft; // Use text-left as fallback for outdent  
+        case 'indent': return TextRight;
+        case 'outdent': return TextLeft;
         case 'bulletList': return ListUl;
         case 'orderedList': return ListOl;
         case 'link': return Link45deg;
@@ -93,13 +112,13 @@ const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor, config, disabled 
         case 'fullscreen': return Fullscreen;
         case 'print': return Printer;
         case 'lineHeight': return TextParagraph;
-        case 'paragraph': return Paragraph;
-        default: return Code; // fallback
+        case 'paragraph': return Code;
+        default: return Code;
       }
     };
     
     const IconComponent = getIcon(item);
-    
+
     const getButtonProps = () => {
       switch (item) {
         // History
@@ -182,85 +201,45 @@ const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor, config, disabled 
           };
           
         // Not yet implemented - placeholder buttons
-        case 'subscript':
-        case 'superscript':
-        case 'textColor':
-        case 'highlightColor':
-        case 'alignLeft':
-        case 'alignCenter':
-        case 'alignRight':
-        case 'alignJustify':
-        case 'indent':
-        case 'outdent':
-        case 'link':
-        case 'unlink':
-        case 'image':
-        case 'table':
-        case 'hr':
-        case 'embed':
-        case 'math':
-        case 'codeInline':
-        case 'clearFormatting':
-        case 'fullscreen':
-        case 'print':
-        case 'lineHeight':
+        default:
           return {
             onClick: () => console.log(`${item} not implemented yet`),
             isActive: false,
             disabled: true,
             title: `${item.charAt(0).toUpperCase() + item.slice(1)} (Coming Soon)`
           };
-          
-        default:
-          return null;
       }
     };
 
-    // Special handling for heading dropdown
+    // Special handling for dropdown items
     if (item === 'headingDropdown') {
       const currentHeading = getCurrentHeading();
       
-      return (
-        <div key={item} className="btn-group" role="group">
+      const dropdownItems = headingOptions.map((option) => (
+        <li key={option.level}>
           <button
             type="button"
-            className={`btn btn-sm btn-outline-secondary dropdown-toggle ${showHeadingDropdown ? 'show' : ''}`}
-            onClick={() => setShowHeadingDropdown(!showHeadingDropdown)}
-            aria-expanded={showHeadingDropdown}
-            disabled={disabled}
-            title="Headings"
-            style={{ minWidth: '110px' }}
+            className={`dropdown-item ${
+              (option.level === 0 && editor.isActive('paragraph')) ||
+              (option.level > 0 && editor.isActive('heading', { level: option.level }))
+                ? 'active' : ''
+            }`}
+            onClick={(e) => {
+              e.preventDefault();
+              if (option.level === 0) {
+                editor.chain().focus().setParagraph().run();
+              } else {
+                editor.chain().focus().toggleHeading({ level: option.level as 1 | 2 | 3 | 4 | 5 | 6 }).run();
+              }
+              setActiveDropdown(null);
+            }}
           >
-            {currentHeading.label}
+            {option.label}
           </button>
-          
-          <ul className={`dropdown-menu mt-6 ${showHeadingDropdown ? 'show' : ''}`} aria-labelledby="headingDropdown">
-            {headingOptions.map((option) => (
-              <li key={option.level}>
-                <button
-                  type="button"
-                  className={`dropdown-item ${
-                    (option.level === 0 && editor.isActive('paragraph')) ||
-                    (option.level > 0 && editor.isActive('heading', { level: option.level }))
-                      ? 'active' : ''
-                  }`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (option.level === 0) {
-                      editor.chain().focus().setParagraph().run();
-                    } else {
-                      editor.chain().focus().toggleHeading({ level: option.level as 1 | 2 | 3 | 4 | 5 | 6 }).run();
-                    }
-                    setShowHeadingDropdown(false);
-                  }}
-                >
-                  {option.label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      );
+        </li>
+      ));
+
+      return renderDropdown(item, currentHeading.label, dropdownItems);
     }
 
     const props = getButtonProps();
@@ -301,16 +280,16 @@ const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor, config, disabled 
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
-      if (showHeadingDropdown && !target.closest('.btn-group')) {
-        setShowHeadingDropdown(false);
+      if (activeDropdown && !target.closest('.btn-group')) {
+        setActiveDropdown(null);
       }
     };
     
-    if (showHeadingDropdown) {
+    if (activeDropdown) {
       document.addEventListener('click', handleClickOutside);
       return () => document.removeEventListener('click', handleClickOutside);
     }
-  }, [showHeadingDropdown]);
+  }, [activeDropdown]);
 
   return (
     <div className="btn-toolbar bg-light p-2 flex-wrap">
