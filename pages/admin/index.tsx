@@ -5,11 +5,14 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useCMSStore } from '@/store/cmsStore';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import { SmartTable } from '@/widgets';
+import type { ColumnConfig, SelectionConfig } from '@/types';
 
 function ProjectsManagementPage() {
   const { projects, loading, error, fetchProjects, deleteProject } = useCMSStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<'all' | 'published' | 'draft'>('all');
+  const [selectedProjects, setSelectedProjects] = useState<any[]>([]);
   const [deleteConfirm, setDeleteConfirm] = useState<{id: string, title: string} | null>(null);
 
   useEffect(() => {
@@ -43,8 +46,8 @@ function ProjectsManagementPage() {
     return matchesSearch && matchesFilter;
   });
 
-  const handleDeleteProject = async (id: string, title: string) => {
-    setDeleteConfirm({ id, title });
+  const handleDeleteProject = async (project: any) => {
+    setDeleteConfirm({ id: project.id, title: project.title });
   };
 
   const confirmDelete = async () => {
@@ -64,6 +67,117 @@ function ProjectsManagementPage() {
       month: 'short',
       day: 'numeric',
     });
+  };
+
+  // SmartTable column configuration
+  const columns: ColumnConfig[] = [
+    {
+      key: 'project',
+      header: 'Project',
+      renderer: 'custom',
+      customConfig: {
+        render: (value, row) => (
+          <div className="d-flex align-items-center">
+            <div className="avatar avatar-soft-primary avatar-circle me-3">
+              <span className="avatar-initials">
+                {row.title.charAt(0).toUpperCase()}
+              </span>
+            </div>
+            <div>
+              <span className="d-block h5 text-inherit mb-0">{row.title}</span>
+              <span className="d-block fs-6 text-body">
+                {row.shortDescription.length > 50 
+                  ? `${row.shortDescription.substring(0, 50)}...` 
+                  : row.shortDescription
+                }
+              </span>
+            </div>
+          </div>
+        )
+      }
+    },
+    {
+      key: 'status',
+      header: 'Status',
+      renderer: 'custom',
+      customConfig: {
+        render: (value, row) => (
+          <>
+            <span className={`legend-indicator ${row.published ? 'bg-success' : 'bg-warning'} me-2`}></span>
+            {row.published ? 'Published' : 'Draft'}
+          </>
+        )
+      }
+    },
+    {
+      key: 'technologies',
+      header: 'Technologies',
+      renderer: 'technologies'
+    },
+    {
+      key: 'category',
+      header: 'Category',
+      renderer: 'badge',
+      badgeConfig: {
+        colorMap: {
+          'web development': 'info',
+          'data science': 'primary',
+          'mobile': 'success'
+        }
+      }
+    },
+    {
+      key: 'createdAt',
+      header: 'Created',
+      renderer: 'custom',
+      customConfig: {
+        render: (value) => (
+          <span className="text-muted">
+            {formatDate(value)}
+          </span>
+        )
+      }
+    },
+    {
+      key: 'actions',
+      header: 'Actions',
+      renderer: 'custom',
+      customConfig: {
+        render: (value, row) => (
+          <div className="d-flex gap-1">
+            {row.published && (
+              <Link href={`/project/${row.slug}`}>
+                <Button size="sm" variant="outline-primary" title="View Project">
+                  <Eye size={12} />
+                </Button>
+              </Link>
+            )}
+            <Link href={`/admin/project/${row.id}/edit`}>
+              <Button size="sm" variant="outline-secondary" title="Edit Project">
+                <Pencil size={12} />
+              </Button>
+            </Link>
+            <Button
+              size="sm"
+              variant="outline-danger"
+              onClick={() => handleDeleteProject(row)}
+              title="Delete Project"
+              disabled={!!deleteConfirm}
+            >
+              <Trash2 size={12} />
+            </Button>
+          </div>
+        )
+      }
+    }
+  ];
+
+  // Selection configuration
+  const selectionConfig: SelectionConfig = {
+    mode: 'multiple',
+    selectedRows: selectedProjects,
+    onSelectionChange: setSelectedProjects,
+    selectRowsBy: 'id'
   };
 
   return (
@@ -143,7 +257,7 @@ function ProjectsManagementPage() {
           </div>
         </div>
 
-        {/* Projects Card */}
+        {/* Projects Table Card */}
         <div className="card">
           {/* Header */}
           <div className="card-header card-header-content-md-between">
@@ -167,6 +281,19 @@ function ProjectsManagementPage() {
             </div>
 
             <div className="d-grid d-sm-flex justify-content-md-end align-items-sm-center gap-2">
+              {/* Selection Actions */}
+              {selectedProjects.length > 0 && (
+                <div className="d-flex align-items-center">
+                  <span className="fs-6 me-3">
+                    {selectedProjects.length} selected
+                  </span>
+                  <Button size="sm" variant="outline-danger">
+                    <Trash2 size={12} className="me-1" />
+                    Delete Selected
+                  </Button>
+                </div>
+              )}
+
               {/* Delete Confirmation */}
               {deleteConfirm && (
                 <div className="d-flex align-items-center">
@@ -185,7 +312,7 @@ function ProjectsManagementPage() {
               )}
 
               {/* Filter Dropdown */}
-              {!deleteConfirm && (
+              {!deleteConfirm && selectedProjects.length === 0 && (
                 <div className="dropdown">
                   <button 
                     type="button" 
@@ -224,123 +351,38 @@ function ProjectsManagementPage() {
             </div>
           </div>
 
-          {/* Table */}
+          {/* Smart Table */}
           <div className="table-responsive datatable-custom">
-            {loading ? (
-              <div className="text-center py-5">
-                <div className="spinner-border" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-              </div>
-            ) : error ? (
-              <div className="alert alert-danger m-3">
-                <strong>Error:</strong> {error}
-              </div>
-            ) : filteredProjects.length === 0 ? (
-              <div className="text-center py-5 text-muted">
-                <FileEarmark size={48} className="mb-3" />
-                <h5 className="mt-3">No projects found</h5>
-                <p>
-                  {projects.length === 0 
-                    ? "You haven't created any projects yet." 
-                    : "No projects match your current filters."
-                  }
-                </p>
-                {projects.length === 0 && (
-                  <Link href="/admin/project/new" className="btn btn-outline-primary">
-                    Create Your First Project
-                  </Link>
-                )}
-              </div>
-            ) : (
-              <table className="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table">
-                <thead className="thead-light">
-                  <tr>
-                    <th>Project</th>
-                    <th>Status</th>
-                    <th>Technologies</th>
-                    <th>Category</th>
-                    <th>Created</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredProjects.map((project) => (
-                    <tr key={project.id}>
-                      <td>
-                        <div className="d-flex align-items-center">
-                          <div className="avatar avatar-soft-primary avatar-circle me-3">
-                            <span className="avatar-initials">
-                              {project.title.charAt(0).toUpperCase()}
-                            </span>
-                          </div>
-                          <div>
-                            <span className="d-block h5 text-inherit mb-0">{project.title}</span>
-                            <span className="d-block fs-6 text-body">
-                              {project.shortDescription.length > 50 
-                                ? `${project.shortDescription.substring(0, 50)}...` 
-                                : project.shortDescription
-                              }
-                            </span>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <span className={`legend-indicator ${project.published ? 'bg-success' : 'bg-warning'}`}></span>
-                        {project.published ? 'Published' : 'Draft'}
-                      </td>
-                      <td>
-                        <div className="d-flex flex-wrap gap-1">
-                          {project.technologies.slice(0, 2).map((tech) => (
-                            <Badge key={tech} bg="secondary" className="small">
-                              {tech}
-                            </Badge>
-                          ))}
-                          {project.technologies.length > 2 && (
-                            <Badge bg="light" className="text-dark small">
-                              +{project.technologies.length - 2}
-                            </Badge>
-                          )}
-                        </div>
-                      </td>
-                      <td>
-                        <span className="badge bg-soft-info text-info">
-                          {project.category}
-                        </span>
-                      </td>
-                      <td className="text-muted">
-                        {formatDate(project.createdAt)}
-                      </td>
-                      <td>
-                        <div className="d-flex gap-1">
-                          {project.published && (
-                            <Link href={`/project/${project.slug}`}>
-                              <Button size="sm" variant="outline-primary" title="View Project">
-                                <Eye size={12} />
-                              </Button>
-                            </Link>
-                          )}
-                          <Link href={`/admin/project/${project.id}/edit`}>
-                            <Button size="sm" variant="outline-secondary" title="Edit Project">
-                              <Pencil size={12} />
-                            </Button>
-                          </Link>
-                          <Button
-                            size="sm"
-                            variant="outline-danger"
-                            onClick={() => handleDeleteProject(project.id, project.title)}
-                            title="Delete Project"
-                            disabled={!!deleteConfirm}
-                          >
-                            <Trash2 size={12} />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
+            <SmartTable
+              data={filteredProjects}
+              columns={columns}
+              variant="basic"
+              selection={selectionConfig}
+              styling={{
+                size: 'lg',
+                theme: 'borderless',
+                headerLight: true,
+                nowrap: true,
+                verticalAlign: 'middle',
+                className: 'card-table'
+              }}
+              loading={{
+                show: loading,
+                rowCount: 5,
+                message: 'Loading projects...'
+              }}
+              emptyState={{
+                show: !loading && filteredProjects.length === 0,
+                message: projects.length === 0 
+                  ? "You haven't created any projects yet." 
+                  : "No projects match your current filters.",
+                icon: 'folder',
+                action: projects.length === 0 ? {
+                  label: 'Create Your First Project',
+                  onClick: () => window.location.href = '/admin/project/new'
+                } : undefined
+              }}
+            />
           </div>
 
           {/* Footer */}

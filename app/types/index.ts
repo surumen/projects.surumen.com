@@ -116,3 +116,37 @@ export type {
     ConnectorProps,
     FinalProps
 } from './brackets/brackets';
+
+// ========================
+// TABLES
+// ========================
+export type {
+    // Column types
+    ColumnRenderer,
+    LinkRendererConfig,
+    BadgeRendererConfig,
+    AvatarRendererConfig,
+    PaymentMethodRendererConfig,
+    ActionButton,
+    ActionDropdownItem,
+    ActionsRendererConfig,
+    CustomRendererConfig,
+    ColumnConfig,
+    ColumnToggleItem,
+    ColumnVisibilityMap,
+    
+    // Table types
+    TableVariant,
+    TableSize,
+    TableTheme,
+    SelectionMode,
+    SelectionConfig,
+    TableStyling,
+    LoadingConfig,
+    EmptyStateConfig,
+    SmartTableProps,
+    TableRowProps,
+    TableCellProps,
+    ExportConfig,
+    ExportFormat
+} from './tables';

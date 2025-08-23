@@ -26,6 +26,9 @@ import Pitch from './football/Pitch';
 // import form components
 import { SmartForm, FormIcons } from './forms';
 
+// import table components
+import { SmartTable } from './tables';
+
 // import theme components  
 import { ThemeProvider } from './theme';
 
@@ -54,6 +57,9 @@ export {
    // Forms
    SmartForm,
    FormIcons,
+   
+   // Tables
+   SmartTable,
    
    // Theme
    ThemeProvider,
