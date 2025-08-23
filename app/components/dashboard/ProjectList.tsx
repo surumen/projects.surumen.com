@@ -33,7 +33,7 @@ const ProjectList: React.FC<ProjectListProps> = ({
   }
 
   return (
-    <div className="projects-list">
+    <>
       {projects.map((project, index) => (
         <Nav.Link 
           key={project.slug || index}
@@ -81,7 +81,7 @@ const ProjectList: React.FC<ProjectListProps> = ({
           </div>
         </Nav.Link>
       ))}
-    </div>
+    </>
   );
 };
 

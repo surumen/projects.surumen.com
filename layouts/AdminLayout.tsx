@@ -1,154 +1,78 @@
-import React, { ReactNode } from 'react';
-import { useRouter } from 'next/router';
+import React, { useState, ReactNode } from 'react';
 import Link from 'next/link';
-import { useAuth } from '../lib/firebase/AuthContext';
+import { NavbarTop, Sidebar, SidebarToggle } from '@/widgets/navbars';
+import { AdminNavigation, AdminSearch, UserMenu } from '@/widgets/navigation';
 import { LogoIcon } from '@/widgets';
-import { House, Files, AppIndicator, Bell, Unlock, ArrowRight } from 'react-bootstrap-icons';
+import { useAppStore } from '@/store/store';
+import useBodyClasses from '@/hooks/useBodyClasses';
 
 interface AdminLayoutProps {
   children: ReactNode;
 }
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
-  const router = useRouter();
-  const { user, logout } = useAuth();
+  const [isCollapsed, setIsCollapsed] = useState(true); // Start mini (inverted logic)
+  const { skin } = useAppStore();
 
-  const handleLogout = async () => {
-    await logout();
-    router.push('/admin/login');
-  };
+  // Apply body classes for admin layout
+  useBodyClasses([
+    'has-navbar-vertical-aside',
+    'navbar-vertical-aside-show-xl',
+    'footer-offset',
+    isCollapsed ? 'navbar-vertical-aside-mini-mode' : '',
+    'navbar-vertical-aside-transition-on'
+  ]);
 
-  const handleBackToSite = () => {
-    router.push('/');
-  };
+  const toggleSidebar = () => setIsCollapsed(!isCollapsed);
 
   return (
     <>
-      {/* Admin Header */}
-      <header id="header" className="navbar navbar-expand-lg navbar-bordered">
-        <div className="container">
-          <nav className="js-mega-menu navbar-nav-wrap hs-menu-initialized hs-menu-horizontal">
-            {/* Logo */}
-            <Link href="/admin" className="navbar-brand" aria-label="Admin">
-              <div className="navbar-brand-logo" style={{ width: '40px', height: '40px' }}>
-                <LogoIcon primary="#377dff" dark="#132144" />
-              </div>
-            </Link>
+      {/* Header */}
+      <NavbarTop>
+        {/* Logo */}
+        <Link href="/admin" className="navbar-brand" aria-label="Admin">
+          <div style={{ width: '40px', height: '40px' }}>
+            <LogoIcon primary="#377dff" dark="#132144" />
+          </div>
+        </Link>
 
-            {/* Secondary Content */}
-            <div className="navbar-nav-wrap-secondary-content">
-              {/* Navbar */}
-              <ul className="navbar-nav">
-                <li className="nav-item d-none d-md-inline-block">
-                  {/* Notification */}
-                  <button 
-                    type="button" 
-                    className="btn btn-ghost-secondary btn-icon rounded-circle" 
-                    title="Notifications coming soon"
-                  >
-                    <Bell size={16} />
-                    <span className="btn-status btn-sm-status btn-status-danger"></span>
-                  </button>
-                  {/* End Notification */}
-                </li>
-
-                <li className="nav-item">
-                  {/* Sign Out */}
-                  <button 
-                    type="button" 
-                    className="btn btn-ghost-secondary btn-icon rounded-circle" 
-                    title="Sign out"
-                    onClick={handleLogout}
-                  >
-                    <Unlock size={16} />
-                  </button>
-                  {/* End Sign Out */}
-                </li>
-
-                <li className="nav-item">
-                  {/* Go to Site */}
-                  <button 
-                    type="button" 
-                    className="btn btn-ghost-secondary btn-icon rounded-circle" 
-                    title="Go to site"
-                    onClick={handleBackToSite}
-                  >
-                    <ArrowRight size={16} />
-                  </button>
-                  {/* End Go to Site */}
-                </li>
-              </ul>
-              {/* End Navbar */}
-            </div>
-            {/* End Secondary Content */}
-
-            {/* Toggler */}
-            <button 
-              className="navbar-toggler" 
-              type="button" 
-              data-bs-toggle="collapse" 
-              data-bs-target="#navbarContainerNavDropdown" 
-              aria-controls="navbarContainerNavDropdown" 
-              aria-expanded="false" 
-              aria-label="Toggle navigation"
-            >
-              <span className="navbar-toggler-default">
-                <i className="bi-list"></i>
-              </span>
-              <span className="navbar-toggler-toggled">
-                <i className="bi-x"></i>
-              </span>
-            </button>
-            {/* End Toggler */}
-
-            {/* Collapse */}
-            <div className="collapse navbar-collapse" id="navbarContainerNavDropdown">
-              <ul className="navbar-nav">
-                <li className="nav-item">
-                  <Link 
-                    href="/admin" 
-                    className={`nav-link ${router.pathname === '/admin' ? 'active' : ''}`}
-                  >
-                    <House size={16} className="nav-icon me-2" /> Dashboard
-                  </Link>
-                </li>
-
-                <li className="nav-item">
-                  <Link 
-                    href="/admin" 
-                    className={`nav-link ${router.pathname.startsWith('/admin/project') ? 'active' : ''}`}
-                  >
-                    <Files size={16} className="nav-icon me-2" /> Projects
-                  </Link>
-                </li>
-
-                <li className="hs-has-sub-menu nav-item">
-                  <a 
-                    id="appsMegaMenu" 
-                    className="hs-mega-menu-invoker nav-link dropdown-toggle" 
-                    href="#" 
-                    role="button"
-                    data-bs-toggle="dropdown"
-                  >
-                    <AppIndicator size={16} className="nav-icon me-2" /> Apps
-                  </a>
-
-                  <div className="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless hs-sub-menu-desktop-lg">
-                    <Link href="/brackets" className="dropdown-item">
-                      Brackets
-                    </Link>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            {/* End Collapse */}
-          </nav>
+        <div className="navbar-nav-wrap-content-start">
+          {/* Sidebar Toggle */}
+          <SidebarToggle isCollapsed={isCollapsed} onToggle={toggleSidebar} />
+          
+          {/* Search */}
+          <AdminSearch />
         </div>
-      </header>
+
+        <div className="navbar-nav-wrap-content-end">
+          {/* User Menu */}
+          <UserMenu />
+        </div>
+      </NavbarTop>
+
+      {/* Sidebar */}
+      <Sidebar>
+        <div className="navbar-vertical-footer-offset">
+          {/* Logo */}
+          <Link href="/admin" className="navbar-brand" aria-label="Admin">
+            <div style={{ width: isCollapsed ? '32px' : '120px', height: '40px' }}>
+              <LogoIcon primary="#377dff" dark="#132144" />
+            </div>
+          </Link>
+
+          {/* Sidebar Toggle */}
+          <SidebarToggle isCollapsed={isCollapsed} onToggle={toggleSidebar} />
+
+          {/* Navigation */}
+          <AdminNavigation isCollapsed={isCollapsed} />
+        </div>
+      </Sidebar>
 
       {/* Main Content */}
-      <main role="main" className="main">
-        {children}
+      <main id="content" role="main" className="main">
+        <div className="content container-fluid">
+          {children}
+        </div>
       </main>
     </>
   );

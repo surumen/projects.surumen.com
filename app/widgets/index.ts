@@ -6,6 +6,11 @@ import Markdown from './projects/Markdown';
 // import widget/custom components from navbars folder
 import Sidebar from './navbars/Sidebar';
 import QuickMenu from './navbars/QuickMenu';
+import NavbarTop from './navbars/NavbarTop';
+import SidebarToggle from './navbars/SidebarToggle';
+
+// import navigation components
+import { AdminNavigation, AdminSearch, UserMenu, YearDisplay, PortfolioNavbar } from './navigation';
 
 // import bracket components
 import Bracket from './brackets/Bracket';
@@ -46,6 +51,13 @@ export {
    // Navigation
    Sidebar,
    QuickMenu,
+   NavbarTop,
+   SidebarToggle,
+   AdminNavigation,
+   AdminSearch,
+   UserMenu,
+   YearDisplay,
+   PortfolioNavbar,
    
    // Charts
    RacingBarChart,
