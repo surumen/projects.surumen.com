@@ -33,6 +33,7 @@ import {
   // Tools
   Eraser, Fullscreen, TextParagraph
 } from 'react-bootstrap-icons';
+import { Button } from 'react-bootstrap';
 
 interface TiptapToolbarProps {
   editor: Editor;
@@ -239,8 +240,9 @@ const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor, config, disabled 
 
     return (
       <div key={item} className="btn-group" role="group">
-        <button
+        <Button
           type="button"
+          variant={''}
           className={`btn btn-sm btn-outline-secondary dropdown-toggle`}
           onClick={() => setActiveDropdown(isOpen ? null : item)}
           aria-expanded={isOpen}
@@ -249,9 +251,9 @@ const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor, config, disabled 
           style={showIcon ? {} : { minWidth: '120px' }}
         >
           {buttonContent}
-        </button>
+        </Button>
         
-        <ul className={`dropdown-menu ${isOpen ? 'show' : ''}`}>
+        <ul className={`dropdown-menu mt-6 ${isOpen ? 'show' : ''}`}>
           {options.map((option, index) => (
             <li key={index}>
               <button
