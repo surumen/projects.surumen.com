@@ -182,12 +182,26 @@ export const BUTTON_CONFIGS: Record<ToolbarItem, ButtonConfig> = {
     icon: 'bi-palette',
     title: 'Text Color',
     getOptions: () => [
-      { value: '#000000', label: 'Black', color: '#000000' },
-      { value: '#dc3545', label: 'Red', color: '#dc3545' },
-      { value: '#0d6efd', label: 'Blue', color: '#0d6efd' },
-      { value: '#198754', label: 'Green', color: '#198754' },
-      { value: '#ffc107', label: 'Yellow', color: '#ffc107' },
-      { value: '#6f42c1', label: 'Purple', color: '#6f42c1' }
+      // Semantic Colors
+      { value: '#0061FE', label: 'Blue', color: '#0061FE' },
+      { value: '#2d7a02', label: 'Green', color: '#2d7a02' },
+      { value: '#007891', label: 'Ocean', color: '#007891' },
+      { value: '#9B6400', label: 'Gold', color: '#9B6400' },
+      { value: '#9B0032', label: 'Crimson', color: '#9B0032' },
+      // Accent Colors
+      { value: '#BE4B0A', label: 'Rust', color: '#BE4B0A' },
+      { value: '#0F503C', label: 'Canopy', color: '#0F503C' },
+      { value: '#283750', label: 'Navy', color: '#283750' },
+      { value: '#78286E', label: 'Plum', color: '#78286E' },
+      { value: '#CD2F7B', label: 'Magenta', color: '#CD2F7B' },
+      { value: '#14C8EB', label: 'Zen', color: '#14C8EB' },
+      { value: '#FA551E', label: 'Sunset', color: '#FA551E' },
+      { value: '#FF8C19', label: 'Tangerine', color: '#FF8C19' },
+      { value: '#B4DC19', label: 'Lime', color: '#B4DC19' },
+      // Neutral Colors
+      { value: '#1A1918', label: 'Black', color: '#1A1918' },
+      { value: '#67615A', label: 'Graphite', color: '#67615A' },
+      { value: '#F7F5F2', label: 'Coconut', color: '#F7F5F2' }
     ],
     getCurrentValue: () => '', // Return empty string to show icon only
     onSelect: (editor, value) => {
@@ -199,11 +213,20 @@ export const BUTTON_CONFIGS: Record<ToolbarItem, ButtonConfig> = {
     icon: 'bi-paint-bucket',
     title: 'Highlight Color',
     getOptions: () => [
-      { value: '#ffff00', label: 'Yellow', color: '#ffff00' },
-      { value: '#00ff00', label: 'Green', color: '#00ff00' },
-      { value: '#00ffff', label: 'Cyan', color: '#00ffff' },
-      { value: '#ff69b4', label: 'Pink', color: '#ff69b4' },
-      { value: '#ffa500', label: 'Orange', color: '#ffa500' }
+      // Soft Accent Colors (with 15% opacity for subtle highlights)
+      { value: 'rgba(190, 75, 10, 0.15)', label: 'Rust Soft', color: 'rgba(190, 75, 10, 0.15)' },
+      { value: 'rgba(15, 80, 60, 0.15)', label: 'Canopy Soft', color: 'rgba(15, 80, 60, 0.15)' },
+      { value: 'rgba(40, 55, 80, 0.15)', label: 'Navy Soft', color: 'rgba(40, 55, 80, 0.15)' },
+      { value: 'rgba(120, 40, 110, 0.15)', label: 'Plum Soft', color: 'rgba(120, 40, 110, 0.15)' },
+      { value: 'rgba(205, 47, 123, 0.15)', label: 'Magenta Soft', color: 'rgba(205, 47, 123, 0.15)' },
+      { value: 'rgba(20, 200, 235, 0.15)', label: 'Zen Soft', color: 'rgba(20, 200, 235, 0.15)' },
+      { value: 'rgba(250, 85, 30, 0.15)', label: 'Sunset Soft', color: 'rgba(250, 85, 30, 0.15)' },
+      { value: 'rgba(255, 140, 25, 0.15)', label: 'Tangerine Soft', color: 'rgba(255, 140, 25, 0.15)' },
+      { value: 'rgba(180, 220, 25, 0.15)', label: 'Lime Soft', color: 'rgba(180, 220, 25, 0.15)' },
+      { value: 'rgba(180, 200, 225, 0.15)', label: 'Cloud Soft', color: 'rgba(180, 200, 225, 0.15)' },
+      { value: 'rgba(200, 175, 240, 0.15)', label: 'Orchid Soft', color: 'rgba(200, 175, 240, 0.15)' },
+      { value: 'rgba(255, 175, 165, 0.15)', label: 'Pink Soft', color: 'rgba(255, 175, 165, 0.15)' },
+      { value: 'rgba(250, 210, 75, 0.15)', label: 'Banana Soft', color: 'rgba(250, 210, 75, 0.15)' }
     ],
     getCurrentValue: () => '', // Return empty string to show icon only
     onSelect: (editor, value) => {
@@ -413,14 +436,14 @@ export const toolbarPresets: Record<string, ToolbarGroupConfig[]> = {
     { id: 'formatting', label: 'Formatting', items: ['bold', 'italic', 'underline', 'strikethrough'] },
     { id: 'script', label: 'Script', items: ['subscript', 'superscript'] },
     { id: 'colors', label: 'Colors', items: ['textColor', 'highlightColor'] },
-    { id: 'alignment', label: 'Alignment', items: ['alignLeft', 'alignCenter', 'alignRight', 'alignJustify'] },
+    { id: 'alignment', label: 'Alignment', items: ['alignLeft', 'alignCenter', 'alignRight'] },
     { id: 'indentation', label: 'Indentation', items: ['outdent', 'indent'] },
     { id: 'lists', label: 'Lists', items: ['bulletList', 'orderedList'] },
     { id: 'insert', label: 'Insert', items: ['link', 'image', 'table', 'hr'] },
     { id: 'media', label: 'Media', items: ['embed', 'math'] },
     { id: 'code', label: 'Code', items: ['codeInline', 'codeBlock'] },
     { id: 'blocks', label: 'Blocks', items: ['blockquote'] },
-    { id: 'tools', label: 'Tools', items: ['clearFormatting', 'fullscreen', 'lineHeight'] }
+    { id: 'tools', label: 'Tools', items: ['clearFormatting', 'fullscreen'] }
   ]
 };
 
