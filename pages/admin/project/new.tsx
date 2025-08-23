@@ -67,11 +67,12 @@ function NewProjectPage() {
     {
       name: 'description',
       label: 'Full Description',
-      type: 'textarea',
+      type: 'richtext',
       required: true,
-      rows: 8,
-      placeholder: 'Enter detailed HTML description for the project header...',
-      helpText: 'Rich HTML content for detailed project page (supports HTML tags)',
+      placeholder: 'Enter detailed description for the project...',
+      helpText: 'Rich HTML content for detailed project page (supports formatting)',
+      toolbar: 'full',
+      height: 300,
       validate: [
         validationRules.required('Full description'),
         validationRules.minLength(50)
@@ -322,6 +323,15 @@ function NewProjectPage() {
                     <h5 className="mb-2">{formValues.title}</h5>
                     {formValues.shortDescription && (
                       <p className="text-muted small mb-2">{formValues.shortDescription}</p>
+                    )}
+                    {formValues.description && (
+                      <div className="mb-2">
+                        <div 
+                          className="small text-muted border rounded p-2"
+                          style={{ maxHeight: '150px', overflow: 'auto' }}
+                          dangerouslySetInnerHTML={{ __html: formValues.description }}
+                        />
+                      </div>
                     )}
                     {formValues.technologies && formValues.technologies.length > 0 && (
                       <div className="d-flex gap-1 flex-wrap mb-2">

@@ -10,7 +10,7 @@ export type Option = {
   label: string; 
 };
 
-export type FieldType = 'input' | 'select' | 'switch' | 'textarea' | 'date' | 'file' | 'tags';
+export type FieldType = 'input' | 'select' | 'switch' | 'textarea' | 'date' | 'file' | 'tags' | 'richtext';
 
 // ========================
 // ADVANCED FORM TYPES
@@ -106,6 +106,28 @@ export interface TagInputFieldConfig {
   maxTags?: number;
   tagPattern?: RegExp;
   separator?: string | string[]; // Characters that trigger tag creation
+  
+  // Template-driven styling
+  styling?: FieldStyling;
+}
+
+export interface RichTextFieldConfig {
+  type: 'richtext';
+  name: string;
+  label: string;
+  required?: boolean;
+  readOnly?: boolean;
+  validate?: ValidationRule[];
+  asyncValidate?: AsyncValidationRule[];
+  initialValue?: string;
+  placeholder?: string;
+  helpText?: string;
+  conditionalLogic?: ConditionalLogic[];
+  
+  // Rich text specific options
+  height?: number;
+  toolbar?: 'basic' | 'standard' | 'full';
+  maxLength?: number;
   
   // Template-driven styling
   styling?: FieldStyling;
@@ -217,7 +239,8 @@ export type FieldConfig =
   | SwitchFieldConfig
   | DateFieldConfig
   | FileUploadFieldConfig
-  | TagInputFieldConfig;
+  | TagInputFieldConfig
+  | RichTextFieldConfig;
 
 export interface FormTemplate {
   id: string;

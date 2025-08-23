@@ -6,6 +6,7 @@ export { FormProvider, useFormContext, useFormStatus, useField } from './core/Fo
 export { default as DateField } from './advanced/DateField';
 export { default as FileUploadField } from './advanced/FileUploadField';
 export { default as TagInputField } from './advanced/TagInputField';
+export { default as RichTextField } from './advanced/RichTextField';
 
 // Template system
 export { TemplateRenderer, BasicFieldTemplate, InputGroupTemplate, SwitchTemplate } from './templates';

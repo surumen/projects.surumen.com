@@ -26,6 +26,7 @@ export const selectFieldTemplate = (field: FieldConfig): FieldTemplate => {
     case 'date':
     case 'file':
     case 'tags':
+    case 'richtext':
       // These will use their specialized components
       // but this helps with template detection
       return 'basic';
@@ -39,6 +40,9 @@ export const selectFieldTemplate = (field: FieldConfig): FieldTemplate => {
  * Check if a field should use input group template
  */
 export const shouldUseInputGroup = (field: FieldConfig): boolean => {
+  // Rich text fields should not use input group template
+  if (field.type === 'richtext') return false;
+  
   return !!(field.styling?.inputGroup?.prepend || field.styling?.inputGroup?.append);
 };
 

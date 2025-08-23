@@ -7,6 +7,7 @@ import { SmartFormProps, FieldConfig } from '@/types/forms/advanced';
 import DateField from '../advanced/DateField';
 import FileUploadField from '../advanced/FileUploadField';
 import TagInputField from '../advanced/TagInputField';
+import RichTextField from '../advanced/RichTextField';
 import { TemplateRenderer } from '../templates';
 
 // ========================
@@ -98,6 +99,19 @@ const SmartFieldRenderer: React.FC<SmartFieldRendererProps> = ({
           value={value}
           error={error}
           touched={touched}
+          onChange={onChange}
+          onBlur={onBlur}
+        />
+      );
+      
+    case 'richtext':
+      return (
+        <RichTextField
+          field={field}
+          value={value}
+          error={error}
+          touched={touched}
+          isValidating={isValidating}
           onChange={onChange}
           onBlur={onBlur}
         />
