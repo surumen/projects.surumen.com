@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Search, Filter, Plus, Eye, Pencil, Trash3 } from 'react-bootstrap-icons';
 import Head from 'next/head';
 import Link from 'next/link';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useCMSStore } from '@/store/cmsStore';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { SmartTable } from '@/widgets';
@@ -11,7 +12,8 @@ import type { ColumnConfig, SelectionConfig } from '@/types';
 const FILTER_OPTIONS = {
   ALL: 'all',
   PUBLISHED: 'published', 
-  DRAFT: 'draft'
+  DRAFT: 'draft',
+  ARCHIVED: 'archived'
 } as const;
 
 const STATUS_CONFIG = {
@@ -56,12 +58,22 @@ const createColumns = (handleDeleteProject: (project: any) => void, deleteInProg
     header: 'Status',
     renderer: 'custom',
     customConfig: {
-      render: (value, row) => (
-        <>
-          <span className={`legend-indicator ${row.published ? 'bg-success' : 'bg-warning'} me-2`}></span>
-          {row.published ? 'Published' : 'Draft'}
-        </>
-      )
+      render: (value, row) => {
+        if (row.archived) {
+          return (
+            <>
+              <span className="legend-indicator bg-secondary me-2"></span>
+              Archived
+            </>
+          );
+        }
+        return (
+          <>
+            <span className={`legend-indicator ${row.published ? 'bg-success' : 'bg-warning'} me-2`}></span>
+            {row.published ? 'Published' : 'Draft'}
+          </>
+        );
+      }
     }
   },
   {
@@ -124,9 +136,19 @@ const createColumns = (handleDeleteProject: (project: any) => void, deleteInProg
 ];
 
 function ProjectsManagementPage() {
-  const { projects, loading, error, fetchProjects, deleteProject } = useCMSStore();
+  const { 
+    projects, 
+    loading, 
+    error, 
+    fetchProjects, 
+    deleteProject,
+    batchDeleteProjects,
+    batchArchiveProjects,
+    batchPublishProjects,
+    batchUnpublishProjects
+  } = useCMSStore();
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState<'all' | 'published' | 'draft'>(FILTER_OPTIONS.ALL);
+  const [filterStatus, setFilterStatus] = useState<'all' | 'published' | 'draft' | 'archived'>(FILTER_OPTIONS.ALL);
   const [selectedProjects, setSelectedProjects] = useState<any[]>([]);
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
@@ -136,15 +158,16 @@ function ProjectsManagementPage() {
 
   // Calculate project statistics with status configurations
   const projectStats = useMemo(() => {
-    const published = projects.filter(p => p.published).length;
-    const drafts = projects.filter(p => !p.published).length;
+    const published = projects.filter(p => p.published && !p.archived).length;
+    const drafts = projects.filter(p => !p.published && !p.archived).length;
+    const archived = projects.filter(p => p.archived).length;
     const total = projects.length;
     
     const stats = {
       total,
       published,
       drafts,
-      archived: 0, // Future feature
+      archived,
     };
     
     // Calculate percentages
@@ -168,8 +191,9 @@ function ProjectsManagementPage() {
                            project.technologies.some(tech => tech.toLowerCase().includes(searchTerm.toLowerCase()));
       
       const matchesFilter = filterStatus === FILTER_OPTIONS.ALL || 
-                           (filterStatus === FILTER_OPTIONS.PUBLISHED && project.published) ||
-                           (filterStatus === FILTER_OPTIONS.DRAFT && !project.published);
+                           (filterStatus === FILTER_OPTIONS.PUBLISHED && project.published && !project.archived) ||
+                           (filterStatus === FILTER_OPTIONS.DRAFT && !project.published && !project.archived) ||
+                           (filterStatus === FILTER_OPTIONS.ARCHIVED && project.archived);
       
       return matchesSearch && matchesFilter;
     });
@@ -190,6 +214,79 @@ function ProjectsManagementPage() {
     }
   };
   const cancelDelete = () => setDeleteTargetId(null);
+
+  // Selection action handlers
+  const handleDeleteSelected = async () => {
+    if (selectedProjects.length === 0) return;
+    
+    const projectTitles = selectedProjects.map(p => p.title).join('", "');
+    const confirmMessage = `Are you sure you want to permanently delete ${selectedProjects.length} project${selectedProjects.length > 1 ? 's' : ''}?\n\n"${projectTitles}"\n\nThis action cannot be undone and will also delete all associated blog posts.`;
+    
+    if (!confirm(confirmMessage)) return;
+    
+    try {
+      const projectIds = selectedProjects.map(p => p.id);
+      await batchDeleteProjects(projectIds);
+      setSelectedProjects([]);
+      // Success feedback could be added here (toast notification)
+    } catch (error) {
+      console.error('Failed to delete projects:', error);
+      // Error feedback could be added here
+    }
+  };
+
+  const handleArchiveSelected = async () => {
+    if (selectedProjects.length === 0) return;
+    
+    try {
+      const projectIds = selectedProjects.map(p => p.id);
+      await batchArchiveProjects(projectIds);
+      setSelectedProjects([]);
+      // Success: Projects archived and hidden from public view
+    } catch (error) {
+      console.error('Failed to archive projects:', error);
+    }
+  };
+
+  const handlePublishSelected = async () => {
+    if (selectedProjects.length === 0) return;
+    
+    // Only publish unpublished projects
+    const unpublishedProjects = selectedProjects.filter(p => !p.published);
+    if (unpublishedProjects.length === 0) {
+      alert('All selected projects are already published.');
+      return;
+    }
+    
+    try {
+      const projectIds = unpublishedProjects.map(p => p.id);
+      await batchPublishProjects(projectIds);
+      setSelectedProjects([]);
+      // Success: Projects published and now visible on portfolio
+    } catch (error) {
+      console.error('Failed to publish projects:', error);
+    }
+  };
+
+  const handleUnpublishSelected = async () => {
+    if (selectedProjects.length === 0) return;
+    
+    // Only unpublish published projects
+    const publishedProjects = selectedProjects.filter(p => p.published);
+    if (publishedProjects.length === 0) {
+      alert('All selected projects are already unpublished.');
+      return;
+    }
+    
+    try {
+      const projectIds = publishedProjects.map(p => p.id);
+      await batchUnpublishProjects(projectIds);
+      setSelectedProjects([]);
+      // Success: Projects hidden from public view
+    } catch (error) {
+      console.error('Failed to unpublish projects:', error);
+    }
+  };
 
   // Table configuration
   const columns = useMemo(() => 
@@ -294,13 +391,37 @@ function ProjectsManagementPage() {
             <div className="d-grid d-sm-flex justify-content-md-end align-items-sm-center gap-2">
               {/* Selection Actions */}
               {selectedProjects.length > 0 ? (
-                <div className="d-flex align-items-center">
-                  <span className="fs-6 me-3">
-                    {selectedProjects.length} selected
+                <div className="d-sm-flex justify-content-lg-end align-items-sm-center">
+                  <span className="d-block d-sm-inline-block fs-5 me-3 mb-2 mb-sm-0">
+                    <span id="datatableCounter">{selectedProjects.length}</span> Selected
                   </span>
-                  <button type="button" className="btn btn-outline-danger btn-sm">
-                    <Trash3 size={12} className="me-1" />
-                    Delete Selected
+                  <button 
+                    className="btn btn-outline-danger btn-sm mb-2 mb-sm-0 me-2" 
+                    type="button"
+                    onClick={handleDeleteSelected}
+                  >
+                    <i className="bi-trash"></i> Delete
+                  </button>
+                  <button 
+                    className="btn btn-white btn-sm mb-2 mb-sm-0 me-2" 
+                    type="button"
+                    onClick={handleArchiveSelected}
+                  >
+                    <i className="bi-archive"></i> Archive
+                  </button>
+                  <button 
+                    className="btn btn-white btn-sm mb-2 mb-sm-0 me-2" 
+                    type="button"
+                    onClick={handlePublishSelected}
+                  >
+                    <i className="bi-upload"></i> Publish
+                  </button>
+                  <button 
+                    className="btn btn-white btn-sm mb-2 mb-sm-0" 
+                    type="button"
+                    onClick={handleUnpublishSelected}
+                  >
+                    <i className="bi-x-lg"></i> Unpublish
                   </button>
                 </div>
               ) : deleteTarget ? (
@@ -351,6 +472,12 @@ function ProjectsManagementPage() {
                       onClick={() => setFilterStatus(FILTER_OPTIONS.DRAFT)}
                     >
                       Drafts Only
+                    </button>
+                    <button 
+                      className={`dropdown-item ${filterStatus === FILTER_OPTIONS.ARCHIVED ? 'active' : ''}`}
+                      onClick={() => setFilterStatus(FILTER_OPTIONS.ARCHIVED)}
+                    >
+                      Archived Only
                     </button>
                   </div>
                 </div>

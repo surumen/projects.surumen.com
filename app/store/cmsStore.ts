@@ -22,6 +22,13 @@ interface CMSStore {
   deleteProject: (id: string) => Promise<void>;
   setCurrentProject: (project: Project | null) => void;
   
+  // Batch Project Actions
+  batchDeleteProjects: (projectIds: string[]) => Promise<void>;
+  batchArchiveProjects: (projectIds: string[]) => Promise<void>;
+  batchUnarchiveProjects: (projectIds: string[]) => Promise<void>;
+  batchPublishProjects: (projectIds: string[]) => Promise<void>;
+  batchUnpublishProjects: (projectIds: string[]) => Promise<void>;
+  
   // Blog Post Actions (nested under projects)
   fetchProjectBlogPosts: (projectId: string) => Promise<void>;
   getProjectBlogPost: (projectId: string, postId: string) => Promise<BlogPost | null>;
@@ -140,6 +147,138 @@ export const useCMSStore = create<CMSStore>((set, get) => ({
   },
 
   setCurrentProject: (project: Project | null) => set({ currentProject: project }),
+
+  // Batch Project Actions
+  batchDeleteProjects: async (projectIds: string[]) => {
+    if (projectIds.length === 0) return;
+    
+    set({ loading: true, error: null });
+    try {
+      const response = await fetch('/api/projects/batch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          projectIds,
+          action: 'delete'
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete projects');
+      }
+      
+      // Refresh projects list
+      await get().fetchProjects();
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+      throw error;
+    }
+  },
+
+  batchArchiveProjects: async (projectIds: string[]) => {
+    if (projectIds.length === 0) return;
+    
+    set({ loading: true, error: null });
+    try {
+      const response = await fetch('/api/projects/batch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          projectIds,
+          action: 'archive'
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to archive projects');
+      }
+      
+      await get().fetchProjects();
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+      throw error;
+    }
+  },
+
+  batchUnarchiveProjects: async (projectIds: string[]) => {
+    if (projectIds.length === 0) return;
+    
+    set({ loading: true, error: null });
+    try {
+      const response = await fetch('/api/projects/batch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          projectIds,
+          action: 'unarchive'
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to unarchive projects');
+      }
+      
+      await get().fetchProjects();
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+      throw error;
+    }
+  },
+
+  batchPublishProjects: async (projectIds: string[]) => {
+    if (projectIds.length === 0) return;
+    
+    set({ loading: true, error: null });
+    try {
+      const response = await fetch('/api/projects/batch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          projectIds,
+          action: 'publish'
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to publish projects');
+      }
+      
+      await get().fetchProjects();
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+      throw error;
+    }
+  },
+
+  batchUnpublishProjects: async (projectIds: string[]) => {
+    if (projectIds.length === 0) return;
+    
+    set({ loading: true, error: null });
+    try {
+      const response = await fetch('/api/projects/batch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          projectIds,
+          action: 'unpublish'
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to unpublish projects');
+      }
+      
+      await get().fetchProjects();
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+      throw error;
+    }
+  },
 
   // Blog Post Actions
   fetchProjectBlogPosts: async (projectId: string) => {
