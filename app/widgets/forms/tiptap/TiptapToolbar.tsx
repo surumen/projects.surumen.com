@@ -11,6 +11,7 @@ import {
 import LinkModal from './components/LinkModal';
 import ImageModal from './components/ImageModal';
 import EmbedModal from './components/EmbedModal';
+import TableModal from './components/TableModal';
 import {
   // History
   ArrowCounterclockwise, ArrowClockwise,
@@ -170,6 +171,8 @@ const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor, config, disabled 
       setActiveModal('link');
     } else if (buttonConfig.title === 'Insert Image') {
       setActiveModal('image');
+    } else if (buttonConfig.title === 'Insert Table') {
+      setActiveModal('table');
     } else if (buttonConfig.title === 'Embed Media') {
       setActiveModal('embed');
     } else {
@@ -365,6 +368,11 @@ const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor, config, disabled 
       />
       <EmbedModal 
         isOpen={activeModal === 'embed'}
+        onClose={() => setActiveModal(null)}
+        editor={editor}
+      />
+      <TableModal 
+        isOpen={activeModal === 'table'}
         onClose={() => setActiveModal(null)}
         editor={editor}
       />

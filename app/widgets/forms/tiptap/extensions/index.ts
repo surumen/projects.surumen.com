@@ -1,4 +1,4 @@
-// Example custom extension - you can add your own here
+// Custom extensions for enhanced functionality
 
 import { Node } from '@tiptap/core';
 import type { RawCommands } from '@tiptap/core';

@@ -2,6 +2,8 @@
 
 export { default as TiptapEditor } from './TiptapEditor';
 export { default as TiptapToolbar } from './TiptapToolbar';
+export { default as TableToolbar } from './components/TableToolbar';
+export { default as TableContextMenu } from './components/TableContextMenu';
 
 export type { TiptapEditorProps } from './TiptapEditor';
 export type { 

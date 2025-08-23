@@ -28,7 +28,7 @@ export type ToolbarItem =
   // Blocks
   | 'blockquote'
   // Tools
-  | 'clearFormatting' | 'fullscreen' | 'lineHeight';
+  | 'clearFormatting' | 'fullscreen';
 
 export interface DropdownOption {
   value: any;
@@ -312,19 +312,11 @@ export const BUTTON_CONFIGS: Record<ToolbarItem, ButtonConfig> = {
     }
   },
   table: {
-    controlType: 'dropdown',
+    controlType: 'dialog',
     icon: 'bi-table',
     title: 'Insert Table',
-    getOptions: () => [
-      { value: { rows: 2, cols: 2 }, label: '2x2 Table' },
-      { value: { rows: 3, cols: 3 }, label: '3x3 Table' },
-      { value: { rows: 4, cols: 4 }, label: '4x4 Table' },
-      { value: { rows: 5, cols: 5 }, label: '5x5 Table' }
-    ],
-    getCurrentValue: () => '', // Return empty string to show icon only
-    onSelect: (editor, value) => {
-      // TODO: Implement table insertion
-      console.log('Insert table:', value);
+    openDialog: (editor) => {
+      // This will be handled by the toolbar component to open Bootstrap modal
     }
   },
   hr: {
@@ -389,23 +381,6 @@ export const BUTTON_CONFIGS: Record<ToolbarItem, ButtonConfig> = {
     activeCheck: 'fullscreen',
     icon: 'bi-fullscreen',
     title: 'Fullscreen'
-  },
-  lineHeight: {
-    controlType: 'dropdown',
-    icon: 'line-height-text', // Will render as text
-    title: 'Line Height',
-    getOptions: () => [
-      { value: 1.0, label: '1.0' },
-      { value: 1.15, label: '1.15' },
-      { value: 1.5, label: '1.5' },
-      { value: 2.0, label: '2.0' },
-      { value: 2.5, label: '2.5' }
-    ],
-    getCurrentValue: () => '1.15', // TODO: Get actual line height
-    onSelect: (editor, value) => {
-      // TODO: Implement line height
-      console.log('Set line height:', value);
-    }
   }
 };
 

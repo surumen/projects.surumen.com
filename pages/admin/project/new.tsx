@@ -18,6 +18,7 @@ function NewProjectPage() {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [formKey, setFormKey] = useState(0); // Key to force form re-render
   const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   // Form field configuration
   const projectFields: FieldConfig[] = [
@@ -166,6 +167,7 @@ function NewProjectPage() {
   // Auto-generate slug from title
   const handleFieldChange = (name: string, value: any, allValues: Record<string, any>) => {
     setFormValues(allValues);
+    setLastUpdated(new Date());
     
     // Auto-generate slug from title if slug is empty
     if (name === 'title' && value) {
@@ -208,6 +210,7 @@ function NewProjectPage() {
     setFormValues({});
     setIsValid(false);
     setFormErrors({});
+    setLastUpdated(null);
     setFormKey(prev => prev + 1); // Force form re-render with initial values
     setShowResetConfirm(false);
   };
@@ -313,64 +316,159 @@ function NewProjectPage() {
           {/* Sidebar Column */}
           <Col lg={4}>
             <div className="card mb-3 mb-lg-5">
-              <div className="card-header">
-                <h4 className="card-header-title">Preview</h4>
+              <div className="card-header d-flex justify-content-between align-items-center">
+                <h4 className="card-header-title mb-0">Live Preview</h4>
+                <div className="d-flex align-items-center gap-2">
+                  {lastUpdated && (
+                    <small className="text-muted">
+                      <i className="bi bi-clock-history me-1"></i>
+                      {new Date(lastUpdated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </small>
+                  )}
+                  {formValues.title && (
+                    <span className="badge bg-soft-primary">
+                      {Object.keys(formValues).filter(key => formValues[key] && formValues[key] !== '').length} / {projectFields.length}
+                    </span>
+                  )}
+                </div>
               </div>
               <div className="card-body">
                 {/* Project Preview */}
-                {formValues.title && (
-                  <div className="mb-4">
-                    <h5 className="mb-2">{formValues.title}</h5>
-                    {formValues.shortDescription && (
-                      <p className="text-muted small mb-2">{formValues.shortDescription}</p>
-                    )}
+                {formValues.title ? (
+                  <div className="project-preview">
+                    {/* Header Section */}
+                    <div className="mb-4">
+                      <div className="d-flex justify-content-between align-items-start mb-2">
+                        <h5 className="mb-0 fw-bold">{formValues.title}</h5>
+                        {formValues.year && (
+                          <span className="badge bg-soft-secondary fs-6">
+                            {formValues.year}
+                          </span>
+                        )}
+                      </div>
+                      
+                      {formValues.category && (
+                        <div className="mb-2">
+                          <span className="badge bg-soft-info me-2">
+                            {formValues.category}
+                          </span>
+                          <span className={`badge ${formValues.published ? 'bg-soft-success' : 'bg-soft-warning'}`}>
+                            {formValues.published ? 'Published' : 'Draft'}
+                          </span>
+                        </div>
+                      )}
+                      
+                      {formValues.shortDescription && (
+                        <p className="text-muted mb-2 lh-sm">
+                          {formValues.shortDescription}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Rich Description Preview */}
                     {formValues.description && (
-                      <div className="mb-2">
+                      <div className="mb-3">
+                        <h6 className="text-muted small text-uppercase mb-2">Description</h6>
                         <div 
-                          className="small text-muted border rounded p-2"
-                          style={{ maxHeight: '150px', overflow: 'auto' }}
+                          className="border rounded p-3 bg-soft-light"
+                          style={{ 
+                            maxHeight: '200px', 
+                            overflow: 'auto',
+                            fontSize: '0.875rem',
+                            lineHeight: '1.4'
+                          }}
                           dangerouslySetInnerHTML={{ __html: formValues.description }}
                         />
                       </div>
                     )}
+
+                    {/* Technologies */}
                     {formValues.technologies && formValues.technologies.length > 0 && (
-                      <div className="d-flex gap-1 flex-wrap mb-2">
-                        {formValues.technologies.slice(0, 4).map((tech: string, index: number) => (
-                          <span key={index} className="badge bg-info">
-                            {tech}
-                          </span>
-                        ))}
-                        {formValues.technologies.length > 4 && (
-                          <span className="badge bg-secondary">
-                            +{formValues.technologies.length - 4} more
-                          </span>
-                        )}
+                      <div className="mb-3">
+                        <h6 className="text-muted small text-uppercase mb-2">Technologies</h6>
+                        <div className="d-flex gap-1 flex-wrap">
+                          {formValues.technologies.map((tech: string, index: number) => (
+                            <span key={index} className="badge bg-primary">
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     )}
-                    {formValues.category && (
-                      <p className="small mb-2">
-                        <strong>Category:</strong> {formValues.category}
-                      </p>
+
+                    {/* Links Section */}
+                    {(formValues.demo || formValues.blog) && (
+                      <div className="mb-3">
+                        <h6 className="text-muted small text-uppercase mb-2">Links</h6>
+                        <div className="d-flex flex-column gap-1">
+                          {formValues.demo && (
+                            <div className="d-flex align-items-center">
+                              <i className="bi bi-play-circle me-2 text-primary"></i>
+                              <small className="text-truncate">{formValues.demo}</small>
+                            </div>
+                          )}
+                          {formValues.blog && (
+                            <div className="d-flex align-items-center">
+                              <i className="bi bi-journal-text me-2 text-info"></i>
+                              <small className="text-truncate">{formValues.blog}</small>
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     )}
-                    {formValues.year && (
-                      <p className="small mb-2">
-                        <strong>Year:</strong> {formValues.year}
-                      </p>
+
+                    {/* URL Preview */}
+                    {(formValues.slug || formValues.title) && (
+                      <div className="mb-3">
+                        <h6 className="text-muted small text-uppercase mb-2">URL</h6>
+                        <div className="bg-soft-secondary p-2 rounded">
+                          <code className="small text-muted">
+                            /project/{formValues.slug || generateSlug(formValues.title)}
+                          </code>
+                        </div>
+                      </div>
                     )}
-                    <div className="small">
-                      <strong>Status:</strong>{' '}
-                      <span className={`badge ${formValues.published ? 'bg-success' : 'bg-warning'}`}>
-                        {formValues.published ? 'Published' : 'Draft'}
-                      </span>
-                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-5">
+                    <i className="bi bi-eye-slash fs-1 text-muted mb-3 d-block"></i>
+                    <p className="text-muted mb-0">
+                      Start filling out the form to see a live preview
+                    </p>
+                    <small className="text-muted">
+                      Preview will update as you type
+                    </small>
                   </div>
                 )}
 
                 <hr className="my-4" />
 
-                {/* Preview Only - No Action Buttons */}
-                <div className="text-center text-muted">
-                  <small>Use the buttons at the bottom of the page to save or discard changes.</small>
+                {/* Completion Status */}
+                <div className="progress-completion">
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <h6 className="mb-0 small text-uppercase text-muted">Completion</h6>
+                    <span className="small text-muted">
+                      {Math.round((Object.keys(formValues).filter(key => formValues[key] && formValues[key] !== '').length / projectFields.length) * 100)}%
+                    </span>
+                  </div>
+                  <div className="progress" style={{ height: '6px' }}>
+                    <div 
+                      className="progress-bar bg-primary"
+                      style={{ 
+                        width: `${Math.round((Object.keys(formValues).filter(key => formValues[key] && formValues[key] !== '').length / projectFields.length) * 100)}%`,
+                        transition: 'width 0.3s ease'
+                      }}
+                    />
+                  </div>
+                  <div className="mt-2">
+                    <small className="text-muted">
+                      {canSubmit ? (
+                        <><i className="bi bi-check-circle text-success me-1"></i>Ready to save</>
+                      ) : (
+                        <><i className="bi bi-exclamation-circle text-warning me-1"></i>Complete required fields</>
+                      )}
+                    </small>
+                  </div>
                 </div>
               </div>
             </div>

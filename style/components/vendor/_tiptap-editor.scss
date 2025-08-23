@@ -1,0 +1,55 @@
+/* Tiptap Editor Vendor Styles */
+/* Uses Bootstrap CSS custom properties and your theme variables */
+
+.tiptap-editor-content .ProseMirror table {
+  margin: 0.5rem 0;
+  max-width: 100%;
+  border-collapse: collapse;
+  // Keep body font size - no font-size override
+}
+
+.tiptap-editor-content .ProseMirror table td,
+.tiptap-editor-content .ProseMirror table th {
+  min-width: 4rem;
+  max-width: 12rem;
+  word-wrap: break-word;
+}
+
+.tiptap-editor-content .ProseMirror table th {
+  font-weight: 600;
+}
+
+.tiptap-editor-content .ProseMirror table .selectedCell {
+  background-color: rgba(var(--bs-primary-rgb), 0.1) !important;
+}
+
+// Support Bootstrap table structure
+.tiptap-editor-content .ProseMirror thead.thead-light th {
+  background-color: var(--bs-light);
+  border-bottom: 2px solid var(--bs-border-color);
+}
+
+.tiptap-editor-content .ProseMirror .table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+// Ensure table responsiveness in editor
+.tiptap-editor-content .ProseMirror {
+  overflow-x: auto;
+}
+
+.tiptap-editor-content .ProseMirror table {
+  table-layout: auto;
+}
+
+// Bootstrap table variants work properly
+.tiptap-editor-content .ProseMirror table.table-striped tbody tr:nth-of-type(odd) td,
+.tiptap-editor-content .ProseMirror table.table-striped tbody tr:nth-of-type(odd) th {
+  background-color: var(--bs-table-striped-bg);
+}
+
+.tiptap-editor-content .ProseMirror table.table-hover tbody tr:hover td,
+.tiptap-editor-content .ProseMirror table.table-hover tbody tr:hover th {
+  background-color: var(--bs-table-hover-bg);
+}
