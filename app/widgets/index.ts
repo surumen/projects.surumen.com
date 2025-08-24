@@ -31,6 +31,9 @@ import Pitch from './football/Pitch';
 // import form components
 import { SmartForm, FormIcons } from './forms';
 
+// import modern form components
+import { Form, Field, FieldGroup, InputGroup, InputGroupPrefix, InputGroupSuffix, validationRules, asyncValidationRules } from './modern-forms';
+
 // import table components
 import { SmartTable } from './tables';
 
@@ -69,6 +72,18 @@ export {
    // Forms
    SmartForm,
    FormIcons,
+   
+   // Modern Forms (Phase 1, 2 & 3)
+   Form,
+   Field,
+   FieldGroup,
+   InputGroup,
+   InputGroupPrefix,
+   InputGroupSuffix,
+   
+   // Modern Forms Validation
+   validationRules,
+   asyncValidationRules,
    
    // Tables
    SmartTable,
