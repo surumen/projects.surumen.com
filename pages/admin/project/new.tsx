@@ -25,6 +25,9 @@ function NewProjectPage() {
   const router = useRouter();
   const { createProject, loading } = useCMSStore();
 
+  // Reset confirmation state
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+
   // Project-specific configuration
   const requiredFields = ['title', 'shortDescription', 'description', 'technologies', 'year', 'category'];
   
@@ -240,6 +243,29 @@ function NewProjectPage() {
     }
   };
 
+  // Reset confirmation handlers
+  const handleResetForm = () => {
+    setShowResetConfirm(true);
+  };
+
+  const confirmResetForm = () => {
+    // Reset all form sections through coordinator
+    coordinator.resetForm();
+    setShowResetConfirm(false);
+  };
+
+  const cancelResetForm = () => {
+    setShowResetConfirm(false);
+  };
+
+  // Handle discard with reliable navigation
+  const handleDiscard = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // Use hard navigation to ensure it works reliably
+    window.location.href = '/admin';
+  };
+
   // Status icon helper - removed since we're keeping it simple
 
   return (
@@ -431,38 +457,74 @@ function NewProjectPage() {
         <div className="position-fixed start-50 bottom-0 translate-middle-x w-100" style={{ zIndex: 99, marginBottom: '1rem', maxWidth: '40rem' }}>
           <Card className="card-sm bg-dark border-dark mx-2">
             <Card.Body>
-              <div className="row justify-content-center justify-content-sm-between">
-                <div className="col">
-                  <Button 
-                    variant="ghost-danger" 
-                    disabled={loading}
-                    onClick={() => coordinator.resetForm()}
-                  >
-                    Reset All
-                  </Button>
-                </div>
-                <div className="col-auto">
-                  <div className="d-flex gap-3">
-                    <Button 
-                      variant="ghost-light"
-                      onClick={() => router.push('/admin')}
-                      disabled={loading}
-                    >
-                      Discard
-                    </Button>
-                    <Button
-                      variant="primary"
-                      disabled={!coordinator.canSubmit || loading}
-                      onClick={handleSubmit}
-                    >
-                      {loading ? 'Saving...' : 'Save'}
-                    </Button>
+              {showResetConfirm ? (
+                // Reset Confirmation State
+                <div className="row justify-content-center align-items-center">
+                  <div className="col">
+                    <span className="text-light">
+                      <i className="bi bi-exclamation-triangle me-2"></i>
+                      Reset form? All unsaved changes will be lost.
+                    </span>
+                  </div>
+                  <div className="col-auto">
+                    <div className="d-flex gap-3">
+                      <Button 
+                        type="button"
+                        variant="ghost-light"
+                        onClick={cancelResetForm}
+                        disabled={loading}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="danger"
+                        onClick={confirmResetForm}
+                        disabled={loading}
+                      >
+                        Yes, Reset
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                // Normal State
+                <div className="row justify-content-center justify-content-sm-between">
+                  <div className="col">
+                    <Button 
+                      type="button"
+                      variant="ghost-danger" 
+                      disabled={loading}
+                      onClick={handleResetForm}
+                    >
+                      Reset Form
+                    </Button>
+                  </div>
+                  <div className="col-auto">
+                    <div className="d-flex gap-3">
+                      <Button 
+                        type="button"
+                        variant="ghost-light"
+                        onClick={handleDiscard}
+                        disabled={loading}
+                      >
+                        Discard
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="primary"
+                        disabled={!coordinator.canSubmit || loading}
+                        onClick={handleSubmit}
+                      >
+                        {loading ? 'Saving...' : 'Save'}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
               
               {/* Validation Status */}
-              {!coordinator.canSubmit && coordinator.progress > 0 && (
+              {!showResetConfirm && !coordinator.canSubmit && coordinator.progress > 0 && (
                 <div className="row mt-2">
                   <div className="col">
                     <small className="text-light opacity-75">
