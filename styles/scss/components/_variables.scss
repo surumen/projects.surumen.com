@@ -199,7 +199,22 @@ $theme-colors: (
   "warning":    $warning,
   "danger":     $danger,
   "light":      $gray-100,
-  "dark":       $dark
+  "dark":       $dark,
+  "ocean":      $ocean,
+  "crimson":    $crimson,
+  "rust":       $rust,
+  "canopy":     $canopy,
+  "navy":       $navy,
+  "plum":       $plum,
+  "magenta":    $magenta,
+  "gold":       $gold,
+  "zen":        $zen,
+  "sunset":     $sunset,
+  "tangerine":  $tangerine,
+  "cloud":      $cloud,
+  "orchid":     $orchid,
+  "pink":       $pink,
+  "banana":     $banana,
 );
 
 // Color system
@@ -211,7 +226,22 @@ $theme-soft-colors: (
   "warning":    $warning-soft,
   "danger":     $danger-soft,
   "light":      $light-soft,
-  "dark":       $dark-soft
+  "dark":       $dark-soft,
+  "ocean":      $ocean-soft,
+  "crimson":    $crimson-soft,
+  "rust":       $rust-soft,
+  "canopy":     $canopy-soft,
+  "navy":       $navy-soft,
+  "plum":       $plum-soft,
+  "magenta":    $magenta-soft,
+  "gold":       $gold-soft,
+  "zen":        $zen-soft,
+  "sunset":     $sunset-soft,
+  "tangerine":  $tangerine-soft,
+  "cloud":      $cloud-soft,
+  "orchid":     $orchid-soft,
+  "pink":       $pink-soft,
+  "banana":     $banana-soft,
 ) !default;
 
 $min-contrast-ratio:                                        2.1 !default;

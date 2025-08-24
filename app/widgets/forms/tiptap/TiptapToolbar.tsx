@@ -216,7 +216,7 @@ const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor, config, disabled 
     }
 
     return (
-      <button
+      <Button
         key={item}
         type="button"
         className="btn btn-sm btn-outline-secondary"
@@ -225,7 +225,7 @@ const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor, config, disabled 
         title={buttonConfig.title}
       >
         {getIcon(buttonConfig.icon)}
-      </button>
+      </Button>
     );
   };
 
@@ -290,7 +290,7 @@ const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor, config, disabled 
     if (buttonConfig.controlType !== 'dialog') return null;
 
     return (
-      <button
+      <Button
         key={item}
         type="button"
         className="btn btn-sm btn-outline-secondary"
@@ -299,7 +299,7 @@ const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor, config, disabled 
         title={buttonConfig.title}
       >
         {getIcon(buttonConfig.icon)}
-      </button>
+      </Button>
     );
   };
 

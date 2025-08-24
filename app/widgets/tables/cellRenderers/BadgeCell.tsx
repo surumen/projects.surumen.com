@@ -37,7 +37,7 @@ const BadgeCell: React.FC<TableCellProps> = ({ value, row, column }) => {
   // Handle array of technologies (merged from TechnologiesBadgeCell)
   if (Array.isArray(value)) {
     const technologies: string[] = value;
-    const maxVisible = config.maxVisible || 2;
+    const maxVisible = config.maxVisible || 4;
     const showMoreText = config.showMoreText !== false;
     
     if (technologies.length === 0) {
@@ -56,9 +56,9 @@ const BadgeCell: React.FC<TableCellProps> = ({ value, row, column }) => {
           return (
             <span 
               key={tech} 
-              className={`badge bg-soft-${softColor} text-${softColor}`}
+              className={`badge bg-soft-${accentColor} text-${accentColor}`}
             >
-              <span className={`legend-indicator bg-accent-${accentColor} me-1`}></span>
+              <span className={`legend-indicator bg-${accentColor} me-1`}></span>
               {tech}
             </span>
           );

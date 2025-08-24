@@ -2,10 +2,6 @@
 export { default as SmartForm } from './core/SmartForm';
 export { FormProvider, useFormContext, useFormStatus, useField } from './core/FormProvider';
 
-// Multi-form coordination components
-export { default as FormSection } from './FormSection';
-export { default as FormCardSection } from './FormCardSection';
-
 // Advanced field components
 export { default as DateField } from './advanced/DateField';
 export { default as FileUploadField } from './advanced/FileUploadField';

@@ -90,7 +90,8 @@ const createColumns = (handleDeleteProject: (project: any) => void, deleteInProg
         'web development': 'info',
         'data science': 'primary',
         'mobile': 'success'
-      }
+      },
+      maxVisible: 3,
     }
   },
   {

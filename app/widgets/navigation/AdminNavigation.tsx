@@ -24,22 +24,22 @@ const AdminNavigation: React.FC<AdminNavigationProps> = ({ isCollapsed = false }
         <div className="nav-item">
           <Link 
             href="/admin"
-            className={`nav-link ${isActive('/admin') ? 'active' : ''}`}
+            className={`nav-link text-body ${isActive('/admin') ? 'active' : ''}`}
           >
             <HouseDoor size={16} className="nav-icon" />
-            {!isCollapsed && <span className="nav-link-title">Dashboard</span>}
+            {!isCollapsed && <span className="nav-link-title text-body">Dashboard</span>}
           </Link>
         </div>
 
         {/* Pages Section */}
-        <span className="dropdown-header mt-4">Pages</span>
+        <span className="dropdown-header text-body mt-4">Pages</span>
         <small className="bi-three-dots nav-subtitle-replacer"></small>
 
         {/* Projects */}
         <div className="nav-item">
           <Link 
             href="/admin"
-            className={`nav-link ${isActive('/admin/project') ? 'active' : ''}`}
+            className={`nav-link text-body ${isActive('/admin/project') ? 'active' : ''}`}
             data-placement="left"
           >
             <Book size={16} className="nav-icon" />
@@ -51,7 +51,7 @@ const AdminNavigation: React.FC<AdminNavigationProps> = ({ isCollapsed = false }
         <div className="nav-item">
           <Link 
             href="#"
-            className="nav-link"
+            className="nav-link text-body"
             data-placement="left"
           >
             <Layers size={16} className="nav-icon" />

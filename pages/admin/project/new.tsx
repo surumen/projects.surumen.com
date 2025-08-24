@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Container, Row, Col, Button, Breadcrumb, Card } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import { FormCardSection } from '@/widgets/forms';
+import { SmartForm } from '@/widgets';
 import { validationRules } from '@/widgets/forms';
 import { FormIcons } from '@/widgets/forms';
-import { useFormCoordinator } from '@/hooks/useFormCoordinator';
 import { useCMSStore } from '@/store/cmsStore';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import type { FieldConfig } from '@/types/forms/advanced';
@@ -25,29 +24,14 @@ function NewProjectPage() {
   const router = useRouter();
   const { createProject, loading } = useCMSStore();
 
-  // Reset confirmation state
+  // Simple coordination state
+  const [allFormValues, setAllFormValues] = useState<Record<string, any>>({});
+  const [sectionValidation, setSectionValidation] = useState<Record<string, { isValid: boolean; errors: Record<string, string> }>>({});
+  const [formKeys, setFormKeys] = useState({ basic: 0, tech: 0, content: 0, publish: 0 });
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
-  // Project-specific configuration
-  const requiredFields = ['title', 'shortDescription', 'description', 'technologies', 'year', 'category'];
-  
-  // Project-specific value change handler (for slug generation)
-  const handleValueChange = (name: string, value: any, allValues: Record<string, any>) => {
-    // Auto-generate slug from title if slug is empty
-    if (name === 'title' && value && !allValues.slug) {
-      coordinator.updateValues({ slug: generateSlug(value) });
-    }
-  };
-
-  // Initialize form coordinator with project-specific config
-  const coordinator = useFormCoordinator({
-    initialValues: {},
-    requiredFields,
-    onValueChange: handleValueChange
-  });
-
-  // Project-specific field configurations
-  const basicInfoFields: FieldConfig[] = [
+  // Project-specific field configurations (memoized to prevent re-creation)
+  const basicInfoFields: FieldConfig[] = useMemo(() => [
     {
       name: 'title',
       label: 'Project name',
@@ -153,9 +137,9 @@ function NewProjectPage() {
         }
       }
     }
-  ];
+  ], []);
 
-  const technicalFields: FieldConfig[] = [
+  const technicalFields: FieldConfig[] = useMemo(() => [
     {
       name: 'technologies',
       label: 'Technologies',
@@ -175,9 +159,9 @@ function NewProjectPage() {
         validationRules.required('Technologies')
       ]
     }
-  ];
+  ], []);
 
-  const contentFields: FieldConfig[] = [
+  const contentFields: FieldConfig[] = useMemo(() => [
     {
       name: 'shortDescription',
       label: 'Short description',
@@ -205,9 +189,9 @@ function NewProjectPage() {
         validationRules.minLength(50)
       ]
     }
-  ];
+  ], []);
 
-  const publishingFields: FieldConfig[] = [
+  const publishingFields: FieldConfig[] = useMemo(() => [
     {
       name: 'published',
       label: 'Confirm you want to publish this project',
@@ -215,42 +199,46 @@ function NewProjectPage() {
       initialValue: false,
       helpText: 'Publishing this project will show it to the public immediately'
     }
-  ];
+  ], []);
 
-  // Handle final form submission
-  const handleSubmit = async () => {
-    if (!coordinator.canSubmit) return;
+  // Simple coordination handlers
+  const handleSectionChange = useCallback((sectionId: string, values: Record<string, any>) => {
+    setAllFormValues(prev => ({
+      ...prev,
+      ...values
+    }));
 
-    try {
-      const projectData: Partial<Project> = {
-        title: coordinator.values.title,
-        slug: coordinator.values.slug || generateSlug(coordinator.values.title),
-        shortDescription: coordinator.values.shortDescription,
-        description: coordinator.values.description,
-        technologies: coordinator.values.technologies || [],
-        year: parseInt(coordinator.values.year),
-        category: coordinator.values.category,
-        blog: coordinator.values.blog || undefined,
-        published: coordinator.values.published || false
-      };
-
-      const newProject = await createProject(projectData);
-      if (newProject) {
-        router.push('/admin');
-      }
-    } catch (error) {
-      console.error('Project creation failed:', error);
+    // Auto-generate slug from title if slug is empty
+    if (values.title && !values.slug) {
+      setAllFormValues(prev => ({
+        ...prev,
+        ...values,
+        slug: generateSlug(values.title)
+      }));
     }
-  };
+  }, []);
 
-  // Reset confirmation handlers
+  const handleSectionValidation = useCallback((sectionId: string, isValid: boolean, errors: Record<string, string>) => {
+    setSectionValidation(prev => ({
+      ...prev,
+      [sectionId]: { isValid, errors }
+    }));
+  }, []);
+
+  // Reset all forms
   const handleResetForm = () => {
     setShowResetConfirm(true);
   };
 
   const confirmResetForm = () => {
-    // Reset all form sections through coordinator
-    coordinator.resetForm();
+    setAllFormValues({});
+    setSectionValidation({});
+    setFormKeys(prev => ({
+      basic: prev.basic + 1,
+      tech: prev.tech + 1,
+      content: prev.content + 1,
+      publish: prev.publish + 1
+    }));
     setShowResetConfirm(false);
   };
 
@@ -262,11 +250,65 @@ function NewProjectPage() {
   const handleDiscard = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    // Use hard navigation to ensure it works reliably
     window.location.href = '/admin';
   };
 
-  // Status icon helper - removed since we're keeping it simple
+  // Calculate overall form status
+  const { progress, canSubmit, totalErrors } = useMemo(() => {
+    const allSections = Object.values(sectionValidation);
+    const isAllValid = allSections.length > 0 && allSections.every(section => section.isValid);
+    
+    // Required fields check
+    const requiredFields = ['title', 'shortDescription', 'description', 'technologies', 'year', 'category'];
+    const hasRequiredFields = requiredFields.every(field => {
+      const value = allFormValues[field];
+      if (field === 'technologies') {
+        return Array.isArray(value) && value.length > 0;
+      }
+      return value && value.toString().trim().length > 0;
+    });
+
+    const totalFields = basicInfoFields.length + technicalFields.length + contentFields.length + publishingFields.length;
+    const completedFields = Object.keys(allFormValues).filter(key => {
+      const value = allFormValues[key];
+      return value !== undefined && value !== null && value !== '';
+    }).length;
+
+    const calculatedProgress = totalFields > 0 ? (completedFields / totalFields) * 100 : 0;
+    const errors = allSections.reduce((sum, section) => sum + Object.keys(section.errors).length, 0);
+
+    return {
+      progress: calculatedProgress,
+      canSubmit: isAllValid && hasRequiredFields,
+      totalErrors: errors
+    };
+  }, [sectionValidation, allFormValues, basicInfoFields, technicalFields, contentFields, publishingFields]);
+
+  // Handle final form submission
+  const handleSubmit = async () => {
+    if (!canSubmit) return;
+
+    try {
+      const projectData: Partial<Project> = {
+        title: allFormValues.title,
+        slug: allFormValues.slug || generateSlug(allFormValues.title),
+        shortDescription: allFormValues.shortDescription,
+        description: allFormValues.description,
+        technologies: allFormValues.technologies || [],
+        year: parseInt(allFormValues.year),
+        category: allFormValues.category,
+        blog: allFormValues.blog || undefined,
+        published: allFormValues.published || false
+      };
+
+      const newProject = await createProject(projectData);
+      if (newProject) {
+        router.push('/admin');
+      }
+    } catch (error) {
+      console.error('Project creation failed:', error);
+    }
+  };
 
   return (
     <ProtectedRoute>
@@ -293,37 +335,84 @@ function NewProjectPage() {
             <div className="d-grid gap-3 gap-lg-5">
               
               {/* Basic Information Section */}
-              <FormCardSection
-                sectionId="basic"
-                title="Project Details"
-                fields={basicInfoFields}
-                coordinator={coordinator}
-              />
+              <Card className="card-lg">
+                <Card.Header>
+                  <h4 className="card-header-title">Project Details</h4>
+                </Card.Header>
+                <Card.Body>
+                  <SmartForm
+                    key={formKeys.basic}
+                    config={{
+                      fields: basicInfoFields,
+                      onSubmit: () => {},
+                      validation: { mode: 'onChange' }
+                    }}
+                    onFieldChange={(name, value, allValues) => handleSectionChange('basic', allValues)}
+                    onValidationChange={(isValid, errors) => handleSectionValidation('basic', isValid, errors)}
+                    renderSubmitButton={() => null}
+                  />
+                </Card.Body>
+              </Card>
 
               {/* Technologies Section */}
-              <FormCardSection
-                sectionId="technical"
-                title="Technologies"
-                fields={technicalFields}
-                coordinator={coordinator}
-              />
+              <Card className="card-lg">
+                <Card.Header>
+                  <h4 className="card-header-title">Technologies</h4>
+                </Card.Header>
+                <Card.Body>
+                  <SmartForm
+                    key={formKeys.tech}
+                    config={{
+                      fields: technicalFields,
+                      onSubmit: () => {},
+                      validation: { mode: 'onChange' }
+                    }}
+                    onFieldChange={(name, value, allValues) => handleSectionChange('tech', allValues)}
+                    onValidationChange={(isValid, errors) => handleSectionValidation('tech', isValid, errors)}
+                    renderSubmitButton={() => null}
+                  />
+                </Card.Body>
+              </Card>
 
               {/* Description Section */}
-              <FormCardSection
-                sectionId="content"
-                title="Description"
-                fields={contentFields}
-                coordinator={coordinator}
-              />
+              <Card className="card-lg">
+                <Card.Header>
+                  <h4 className="card-header-title">Description</h4>
+                </Card.Header>
+                <Card.Body>
+                  <SmartForm
+                    key={formKeys.content}
+                    config={{
+                      fields: contentFields,
+                      onSubmit: () => {},
+                      validation: { mode: 'onChange' }
+                    }}
+                    onFieldChange={(name, value, allValues) => handleSectionChange('content', allValues)}
+                    onValidationChange={(isValid, errors) => handleSectionValidation('content', isValid, errors)}
+                    renderSubmitButton={() => null}
+                  />
+                </Card.Body>
+              </Card>
 
               {/* Publishing Section */}
-              <FormCardSection
-                sectionId="publishing"
-                title="Publish"
-                fields={publishingFields}
-                coordinator={coordinator}
-              >
-              </FormCardSection>
+              <Card className="card-lg">
+                <Card.Header>
+                  <h4 className="card-header-title">Publish</h4>
+                </Card.Header>
+                <Card.Body>
+                  <SmartForm
+                    key={formKeys.publish}
+                    config={{
+                      fields: publishingFields,
+                      onSubmit: () => {},
+                      validation: { mode: 'onChange' }
+                    }}
+                    onFieldChange={(name, value, allValues) => handleSectionChange('publish', allValues)}
+                    onValidationChange={(isValid, errors) => handleSectionValidation('publish', isValid, errors)}
+                    renderSubmitButton={() => null}
+                  />
+                </Card.Body>
+              </Card>
 
             </div>
           </Col>
@@ -337,22 +426,22 @@ function NewProjectPage() {
                 <div className="progress flex-grow-1">
                   <div 
                     className="progress-bar bg-primary" 
-                    style={{ width: `${coordinator.progress}%` }}
-                    aria-valuenow={coordinator.progress}
+                    style={{ width: `${progress}%` }}
+                    aria-valuenow={progress}
                   />
                 </div>
-                <span className="ms-4">{Math.round(coordinator.progress)}%</span>
+                <span className="ms-4">{Math.round(progress)}%</span>
               </div>
               
               <div className="mt-3">
                 <div className="d-flex justify-content-between text-sm">
                   <span>Completed sections:</span>
-                  <span>{coordinator.completedSections.length} / {Object.keys(coordinator.sectionValidation).length}</span>
+                  <span>{Object.values(sectionValidation).filter(section => section.isValid).length} / {Object.keys(formKeys).length}</span>
                 </div>
-                {coordinator.totalErrors > 0 && (
+                {totalErrors > 0 && (
                   <div className="d-flex justify-content-between text-sm text-warning">
                     <span>Total errors:</span>
-                    <span>{coordinator.totalErrors}</span>
+                    <span>{totalErrors}</span>
                   </div>
                 )}
               </div>
@@ -364,39 +453,39 @@ function NewProjectPage() {
                 <h4 className="card-header-title">Preview</h4>
               </Card.Header>
               <Card.Body>
-                {coordinator.values.title ? (
+                {allFormValues.title ? (
                   <div className="project-preview">
                     {/* Header Section */}
                     <div className="mb-4">
                       <div className="d-flex justify-content-between align-items-start mb-2">
-                        <h5 className="mb-0 fw-bold">{coordinator.values.title}</h5>
-                        {coordinator.values.year && (
+                        <h5 className="mb-0 fw-bold">{allFormValues.title}</h5>
+                        {allFormValues.year && (
                           <span className="badge bg-soft-secondary fs-6">
-                            {coordinator.values.year}
+                            {allFormValues.year}
                           </span>
                         )}
                       </div>
                       
-                      {coordinator.values.category && (
+                      {allFormValues.category && (
                         <div className="mb-2">
                           <span className="badge bg-soft-info me-2">
-                            {coordinator.values.category}
+                            {allFormValues.category}
                           </span>
-                          <span className={`badge ${coordinator.values.published ? 'bg-soft-success' : 'bg-soft-warning'}`}>
-                            {coordinator.values.published ? 'Published' : 'Draft'}
+                          <span className={`badge ${allFormValues.published ? 'bg-soft-success' : 'bg-soft-warning'}`}>
+                            {allFormValues.published ? 'Published' : 'Draft'}
                           </span>
                         </div>
                       )}
                       
-                      {coordinator.values.shortDescription && (
+                      {allFormValues.shortDescription && (
                         <p className="text-muted mb-2 lh-sm">
-                          {coordinator.values.shortDescription}
+                          {allFormValues.shortDescription}
                         </p>
                       )}
                     </div>
 
                     {/* Rich Description Preview */}
-                    {coordinator.values.description && (
+                    {allFormValues.description && (
                       <div className="mb-3">
                         <h6 className="text-muted small text-uppercase mb-2">Description</h6>
                         <div 
@@ -407,17 +496,17 @@ function NewProjectPage() {
                             fontSize: '0.875rem',
                             lineHeight: '1.4'
                           }}
-                          dangerouslySetInnerHTML={{ __html: coordinator.values.description }}
+                          dangerouslySetInnerHTML={{ __html: allFormValues.description }}
                         />
                       </div>
                     )}
 
                     {/* Technologies */}
-                    {coordinator.values.technologies && coordinator.values.technologies.length > 0 && (
+                    {allFormValues.technologies && allFormValues.technologies.length > 0 && (
                       <div className="mb-3">
                         <h6 className="text-muted small text-uppercase mb-2">Technologies</h6>
                         <div className="d-flex gap-1 flex-wrap">
-                          {coordinator.values.technologies.map((tech: string, index: number) => (
+                          {allFormValues.technologies.map((tech: string, index: number) => (
                             <span key={index} className="badge bg-primary">
                               {tech}
                             </span>
@@ -426,13 +515,25 @@ function NewProjectPage() {
                       </div>
                     )}
 
+                    {/* Links Section */}
+                    {allFormValues.blog && (
+                      <div className="mb-3">
+                        <h6 className="text-muted small text-uppercase mb-2">Blog</h6>
+                        <div className="bg-soft-secondary p-2 rounded">
+                          <code className="small text-muted">
+                            {allFormValues.blog}
+                          </code>
+                        </div>
+                      </div>
+                    )}
+
                     {/* URL Preview */}
-                    {(coordinator.values.slug || coordinator.values.title) && (
+                    {(allFormValues.slug || allFormValues.title) && (
                       <div className="mb-3">
                         <h6 className="text-muted small text-uppercase mb-2">URL</h6>
                         <div className="bg-soft-secondary p-2 rounded">
                           <code className="small text-muted">
-                            /project/{coordinator.values.slug || generateSlug(coordinator.values.title)}
+                            /project/{allFormValues.slug || generateSlug(allFormValues.title)}
                           </code>
                         </div>
                       </div>
@@ -513,7 +614,7 @@ function NewProjectPage() {
                       <Button
                         type="button"
                         variant="primary"
-                        disabled={!coordinator.canSubmit || loading}
+                        disabled={!canSubmit || loading}
                         onClick={handleSubmit}
                       >
                         {loading ? 'Saving...' : 'Save'}
@@ -524,15 +625,11 @@ function NewProjectPage() {
               )}
               
               {/* Validation Status */}
-              {!showResetConfirm && !coordinator.canSubmit && coordinator.progress > 0 && (
+              {!showResetConfirm && !canSubmit && progress > 0 && (
                 <div className="row mt-2">
                   <div className="col">
                     <small className="text-light opacity-75">
-                      {coordinator.sectionsWithErrors.length > 0 ? (
-                        <>Complete required fields to save</>
-                      ) : (
-                        <>Complete required fields to save</>
-                      )}
+                      Complete required fields to save
                     </small>
                   </div>
                 </div>
