@@ -1,9 +1,8 @@
-import React, { useState, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import Link from 'next/link';
-import { NavbarTop, Sidebar, SidebarToggle } from '@/widgets/navbars';
+import { NavbarTop, Sidebar } from '@/widgets/navbars';
 import { AdminNavigation, AdminSearch, UserMenu } from '@/widgets/navigation';
 import { LogoIcon } from '@/widgets';
-import { useAppStore } from '@/store/store';
 import useBodyClasses from '@/hooks/useBodyClasses';
 
 interface AdminLayoutProps {
@@ -11,19 +10,16 @@ interface AdminLayoutProps {
 }
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
-  const [isCollapsed, setIsCollapsed] = useState(true); // Start mini (inverted logic)
-  const { skin } = useAppStore();
 
   // Apply body classes for admin layout
   useBodyClasses([
     'has-navbar-vertical-aside',
     'navbar-vertical-aside-show-md',
     'footer-offset',
-    isCollapsed ? 'navbar-vertical-aside-mini-mode' : '',
+    'navbar-vertical-aside-mini-mode',
     'navbar-vertical-aside-transition-on'
   ]);
 
-  const toggleSidebar = () => setIsCollapsed(!isCollapsed);
 
   return (
     <>
@@ -52,16 +48,13 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
         <div className="navbar-vertical-footer-offset">
           {/* Logo */}
           <Link href="/admin" className="navbar-brand" aria-label="Admin">
-            <div style={{ width: isCollapsed ? '32px' : '120px', height: '40px' }}>
+            <div>
               <LogoIcon primary="#377dff" dark="#132144" />
             </div>
           </Link>
 
-          {/* Sidebar Toggle */}
-          <SidebarToggle isCollapsed={isCollapsed} onToggle={toggleSidebar} />
-
           {/* Navigation */}
-          <AdminNavigation isCollapsed={isCollapsed} />
+          <AdminNavigation />
         </div>
       </Sidebar>
 
