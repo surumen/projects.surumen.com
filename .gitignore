@@ -28,8 +28,22 @@ yarn-error.log*
 
 # local env files
 .env*.local
+
+# IDE
 .idea
+.vscode
 
 # vercel
 .vercel
+
+# temporary files
 test.txt
+*.tmp
+*.temp
+
+# CMS uploads (if using local storage)
+/public/uploads/
+/public/blog-images/
+
+# ESLint cache
+.eslintcache

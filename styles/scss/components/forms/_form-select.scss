@@ -1,0 +1,13 @@
+/*------------------------------------
+  Form Select
+------------------------------------*/
+
+.form-select {
+  cursor: pointer;
+  color: $form-select-color;
+  border: $form-select-border-width solid $border-color;
+}
+
+.form-select-borderless {
+  border-width: 0;
+}

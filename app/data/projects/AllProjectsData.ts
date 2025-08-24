@@ -1,7 +1,8 @@
-import { Project } from '@/types';
+import { Project } from '../../types';
 
 export const AllProjectsData: Project[] = [
 	{
+		id: 'proj-001',
 		slug: 'tournament-brackets-ai-assistant',
 		title: 'Tournament Brackets AI Assistant',
 		shortDescription: 'An AI-driven assistant for bracket predictions and tactical insights across college basketball tournaments, soccer, and other professional leagues.',
@@ -26,9 +27,12 @@ export const AllProjectsData: Project[] = [
 		year: 2025,
 		category: 'AI/ML',
 		demo: 'tournament-brackets-ai-assistant',
-		blog: 'tournament-brackets-ai-assistant'
+		published: true,
+		createdAt: new Date('2025-01-01'),
+		updatedAt: new Date('2025-01-15')
 	},
 	{
+		id: 'proj-002',
 		slug: 'fantasy-manager-assistant',
 		title: 'Fantasy Premier League Manager Assistant',
 		shortDescription: 'An fantasy game co-manager that delivers transfer picks, lineup optimizations, and fixture insights in seconds without the busywork.',
@@ -50,8 +54,10 @@ export const AllProjectsData: Project[] = [
 		],
 		year: 2025,
 		category: 'AI/ML',
-		demo: 'fantasy-manager-assistant'
-		// No blog for this project yet
+		demo: 'fantasy-manager-assistant',
+		published: true,
+		createdAt: new Date('2025-01-01'),
+		updatedAt: new Date('2025-01-15')
 	},
 ];
 

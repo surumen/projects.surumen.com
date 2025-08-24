@@ -2,6 +2,22 @@
 // Centralized utility exports
 
 // ========================
+// TECHNOLOGY UTILITIES
+// ========================
+export { 
+  getTechnologyColor,
+  getTechnologyScheme, 
+  getTechnologyColors,
+  getColorDistribution,
+  getLanguageScheme
+} from './technologyColors';
+
+// ========================
+// FORMATTING UTILITIES
+// ========================
+export { formatValue } from './formatting';
+
+// ========================
 // BRACKETS UTILITIES
 // ========================
 export { TournamentBuilder } from './brackets/tournament';

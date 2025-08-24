@@ -3,52 +3,65 @@ import { Fragment } from 'react';
 import { NextSeo } from 'next-seo';
 import { Container, Row, Col } from 'react-bootstrap';
 
-import { ProjectHeader, Markdown } from '@/widgets';
+import { ProjectHeader } from '@/widgets';
+import Markdown from '../../app/widgets/projects/Markdown';
 import { getAllProjects, getProjectBySlug, getProjectBlogBySlug } from '../../lib/getProjectBySlug';
-import { Project } from '@/types';
+import type { Project } from '../../app/types';
+
+type SerializedProject = Omit<Project, 'createdAt' | 'updatedAt'> & {
+  createdAt: string;
+  updatedAt: string;
+};
 
 interface ProjectPageProps {
-  project: Project;
+  project: SerializedProject;
   blog: string | null;
 }
 
 export default function ProjectPage({ project, blog }: ProjectPageProps) {
+  // Convert string dates back to Date objects for component usage
+  const projectWithDates: Project = {
+    ...project,
+    createdAt: new Date(project.createdAt),
+    updatedAt: new Date(project.updatedAt),
+  };
+
   // Generate structured data for better SEO
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'CreativeWork',
-    name: project.title,
-    description: project.shortDescription,
+    name: projectWithDates.title,
+    description: projectWithDates.shortDescription,
     author: {
       '@type': 'Person',
       name: 'Moses Surumen',
     },
-    programmingLanguage: project.technologies,
-    tool: project.technologies,
-    dateCreated: project.year,
+    programmingLanguage: projectWithDates.technologies,
+    tool: projectWithDates.technologies,
+    dateCreated: projectWithDates.year,
   };
 
   return (
     <Fragment>
       <NextSeo
-        title={`${project.title} | Moses Surumen`}
-        description={project.shortDescription}
-        canonical={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://projects.surumen.com'}/project/${project.slug}`}
+        title={`${projectWithDates.title} | Moses Surumen`}
+        description={projectWithDates.shortDescription}
+        canonical={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://projects.surumen.com'}/project/${projectWithDates.slug}`}
         openGraph={{
-          title: project.title,
-          description: project.shortDescription,
+          title: projectWithDates.title,
+          description: projectWithDates.shortDescription,
           type: 'article',
-          url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://projects.surumen.com'}/project/${project.slug}`,
+          url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://projects.surumen.com'}/project/${projectWithDates.slug}`,
           siteName: 'Moses Surumen Projects',
           article: {
             authors: ['Moses Surumen'],
-            tags: project.technologies,
+            tags: projectWithDates.technologies,
           },
         }}
         additionalMetaTags={[
           {
             name: 'keywords',
-            content: project.technologies.join(', '),
+            content: projectWithDates.technologies.join(', '),
           },
           {
             name: 'author',
@@ -67,10 +80,10 @@ export default function ProjectPage({ project, blog }: ProjectPageProps) {
 
       <main className="container-fluid py-5">
         {/* Project Header */}
-        <ProjectHeader project={project} />
+        <ProjectHeader project={projectWithDates} />
 
         {/* Project Content */}
-        {blog && project.blog ? (
+        {blog ? (
           <Container className="mw-screen-xxl py-5">
             <Row>
               <Col>
@@ -118,23 +131,28 @@ export const getStaticProps: GetStaticProps<ProjectPageProps> = async ({ params 
 
     let blog: string | null = null;
 
-    // Only load blog content if the project has blog enabled
+    // Check if project has blog content
     if (project.blog) {
       try {
-        blog = getProjectBlogBySlug(slug);
+        blog = await getProjectBlogBySlug(slug);
         // Handle empty blog content gracefully
         if (!blog || blog.trim().length === 0) {
           blog = null;
         }
       } catch (error) {
         // Don't fail the entire page if blog loading fails
+        console.error('Failed to load blog content:', error);
         blog = null;
       }
     }
 
     return {
       props: {
-        project,
+        project: {
+          ...project,
+          createdAt: project.createdAt.toISOString(),
+          updatedAt: project.updatedAt.toISOString(),
+        },
         blog,
       },
       revalidate: 60, // Revalidate every minute for content updates

@@ -4,14 +4,15 @@ import { CursorFill } from 'react-bootstrap-icons';
 
 import { premierLeagueTeams } from '@/data/teams/premierLeague';
 import useFPL from '@/hooks/useFPL';
-import { DynamicForm, PlayerFormation } from '@/widgets';
+import { SmartForm, PlayerFormation } from '@/widgets';
 import type { 
-    FieldConfig, 
+    Option,
     TransferOutCandidate,
     TransferInCandidate,
     PremierLeaguePlayer,
     UpcomingFixture 
 } from '@/types';
+import type { FieldConfig } from '@/types/forms/advanced';
 
 const positionMap = {
     1: 'Goalkeeper',
@@ -127,7 +128,7 @@ const FantasyAssistant: React.FC = () => {
     const [activeGameweek, setActiveGameweek] = useState<number>(1);
     const [showRecs, setShowRecs] = useState<boolean>(true);
 
-    const weekOptions = useMemo<FieldConfig['options']>(
+    const weekOptions = useMemo<Option[]>(
         () =>
             Array.from({ length: 38 }, (_, i) => ({
                 value: i + 1,
@@ -180,6 +181,44 @@ const FantasyAssistant: React.FC = () => {
         }
     }, [fetchManagerTeam, planManagerStrategy]);
 
+    // Memoize form fields to prevent unnecessary re-renders
+    const formFields = useMemo((): FieldConfig[] => [
+        {
+            name: 'competition',
+            label: 'Competition',
+            type: 'select',
+            options: [{ value: 'Premier League', label: 'Premier League' }],
+            readOnly: true,
+            initialValue: 'Premier League'
+        },
+        {
+            name: 'managerId',
+            label: 'Manager ID',
+            type: 'input',
+            inputType: 'text',
+            required: true,
+            validate: [{ test: (v: any) => /^\d+$/.test(v), message: 'Manager ID must be a number' }],
+            initialValue: String(managerId)
+        },
+        {
+            name: 'showTransferRecommendations',
+            label: 'Show transfer recommendations',
+            type: 'switch',
+            initialValue: showRecs,
+            styling: {
+                inline: true
+            }
+        },
+        {
+            name: 'gameweek',
+            label: 'Gameweek',
+            type: 'select',
+            options: weekOptions,
+            required: true,
+            initialValue: activeGameweek
+        },
+    ], [weekOptions, managerId, showRecs, activeGameweek]);
+
     if (loading) {
         return (
             <Row>
@@ -213,42 +252,23 @@ const FantasyAssistant: React.FC = () => {
 
                     <Col lg={3} className="order-1 order-lg-2">
                         <div className="sticky-top pt-4" style={{ top: '5%' }}>
-                            <DynamicForm
-                                fields={[
-                                    {
-                                        name: 'competition',
-                                        label: 'Competition',
-                                        type: 'select',
-                                        options: [{ value: 'Premier League', label: 'Premier League' }],
-                                        initialValue: 'Premier League',
-                                        readOnly: true,
-                                    },
-                                    {
-                                        name: 'managerId',
-                                        label: 'Manager ID',
-                                        type: 'input',
-                                        inputType: 'text',
-                                        required: true,
-                                        validate: v => /^\d+$/.test(v),
-                                        initialValue: String(managerId),
-                                    },
-                                    {
-                                        name: 'showTransferRecommendations',
-                                        label: 'Show transfer recommendations',
-                                        type: 'switch',
-                                        initialValue: showRecs,
-                                    },
-                                    {
-                                        name: 'gameweek',
-                                        label: 'Gameweek',
-                                        type: 'select',
-                                        options: weekOptions,
-                                        required: true,
-                                        initialValue: activeGameweek,
-                                    },
-                                ]}
-                                submitLabel={<><CursorFill className="me-1" /> Start</>}
-                                onSubmit={handleFormSubmit}
+                            <SmartForm
+                                config={{
+                                    fields: formFields,
+                                    onSubmit: handleFormSubmit
+                                }}
+                                renderSubmitButton={({ isValid, submit }) => (
+                                    <div className="d-grid gap-2">
+                                        <button
+                                            type="button"
+                                            className="btn btn-primary"
+                                            disabled={!isValid}
+                                            onClick={submit}
+                                        >
+                                            <CursorFill className="me-1" /> Start
+                                        </button>
+                                    </div>
+                                )}
                             />
                         </div>
                     </Col>
@@ -291,42 +311,23 @@ const FantasyAssistant: React.FC = () => {
 
                     <Col lg={3} className="order-1 order-lg-2">
                         <div className="sticky-top pt-4" style={{ top: '5%' }}>
-                            <DynamicForm
-                                fields={[
-                                    {
-                                        name: 'competition',
-                                        label: 'Competition',
-                                        type: 'select',
-                                        options: [{ value: 'Premier League', label: 'Premier League' }],
-                                        initialValue: 'Premier League',
-                                        readOnly: true,
-                                    },
-                                    {
-                                        name: 'managerId',
-                                        label: 'Manager ID',
-                                        type: 'input',
-                                        inputType: 'text',
-                                        required: true,
-                                        validate: v => /^\d+$/.test(v),
-                                        initialValue: String(managerId),
-                                    },
-                                    {
-                                        name: 'showTransferRecommendations',
-                                        label: 'Show transfer recommendations',
-                                        type: 'switch',
-                                        initialValue: showRecs,
-                                    },
-                                    {
-                                        name: 'gameweek',
-                                        label: 'Gameweek',
-                                        type: 'select',
-                                        options: weekOptions,
-                                        required: true,
-                                        initialValue: activeGameweek,
-                                    },
-                                ]}
-                                submitLabel={<><CursorFill className="me-1" /> Start</>}
-                                onSubmit={handleFormSubmit}
+                            <SmartForm
+                                config={{
+                                    fields: formFields,
+                                    onSubmit: handleFormSubmit
+                                }}
+                                renderSubmitButton={({ isValid, submit }) => (
+                                    <div className="d-grid gap-2">
+                                        <button
+                                            type="button"
+                                            className="btn btn-primary"
+                                            disabled={!isValid}
+                                            onClick={submit}
+                                        >
+                                            <CursorFill className="me-1" /> Start
+                                        </button>
+                                    </div>
+                                )}
                             />
                         </div>
                     </Col>
@@ -377,42 +378,23 @@ const FantasyAssistant: React.FC = () => {
 
                 <Col lg={3} className="order-1 order-lg-2">
                     <div className="sticky-top pt-4" style={{ top: '5%' }}>
-                        <DynamicForm
-                            fields={[
-                                {
-                                    name: 'competition',
-                                    label: 'Competition',
-                                    type: 'select',
-                                    options: [{ value: 'Premier League', label: 'Premier League' }],
-                                    initialValue: 'Premier League',
-                                    readOnly: true,
-                                },
-                                {
-                                    name: 'managerId',
-                                    label: 'Manager ID',
-                                    type: 'input',
-                                    inputType: 'text',
-                                    required: true,
-                                    validate: v => /^\d+$/.test(v),
-                                    initialValue: String(managerId),
-                                },
-                                {
-                                    name: 'showTransferRecommendations',
-                                    label: 'Show transfer recommendations',
-                                    type: 'switch',
-                                    initialValue: showRecs,
-                                },
-                                {
-                                    name: 'gameweek',
-                                    label: 'Gameweek',
-                                    type: 'select',
-                                    options: weekOptions,
-                                    required: true,
-                                    initialValue: activeGameweek,
-                                },
-                            ]}
-                            submitLabel={<><CursorFill className="me-1" /> Start</>}
-                            onSubmit={handleFormSubmit}
+                        <SmartForm
+                            config={{
+                                fields: formFields,
+                                onSubmit: handleFormSubmit
+                            }}
+                            renderSubmitButton={({ isValid, submit }) => (
+                                <div className="d-grid gap-2">
+                                    <button
+                                        type="button"
+                                        className="btn btn-primary"
+                                        disabled={!isValid}
+                                        onClick={submit}
+                                    >
+                                        <CursorFill className="me-1" /> Start
+                                    </button>
+                                </div>
+                            )}
                         />
                     </div>
                 </Col>

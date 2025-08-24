@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, Row, Nav } from 'react-bootstrap';
 import { SendFill, Heart } from 'react-bootstrap-icons';
 import { Project } from '@/types';
-import { getTechnologyScheme } from '@/utils/technologyColors';
+import { getTechnologyScheme } from '../../utils';
 
 interface ProjectListProps {
   projects: Project[];
@@ -33,7 +33,7 @@ const ProjectList: React.FC<ProjectListProps> = ({
   }
 
   return (
-    <div className="projects-list">
+    <>
       {projects.map((project, index) => (
         <Nav.Link 
           key={project.slug || index}
@@ -58,7 +58,7 @@ const ProjectList: React.FC<ProjectListProps> = ({
                     <div className="row fs-6 text-body gap-2">
                       {project.technologies.slice(0, 4).map((tech, index) => (
                         <div key={index} className="col-auto">
-                          <span className={`legend-indicator bg-accent-${getTechScheme(tech)}`} />
+                          <span className={`legend-indicator bg-${getTechScheme(tech)}`} />
                           {tech}
                         </div>
                       ))}
@@ -81,7 +81,7 @@ const ProjectList: React.FC<ProjectListProps> = ({
           </div>
         </Nav.Link>
       ))}
-    </div>
+    </>
   );
 };
 

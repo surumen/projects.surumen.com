@@ -1,22 +1,12 @@
-import { Fragment, useEffect } from 'react'
-import { useMediaQuery } from 'react-responsive'
+import { Fragment } from 'react'
 import { Nav } from 'react-bootstrap'
 import { Sun, MoonFill, Person, Linkedin } from 'react-bootstrap-icons'
 import { useAppStore } from '@/store/store'
 import useMounted from '@/hooks/useMounted'
 
 const QuickMenu = () => {
-    const { skin, changeSkin } = useAppStore()
+    const { skin, toggleSkin } = useAppStore()
     const hasMounted = useMounted()
-
-    useEffect(() => {
-        const root = document.documentElement
-        root.setAttribute('data-bs-theme', skin)
-    }, [skin])
-
-    const toggleTheme = () => {
-        changeSkin(skin === 'light' ? 'dark' : 'light')
-    }
 
     if (!hasMounted) return null
 
@@ -37,7 +27,7 @@ const QuickMenu = () => {
                 <Linkedin size={18} />
             </Nav.Link>
             <Nav.Link
-                onClick={toggleTheme}
+                onClick={toggleSkin}
                 className="nav-item nav-link rounded-pill cursor-pointer"
             >
                 {skin === 'dark' ? <MoonFill size={18} /> : <Sun size={24} />}

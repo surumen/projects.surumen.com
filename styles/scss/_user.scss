@@ -1,0 +1,605 @@
+/*------------------------------------
+  File for your custom SCSS style
+------------------------------------*/
+
+// ===== DARK MODE CSS CUSTOM PROPERTIES =====
+// This section adds dark mode support via CSS custom properties
+// Only applies when data-bs-theme="dark" is set on <html> element
+
+[data-bs-theme="dark"] {
+  // Import your dark mode variables in this scoped context
+  @import 'themes/darkmode';
+  @import 'themes/darkmode-overrides';
+  
+  // Core Bootstrap theme colors
+  --bs-primary: #{$primary};
+  --bs-secondary: #{$secondary};
+  --bs-success: #{$success};
+  --bs-info: #{$info};
+  --bs-warning: #{$warning};
+  --bs-danger: #{$danger};
+  --bs-light: #{$light};
+  --bs-dark: #{$dark};
+  
+  // Bootstrap gray scale (mapped from your dark mode variables)
+  // These use your sophisticated gray inversion system from themes/_darkmode.scss
+  --bs-gray-100: #{lighten($gray-800, 1%)};    // Lightest in dark mode
+  --bs-gray-200: #{lighten($gray-800, 2%)};
+  --bs-gray-300: #{lighten($gray-800, 14%)};
+  --bs-gray-400: #{lighten($gray-800, 8%)};
+  --bs-gray-500: #{lighten($gray-800, 4%)};
+  --bs-gray-600: #{lighten($gray-900, 1%)};
+  --bs-gray-700: #{lighten($gray-900, 3%)};
+  --bs-gray-800: #{lighten($gray-900, 5%)};
+  --bs-gray-900: #{$gray-900};                 // Your main dark background #1e2022
+  
+  // Core body & semantic colors
+  --bs-body-bg: #{$body-bg};                   // Dark background
+  --bs-body-color: #{$body-color};             // Light text color
+  --bs-border-color: #{$border-color};         // Dark border color
+  --bs-heading-color: #{$headings-color};      // White headings
+  --bs-link-color: #{$link-color};             // Light links
+  --bs-link-hover-color: #{$link-hover-color}; // Bright link hover
+  
+  // RGB versions for rgba() calculations in Bootstrap components
+  --bs-primary-rgb: #{red($primary)}, #{green($primary)}, #{blue($primary)};
+  --bs-secondary-rgb: #{red($secondary)}, #{green($secondary)}, #{blue($secondary)};
+  --bs-success-rgb: #{red($success)}, #{green($success)}, #{blue($success)};
+  --bs-info-rgb: #{red($info)}, #{green($info)}, #{blue($info)};
+  --bs-warning-rgb: #{red($warning)}, #{green($warning)}, #{blue($warning)};
+  --bs-danger-rgb: #{red($danger)}, #{green($danger)}, #{blue($danger)};
+  --bs-light-rgb: #{red($light)}, #{green($light)}, #{blue($light)};
+  --bs-dark-rgb: #{red($dark)}, #{green($dark)}, #{blue($dark)};
+  --bs-body-bg-rgb: #{red($body-bg)}, #{green($body-bg)}, #{blue($body-bg)};
+  --bs-body-color-rgb: #{red($body-color)}, #{green($body-color)}, #{blue($body-color)};
+  
+  // Additional semantic colors that Bootstrap 5.3+ uses
+  --bs-emphasis-color: #{$white};
+  --bs-secondary-color: #{$secondary};
+  --bs-tertiary-color: #{rgba($body-color, .5)};
+  --bs-secondary-bg: #{lighten($gray-800, 5%)};
+  --bs-tertiary-bg: #{lighten($gray-800, 2%)};
+  
+  // Text emphasis colors for .text-primary-emphasis, etc.
+  --bs-primary-text-emphasis: #{$primary};
+  --bs-secondary-text-emphasis: #{$secondary};
+  --bs-success-text-emphasis: #{$success};
+  --bs-info-text-emphasis: #{$info};
+  --bs-warning-text-emphasis: #{$warning};
+  --bs-danger-text-emphasis: #{$danger};
+  --bs-light-text-emphasis: #{$light};
+  --bs-dark-text-emphasis: #{$dark};
+  
+  // Subtle background colors for .bg-primary-subtle, etc.
+  --bs-primary-bg-subtle: #{rgba($primary, .1)};
+  --bs-secondary-bg-subtle: #{rgba($secondary, .1)};
+  --bs-success-bg-subtle: #{rgba($success, .1)};
+  --bs-info-bg-subtle: #{rgba($info, .1)};
+  --bs-warning-bg-subtle: #{rgba($warning, .1)};
+  --bs-danger-bg-subtle: #{rgba($danger, .1)};
+  --bs-light-bg-subtle: #{rgba($light, .1)};
+  --bs-dark-bg-subtle: #{rgba($dark, .1)};
+  
+  // Subtle border colors for .border-primary-subtle, etc.
+  --bs-primary-border-subtle: #{rgba($primary, .25)};
+  --bs-secondary-border-subtle: #{rgba($secondary, .25)};
+  --bs-success-border-subtle: #{rgba($success, .25)};
+  --bs-info-border-subtle: #{rgba($info, .25)};
+  --bs-warning-border-subtle: #{rgba($warning, .25)};
+  --bs-danger-border-subtle: #{rgba($danger, .25)};
+  --bs-light-border-subtle: #{rgba($light, .25)};
+  --bs-dark-border-subtle: #{rgba($dark, .25)};
+  
+  // Additional border properties
+  --bs-border-color-translucent: #{rgba($white, .15)};
+  
+  // Form and input colors
+  --bs-form-valid-color: #{$success};
+  --bs-form-valid-border-color: #{$success};
+  --bs-form-invalid-color: #{$danger};
+  --bs-form-invalid-border-color: #{$danger};
+  
+  // ===== HIGH PRIORITY COMPONENT BACKGROUNDS =====
+  
+  // Cards & Content Backgrounds (Immediate Visual Impact)
+  --bs-card-bg: #{$white-bg};                    // Dark card backgrounds
+  --bs-card-border-color: #{$border-color};      // Dark card borders  
+  --bs-card-cap-bg: #{$gray-800};               // Card header backgrounds
+  --bs-card-cap-color: #{$headings-color};      // Card header text
+  
+  // Form Controls (Critical for usability)
+  --bs-input-bg: #{$white-bg};                   // Form input backgrounds
+  --bs-input-color: #{$input-color};             // Input text color
+  --bs-input-border-color: #{$border-color};     // Input borders
+  --bs-input-focus-border-color: #{$input-btn-focus-color}; // Focus borders
+  --bs-input-focus-color: #{$input-focus-color}; // Focus text color
+  --bs-input-placeholder-color: #{$input-placeholder-color}; // Placeholder text
+  --bs-form-select-bg: #{$form-select-bg};      // Select dropdown background
+  --bs-form-select-color: #{$form-select-color}; // Select text color
+  --bs-form-select-indicator-color: #{$form-select-indicator-color}; // Select arrow
+  --bs-form-check-input-bg: #{$form-check-input-bg}; // Checkbox backgrounds
+  --bs-form-label-color: #{$form-label-color};   // Form label color
+  
+  // Modals & Overlays (High visual impact)
+  --bs-modal-bg: #{$modal-content-bg};          // Modal background
+  --bs-modal-content-bg: #{$modal-content-bg};  // Modal content background
+  --bs-modal-content-border-color: #{$border-color}; // Modal borders
+  --bs-modal-header-border-color: #{$border-color}; // Modal header border
+  --bs-modal-footer-border-color: #{$border-color}; // Modal footer border
+  --bs-modal-backdrop-bg: #{$overlay-soft-bg-color}; // Modal backdrop
+  
+  // Navigation & Dropdowns (User interaction)
+  --bs-nav-link-color: #{$nav-link-color};      // Nav link color
+  --bs-nav-link-hover-color: #{$nav-link-hover-color}; // Nav link hover
+  --bs-nav-pills-link-active-color: #{$nav-pills-link-active-color}; // Active nav pill text
+  --bs-nav-pills-link-active-bg: #{$nav-pills-link-active-bg}; // Active nav pill background
+  --bs-dropdown-bg: #{$dropdown-bg};            // Dropdown background
+  --bs-dropdown-color: #{$dropdown-color};      // Dropdown text color
+  --bs-dropdown-link-color: #{$dropdown-link-color}; // Dropdown link color
+  --bs-dropdown-link-hover-color: #{$dropdown-link-active-color}; // Dropdown link hover
+  --bs-dropdown-link-hover-bg: #{$dropdown-link-hover-bg}; // Dropdown link hover bg
+  --bs-dropdown-border-color: #{$border-color}; // Dropdown borders
+  
+  // Tables (Content display)
+  --bs-table-bg: transparent;                   // Table background
+  --bs-table-color: #{$body-color};            // Table text color
+  --bs-table-border-color: #{$border-color};   // Table borders
+  --bs-table-striped-bg: #{rgba($white, .05)}; // Striped row background
+  --bs-table-striped-color: #{$body-color};    // Striped row text
+  --bs-table-hover-bg: #{rgba($white, .075)};  // Table row hover
+  --bs-table-hover-color: #{$body-color};      // Table row hover text
+  
+  // ===== COMPONENT-SPECIFIC CSS CUSTOM PROPERTY OVERRIDES =====
+  // These override the component-level CSS custom properties that Bootstrap generates
+  
+  // Card Component Overrides (Fix for --bs-card-bg: #fff issue)
+  .card {
+    --bs-card-bg: #{$white-bg};                    // Override compiled card background
+    --bs-card-color: #{$body-color};               // Override card text color  
+    --bs-card-border-color: #{$border-color};      // Override card border color
+    --bs-card-box-shadow: #{$box-shadow-sm};       // Override card shadow
+    --bs-card-cap-bg: #{$gray-800};               // Override card header/footer bg
+    --bs-card-cap-color: #{$headings-color};      // Override card header/footer text
+    --bs-card-title-color: #{$headings-color};    // Override card title color
+    --bs-card-subtitle-color: #{$text-muted};     // Override card subtitle color
+  }
+  
+  // Form Component Overrides
+  .form-control,
+  .form-select {
+    --bs-form-control-bg: #{$white-bg};           // Override input backgrounds
+    --bs-form-control-color: #{$input-color};     // Override input text color
+    --bs-form-control-border-color: #{$border-color}; // Override input borders
+  }
+  
+  // Modal Component Overrides
+  .modal-content {
+    --bs-modal-bg: #{$white-bg};                  // Override modal background
+    --bs-modal-border-color: #{$border-color};    // Override modal borders
+  }
+  
+  // Dropdown Component Overrides
+  .dropdown-menu {
+    --bs-dropdown-bg: #{$dropdown-bg};            // Override dropdown background
+    --bs-dropdown-border-color: #{$border-color}; // Override dropdown borders
+    --bs-dropdown-link-color: #{$dropdown-color}; // Override dropdown link color
+  }
+  
+  // Table Component Overrides
+  .table {
+    --bs-table-bg: transparent;                   // Override table background
+    --bs-table-color: #{$body-color};            // Override table text color
+    --bs-table-border-color: #{$border-color};   // Override table borders
+  }
+  
+  // Nav Component Overrides
+  .nav {
+    --bs-nav-link-color: #{$nav-link-color};     // Override nav link color
+    --bs-nav-link-hover-color: #{$nav-link-hover-color}; // Override nav link hover
+  }
+  
+  // ===== MEDIUM PRIORITY COMPONENTS =====
+  
+  // Buttons & Interactive Elements
+  --bs-btn-close-color: #{$btn-close-color};    // Close button color
+  --bs-btn-close-bg: transparent;               // Close button background
+  --bs-btn-close-hover-color: #{$text-muted};   // Close button hover
+  --bs-btn-close-focus-shadow: #{rgba($primary, .25)}; // Close button focus
+  
+  // Tooltips & Popovers
+  --bs-tooltip-bg: #{$tooltip-bg};              // Tooltip background
+  --bs-tooltip-color: #{$body-color};           // Tooltip text color
+  --bs-popover-bg: #{$popover-dark-bg-color};   // Popover background
+  --bs-popover-border-color: #{$border-color};  // Popover borders
+  --bs-popover-header-bg: #{$popover-dark-header-bg-color}; // Popover header
+  --bs-popover-body-color: #{$popover-dark-body-color}; // Popover body text
+  
+  // Alerts
+  --bs-alert-bg: #{$gray-800};                 // Alert background
+  --bs-alert-border-color: #{$border-color};   // Alert borders
+  --bs-alert-color: #{$body-color};           // Alert text color
+  --bs-alert-link-color: #{$link-color};      // Alert link color
+  
+  // Lists & Groups  
+  --bs-list-group-bg: #{$list-group-bg};       // List group background
+  --bs-list-group-color: #{$list-group-color}; // List group text
+  --bs-list-group-border-color: #{$list-group-border-color}; // List group borders
+  --bs-list-group-hover-bg: #{rgba($white, .075)}; // List group hover
+  --bs-list-group-active-bg: #{$active-bg-color}; // List group active
+  --bs-list-group-active-color: #{$active-color}; // List group active text
+  --bs-list-group-disabled-bg: transparent;    // List group disabled
+  --bs-list-group-disabled-color: #{$disabled-color}; // List group disabled text
+  
+  // Accordion
+  --bs-accordion-bg: transparent;               // Accordion background
+  --bs-accordion-color: #{$body-color};        // Accordion text
+  --bs-accordion-border-color: #{$accordion-border-color}; // Accordion borders
+  --bs-accordion-button-bg: transparent;       // Accordion button background
+  --bs-accordion-button-color: #{$accordion-button-color}; // Accordion button text
+  --bs-accordion-button-active-bg: #{$accordion-button-active-bg}; // Active accordion
+  --bs-accordion-button-active-color: #{$active-color}; // Active accordion text
+  
+  // Pagination
+  --bs-pagination-color: #{$pagination-color}; // Pagination text
+  --bs-pagination-bg: #{$pagination-bg};       // Pagination background  
+  --bs-pagination-border-color: #{$border-color}; // Pagination borders
+  --bs-pagination-hover-color: #{$link-hover-color}; // Pagination hover text
+  --bs-pagination-hover-bg: #{rgba($white, .075)}; // Pagination hover background
+  --bs-pagination-active-color: #{$pagination-active-color}; // Active page text
+  --bs-pagination-active-bg: #{$pagination-active-bg}; // Active page background
+  --bs-pagination-disabled-color: #{$pagination-disabled-color}; // Disabled pagination
+  --bs-pagination-disabled-bg: #{$pagination-disabled-bg}; // Disabled pagination bg
+  
+  // ===== TYPOGRAPHY & CONTENT =====
+  
+  // Code & Highlighting
+  --bs-code-color: #{$active-color};           // Inline code color
+  --bs-kbd-bg: #{$kbd-bg};                    // Keyboard key background
+  --bs-kbd-color: #{$kbd-color};              // Keyboard key text
+  --bs-mark-bg: #{rgba($warning, .25)};       // Highlight background
+  --bs-mark-color: #{$body-color};           // Highlight text
+  --bs-pre-color: #{$body-color};            // Pre-formatted text
+  
+  // Text Utilities
+  --bs-text-muted: #{$text-muted};            // Muted text color
+  --bs-text-opacity: 1;                       // Text opacity
+  
+  // ===== ADVANCED STYLING =====
+  
+  // Box Shadows (Your custom dark shadows)
+  --bs-box-shadow: #{$box-shadow};            // Main shadow
+  --bs-box-shadow-sm: #{$box-shadow-sm};      // Small shadow
+  --bs-box-shadow-lg: #{$box-shadow-lg};      // Large shadow
+  --bs-box-shadow-inset: inset 0 1px 2px #{rgba($gray-900, .075)}; // Inset shadow
+  
+  // Focus States
+  --bs-focus-ring-color: #{rgba($primary, .25)}; // Focus ring color
+  --bs-focus-ring-width: 0.25rem;             // Focus ring width
+  --bs-focus-ring-opacity: 0.25;              // Focus ring opacity
+  
+  // Front Dashboard Custom Properties
+  --bs-white-70: #{$white-70};                // Your white-70 utility
+  --bs-white-10: #{rgba($white, .1)};         // Your white-10 utility
+  --bs-overlay-bg: #{$overlay-soft-bg-color}; // Overlay backgrounds
+  --bs-disabled-color: #{$disabled-color};     // Disabled state color
+  --bs-disabled-bg: #{$disabled-bg-color};    // Disabled background
+  --bs-active-color: #{$active-color};        // Active state color
+  --bs-active-bg: #{$active-bg-color};        // Active background
+  
+  // ===== ADDITIONAL BASE FOUNDATION COLORS =====
+  
+  // Link Colors (Extended)
+  --bs-link-darker: #{darken($primary, 7%)};
+  
+  // Background Colors (Critical for Dark Mode)
+  --bs-overlay-soft-bg-color: #{$overlay-soft-bg-color};
+  --bs-secondary-bg-color: transparent;
+  --bs-secondary-hover-bg-color: #{$secondary-hover-bg-color};
+  --bs-active-bg-color: #{$primary};
+  --bs-disabled-bg-color: #{$disabled-bg-color};
+  --bs-primary-soft-bg-color: #{rgba($primary, .1)};
+  
+  // Shadow Colors (Dark Mode Specific)
+  --bs-box-shadow: #{$box-shadow};
+  --bs-box-shadow-sm: #{$box-shadow-sm};
+  --bs-box-shadow-sm-hover: #{$box-shadow-sm-hover};
+  --bs-box-shadow-lg: #{$box-shadow-lg};
+  --bs-box-shadow-xl: #{$box-shadow-xl};
+  
+  // Border Colors (Essential)
+  --bs-border-color: #{$border-color};
+  
+  // Navigation Specific (Front Dashboard)
+  --bs-nav-segment-bg: #{$nav-segment-bg-color}; // Segment nav background
+  --bs-nav-segment-bg-card: #{$nav-segment-bg-color-on-card}; // Segment nav on cards
+  --bs-nav-tabs-link-active-border-color: #{$nav-tabs-link-active-border-color}; // Active tab border
+  
+  // Additional Component Colors
+  --bs-hr-color: #{$hr-color};                // Horizontal rule color
+  --bs-hr-opacity: 1;                         // Horizontal rule opacity
+  --bs-dt-color: #{$dt-color};               // Definition term color
+
+  // ===== MISSING FRONT DASHBOARD COMPONENTS =====
+  
+  // ===== FORM COMPONENTS =====
+  
+  // Form Check Switch Colors (use existing primary/white/disabled colors)
+  --bs-form-check-switch-label-color: #{$primary};
+  --bs-form-check-switch-label-hover-color: #{$primary};
+  --bs-form-check-switch-label-active-color: #{$white};
+  --bs-form-check-switch-label-disabled-color: #{$disabled-color};
+  
+  // Input Group Add Field Colors (use existing danger colors)
+  --bs-input-group-add-field-delete-color: #{$danger};
+  --bs-input-group-add-field-delete-hover-color: #{darken($danger, 7%)};
+  
+  // Select Colors (Tom Select - use existing semantic colors)
+  --bs-select-active-color: #{$headings-color};
+  --bs-select-input-placeholder-color: #{$input-placeholder-color};
+  --bs-select-selection-tag-color: #{$headings-color};
+  --bs-select-tag-remove-icon-color: #{$text-muted};
+  --bs-select-tag-remove-icon-hover-color: #{$active-color};
+  --bs-select-tag-input-color: #{$headings-color};
+
+  // ===== AVATAR & MEDIA =====
+  
+  // Avatar Uploader Colors (use existing body/white colors)
+  --bs-avatar-uploader-icon-color: #{$body-color};
+  --bs-avatar-uploader-icon-hover-color: #{$white};
+
+  // ===== NAVIGATION EXTENDED =====
+  
+  // Nav Scroller Colors (use existing nav/link colors)
+  --bs-nav-scroller-arrow-link-color: #{$body-color};
+  --bs-nav-scroller-arrow-link-hover-color: #{$link-hover-color};
+  --bs-nav-scroller-arrow-light-link-color: #{$white-70};
+  --bs-nav-scroller-arrow-light-link-hover-color: #{$white};
+  
+  // Extended Navbar Colors (use existing semantic colors)
+  --bs-navbar-light-brand-color: #{$body-color};
+  --bs-navbar-light-toggle-color: #{$text-muted};
+  --bs-navbar-light-color: #{$body-color};
+  --bs-navbar-light-active-color: #{$body-color};
+  --bs-navbar-light-hover-color: #{$active-color};
+  --bs-navbar-toggler-color: #{$body-color};
+  --bs-navbar-toggler-text-color: #{$dark};
+  --bs-navbar-dark-toggler-text-color: #{$white};
+  --bs-navbar-dark-aside-toggler-color: #{$white};
+  --bs-navbar-dark-hover-color: #{$white};
+  --bs-navbar-dark-divider-color: #{rgba($white, .2)};
+  --bs-navbar-dark-nav-link-color: #{$white};
+  --bs-navbar-dropdown-menu-media-title-color: #{$headings-color};
+  --bs-navbar-dropdown-menu-media-desc-color: #{$body-color};
+  --bs-navbar-dropdown-menu-media-title-hover-color: #{$link-color};
+  --bs-navbar-dropdown-menu-promo-link-title-active-color: #{$link-color};
+  --bs-navbar-dropdown-account-wrapper-color: #{$headings-color};
+  --bs-navbar-vertical-nav-collapse-link-pseudo-color: #{$text-muted};
+  --bs-navbar-vertical-aside-toggler-color: #{$body-color};
+  
+  // Extended Dropdown Colors (use existing dropdown/text colors)
+  --bs-dropdown-header-color: #{$text-muted};
+  --bs-dropdown-icon-color: #{$body-color};
+
+  // ===== CONTENT & TYPOGRAPHY =====
+  
+  // Text Cap Colors (use existing headings color)
+  --bs-text-cap-color: #{$headings-color};
+  
+  // List Component Colors (use existing body/link colors)
+  --bs-list-checked-item-color: #{$body-color};
+  --bs-list-checked-item-hover-color: #{$link-color};
+  --bs-list-pointer-item-color: #{$body-color};
+  --bs-list-pointer-item-hover-color: #{$link-color};
+
+  // ===== STEP & PROGRESS =====
+  
+  // Step Colors (use existing semantic colors)
+  --bs-step-title-color: #{$headings-color};
+  --bs-step-text-color: #{$body-color};
+  --bs-step-active-icon-color: #{$white};
+  --bs-step-is-valid-color: #{$primary};
+  --bs-step-is-valid-icon-color: #{$white};
+  --bs-step-is-invalid-color: #{$danger};
+  --bs-step-is-invalid-icon-color: #{$white};
+
+  // ===== LAYOUT & NAVIGATION =====
+  
+  // Breadcrumb Colors (use existing headings/text/link colors)
+  --bs-breadcrumb-item-color: #{$headings-color};
+  --bs-breadcrumb-link-color: #{$text-muted};
+  --bs-breadcrumb-link-hover-color: #{$link-hover-color};
+  
+  // Page Header Colors (use existing white colors)
+  --bs-page-header-light-title-color: #{$white};
+  --bs-page-header-light-text-color: #{$white-70};
+
+  // ===== SPECIALIZED COMPONENTS =====
+  
+  // Device Browser Colors (use existing body color)
+  --bs-device-browser-header-browser-bar-color: #{$body-color};
+  
+  // Go To Colors (use existing go-to and white colors)
+  --bs-go-to-color: #{$go-to-color};
+  --bs-go-to-hover-color: #{$white};
+
+  // ===== THIRD-PARTY INTEGRATIONS =====
+  
+  // Leaflet Map Colors (use existing body/link colors)
+  --bs-leaflet-bar-color: #{$body-color};
+  --bs-leaflet-bar-hover-color: #{$link-hover-color};
+  
+  // Quill Editor Colors (use existing input/body/link/white colors)
+  --bs-quill-editor-p-color: #{$quill-editor-p-color};
+  --bs-quill-stroke-color: #{$body-color};
+  --bs-quill-fill-color: #{$body-color};
+  --bs-quill-toolbar-btn-hover-color: #{$link-color};
+  --bs-quill-btn-color: #{$white};
+  
+  // ChartJS Colors (use existing white colors)
+  --bs-chartjs-tooltip-body-color: #{$white};
+  --bs-chartjs-tooltip-header-color: #{$white-70};
+  
+  // Datatable Colors (use existing secondary color)
+  --bs-datatable-link-pagination-hover-color: #{$secondary};
+
+  // ===== DATE & TIME PICKERS =====
+  
+  // Flatpickr Colors (use existing semantic colors)
+  --bs-flatpickr-day-color: #{$headings-color};
+  --bs-flatpickr-form-control-color: #{$primary};
+  --bs-flatpickr-selected-end-start-range-color: #{$white};
+  --bs-flatpickr-weekday-color: #{$flatpickr-weekday-color};
+  --bs-flatpickr-day-hover-color: #{$link-color};
+  --bs-flatpickr-day-today-color: #{$white};
+  --bs-flatpickr-day-inrange-color: #{$white};
+  --bs-flatpickr-day-prev-and-next-month-day-color: #{$flatpickr-day-prev-and-next-month-day-color};
+  --bs-flatpickr-day-prev-and-next-month-day-hover-color: #{$text-muted};
+  --bs-flatpickr-day-disabled-color: #{$disabled-color};
+  
+  // Daterangepicker Colors (use existing semantic colors)
+  --bs-daterangepicker-available-date-hover-color: #{$link-color};
+  --bs-daterangepicker-active-date-color: #{$white};
+  --bs-daterangepicker-in-range-color: #{$body-color};
+  --bs-daterangepicker-week-color: #{$daterangepicker-week-color};
+  --bs-daterangepicker-off-date-color: #{$disabled-color};
+  --bs-daterangepicker-select-color: #{$headings-color};
+  --bs-daterangepicker-selected-color: #{$daterangepicker-selected-color};
+  --bs-daterangepicker-prev-next-btn-icon-color: #{$body-color};
+  --bs-daterangepicker-prev-next-btn-icon-hover-color: #{$link-color};
+  --bs-daterangepicker-ranges-item-color: #{$dropdown-color};
+
+  // ===== ADVANCED VISUALIZATIONS =====
+  
+  // JSVectormap Colors (use existing semantic colors)
+  --bs-jvm-tooltip-color: #{$headings-color};
+  --bs-jvm-zoom-color: #{$body-color};
+  --bs-jvm-indicators-hover-color: #{$link-hover-color};
+  
+  // Fullcalendar Colors (use existing semantic colors)
+  --bs-fullcalendar-cell-cushion-color: #{$fullcalendar-cell-cushion-color};
+  --bs-fullcalendar-daygrid-day-number-color: #{$dark};
+  --bs-fullcalendar-daygrid-day-number-active-color: #{$white};
+  --bs-fullcalendar-daygrid-day-number-disabled-color: #{$disabled-color};
+  --bs-fullcalendar-btn-color: #{$body-color};
+  --bs-fullcalendar-btn-hover-color: #{$btn-white-hover-color};
+  --bs-fullcalendar-btn-active-color: #{$white};
+  --bs-fullcalendar-event-color: #{$fullcalendar-event-color};
+  --bs-fullcalendar-daygrid-block-event-color: #{$fullcalendar-daygrid-block-event-color};
+  --bs-fullcalendar-event-hover-color: #{$primary};
+
+  // ===== MISSING BACKGROUND & BORDER VARIABLES =====
+  
+  // ===== TABLE BACKGROUNDS & BORDERS =====
+  
+  // Table Backgrounds (use existing gray variations)
+  --bs-table-thead-light-bg: #{$gray-800}; // Light theme header bg
+  --bs-table-striped-bg: #{rgba($white, .05)}; // Striped row background  
+  --bs-table-hover-bg: #{rgba($white, .075)}; // Hover row background
+  
+  // Table Borders (use existing border colors)
+  --bs-table-border-width: #{$border-width};
+  --bs-table-border-color: #{$border-color};
+  --bs-table-thead-border-color: #{$border-color};
+  --bs-table-group-separator-color: #{$border-color};
+
+  // ===== SCROLLBAR BACKGROUNDS =====
+  
+  // Scrollbar (use existing muted colors)
+  --bs-scrollbar-bg-color: #{rgba($text-muted, .6)};
+  --bs-scrollbar-horizontal-bg-color: #{rgba($text-muted, .6)};
+
+  // ===== FORM CHECK BACKGROUNDS =====
+  
+  // Form Check Switch Backgrounds (use existing colors)
+  --bs-form-check-switch-label-bg-color: #{$white-bg};
+  --bs-form-check-switch-label-active-bg-color: #{$primary};
+  --bs-form-check-switch-label-disabled-bg-color: #{$disabled-bg-color};
+  
+  // Form Check Select Backgrounds (use existing colors)
+  --bs-form-check-select-input-bg-color: #{$text-muted};
+  --bs-form-check-select-input-hover-bg-color: #{rgba($primary, .3)};
+  
+  // Form Check Dashed Backgrounds (use existing gray)
+  --bs-form-check-dashed-bg-hover-color: #{rgba($white, .05)};
+  
+  // Form Check Borders (use existing border colors)
+  --bs-form-check-switch-label-border-color: #{$primary};
+  --bs-form-check-dashed-border-color: #{$border-color};
+
+  // ===== BUTTON BACKGROUNDS =====
+  
+  // Button Backgrounds (use existing semantic colors)
+  --bs-btn-ghost-bg-color: transparent;
+  --bs-btn-white-bg-color: #{$white-bg};
+  --bs-btn-white-bg-disabled-color: #{$disabled-bg-color};
+  --bs-btn-group-segment-bg-color: #{$gray-800};
+  --bs-btn-group-segment-link-active-bg-color: #{$white-bg};
+  
+  // Button Status Background (use existing colors)
+  --bs-btn-status-bg-color: #{$text-muted};
+  
+  // Button Borders (use existing border colors)
+  --bs-btn-white-border-color: #{$border-color};
+  --bs-btn-status-border-color: #{$white-bg};
+
+  // ===== INPUT GROUP BACKGROUNDS =====
+  
+  // Input Group (use existing background colors)
+  --bs-input-group-addon-bg: #{$body-bg};
+  --bs-input-group-hover-light-bg-color: #{$white-bg};
+  --bs-input-group-hover-light-bg-hover-color: #{darken($white-bg, 3%)};
+  --bs-input-group-light-bg-color: #{darken($white-bg, 1%)};
+
+  // ===== AVATAR & LEGEND BACKGROUNDS =====
+  
+  // Avatar Background (use existing card background)
+  --bs-avatar-bg-color: #{$white-bg};
+  
+  // Legend Indicator Background (use existing progress background)
+  --bs-legend-indicator-bg-color: #{$gray-800};
+
+  // ===== NAVBAR & NAVIGATION BACKGROUNDS =====
+  
+  // Navbar Backgrounds (use existing dark colors)
+  --bs-navbar-dark-bg-color: #{$white-bg};
+  --bs-navbar-dark-aside-toggler-bg-color: #{$white-bg};
+
+  // ===== SPECIALIZED COMPONENT BACKGROUNDS =====
+  
+  // Device Browser Border (use existing border color)
+  --bs-device-browser-header-border-color: #{$border-color};
+  
+  // Close Button Color (use existing text muted)
+  --bs-btn-close-color: #{$text-muted};
+
+  // ===== DATE PICKER BACKGROUNDS =====
+  
+  // Daterangepicker Backgrounds (use existing semantic colors)
+  --bs-daterangepicker-off-date-bg-color: transparent;
+  --bs-daterangepicker-in-range-bg-color: #{$white-bg};
+  
+  // Fullcalendar Backgrounds (use existing colors)
+  --bs-fullcalendar-highlight-bg-color: #{$white-bg};
+  --bs-fullcalendar-event-bg-color: #{$white-bg};
+
+  // ===== TOOLTIP & POPOVER BACKGROUNDS =====
+  
+  // Tooltip/Map Backgrounds (use existing tooltip color)
+  --bs-jvm-tooltip-bg-color: #{$tooltip-bg};
+  --bs-jvm-zoom-bg-color: #{$tooltip-bg};
+  
+  // ChartJS Tooltip Background (use existing tooltip)
+  --bs-chartjs-tooltip-bg-color: #{$tooltip-bg};
+
+  // ===== MISSING BORDER COLORS =====
+  
+  // Component Specific Borders (use existing border color)
+  --bs-card-border-color: #{$border-color};
+  --bs-input-border-color: #{$border-color};
+  --bs-form-check-label-highlighter-border-color: #{$border-color};
+  --bs-btn-outline-secondary-color: #{$border-color};
+  --bs-accordion-border-color: #{$border-color};
+  --bs-list-group-border-color: #{$border-color};
+  --bs-popover-border-color: #{$border-color};
+  --bs-modal-content-border-color: #{$border-color};
+}

@@ -8,21 +8,19 @@
 // Available accent colors from your design system
 const ACCENT_COLORS = [
   'ocean',
-  'crimson', 
+  'gold',
+  'plum',
+  'crimson',
+  'success',
+  'info',
+  'warning',
+  'secondary',
   'rust',
   'canopy',
   'navy',
   'plum',
   'magenta',
-  'gold',
-  'zen',
-  'sunset',
-  'tangerine',
-  'lime',
-  'cloud',
-  'orchid',
-  'pink',
-  'banana',
+  'primary'
 ] as const;
 
 /**

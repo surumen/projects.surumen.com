@@ -10,7 +10,9 @@ import { persist } from 'zustand/middleware';
 interface AppState {
   skin: 'light' | 'dark';
   acceptedCookies: boolean;
+  
   changeSkin: (skin: 'light' | 'dark') => void;
+  toggleSkin: () => void;
   acceptCookies: () => void;
 }
 
@@ -24,25 +26,51 @@ interface ProjectsState {
 }
 
 // ========================
+// THEME HELPER FUNCTION
+// ========================
+const applyTheme = (skin: 'light' | 'dark') => {
+  if (typeof window !== 'undefined') {
+    document.documentElement.setAttribute('data-bs-theme', skin);
+  }
+};
+
+// ========================
 // STORE IMPLEMENTATIONS
 // ========================
 
 export const useAppStore = create<AppState>()(
   persist(
-    immer((set) => ({
+    immer((set, get) => ({
       skin: 'light',
       acceptedCookies: false,
       
-      changeSkin: (skin) => set((state) => {
-        state.skin = skin;
-      }),
+      changeSkin: (skin: 'light' | 'dark') => {
+        set((draft) => {
+          draft.skin = skin;
+        });
+        applyTheme(skin);
+      },
       
-      acceptCookies: () => set((state) => {
-        state.acceptedCookies = true;
+      toggleSkin: () => {
+        const newSkin = get().skin === 'light' ? 'dark' : 'light';
+        set((draft) => {
+          draft.skin = newSkin;
+        });
+        applyTheme(newSkin);
+      },
+      
+      acceptCookies: () => set((draft) => {
+        draft.acceptedCookies = true;
       })
     })),
     {
-      name: 'app-storage'
+      name: 'app-storage',
+      onRehydrateStorage: () => (state) => {
+        // Apply theme when store rehydrates
+        if (state?.skin) {
+          applyTheme(state.skin);
+        }
+      }
     }
   )
 );
