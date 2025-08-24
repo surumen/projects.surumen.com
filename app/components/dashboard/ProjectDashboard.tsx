@@ -14,7 +14,7 @@ interface ProjectDashboardProps {
 }
 
 export const ProjectDashboard: React.FC<ProjectDashboardProps> = () => {
-  const { projects, filters, activeFilters, search, totalProjects, filteredCount } = useProjects();
+  const { projects, filters, activeFilters, search, loading, error, totalProjects, filteredCount } = useProjects();
   const { toggleFilter, clearFilters, setSearch } = useProjectsStore();
   
   // Offcanvas state
@@ -55,8 +55,35 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = () => {
   return (
     <>
         <div className="content container-fluid">
-          {/* Page Header */}
-          <div className="page-header border-bottom-0 mb-0">
+          {/* Loading State */}
+          {loading && (
+            <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '400px' }}>
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading projects...</span>
+              </div>
+            </div>
+          )}
+
+          {/* Error State */}
+          {error && !loading && (
+            <div className="alert alert-danger d-flex align-items-center justify-content-between" role="alert">
+              <div>
+                <strong>Error loading projects:</strong> {error}
+              </div>
+              <button 
+                className="btn btn-outline-danger btn-sm"
+                onClick={() => window.location.reload()}
+              >
+                Retry
+              </button>
+            </div>
+          )}
+
+          {/* Main Content - Only show when not loading and no error */}
+          {!loading && !error && (
+            <>
+              {/* Page Header */}
+              <div className="page-header border-bottom-0 mb-0">
             <div className="row align-items-center">
               <div className="col">
                 {/* Filters Section */}
@@ -163,6 +190,8 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = () => {
                 onClearSearch={handleClearSearch}
             />
           </div>
+            </>
+          )}
         </div>
 
         {/* Project Preview Offcanvas */}
