@@ -219,8 +219,8 @@ const FormContent: React.FC<{
 
   // Process fields into renderables (handles row grouping)
   const processFields = () => {
-    const fieldsToRender = [];
-    let currentRow = [];
+    const fieldsToRender: (FieldConfig | { type: 'row'; fields: FieldConfig[] })[] = [];
+    let currentRow: FieldConfig[] = [];
     
     fields.forEach((field, index) => {
       if (field.row) {
@@ -265,11 +265,11 @@ const FormContent: React.FC<{
       {/* Fields */}
       <div className={getLayoutClasses()}>
         {renderableItems.map((item, index) => {
-          if (item.type === 'row') {
+          if ('type' in item && item.type === 'row') {
             return (
               <div key={`row-${index}`} className="row">
                 {item.fields.map((field) => (
-                  <div key={field.name} className={`col-sm-${field.row.columns} mb-4`}>
+                  <div key={field.name} className={`col-sm-${field.row?.columns} mb-4`}>
                     <SmartFieldRenderer
                       field={field}
                       value={values[field.name]}
@@ -285,9 +285,9 @@ const FormContent: React.FC<{
             );
           } else {
             return (
-              <div key={item.name} className={getFieldWrapperClasses(item)}>
+              <div key={item.name} className={getFieldWrapperClasses(item as FieldConfig)}>
                 <SmartFieldRenderer
-                  field={item}
+                  field={item as FieldConfig}
                   value={values[item.name]}
                   error={errors[item.name]}
                   touched={touched[item.name]}

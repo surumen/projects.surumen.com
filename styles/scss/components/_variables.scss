@@ -1,13 +1,7 @@
 // Bootstrap Customs
 // =========================================================
 
-// System fonts
-$font-sans-serif-system:    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
-$font-serif-system:         ui-serif, Georgia, Cambria, "Times New Roman", Times, serif !default;
-$font-monospace-system:     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
-
-
-$font-family-base:                                          $font-sans-serif-system;
+$font-family-base:                                          "Inter", sans-serif !default;
 
 $font-size-base:                                            .875rem !default; // Assumes the browser default, typically `16px`
 $font-size-xs:                                              $font-size-base * .75 !default;
@@ -48,6 +42,7 @@ $font-sizes: (
   5: $h5-font-size,
   6: $font-size-sm
 ) !default;
+
 // Colors
 $body-bg:                                                   $white !default;
 $body-color:                                                $gray-700 !default;
@@ -72,22 +67,19 @@ $overlay-soft-bg-color:                                     rgba($dark, .25) !de
 $secondary-bg-color:                                        transparent !default;
 $secondary-hover-bg-color:                                  rgba($primary, .1) !default;
 $active-bg-color:                                           $primary !default;
-$disabled-bg-color:                                         rgba($gray-100, .5) !default;
+$disabled-bg-color:                                         rgba($gray-300, .5) !default;
 $primary-soft-bg-color:                                     rgba(lighten($primary, 12%), .1) !default;
 
 // Shadows
 $box-shadow:                                                0rem .375rem 1.5rem 0rem rgba($gray-600, .125) !default;
-//$box-shadow:                                                0px 3px 3px -1px rgba(10 22 70 / 10%), 0px 0px 1px 0px rgb(10 22 70 / 6%) !default;
-$box-shadow-sm:                                             0rem .375rem .75rem rgba($gray-300, .075) !default;
-//$box-shadow-sm:                                             0px 1px 1px 0px rgba(10 22 70 / 10%), 0px 0px 1px 0px rgb(10 22 70 / 6%) !default;
+$box-shadow-sm:                                             0rem .375rem .75rem rgba($gray-600, .075) !default;
 $box-shadow-sm-hover:                                       0px .1875rem .75rem rgba($gray-600, .25) !default;
 $box-shadow-lg:                                             0rem .6125rem 2.5rem .6125rem rgba($gray-600, .175) !default;
 $box-shadow-xl:                                             0rem 3.75rem 5rem 0rem rgba($gray-600, .3) !default;
 
-
 // Borders
 $border-width:                                              .0625rem !default;
-$border-color:                                              rgba($gray-100, 1) !default;
+$border-color:                                              rgba($gray-300, .7) !default;
 
 // Border Radius
 $border-radius:                                             .5rem !default;
@@ -206,7 +198,7 @@ $theme-colors: (
   "info":       $info,
   "warning":    $warning,
   "danger":     $danger,
-  "light":      $light,
+  "light":      $gray-100,
   "dark":       $dark
 );
 
@@ -220,28 +212,6 @@ $theme-soft-colors: (
   "danger":     $danger-soft,
   "light":      $light-soft,
   "dark":       $dark-soft
-) !default;
-
-
-$theme-accent-colors: (
-  "ocean":      $ocean,
-  "crimson":    $crimson,
-  "rust":       $rust,
-  "canopy":     $canopy,
-  "navy":       $navy,
-  "plum":       $plum,
-  "magenta":    $magenta,
-  "gold":       $gold,
-  "zen":        $zen,
-  "sunset":     $sunset,
-  "tangerine":  $tangerine,
-  "lime":       $lime,
-  "cloud":      $cloud,
-  "orchid":     $orchid,
-  "pink":       $pink,
-  "banana":     $banana,
-  "coconut":    $coconut,
-  "graphite":   $graphite,
 ) !default;
 
 $min-contrast-ratio:                                        2.1 !default;
@@ -324,8 +294,7 @@ $card-text-color:                                           $body-color !default
 
 // Backgrounds
 $card-cap-bg:                                               transparent !default;
-$card-bg:                                                   transparent !default;
-$card-hover-bg:                                             $gray-01 !default;
+$card-bg:                                                   $white-bg !default;
 
 // Borders
 $card-border-color:                                         $border-color !default;
@@ -397,7 +366,7 @@ $input-placeholder-color:                                   $gray-600 !default;
 $input-focus-color:                                         $input-color !default;
 $input-focus-border-color:                                  $input-btn-focus-color !default;
 $input-group-addon-color:                                   $gray-600 !default;
-$form-label-color:                                          $gray-900 !default;
+$form-label-color:                                          $body-color !default;
 $form-label-secondary-color:                                $gray-600 !default;
 $form-check-label-color:                                    $body-color !default;
 $form-select-indicator-color:                               $gray-800 !default;
@@ -1058,7 +1027,7 @@ $navbar-sidebar-aside-width:                                17rem !default;
 $navbar-sidebar-aside-brand-height:                         5rem !default;
 $navbar-dropdown-menu-shop-banner-img-width:                10rem !default;
 $navbar-floating-height:                                    $navbar-absolute-height !default;
-$navbar-input-group-min-width:                              30rem !default;
+$navbar-input-group-min-width:                              21rem !default;
 $navbar-dropdown-pseudo-width:                              .125rem !default;
 $navbar-dropdown-pseudo-height:                             calc(100% - .25rem) !default;
 
@@ -1172,7 +1141,7 @@ $navbar-vertical-mobile-overlay-z-index:                    $navbar-vertical-z-i
 
 // Width & Height
 $navbar-vertical-width:                                     $navbar-brand-width !default;
-$navbar-vertical-compact-width:                             8rem !default;
+$navbar-vertical-compact-width:                             9rem !default;
 $navbar-vertical-compact-title-width:                       8.5rem !default;
 $navbar-vertical-mini-width:                                $navbar-left-mini-offset !default;
 $navbar-vertical-brand-height:                              $navbar-height !default;
@@ -1748,7 +1717,7 @@ $breadcrumb-divider-color:                                  $gray-500 !default;
 
 
 
-// Page NavTop
+// Page Header
 // =========================================================
 
 // Colors
@@ -1787,10 +1756,6 @@ $page-preloader-z-index:                                    $navbar-z-index + 1 
 
 // Colors
 $pagination-color:                                          $gray-700 !default;
-$pagination-disabled-color:                                 $gray-400;
-
-// Backgrounds
-$pagination-disabled-bg:                                    $coconut;
 
 // Borders
 $pagination-border-width:                                   0 !default;
@@ -1921,17 +1886,6 @@ $legend-indicator-margin-y:                                 .5rem !default;
 $legend-indicator-margin-x:                                 .4375rem !default;
 
 
-// Surtitle
-$surtitle-font-size:          .75rem !default;
-$surtitle-font-size-sm:       .65625rem !default;
-$surtitle-text-transform:     uppercase !default;
-
-
-// Articles
-$article-font-size:           1rem !default;
-$article-hr-spacing-y:        3em !default;
-$article-text-line-height:    1.9 !default;
-
 
 // Table
 // =========================================================
@@ -1941,13 +1895,13 @@ $table-thead-th-color:                                      $body-color !default
 $table-body-color:                                          $body-color !default;
 
 // Background
-$table-thead-light-bg:                                      $gray-02 !default;
+$table-thead-light-bg:                                      $gray-200 !default;
 $table-striped-bg:                                          $gray-100 !default;
 $table-hover-bg:                                            rgba($gray-300, .4) !default;
 
 // Borders
 $table-border-width:                                        $border-width !default;
-$table-border-color:                                        $gray-100 !default;
+$table-border-color:                                        $border-color !default;
 $table-thead-border-color:                                  $table-border-color !default;
 $table-group-separator-color:                               $gray-300 !default;
 

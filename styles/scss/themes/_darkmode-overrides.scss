@@ -1,0 +1,524 @@
+//
+// Dark Mode Overrides
+//
+
+
+// Default Styles
+/* Change the white to any color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: $white !important;
+  -webkit-box-shadow: 0 0 0px 1000px $gray-700 inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+:focus-visible {
+  outline: -webkit-focus-ring-color auto 0px;
+}
+
+.link {
+  color: $link-hover-color;
+
+  &:hover,
+  &focus {
+    color: $link-color;
+  }
+}
+
+.text-dark {
+  color: $white !important;
+}
+
+.text-secondary {
+  color: $secondary !important;
+}
+
+.bg-white {
+  background-color: $white-bg !important;
+}
+
+.bg-dark {
+  background-color: darken($white-bg, 6%) !important;
+}
+
+.bg-light {
+  background-color: lighten($gray-200, 3%) !important;
+}
+
+.bg-warning {
+  background-color: darken($white-bg, 1%) !important;
+}
+
+.bg-soft-dark {
+  background-color: rgba($dark, .1) !important;
+}
+
+.border-dark {
+  border-color: $white-bg !important;
+}
+
+.border-white {
+  border-color: $dark !important;
+}
+
+// Alert
+.alert-soft-dark {
+  color: $body-color;
+  background-color: rgba($white-bg, .3);
+}
+
+.alert-soft-dark .alert-link {
+  color: $body-color;
+
+  &:hover {
+    color: $white;
+  }
+}
+
+// Buttons
+.btn-ghost-secondary {
+  color: $text-muted;
+}
+
+.btn-ghost-light {
+  color: lighten($gray-300, 7%);
+}
+
+.btn-ghost-light:hover,
+.btn-check:focus + .btn-ghost-light,
+.btn-ghost-light:focus,
+.btn-check:checked + .btn-ghost-light,
+.btn-check:active + .btn-ghost-light,
+.btn-ghost-light:active,
+.btn-ghost-light.active,
+.show > .btn-ghost-light.dropdown-toggle {
+  color: lighten($gray-300, 10%);
+  background-color: rgba(lighten($gray-300, 2%), .15);
+}
+
+.btn-check:focus + .btn-ghost-secondary,
+.btn-ghost-secondary:hover,
+.btn-ghost-secondary:focus {
+  color: darken($text-muted, 2%);
+}
+
+.btn-ghost-secondary:hover,
+.btn-check:focus + .btn-ghost-secondary,
+.btn-ghost-secondary:focus,
+.btn-check:checked + .btn-ghost-secondary,
+.btn-check:active + .btn-ghost-secondary,
+.btn-ghost-secondary:active,
+.btn-ghost-secondary.active,
+.show > .btn-ghost-secondary.dropdown-toggle {
+  background-color: rgba($white, .05);
+}
+
+// Ghost Secondary
+.btn-ghost-secondary {
+  &.dropdown-toggle::after {
+    background-image: escape-svg(url("data:image/svg+xml,<svg width='24' height='24' viewBox='0 0 24 24' fill='#{$text-muted}' xmlns='http://www.w3.org/2000/svg'><path d='M12.72,15.78a.75.75,0,0,1-.53.22h-.38a.77.77,0,0,1-.53-.22L6.15,10.64a.5.5,0,0,1,0-.71l.71-.71a.49.49,0,0,1,.7,0L12,13.67l4.44-4.45a.5.5,0,0,1,.71,0l.7.71a.5.5,0,0,1,0,.71Z'/></svg>"));
+  }
+
+  .btn-check:focus + &,
+  &:hover,
+  &:focus {
+    color: $white;
+
+    &.dropdown-toggle::after {
+      background-image: escape-svg(url("data:image/svg+xml,<svg width='24' height='24' viewBox='0 0 24 24' fill='#{$white}' xmlns='http://www.w3.org/2000/svg'><path d='M12.72,15.78a.75.75,0,0,1-.53.22h-.38a.77.77,0,0,1-.53-.22L6.15,10.64a.5.5,0,0,1,0-.71l.71-.71a.49.49,0,0,1,.7,0L12,13.67l4.44-4.45a.5.5,0,0,1,.71,0l.7.71a.5.5,0,0,1,0,.71Z'/></svg>"));
+    }
+  }
+
+  &.btn-no-focus {
+    .btn-check:focus + &,
+    &:hover,
+    &.focus,
+    &:focus {
+      &:hover {
+        color: $white;
+        background-color: rgba($white, .1);
+      }
+    }
+  }
+}
+
+.btn-white {
+  &.dropdown-toggle::after {
+    transition: $transition-timing;
+  }
+
+  .btn-check:focus + &,
+  &:hover,
+  &:focus {
+    &.dropdown-toggle::after {
+      background-image: escape-svg(url("data:image/svg+xml,<svg width='24' height='24' viewBox='0 0 24 24' fill='#{$link-hover-color}' xmlns='http://www.w3.org/2000/svg'><path d='M12.72,15.78a.75.75,0,0,1-.53.22h-.38a.77.77,0,0,1-.53-.22L6.15,10.64a.5.5,0,0,1,0-.71l.71-.71a.49.49,0,0,1,.7,0L12,13.67l4.44-4.45a.5.5,0,0,1,.71,0l.7.71a.5.5,0,0,1,0,.71Z'/></svg>"));
+    }
+  }
+}
+
+// Navbar
+@each $breakpoint in map-keys($grid-breakpoints) {
+  $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+  .navbar-expand#{$infix} {
+    @include media-breakpoint-down($breakpoint) {
+      .dropdown-menu {
+        background-color: $navbar-dark-bg-color;
+      }
+    }
+  }
+}
+
+// Avatar
+.avatar-dark .avatar-initials,
+.avatar-soft-dark .avatar-initials,
+.avatar-light .avatar-initials {
+  color: $body-color;
+  background-color: $avatar-bg-color;
+}
+
+// List Group
+.list-group-item-light {
+  color: $body-color;
+  background-color: darken($card-bg, 2%);
+}
+
+// Segment
+.card .nav-segment,
+.modal .nav-segment {
+  background-color: $nav-segment-bg-color-on-card;
+}
+
+// Form Select
+.form-select-borderless.tom-select-form-select-ps-0 {
+  background-color: transparent;
+}
+
+// Form Switch
+.form-switch-promotion-arrow path {
+  stroke: $gray-300;
+}
+
+// Modal Top Cover
+.modal-top-cover path {
+  fill: $white-bg;
+}
+
+// Shape
+.shape > svg,
+.shape > svg > * {
+  fill: $body-bg;
+}
+
+// Nav Scroll Horizontal
+
+.hs-nav-scroller-horizontal {
+  .hs-nav-scroller-arrow-prev {
+    @include gradient-x($start-color: $gradient-white, $start-percent: 50%, $end-color: transparent);
+  }
+
+  .hs-nav-scroller-arrow-next {
+    @include gradient-x($start-color: transparent, $end-color: $gradient-white, $end-percent: 50%);
+  }
+}
+
+// ===== COMPONENT-SPECIFIC DARK MODE OVERRIDES =====
+// These fix direct Sass variable usage that CSS custom properties can't override
+
+// ===== TABLE COMPONENTS =====
+.thead-light th {
+  background-color: $gray-900 !important;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > td,
+.table-striped > tbody > tr:nth-of-type(odd) > th {
+  background-color: rgba($white, .05) !important;
+}
+
+.table-hover > tbody > tr:hover > td,
+.table-hover > tbody > tr:hover > th {
+  background-color: rgba($white, .075) !important;
+}
+
+// ===== NAVIGATION COMPONENTS =====
+.nav-segment {
+  background-color: $gray-800 !important;
+}
+
+.navbar-aside-toggler {
+  color: $body-color !important;
+  background-color: $body-bg !important;
+  border-color: $border-color !important;
+}
+
+.card .nav-segment,
+.modal .nav-segment {
+  background-color: $gray-900 !important;
+}
+
+.nav-pills .nav-link.active {
+  background-color: $nav-pills-link-active-bg !important;
+  color: $nav-pills-link-active-color !important;
+}
+
+// ===== FORM COMPONENTS =====
+.form-check-switch .form-check-label {
+  background-color: $white-bg !important;
+  color: $primary !important;
+  
+  &:hover {
+    color: $primary !important;
+  }
+  
+  &.active {
+    background-color: $primary !important;
+    color: $white !important;
+  }
+}
+
+.form-check-select input[type="radio"],
+.form-check-select input[type="checkbox"] {
+  background-color: $text-muted !important;
+  
+  &:hover {
+    background-color: rgba($primary, .3) !important;
+  }
+}
+
+.form-check-dashed:hover {
+  background-color: rgba($gray-700, .05) !important;
+}
+
+.input-group-light {
+  background-color: darken($gray-700, 1%) !important;
+}
+
+.input-group-hover-light {
+  background-color: $gray-700 !important;
+  
+  &:hover {
+    background-color: darken($gray-700, 3%) !important;
+  }
+}
+
+// Form Input & Input Group Backgrounds (Direct Variable Usage)
+.input-group-hover-light .form-control,
+.input-group-hover-light .form-select,
+.form-control-hover-light,
+.form-select-hover-light {
+  background-color: $gray-700 !important;
+  
+  &:hover,
+  &.focus,
+  &:focus {
+    background-color: darken($gray-700, 3%) !important;
+  }
+}
+
+.input-group-light .form-control,
+.input-group-light .form-select,
+.form-control-light,
+.form-select-light {
+  background-color: darken($gray-700, 1%) !important;
+}
+
+// Standard form inputs
+.form-control,
+.form-select {
+  background-color: $gray-700 !important;
+  border: $form-select-border-width solid $border-color !important;
+}
+
+.form-label,
+.form-check-label{
+  color:$body-color !important;
+}
+
+
+// Input group addons
+.input-group-text {
+  background-color: $gray-700 !important;
+  border-color: $border-color !important;
+}
+
+// Form switches
+.form-switch .form-check-input {
+  background-color: $border-color !important;
+}
+
+// ===== BUTTON COMPONENTS =====
+.btn-white {
+  background-color: $white-bg !important;
+  color: $body-color !important;
+  border-color: $border-color !important;
+  
+  &:hover,
+  &:focus {
+    background-color: darken($white-bg, 5%) !important;
+    color: $btn-white-hover-color !important;
+    border-color: $border-color !important;
+  }
+  
+  &:disabled {
+    background-color: $disabled-bg-color !important;
+    color: $disabled-color !important;
+  }
+}
+
+.btn-group-segment {
+  background-color: $gray-800 !important;
+  
+  .btn.active {
+    background-color: $white-bg !important;
+    color: $btn-group-segment-link-active-color !important;
+  }
+}
+
+.btn-status {
+  background-color: $text-muted !important;
+  border-color: $white-bg !important;
+}
+
+// ===== DROPDOWN COMPONENTS =====
+.dropdown-menu {
+  background-color: $dropdown-bg !important;
+  border-color: $border-color !important;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: $dropdown-link-hover-bg !important;
+  color: $dropdown-link-active-color !important;
+}
+
+// ===== AVATAR COMPONENTS =====
+.avatar-initials {
+  background-color: $avatar-bg-color !important;
+  color: $body-color !important;
+}
+
+.avatar-uploader .avatar-uploader-trigger {
+  color: $body-color !important;
+  
+  &:hover {
+    color: $white !important;
+    background-color: rgba($white, .1) !important;
+  }
+}
+
+// ===== LIST COMPONENTS =====
+.list-group-striped .list-group-item:nth-of-type(odd) {
+  background-color: rgba($white, .1) !important;
+}
+
+.list-checked li:hover a,
+.list-checked li:hover {
+  color: $link-color !important;
+}
+
+.list-pointer li:hover a,
+.list-pointer li:hover {
+  color: $link-color !important;
+}
+
+// ===== STEP COMPONENTS =====
+.step.is-valid .step-icon {
+  background-color: $primary !important;
+  color: $white !important;
+}
+
+.step.is-invalid .step-icon {
+  background-color: $danger !important;
+  color: $white !important;
+}
+
+.step .step-title {
+  color: $headings-color !important;
+}
+
+.step .step-text {
+  color: $body-color !important;
+}
+
+// ===== CONTENT & TYPOGRAPHY =====
+.go-to {
+  color: $body-color !important;
+  
+  &:hover {
+    color: $white !important;
+  }
+}
+
+.breadcrumb-item {
+  color: $headings-color !important;
+  
+  a {
+    color: $text-muted !important;
+    
+    &:hover {
+      color: $link-hover-color !important;
+    }
+  }
+}
+
+.text-cap {
+  color: $headings-color !important;
+}
+
+// ===== SPECIALIZED COMPONENTS =====
+.legend-indicator {
+  background-color: $gray-800 !important;
+}
+
+.device-browser .device-browser-header {
+  border-color: $border-color !important;
+}
+
+.device-browser-header .device-browser-header-browser-bar {
+  color: $body-color !important;
+}
+
+// ===== ACCORDION COMPONENTS =====
+.accordion-button {
+  color: $dark !important;
+  
+  &:not(.collapsed) {
+    color: $active-color !important;
+  }
+}
+
+// Bordered
+.navbar-bordered {
+  border-color: $border-color !important;
+}
+
+.page-header {
+  border-bottom: $page-header-border-width solid $border-color !important;
+}
+
+// Thead Bordered
+.table-thead-bordered {
+  > :not(:last-child) > :last-child > * {
+    border-top: $table-border-width solid $border-color !important;
+    border-bottom: $table-border-width solid $border-color !important;
+  }
+}
+
+// Vertical Border Striped
+.table-vertical-border-striped {
+  > thead > tr > th:not(:first-child):not(:last-child),
+  > tbody > tr > td:not(:first-child):not(:last-child) {
+    border-right: $table-border-width solid $border-color !important;
+  }
+}
+
+.input-group-merge {
+  border: $input-border-width solid $border-color !important;
+}

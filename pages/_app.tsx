@@ -16,7 +16,7 @@ import {
 } from '../lib/layoutMapping';
 
 // Styles
-import 'style/_index.scss';
+import 'styles/scss/theme.scss';
 
 // Extend AppProps to include Layout property
 type AppPropsWithLayout = AppProps & {
