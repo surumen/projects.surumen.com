@@ -2,6 +2,30 @@ import React, { useState, useRef } from 'react';
 import type { Editor } from '@tiptap/core';
 import ToolbarModal from './ToolbarModal';
 
+// URL validation helper to prevent XSS through malicious URLs
+const isSafeImageUrl = (url: string): boolean => {
+  if (!url) return false;
+  
+  try {
+    const parsed = new URL(url);
+    
+    // Allow only safe protocols
+    const safeProtocols = ['http:', 'https:', 'data:'];
+    if (!safeProtocols.includes(parsed.protocol)) {
+      return false;
+    }
+    
+    // For data URLs, ensure they're image types and don't contain script
+    if (parsed.protocol === 'data:') {
+      return url.startsWith('data:image/') && !url.toLowerCase().includes('script');
+    }
+    
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 interface ImageModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -46,6 +70,12 @@ const ImageModal: React.FC<ImageModalProps> = ({ isOpen, onClose, editor }) => {
 
     if (imageSource === 'url') {
       if (!url) return;
+      // Validate URL safety before using it
+      if (!isSafeImageUrl(url)) {
+        // Could add a toast notification here
+        console.warn('Attempted to insert unsafe image URL:', url);
+        return;
+      }
       imageUrl = url;
     } else {
       if (!selectedFile) return;
@@ -76,7 +106,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ isOpen, onClose, editor }) => {
     onClose();
   };
 
-  const isValid = imageSource === 'url' ? !!url : !!selectedFile;
+  const isValid = imageSource === 'url' ? (!!url && isSafeImageUrl(url)) : !!selectedFile;
 
   return (
     <ToolbarModal
@@ -217,15 +247,22 @@ const ImageModal: React.FC<ImageModalProps> = ({ isOpen, onClose, editor }) => {
           <label className="form-label">Preview</label>
           <div className="border rounded p-3 text-center bg-light">
             {imageSource === 'url' ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={url}
-                alt={altText || 'Image preview'}
-                style={{ maxWidth: '100%', maxHeight: '200px' }}
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = 'none';
-                }}
-              />
+              isSafeImageUrl(url) ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={url}
+                  alt={altText || 'Image preview'}
+                  style={{ maxWidth: '100%', maxHeight: '200px' }}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none';
+                  }}
+                />
+              ) : (
+                <div className="text-danger">
+                  <i className="bi bi-exclamation-triangle me-2"></i>
+                  Invalid or unsafe image URL. Please use http://, https://, or data:image/ URLs only.
+                </div>
+              )
             ) : selectedFile ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -240,7 +277,11 @@ const ImageModal: React.FC<ImageModalProps> = ({ isOpen, onClose, editor }) => {
 
       {!isValid && (
         <div className="alert alert-warning">
-          Please {imageSource === 'url' ? 'enter an image URL' : 'select an image file'}
+          {imageSource === 'url' 
+            ? (!url 
+                ? 'Please enter an image URL' 
+                : 'Please enter a valid and safe image URL (http://, https://, or data:image/ only)')
+            : 'Please select an image file'}
         </div>
       )}
     </ToolbarModal>

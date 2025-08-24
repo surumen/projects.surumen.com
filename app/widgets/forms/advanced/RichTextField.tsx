@@ -1,4 +1,5 @@
 import React from 'react';
+import striptags from 'striptags';
 import type { RichTextFieldConfig } from '@/types/forms/advanced';
 import type { FieldState } from '@/types/forms/styling';
 import { TiptapEditor } from '../tiptap';
@@ -46,8 +47,8 @@ const RichTextField: React.FC<RichTextFieldProps> = ({
   const getCharacterCount = () => {
     if (!field.maxLength) return null;
     
-    // Strip HTML tags to get actual text length
-    const textContent = value ? value.replace(/<[^>]*>/g, '') : '';
+    // Strip HTML tags to get actual text length using secure striptags library
+    const textContent = value ? striptags(value) : '';
     const currentLength = textContent.length;
     const isOverLimit = currentLength > field.maxLength;
     

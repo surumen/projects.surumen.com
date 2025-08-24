@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import DOMPurify from 'dompurify';
 import type { Editor } from '@tiptap/core';
 import ToolbarModal from './ToolbarModal';
 
@@ -66,12 +67,33 @@ const EmbedModal: React.FC<EmbedModalProps> = ({ isOpen, onClose, editor }) => {
     const html = generateEmbedHtml();
     if (!html) return;
 
-    // Insert as HTML content
-    editor.chain().focus().insertContent(html).run();
+    // Sanitize HTML before inserting to prevent XSS
+    const sanitizedHtml = DOMPurify.sanitize(html, {
+      ALLOWED_TAGS: ['iframe', 'video', 'audio', 'img', 'div', 'span', 'p', 'pre', 'code'],
+      ALLOWED_ATTR: [
+        'src', 'width', 'height', 'frameborder', 'allowfullscreen', 
+        'allow', 'title', 'alt', 'controls', 'poster', 'preload',
+        'class', 'id', 'style'
+      ],
+      ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i
+    });
+
+    // Insert sanitized HTML content
+    editor.chain().focus().insertContent(sanitizedHtml).run();
     onClose();
   };
 
   const previewHtml = generateEmbedHtml();
+  // Sanitize preview HTML to prevent XSS in preview
+  const sanitizedPreviewHtml = previewHtml ? DOMPurify.sanitize(previewHtml, {
+    ALLOWED_TAGS: ['iframe', 'video', 'audio', 'img', 'div', 'span', 'p', 'pre', 'code'],
+    ALLOWED_ATTR: [
+      'src', 'width', 'height', 'frameborder', 'allowfullscreen', 
+      'allow', 'title', 'alt', 'controls', 'poster', 'preload',
+      'class', 'id', 'style'
+    ],
+    ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i
+  }) : '';
   const isValid = embedType === 'code' ? !!embedCode : !!url;
 
   return (
@@ -190,12 +212,12 @@ const EmbedModal: React.FC<EmbedModalProps> = ({ isOpen, onClose, editor }) => {
       )}
 
       {/* Preview */}
-      {previewHtml && (
+      {sanitizedPreviewHtml && (
         <div className="mb-3">
           <label className="form-label">Preview</label>
           <div className="border rounded p-3 bg-light">
             <div 
-              dangerouslySetInnerHTML={{ __html: previewHtml }}
+              dangerouslySetInnerHTML={{ __html: sanitizedPreviewHtml }}
               style={{ pointerEvents: 'none' }} // Disable interactions in preview
             />
           </div>
