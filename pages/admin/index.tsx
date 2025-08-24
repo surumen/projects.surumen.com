@@ -334,8 +334,8 @@ function ProjectsManagementPage() {
 
               <div className="flex-grow-1 ms-3">
                 <div className="row mx-md-n3">
-                  <div className="col-md px-md-4 align-middle">
-                    <span className="d-block">Total projects</span>
+                  <div className="col-md px-md-4 align-items-center d-flex">
+                    Total projects
                   </div>
 
                   <div className="col-md-9 col-lg-10 column-md-divider px-md-4">
