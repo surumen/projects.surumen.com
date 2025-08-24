@@ -217,7 +217,7 @@ const TagInputField: React.FC<TagInputFieldProps> = ({
         {field.label}
         {!field.required && <span className="form-label-secondary">(Optional)</span>}
         {field.maxTags && (
-          <Badge bg="secondary" className="ms-2">
+          <Badge bg="info" className="ms-2">
             {value.length}/{field.maxTags}
           </Badge>
         )}

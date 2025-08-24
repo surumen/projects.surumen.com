@@ -37,9 +37,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
         </Link>
 
         <div className="navbar-nav-wrap-content-start">
-          {/* Sidebar Toggle */}
-          <SidebarToggle isCollapsed={isCollapsed} onToggle={toggleSidebar} />
-          
           {/* Search */}
           <AdminSearch />
         </div>

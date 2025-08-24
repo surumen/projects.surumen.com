@@ -3,7 +3,7 @@
 
 import React from 'react';
 import type { TableCellProps } from '@/types';
-import { CELL_RENDERERS } from './cellRenderers';
+import { CELL_RENDERERS } from './cells';
 
 const TableCell: React.FC<TableCellProps> = ({ value, row, column }) => {
   // Get the appropriate renderer - default to 'text' if no renderer specified

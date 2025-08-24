@@ -19,30 +19,30 @@ const AdminNavigation: React.FC<AdminNavigationProps> = ({ isCollapsed = false }
 
   return (
     <div className="navbar-vertical-content">
-      <div id="navbarVerticalMenu" className="nav nav-pills nav-vertical card-navbar-nav">
+      <div className="nav nav-pills nav-vertical card-navbar-nav">
         {/* Dashboard */}
         <div className="nav-item">
           <Link 
             href="/admin"
-            className={`nav-link text-body ${isActive('/admin') ? 'active' : ''}`}
+            className={`nav-link justify-content-center align-items-center ${isActive('/admin') ? 'active' : ''}`}
           >
-            <HouseDoor size={16} className="nav-icon" />
-            {!isCollapsed && <span className="nav-link-title text-body">Dashboard</span>}
+            <HouseDoor size={18} className="nav-icon" />
+            {!isCollapsed && <span className="nav-link-title">Dashboard</span>}
           </Link>
         </div>
 
         {/* Pages Section */}
-        <span className="dropdown-header text-body mt-4">Pages</span>
+        <span className="dropdown-header mt-4">Pages</span>
         <small className="bi-three-dots nav-subtitle-replacer"></small>
 
         {/* Projects */}
         <div className="nav-item">
           <Link 
             href="/admin"
-            className={`nav-link text-body ${isActive('/admin/project') ? 'active' : ''}`}
+            className={`nav-link justify-content-center align-items-cente ${isActive('/admin/project') ? 'active' : ''}`}
             data-placement="left"
           >
-            <Book size={16} className="nav-icon" />
+            <Book size={18} className="nav-icon" />
             {!isCollapsed && <span className="nav-link-title">Projects</span>}
           </Link>
         </div>
@@ -51,10 +51,9 @@ const AdminNavigation: React.FC<AdminNavigationProps> = ({ isCollapsed = false }
         <div className="nav-item">
           <Link 
             href="#"
-            className="nav-link text-body"
-            data-placement="left"
+            className="nav-link justify-content-center align-items-cente"
           >
-            <Layers size={16} className="nav-icon" />
+            <Layers size={18} className="nav-icon" />
             {!isCollapsed && <span className="nav-link-title">Posts</span>}
           </Link>
         </div>

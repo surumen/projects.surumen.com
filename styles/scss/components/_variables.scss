@@ -861,12 +861,12 @@ $avatar-uploader-icon-transition:                           $transition-timing-s
 // =========================================================
 
 // Colors
-$nav-link-color:                                            $dark !default;
+$nav-link-color:                                            $body-color !default;
 $nav-link-active-color:                                     $active-color !default;
 $nav-link-hover-color:                                      $link-hover-color !default;
 $nav-link-disabled-color:                                   $disabled-color !default;
 $nav-subtitle-color:                                        $text-muted !default;
-$nav-light-link-color:                                      $white-70 !default;
+$nav-light-link-color:                                      $body-color !default;
 $nav-light-link-hover-color:                                $white !default;
 $nav-tabs-link-active-color:                                $active-color !default;
 $nav-tabs-light-link-active-color:                          $white !default;

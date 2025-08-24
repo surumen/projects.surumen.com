@@ -6,7 +6,7 @@ export { default as TableRow } from './TableRow';
 export { default as TableCell } from './TableCell';
 
 // Cell renderers
-export * from './cellRenderers';
+export * from './cells';
 
 // Utility functions for external components
 export const createColumnVisibilityMap = (columns: any[]) => {

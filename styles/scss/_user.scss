@@ -129,7 +129,7 @@
   --bs-modal-backdrop-bg: #{$overlay-soft-bg-color}; // Modal backdrop
   
   // Navigation & Dropdowns (User interaction)
-  --bs-nav-link-color: #{$nav-link-color};      // Nav link color
+  --bs-nav-link-color: #{$body-color};      // Nav link color
   --bs-nav-link-hover-color: #{$nav-link-hover-color}; // Nav link hover
   --bs-nav-pills-link-active-color: #{$nav-pills-link-active-color}; // Active nav pill text
   --bs-nav-pills-link-active-bg: #{$nav-pills-link-active-bg}; // Active nav pill background
@@ -191,11 +191,12 @@
     --bs-table-color: #{$body-color};            // Override table text color
     --bs-table-border-color: #{$border-color};   // Override table borders
   }
-  
+
   // Nav Component Overrides
   .nav {
-    --bs-nav-link-color: #{$nav-link-color};     // Override nav link color
-    --bs-nav-link-hover-color: #{$nav-link-hover-color}; // Override nav link hover
+    --bs-nav-link-color: #{$body-color};
+    --bs-nav-link-hover-color: #{$body-color};
+    --bs-nav-pills-link-active-color: #{$body-color};
   }
   
   // ===== MEDIUM PRIORITY COMPONENTS =====
