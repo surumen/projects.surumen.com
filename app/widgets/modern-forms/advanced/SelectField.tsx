@@ -28,7 +28,19 @@ export const SelectField: React.FC<SelectFieldProps> = ({
   placeholder = 'Select an option...',
   helpText,
   className,
-  multiple = false, // Always false - use TagsField for multiple selection
+  // Destructure props that shouldn't go to DOM
+  multiple, // Always false - use TagsField for multiple selection
+  searchable,
+  allowCustomOptions,
+  hideSearch,
+  dropdownWidth,
+  dropdownLeft,
+  maxItems,
+  loading,
+  loadingText,
+  noResultsText,
+  onSearch,
+  onCreate,
   validators = [],
   asyncValidators = [],
   deps = [],
@@ -63,8 +75,9 @@ export const SelectField: React.FC<SelectFieldProps> = ({
     unregisterFieldValidation: formContext.unregisterFieldValidation
   });
 
-  // Current field state - single value only
-  const currentValue = controlledValue !== undefined ? controlledValue : formContext.values[name] ?? (defaultValue ?? '');
+  // Current field state - single value only, handle array values gracefully
+  const rawValue = controlledValue !== undefined ? controlledValue : formContext.values[name] ?? (defaultValue ?? '');
+  const currentValue = Array.isArray(rawValue) ? (rawValue[0] || '') : rawValue;
   const currentError = error || (formContext.touched[name] ? formContext.errors[name] : undefined);
   const isValidating = formContext.isValidating[name] ?? false;
   

@@ -39,8 +39,9 @@ export interface CheckboxFieldProps extends Omit<FieldProps, 'type' | 'placehold
   indeterminate?: boolean;
 }
 
-// TagsField component props (extends SelectField)
-export interface TagsFieldProps extends Omit<SelectFieldProps, 'multiple'> {
+// TagsField component props (extends SelectField but makes options optional)
+export interface TagsFieldProps extends Omit<SelectFieldProps, 'multiple' | 'options'> {
+  options?: SelectOption[]; // Make options optional since we have suggestions
   suggestions?: string[] | SelectOption[];
   maxTags?: number;
   allowDuplicates?: boolean;

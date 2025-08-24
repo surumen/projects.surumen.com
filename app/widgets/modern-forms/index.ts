@@ -10,7 +10,8 @@ export { InputGroupSuffix } from './core/InputGroupSuffix';
 export { 
   SelectField,
   SwitchField, 
-  CheckboxField 
+  CheckboxField,
+  TagsField 
 } from './advanced';
 
 // Context hooks
