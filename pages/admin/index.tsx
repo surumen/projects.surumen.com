@@ -155,7 +155,8 @@ function ProjectsManagementPage() {
 
   useEffect(() => {
     fetchProjects();
-  }, [fetchProjects]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty dependency array - only run once on mount. fetchProjects is a stable Zustand action.
 
   // Calculate project statistics with status configurations
   const projectStats = useMemo(() => {

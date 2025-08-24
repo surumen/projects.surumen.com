@@ -76,6 +76,7 @@ const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor, config, disabled 
       case 'bi-list-ol': return <ListOl size={size} />;
       // Insert
       case 'bi-link-45deg': return <Link45deg size={size} />;
+      // eslint-disable-next-line jsx-a11y/alt-text
       case 'bi-image': return <Image size={size} />;
       case 'bi-table': return <Table size={size} />;
       case 'bi-hr': return <Hr size={size} />;

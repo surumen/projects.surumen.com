@@ -225,6 +225,39 @@ function NewProjectPage() {
     }));
   }, []);
 
+  // Memoized callback creators for each section to prevent infinite loops
+  const handleBasicChange = useCallback((name: string, value: any, allValues: Record<string, any>) => {
+    handleSectionChange('basic', allValues);
+  }, [handleSectionChange]);
+
+  const handleBasicValidation = useCallback((isValid: boolean, errors: Record<string, string>) => {
+    handleSectionValidation('basic', isValid, errors);
+  }, [handleSectionValidation]);
+
+  const handleTechChange = useCallback((name: string, value: any, allValues: Record<string, any>) => {
+    handleSectionChange('tech', allValues);
+  }, [handleSectionChange]);
+
+  const handleTechValidation = useCallback((isValid: boolean, errors: Record<string, string>) => {
+    handleSectionValidation('tech', isValid, errors);
+  }, [handleSectionValidation]);
+
+  const handleContentChange = useCallback((name: string, value: any, allValues: Record<string, any>) => {
+    handleSectionChange('content', allValues);
+  }, [handleSectionChange]);
+
+  const handleContentValidation = useCallback((isValid: boolean, errors: Record<string, string>) => {
+    handleSectionValidation('content', isValid, errors);
+  }, [handleSectionValidation]);
+
+  const handlePublishChange = useCallback((name: string, value: any, allValues: Record<string, any>) => {
+    handleSectionChange('publish', allValues);
+  }, [handleSectionChange]);
+
+  const handlePublishValidation = useCallback((isValid: boolean, errors: Record<string, string>) => {
+    handleSectionValidation('publish', isValid, errors);
+  }, [handleSectionValidation]);
+
   // Reset all forms
   const handleResetForm = () => {
     setShowResetConfirm(true);
@@ -316,328 +349,326 @@ function NewProjectPage() {
         <title>Add New Project | Admin</title>
       </Head>
       
-      <Container fluid className="py-4">
-        {/* Page Header */}
-        <div className="page-header">
-          <div className="row align-items-center">
-            <div className="col-sm mb-2 mb-sm-0">
-              <Breadcrumb className="breadcrumb breadcrumb-no-gutter">
-                <Breadcrumb.Item href="/admin">Projects</Breadcrumb.Item>
-                <Breadcrumb.Item active>Add Project</Breadcrumb.Item>
-              </Breadcrumb>
-              <h1 className="page-header-title">Create New Project</h1>
-            </div>
+      {/* Page Header */}
+      <div className="page-header">
+        <div className="row align-items-center">
+          <div className="col-sm mb-2 mb-sm-0">
+            <Breadcrumb className="breadcrumb breadcrumb-no-gutter">
+              <Breadcrumb.Item href="/admin">Projects</Breadcrumb.Item>
+              <Breadcrumb.Item active>Add Project</Breadcrumb.Item>
+            </Breadcrumb>
+            <h1 className="page-header-title">Create New Project</h1>
           </div>
         </div>
+      </div>
 
-        <Row>
-          <Col lg={8}>
-            <div className="d-grid gap-3 gap-lg-5">
-              
-              {/* Basic Information Section */}
-              <Card className="card-lg">
-                <Card.Header>
-                  <h4 className="card-header-title">Project Details</h4>
-                </Card.Header>
-                <Card.Body>
-                  <SmartForm
-                    key={formKeys.basic}
-                    config={{
-                      fields: basicInfoFields,
-                      onSubmit: () => {},
-                      validation: { mode: 'onChange' }
-                    }}
-                    onFieldChange={(name, value, allValues) => handleSectionChange('basic', allValues)}
-                    onValidationChange={(isValid, errors) => handleSectionValidation('basic', isValid, errors)}
-                    renderSubmitButton={() => null}
-                  />
-                </Card.Body>
-              </Card>
+      <Row>
+        <Col lg={8} className="mb-4">
+          <div className="d-grid gap-3 gap-lg-5">
 
-              {/* Technologies Section */}
-              <Card className="card-lg">
-                <Card.Header>
-                  <h4 className="card-header-title">Technologies</h4>
-                </Card.Header>
-                <Card.Body>
-                  <SmartForm
-                    key={formKeys.tech}
-                    config={{
-                      fields: technicalFields,
-                      onSubmit: () => {},
-                      validation: { mode: 'onChange' }
-                    }}
-                    onFieldChange={(name, value, allValues) => handleSectionChange('tech', allValues)}
-                    onValidationChange={(isValid, errors) => handleSectionValidation('tech', isValid, errors)}
-                    renderSubmitButton={() => null}
-                  />
-                </Card.Body>
-              </Card>
-
-              {/* Description Section */}
-              <Card className="card-lg">
-                <Card.Header>
-                  <h4 className="card-header-title">Description</h4>
-                </Card.Header>
-                <Card.Body>
-                  <SmartForm
-                    key={formKeys.content}
-                    config={{
-                      fields: contentFields,
-                      onSubmit: () => {},
-                      validation: { mode: 'onChange' }
-                    }}
-                    onFieldChange={(name, value, allValues) => handleSectionChange('content', allValues)}
-                    onValidationChange={(isValid, errors) => handleSectionValidation('content', isValid, errors)}
-                    renderSubmitButton={() => null}
-                  />
-                </Card.Body>
-              </Card>
-
-              {/* Publishing Section */}
-              <Card className="card-lg">
-                <Card.Header>
-                  <h4 className="card-header-title">Publish</h4>
-                </Card.Header>
-                <Card.Body>
-                  <SmartForm
-                    key={formKeys.publish}
-                    config={{
-                      fields: publishingFields,
-                      onSubmit: () => {},
-                      validation: { mode: 'onChange' }
-                    }}
-                    onFieldChange={(name, value, allValues) => handleSectionChange('publish', allValues)}
-                    onValidationChange={(isValid, errors) => handleSectionValidation('publish', isValid, errors)}
-                    renderSubmitButton={() => null}
-                  />
-                </Card.Body>
-              </Card>
-
+            {/* Basic Information Section */}
+            <div className="card card-lg">
+              <div className="card-header">
+                <h4 className="card-header-title">Project Details</h4>
+              </div>
+              <div className="card-body">
+                <SmartForm
+                  key={formKeys.basic}
+                  config={{
+                    fields: basicInfoFields,
+                    onSubmit: () => {},
+                    validation: { mode: 'onChange' }
+                  }}
+                  onFieldChange={handleBasicChange}
+                  onValidationChange={handleBasicValidation}
+                  renderSubmitButton={() => null}
+                />
+              </div>
             </div>
-          </Col>
 
-          {/* Sidebar */}
-          <Col lg={4}>
-            {/* Progress Card */}
-            <Card className="card-body mb-3 mb-lg-5">
-              <h5>Progress</h5>
-              <div className="d-flex justify-content-between align-items-center">
-                <div className="progress flex-grow-1">
-                  <div 
-                    className="progress-bar bg-primary" 
-                    style={{ width: `${progress}%` }}
-                    aria-valuenow={progress}
-                  />
-                </div>
-                <span className="ms-4">{Math.round(progress)}%</span>
-              </div>
-              
-              <div className="mt-3">
-                <div className="d-flex justify-content-between text-sm">
-                  <span>Completed sections:</span>
-                  <span>{Object.values(sectionValidation).filter(section => section.isValid).length} / {Object.keys(formKeys).length}</span>
-                </div>
-                {totalErrors > 0 && (
-                  <div className="d-flex justify-content-between text-sm text-warning">
-                    <span>Total errors:</span>
-                    <span>{totalErrors}</span>
-                  </div>
-                )}
-              </div>
-            </Card>
-
-            {/* Preview Card */}
-            <Card className="mb-3 mb-lg-5">
+            {/* Technologies Section */}
+            <Card className="card-lg">
               <Card.Header>
-                <h4 className="card-header-title">Preview</h4>
+                <h4 className="card-header-title">Technologies</h4>
               </Card.Header>
               <Card.Body>
-                {allFormValues.title ? (
-                  <div className="project-preview">
-                    {/* Header Section */}
-                    <div className="mb-4">
-                      <div className="d-flex justify-content-between align-items-start mb-2">
-                        <h5 className="mb-0 fw-bold">{allFormValues.title}</h5>
-                        {allFormValues.year && (
-                          <span className="badge bg-soft-secondary fs-6">
-                            {allFormValues.year}
-                          </span>
-                        )}
-                      </div>
-                      
-                      {allFormValues.category && (
-                        <div className="mb-2">
-                          <span className="badge bg-soft-info me-2">
-                            {allFormValues.category}
-                          </span>
-                          <span className={`badge ${allFormValues.published ? 'bg-soft-success' : 'bg-soft-warning'}`}>
-                            {allFormValues.published ? 'Published' : 'Draft'}
-                          </span>
-                        </div>
-                      )}
-                      
-                      {allFormValues.shortDescription && (
-                        <p className="text-muted mb-2 lh-sm">
-                          {allFormValues.shortDescription}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Rich Description Preview */}
-                    {allFormValues.description && (
-                      <div className="mb-3">
-                        <h6 className="text-muted small text-uppercase mb-2">Description</h6>
-                        <div 
-                          className="border rounded p-3 bg-soft-light"
-                          style={{ 
-                            maxHeight: '200px', 
-                            overflow: 'auto',
-                            fontSize: '0.875rem',
-                            lineHeight: '1.4'
-                          }}
-                          dangerouslySetInnerHTML={{ __html: allFormValues.description }}
-                        />
-                      </div>
-                    )}
-
-                    {/* Technologies */}
-                    {allFormValues.technologies && allFormValues.technologies.length > 0 && (
-                      <div className="mb-3">
-                        <h6 className="text-muted small text-uppercase mb-2">Technologies</h6>
-                        <div className="d-flex gap-1 flex-wrap">
-                          {allFormValues.technologies.map((tech: string, index: number) => (
-                            <span key={index} className="badge bg-primary">
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Links Section */}
-                    {allFormValues.blog && (
-                      <div className="mb-3">
-                        <h6 className="text-muted small text-uppercase mb-2">Blog</h6>
-                        <div className="bg-soft-secondary p-2 rounded">
-                          <code className="small text-muted">
-                            {allFormValues.blog}
-                          </code>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* URL Preview */}
-                    {(allFormValues.slug || allFormValues.title) && (
-                      <div className="mb-3">
-                        <h6 className="text-muted small text-uppercase mb-2">URL</h6>
-                        <div className="bg-soft-secondary p-2 rounded">
-                          <code className="small text-muted">
-                            /project/{allFormValues.slug || generateSlug(allFormValues.title)}
-                          </code>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="text-center py-5">
-                    <p className="text-muted mb-0">
-                      Start filling out the form to see a live preview
-                    </p>
-                    <small className="text-muted">
-                      Preview will update as you type
-                    </small>
-                  </div>
-                )}
+                <SmartForm
+                  key={formKeys.tech}
+                  config={{
+                    fields: technicalFields,
+                    onSubmit: () => {},
+                    validation: { mode: 'onChange' }
+                  }}
+                  onFieldChange={handleTechChange}
+                  onValidationChange={handleTechValidation}
+                  renderSubmitButton={() => null}
+                />
               </Card.Body>
             </Card>
-          </Col>
-        </Row>
 
-        {/* Fixed Bottom Actions */}
-        <div className="position-fixed start-50 bottom-0 translate-middle-x w-100" style={{ zIndex: 99, marginBottom: '1rem', maxWidth: '40rem' }}>
-          <Card className="card-sm bg-dark border-dark mx-2">
-            <Card.Body>
-              {showResetConfirm ? (
-                // Reset Confirmation State
-                <div className="row justify-content-center align-items-center">
-                  <div className="col">
-                    <span className="text-light">
-                      <i className="bi bi-exclamation-triangle me-2"></i>
-                      Reset form? All unsaved changes will be lost.
-                    </span>
-                  </div>
-                  <div className="col-auto">
-                    <div className="d-flex gap-3">
-                      <Button 
-                        type="button"
-                        variant="ghost-light"
-                        onClick={cancelResetForm}
-                        disabled={loading}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="danger"
-                        onClick={confirmResetForm}
-                        disabled={loading}
-                      >
-                        Yes, Reset
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                // Normal State
-                <div className="row justify-content-center justify-content-sm-between">
-                  <div className="col">
-                    <Button 
-                      type="button"
-                      variant="ghost-danger" 
-                      disabled={loading}
-                      onClick={handleResetForm}
-                    >
-                      Reset Form
-                    </Button>
-                  </div>
-                  <div className="col-auto">
-                    <div className="d-flex gap-3">
-                      <Button 
-                        type="button"
-                        variant="ghost-light"
-                        onClick={handleDiscard}
-                        disabled={loading}
-                      >
-                        Discard
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="primary"
-                        disabled={!canSubmit || loading}
-                        onClick={handleSubmit}
-                      >
-                        {loading ? 'Saving...' : 'Save'}
-                      </Button>
-                    </div>
-                  </div>
+            {/* Description Section */}
+            <Card className="card-lg">
+              <Card.Header>
+                <h4 className="card-header-title">Description</h4>
+              </Card.Header>
+              <Card.Body>
+                <SmartForm
+                  key={formKeys.content}
+                  config={{
+                    fields: contentFields,
+                    onSubmit: () => {},
+                    validation: { mode: 'onChange' }
+                  }}
+                  onFieldChange={handleContentChange}
+                  onValidationChange={handleContentValidation}
+                  renderSubmitButton={() => null}
+                />
+              </Card.Body>
+            </Card>
+
+            {/* Publishing Section */}
+            <Card className="card-lg">
+              <Card.Header>
+                <h4 className="card-header-title">Publish</h4>
+              </Card.Header>
+              <Card.Body>
+                <SmartForm
+                  key={formKeys.publish}
+                  config={{
+                    fields: publishingFields,
+                    onSubmit: () => {},
+                    validation: { mode: 'onChange' }
+                  }}
+                  onFieldChange={handlePublishChange}
+                  onValidationChange={handlePublishValidation}
+                  renderSubmitButton={() => null}
+                />
+              </Card.Body>
+            </Card>
+
+          </div>
+        </Col>
+
+        {/* Sidebar */}
+        <Col lg={4}>
+          {/* Progress Card */}
+          <Card className="card-body mb-3 mb-lg-5">
+            <h5>Progress</h5>
+            <div className="d-flex justify-content-between align-items-center">
+              <div className="progress flex-grow-1">
+                <div
+                  className="progress-bar bg-primary"
+                  style={{ width: `${progress}%` }}
+                  aria-valuenow={progress}
+                />
+              </div>
+              <span className="ms-4">{Math.round(progress)}%</span>
+            </div>
+
+            <div className="mt-3">
+              <div className="d-flex justify-content-between text-sm">
+                <span>Completed sections:</span>
+                <span>{Object.values(sectionValidation).filter(section => section.isValid).length} / {Object.keys(formKeys).length}</span>
+              </div>
+              {totalErrors > 0 && (
+                <div className="d-flex justify-content-between text-sm text-warning">
+                  <span>Total errors:</span>
+                  <span>{totalErrors}</span>
                 </div>
               )}
-              
-              {/* Validation Status */}
-              {!showResetConfirm && !canSubmit && progress > 0 && (
-                <div className="row mt-2">
-                  <div className="col">
-                    <small className="text-light opacity-75">
-                      Complete required fields to save
-                    </small>
+            </div>
+          </Card>
+
+          {/* Preview Card */}
+          <Card className="mb-3 mb-lg-5">
+            <Card.Header>
+              <h4 className="card-header-title">Preview</h4>
+            </Card.Header>
+            <Card.Body>
+              {allFormValues.title ? (
+                <div className="project-preview">
+                  {/* Header Section */}
+                  <div className="mb-4">
+                    <div className="d-flex justify-content-between align-items-start mb-2">
+                      <h5 className="mb-0 fw-bold">{allFormValues.title}</h5>
+                      {allFormValues.year && (
+                        <span className="badge bg-soft-secondary fs-6">
+                          {allFormValues.year}
+                        </span>
+                      )}
+                    </div>
+
+                    {allFormValues.category && (
+                      <div className="mb-2">
+                        <span className="badge bg-soft-info me-2">
+                          {allFormValues.category}
+                        </span>
+                        <span className={`badge ${allFormValues.published ? 'bg-soft-success' : 'bg-soft-warning'}`}>
+                          {allFormValues.published ? 'Published' : 'Draft'}
+                        </span>
+                      </div>
+                    )}
+
+                    {allFormValues.shortDescription && (
+                      <p className="text-muted mb-2 lh-sm">
+                        {allFormValues.shortDescription}
+                      </p>
+                    )}
                   </div>
+
+                  {/* Rich Description Preview */}
+                  {allFormValues.description && (
+                    <div className="mb-3">
+                      <h6 className="text-muted small text-uppercase mb-2">Description</h6>
+                      <div
+                        className="border rounded p-3 bg-soft-light"
+                        style={{
+                          maxHeight: '200px',
+                          overflow: 'auto',
+                          fontSize: '0.875rem',
+                          lineHeight: '1.4'
+                        }}
+                        dangerouslySetInnerHTML={{ __html: allFormValues.description }}
+                      />
+                    </div>
+                  )}
+
+                  {/* Technologies */}
+                  {allFormValues.technologies && allFormValues.technologies.length > 0 && (
+                    <div className="mb-3">
+                      <h6 className="text-muted small text-uppercase mb-2">Technologies</h6>
+                      <div className="d-flex gap-1 flex-wrap">
+                        {allFormValues.technologies.map((tech: string, index: number) => (
+                          <span key={index} className="badge bg-primary">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Links Section */}
+                  {allFormValues.blog && (
+                    <div className="mb-3">
+                      <h6 className="text-muted small text-uppercase mb-2">Blog</h6>
+                      <div className="bg-soft-secondary p-2 rounded">
+                        <code className="small text-muted">
+                          {allFormValues.blog}
+                        </code>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* URL Preview */}
+                  {(allFormValues.slug || allFormValues.title) && (
+                    <div className="mb-3">
+                      <h6 className="text-muted small text-uppercase mb-2">URL</h6>
+                      <div className="bg-soft-secondary p-2 rounded">
+                        <code className="small text-muted">
+                          /project/{allFormValues.slug || generateSlug(allFormValues.title)}
+                        </code>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="text-center py-5">
+                  <p className="text-muted mb-0">
+                    Start filling out the form to see a live preview
+                  </p>
+                  <small className="text-muted">
+                    Preview will update as you type
+                  </small>
                 </div>
               )}
             </Card.Body>
           </Card>
-        </div>
-      </Container>
+        </Col>
+      </Row>
+
+      {/* Fixed Bottom Actions */}
+      <div className="position-fixed start-50 bottom-0 translate-middle-x w-100" style={{ zIndex: 99, marginBottom: '1rem', maxWidth: '40rem' }}>
+        <Card className="card-sm bg-dark border-dark mx-2">
+          <Card.Body>
+            {showResetConfirm ? (
+              // Reset Confirmation State
+              <div className="row justify-content-center align-items-center">
+                <div className="col">
+                  <span className="text-light">
+                    <i className="bi bi-exclamation-triangle me-2"></i>
+                    Reset form? All unsaved changes will be lost.
+                  </span>
+                </div>
+                <div className="col-auto">
+                  <div className="d-flex gap-3">
+                    <Button
+                      type="button"
+                      variant="ghost-light"
+                      onClick={cancelResetForm}
+                      disabled={loading}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="danger"
+                      onClick={confirmResetForm}
+                      disabled={loading}
+                    >
+                      Yes, Reset
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              // Normal State
+              <div className="row justify-content-center justify-content-sm-between">
+                <div className="col">
+                  <Button
+                    type="button"
+                    variant="ghost-danger"
+                    disabled={loading}
+                    onClick={handleResetForm}
+                  >
+                    Reset Form
+                  </Button>
+                </div>
+                <div className="col-auto">
+                  <div className="d-flex gap-3">
+                    <Button
+                      type="button"
+                      variant="ghost-light"
+                      onClick={handleDiscard}
+                      disabled={loading}
+                    >
+                      Discard
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="primary"
+                      disabled={!canSubmit || loading}
+                      onClick={handleSubmit}
+                    >
+                      {loading ? 'Saving...' : 'Save'}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Validation Status */}
+            {!showResetConfirm && !canSubmit && progress > 0 && (
+              <div className="row mt-2">
+                <div className="col">
+                  <small className="text-light opacity-75">
+                    Complete required fields to save
+                  </small>
+                </div>
+              </div>
+            )}
+          </Card.Body>
+        </Card>
+      </div>
     </ProtectedRoute>
   );
 }
