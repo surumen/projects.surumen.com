@@ -3,35 +3,81 @@
 
 $root-path:                                                 "../";
 
+// Base colors
+$blue:        #0061FE !default;
+$blue-night:  #3984FF !default;  // use in dark mode
+$coconut:     #F7F5F2 !default;
+$graphite:    #1E1919 !default;
+$green:       #2d7a02 !default;
+
+// Accent colors
+$ocean:     #007891 !default;
+$crimson:   #9B0032 !default;
+$rust:      #BE4B0A !default;
+$canopy:    #0F503C !default;
+$navy:      #283750 !default;
+$plum:      #78286E !default;
+$magenta:   #CD2F7B !default;
+$gold:      #9B6400 !default;
+
+$zen:       #14C8EB !default;
+$sunset:    #FA551E !default;
+$tangerine: #FF8C19 !default;
+$lime:      #B4DC19 !default;
+$cloud:     #B4C8E1 !default;
+$orchid:    #C8AFF0 !default;
+$pink:      #FFAFA5 !default;
+$banana:    #FAD24B !default;
+
+// White/Grays/Black colors
+$white:    #FFFFFF !default;
+$gray-02:  #FAF9F7 !default;
+$gray-03:  #F7F5F2 !default;  // coconut
+$gray-04:  #F5F2EE !default;
+$gray-05:  #F2EEE8 !default;
+$gray-06:  #EEE9E2 !default;
+$gray-07:  #E8E4DC !default;
+$gray-08:  #D9D4CC !default;
+$gray-09:  #C2BDB6 !default;
+$gray-10:  #A8A49E !default;
+$gray-11:  #8E8B87 !default;
+$gray-12:  #777471 !default;
+$gray-13:  #54514F !default;
+$gray-14:  #393736 !default;
+$gray-15:  #2B2929 !default;
+$gray-16:  #242121 !default;
+$gray-17:  #201D1D !default;
+$gray-18:  #1E1919 !default;  // graphite
+$gray-19:  #161313 !default;
+$black:    #000000 !default;
 
 
 // Grays
-$gray-100:                                                  #f9fafc;
-$gray-200:                                                  #f8fafd;
-$gray-300:                                                  #e7eaf3;
-$gray-400:                                                  #bdc5d1;
-$gray-500:                                                  #97a4af;
-$gray-600:                                                  #8c98a4;
-$gray-700:                                                  #677788;
-$gray-800:                                                  #71869d;
-$gray-900:                                                  #1e2022;
+$gray-100:                                                  $gray-03;
+$gray-200:                                                  $gray-05;
+$gray-300:                                                  $gray-07;
+$gray-400:                                                  $gray-09;
+$gray-500:                                                  $gray-11;
+$gray-600:                                                  $gray-13;
+$gray-700:                                                  $gray-15;
+$gray-800:                                                  $gray-17;
+$gray-900:                                                  $gray-19;
 
 // Colors
 $white:                                                     #fff;
-$dark:                                                      #132144;
-$blue:                                                      #377dff;
-$teal:                                                      #00c9a7;
-$cyan:                                                      #09a5be;
-$yellow:                                                    #f5ca99;
-$red:                                                       #ed4c78;
+$dark:                                                      $black;
+//$blue:                                                      #377dff;
+//$cyan:                                                      #09a5be;
+//$yellow:                                                    #f5ca99;
+//$red:                                                       #ed4c78;
 
 // Theme Colors
 $primary:                                                   $blue;
 $secondary:                                                 $gray-800;
-$success:                                                   $teal;
-$info:                                                      $cyan;
-$warning:                                                   $yellow;
-$danger:                                                    $red;
+$success:                                                   $green;
+$info:                                                      $ocean;
+$warning:                                                   $gold;
+$danger:                                                    $crimson;
 $dark:                                                      $dark;
 
 // Theme Soft Colors
