@@ -6,6 +6,13 @@ export { InputGroup } from './core/InputGroup';
 export { InputGroupPrefix } from './core/InputGroupPrefix';
 export { InputGroupSuffix } from './core/InputGroupSuffix';
 
+// Advanced Components
+export { 
+  SelectField,
+  SwitchField, 
+  CheckboxField 
+} from './advanced';
+
 // Context hooks
 export { useFormContext } from './core/Form';
 

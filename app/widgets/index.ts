@@ -32,7 +32,19 @@ import Pitch from './football/Pitch';
 import { SmartForm, FormIcons } from './forms';
 
 // import modern form components
-import { Form, Field, FieldGroup, InputGroup, InputGroupPrefix, InputGroupSuffix, validationRules, asyncValidationRules } from './modern-forms';
+import { 
+  Form, 
+  Field, 
+  FieldGroup, 
+  InputGroup, 
+  InputGroupPrefix, 
+  InputGroupSuffix,
+  SelectField,
+  SwitchField,
+  CheckboxField,
+  validationRules, 
+  asyncValidationRules 
+} from './modern-forms';
 
 // import table components
 import { SmartTable } from './tables';
@@ -80,6 +92,11 @@ export {
    InputGroup,
    InputGroupPrefix,
    InputGroupSuffix,
+   
+   // Modern Forms Advanced Components (Phase 4)
+   SelectField,
+   SwitchField,
+   CheckboxField,
    
    // Modern Forms Validation
    validationRules,
