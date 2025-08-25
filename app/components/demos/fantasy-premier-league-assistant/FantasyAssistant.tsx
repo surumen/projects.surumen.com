@@ -4,7 +4,15 @@ import { CursorFill } from 'react-bootstrap-icons';
 
 import { premierLeagueTeams } from '@/data/teams/premierLeague';
 import useFPL from '@/hooks/useFPL';
-import { SmartForm, PlayerFormation } from '@/widgets';
+import { 
+    Form, 
+    Field, 
+    SelectField,
+    SwitchField,
+    validationRules,
+    useFormContext,
+    PlayerFormation 
+} from '@/widgets';
 import type { 
     Option,
     TransferOutCandidate,
@@ -12,7 +20,6 @@ import type {
     PremierLeaguePlayer,
     UpcomingFixture 
 } from '@/types';
-import type { FieldConfig } from '@/types/forms/advanced';
 
 const positionMap = {
     1: 'Goalkeeper',
@@ -123,6 +130,23 @@ const TransferTable: React.FC<TransferTableProps> = ({ title, candidates, recomm
     </Card>
 );
 
+// Submit button component that uses form context
+const SubmitButton = () => {
+    const { isValid, isSubmitting } = useFormContext();
+    
+    return (
+        <div className="d-grid gap-2">
+            <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={!isValid || isSubmitting}
+            >
+                <CursorFill className="me-1" /> Start
+            </button>
+        </div>
+    );
+};
+
 const FantasyAssistant: React.FC = () => {
     const [managerId, setManagerId] = useState<number>(8025532);
     const [activeGameweek, setActiveGameweek] = useState<number>(1);
@@ -181,43 +205,61 @@ const FantasyAssistant: React.FC = () => {
         }
     }, [fetchManagerTeam, planManagerStrategy]);
 
-    // Memoize form fields to prevent unnecessary re-renders
-    const formFields = useMemo((): FieldConfig[] => [
-        {
-            name: 'competition',
-            label: 'Competition',
-            type: 'select',
-            options: [{ value: 'Premier League', label: 'Premier League' }],
-            readOnly: true,
-            initialValue: 'Premier League'
-        },
-        {
-            name: 'managerId',
-            label: 'Manager ID',
-            type: 'input',
-            inputType: 'text',
-            required: true,
-            validate: [{ test: (v: any) => /^\d+$/.test(v), message: 'Manager ID must be a number' }],
-            initialValue: String(managerId)
-        },
-        {
-            name: 'showTransferRecommendations',
-            label: 'Show transfer recommendations',
-            type: 'switch',
-            initialValue: showRecs,
-            styling: {
-                inline: true
-            }
-        },
-        {
-            name: 'gameweek',
-            label: 'Gameweek',
-            type: 'select',
-            options: weekOptions,
-            required: true,
-            initialValue: activeGameweek
-        },
-    ], [weekOptions, managerId, showRecs, activeGameweek]);
+    // Render the form component
+    const renderFantasyForm = () => (
+        <Form
+            onSubmit={handleFormSubmit}
+            initialValues={{
+                competition: 'Premier League',
+                managerId: String(managerId),
+                showTransferRecommendations: showRecs,
+                gameweek: activeGameweek
+            }}
+        >
+            {/* Competition - Read-only select */}
+            <SelectField
+                name="competition"
+                label="Competition"
+                options={[{ value: 'Premier League', label: 'Premier League' }]}
+                readOnly={true}
+            />
+
+            {/* Manager ID - Text input with validation */}
+            <Field
+                name="managerId"
+                label="Manager ID"
+                type="text"
+                required
+                validators={[
+                    validationRules.required('Manager ID'),
+                    validationRules.pattern(
+                        /^\d+$/, 
+                        'Manager ID must be a number'
+                    )
+                ]}
+            />
+
+            {/* Show Transfer Recommendations - Switch */}
+            <SwitchField
+                name="showTransferRecommendations"
+                label="Show transfer recommendations"
+                inline={true}
+            />
+
+            {/* Gameweek - Select dropdown */}
+            <SelectField
+                name="gameweek"
+                label="Gameweek"
+                options={weekOptions}
+                required
+                validators={[
+                    validationRules.required('Gameweek')
+                ]}
+            />
+
+            <SubmitButton />
+        </Form>
+    );
 
     if (loading) {
         return (
@@ -252,24 +294,7 @@ const FantasyAssistant: React.FC = () => {
 
                     <Col lg={3} className="order-1 order-lg-2">
                         <div className="sticky-top pt-4" style={{ top: '5%' }}>
-                            <SmartForm
-                                config={{
-                                    fields: formFields,
-                                    onSubmit: handleFormSubmit
-                                }}
-                                renderSubmitButton={({ isValid, submit }) => (
-                                    <div className="d-grid gap-2">
-                                        <button
-                                            type="button"
-                                            className="btn btn-primary"
-                                            disabled={!isValid}
-                                            onClick={submit}
-                                        >
-                                            <CursorFill className="me-1" /> Start
-                                        </button>
-                                    </div>
-                                )}
-                            />
+                            {renderFantasyForm()}
                         </div>
                     </Col>
                 </Row>
@@ -311,24 +336,7 @@ const FantasyAssistant: React.FC = () => {
 
                     <Col lg={3} className="order-1 order-lg-2">
                         <div className="sticky-top pt-4" style={{ top: '5%' }}>
-                            <SmartForm
-                                config={{
-                                    fields: formFields,
-                                    onSubmit: handleFormSubmit
-                                }}
-                                renderSubmitButton={({ isValid, submit }) => (
-                                    <div className="d-grid gap-2">
-                                        <button
-                                            type="button"
-                                            className="btn btn-primary"
-                                            disabled={!isValid}
-                                            onClick={submit}
-                                        >
-                                            <CursorFill className="me-1" /> Start
-                                        </button>
-                                    </div>
-                                )}
-                            />
+                            {renderFantasyForm()}
                         </div>
                     </Col>
                 </Row>
@@ -378,24 +386,7 @@ const FantasyAssistant: React.FC = () => {
 
                 <Col lg={3} className="order-1 order-lg-2">
                     <div className="sticky-top pt-4" style={{ top: '5%' }}>
-                        <SmartForm
-                            config={{
-                                fields: formFields,
-                                onSubmit: handleFormSubmit
-                            }}
-                            renderSubmitButton={({ isValid, submit }) => (
-                                <div className="d-grid gap-2">
-                                    <button
-                                        type="button"
-                                        className="btn btn-primary"
-                                        disabled={!isValid}
-                                        onClick={submit}
-                                    >
-                                        <CursorFill className="me-1" /> Start
-                                    </button>
-                                </div>
-                            )}
-                        />
+                        {renderFantasyForm()}
                     </div>
                 </Col>
             </Row>

@@ -1,8 +1,11 @@
 import React, { useMemo, useEffect } from 'react';
 import { Card, Image, Button } from 'react-bootstrap';
 import { ArrowClockwise, Trash } from 'react-bootstrap-icons';
-import { SmartForm } from '@/widgets';
-import type { FieldConfig } from '@/types/forms/advanced';
+import { 
+  Form, 
+  FieldGroup, 
+  SelectField,
+} from '@/widgets';
 import useMounted from '@/hooks/useMounted';
 import { Bracket } from '@/widgets';
 
@@ -49,33 +52,6 @@ const TournamentAssistant: React.FC = () => {
     const yearOptions = availableYears.map((y) => ({ value: y, label: `${y}` }));
     const leagueOptions = availableLeagues.map((l) => ({ value: l, label: l.toUpperCase() }));
 
-    // Memoize form config with fields inside
-    const formConfig = useMemo(() => {
-        const formFields: FieldConfig[] = [
-            {
-                name: 'league',
-                label: 'League',
-                type: 'select',
-                options: leagueOptions,
-                required: true,
-                initialValue: currentLeague
-            },
-            {
-                name: 'year',
-                label: 'Year',
-                type: 'select',
-                options: yearOptions,
-                required: true,
-                initialValue: currentYear
-            },
-        ];
-
-        return {
-            fields: formFields,
-            onSubmit: () => {}
-        };
-    }, [leagueOptions, yearOptions, currentLeague, currentYear]);
-
     const logoSrc = logos[currentLeague] || logos.ncaa;
 
     const renderRegionHeader = (name: string) => {
@@ -116,6 +92,15 @@ const TournamentAssistant: React.FC = () => {
         }
     };
 
+    // Handle individual field changes
+    const handleLeagueChange = (league: string) => {
+        handleFormChange({ league, year: currentYear });
+    };
+
+    const handleYearChange = (year: number) => {
+        handleFormChange({ league: currentLeague, year });
+    };
+
     // Handle team advancement
     const handleTeamAdvance = (gameId: string, teamId: string) => {
         advanceTeam(gameId, teamId);
@@ -130,6 +115,36 @@ const TournamentAssistant: React.FC = () => {
     const handleResetBracket = () => {
         resetBracket();
     };
+
+    // Render the form fields
+    const renderTournamentForm = () => (
+        <Form
+            onSubmit={() => {}} // No submit needed
+            initialValues={{
+                league: currentLeague,
+                year: currentYear
+            }}
+        >
+            <FieldGroup>
+                <SelectField
+                    name="league"
+                    label="League"
+                    columns={6}
+                    options={leagueOptions}
+                    onChange={handleLeagueChange}
+                    required
+                />
+                <SelectField
+                    name="year"
+                    label="Year"
+                    columns={6}
+                    options={yearOptions}
+                    onChange={handleYearChange}
+                    required
+                />
+            </FieldGroup>
+        </Form>
+    );
 
     // Loading state
     if (!hasMounted) {
@@ -150,12 +165,9 @@ const TournamentAssistant: React.FC = () => {
                 <Card.Header className="border-0 card-header-content-sm-between mb-4 px-0 px-md-2">
                     <Image className="avatar avatar-lg" src={logoSrc} alt={currentLeague} />
 
-                    <SmartForm
-                        config={formConfig}
-                        className="d-flex gap-3 align-items-end"
-                        onFieldChange={(name, value, allValues) => handleFormChange(allValues)}
-                        renderSubmitButton={() => null}
-                    />
+                    <div className="d-flex gap-3 align-items-end">
+                        {renderTournamentForm()}
+                    </div>
                 </Card.Header>
                 <Card.Body>
                     <div className="text-center">
@@ -179,12 +191,9 @@ const TournamentAssistant: React.FC = () => {
                 <Card.Header className="border-0 card-header-content-sm-between mb-4 px-0 px-md-2">
                     <Image className="avatar avatar-lg" src={logoSrc} alt={currentLeague} />
 
-                    <SmartForm
-                        config={formConfig}
-                        className="d-flex gap-3 align-items-end"
-                        onFieldChange={(name, value, allValues) => handleFormChange(allValues)}
-                        renderSubmitButton={() => null}
-                    />
+                    <div className="d-flex gap-3 align-items-end">
+                        {renderTournamentForm()}
+                    </div>
                 </Card.Header>
                 <Card.Body>
                     <div className="text-center">
@@ -253,12 +262,9 @@ const TournamentAssistant: React.FC = () => {
                     </div>
                 </div>
 
-                <SmartForm
-                    config={formConfig}
-                    className="d-flex gap-3 align-items-end"
-                    onFieldChange={(name, value, allValues) => handleFormChange(allValues)}
-                    renderSubmitButton={() => null}
-                />
+                <div className="d-flex gap-3 align-items-end">
+                    {renderTournamentForm()}
+                </div>
             </Card.Header>
 
             <div key={instanceKey}>
