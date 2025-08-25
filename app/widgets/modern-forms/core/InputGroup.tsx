@@ -2,10 +2,12 @@ import React, { Children, cloneElement, isValidElement } from 'react';
 import { classNames } from '../utils/classNames';
 import { InputGroupProvider } from './Field';
 import { generateFieldId } from '../utils/fieldHelpers';
+import { useFormContext } from '@/widgets/modern-forms';
 
 export interface InputGroupProps {
   children: React.ReactNode;
   className?: string;
+  required?: boolean;
   label?: string; // Label for the input group
   helpText?: string; // Help text for the input group
 }
@@ -32,9 +34,13 @@ export interface InputGroupProps {
 export const InputGroup: React.FC<InputGroupProps> = ({ 
   children, 
   className,
+  required,
   label,
-  helpText 
+  helpText ,
 }) => {
+  // Get form context
+  const formContext = useFormContext();
+
   // Find Field component to get its name for label association
   let fieldName = '';
   Children.forEach(children, (child) => {
@@ -42,6 +48,10 @@ export const InputGroup: React.FC<InputGroupProps> = ({
       fieldName = child.props.name;
     }
   });
+
+  const hasValidationError = fieldName &&
+      formContext.errors[fieldName] &&
+      formContext.touched[fieldName];
 
   const fieldId = fieldName ? generateFieldId(fieldName) : undefined;
 
@@ -52,6 +62,7 @@ export const InputGroup: React.FC<InputGroupProps> = ({
     return (
       <label className="form-label" htmlFor={fieldId}>
         {label}
+        {required && <span className="text-danger ms-1">*</span>}
       </label>
     );
   };
@@ -69,7 +80,7 @@ export const InputGroup: React.FC<InputGroupProps> = ({
 
   const inputGroup = (
     <InputGroupProvider value={true}>
-      <div className={classNames('input-group', className)}>
+      <div className={classNames('input-group', className, hasValidationError && 'is-invalid')}>
         {children}
       </div>
     </InputGroupProvider>

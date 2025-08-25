@@ -34,6 +34,9 @@ export const useForm = (options: UseFormOptions = {}) => {
   
   // Validation ID to prevent race conditions
   const validationId = useRef(0);
+  
+  // Ref to store current validateField function
+  const validateFieldRef = useRef<((name: string, triggerType?: 'change' | 'blur' | 'submit') => Promise<boolean>) | null>(null);
 
   // Register field validation
   const registerFieldValidation = useCallback((
@@ -59,21 +62,35 @@ export const useForm = (options: UseFormOptions = {}) => {
         delete newErrors[name];
       }
 
-      // Check if any fields depend on this field and revalidate them
-      Object.keys(fieldValidations.current).forEach(fieldName => {
-        const config = fieldValidations.current[fieldName];
-        if (config.deps?.includes(name) && prev.touched[fieldName]) {
-          // Schedule revalidation for dependent fields
-          setTimeout(() => validateField(fieldName), 0);
-        }
-      });
-
       return {
         ...prev,
         values: newValues,
         errors: newErrors
       };
     });
+
+    // Check if any fields depend on this field and revalidate them
+    // Use setTimeout to avoid stale closure
+    setTimeout(() => {
+      Object.keys(fieldValidations.current).forEach(fieldName => {
+        const config = fieldValidations.current[fieldName];
+        if (config.deps?.includes(name)) {
+          setState(currentState => {
+            if (currentState.touched[fieldName]) {
+              // Schedule revalidation for dependent field
+              setTimeout(() => {
+                // Access validateField from the current scope when setTimeout executes
+                const currentValidateField = validateFieldRef.current;
+                if (currentValidateField) {
+                  currentValidateField(fieldName);
+                }
+              }, 0);
+            }
+            return currentState;
+          });
+        }
+      });
+    }, 0);
   }, []);
 
   // Set field error
@@ -161,6 +178,9 @@ export const useForm = (options: UseFormOptions = {}) => {
       return false;
     }
   }, [state.values, setError, setValidating]);
+
+  // Store validateField in ref for dependent field validation
+  validateFieldRef.current = validateField;
 
   // Validate entire form
   const validateForm = useCallback(async (): Promise<boolean> => {
