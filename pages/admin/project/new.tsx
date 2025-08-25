@@ -139,15 +139,14 @@ function NewProjectPage() {
         </div>
       </div>
 
-      <div className="container-fluid">
-        <div className="row justify-content-center">
-          <div className="col-lg-10">
-            <div className="card shadow">
-              <div className="card-header bg-primary">
-                <h4 className="text-bg-primary mb-0">Project Information</h4>
-              </div>
-              <div className="card-body p-4">
-                <Form
+      <div className="row justify-content-start">
+        <div className="col-lg-8">
+          <div className="card shadow">
+            <div className="card-header bg-primary">
+              <h4 className="text-bg-primary mb-0">Project Information</h4>
+            </div>
+            <div className="card-body p-4">
+              <Form
                   onSubmit={handleSubmit}
                   initialValues={{
                     title: '',
@@ -161,16 +160,16 @@ function NewProjectPage() {
                     blog: '',
                     published: false
                   }}
-                >
-                  {/* Basic Project Information */}
-                  <h5 className="mb-3">Basic Information</h5>
-                  
-                  {/* Project Title */}
-                  <InputGroup label="Project Name" required className="input-group-merge">
-                    <InputGroupPrefix>
-                      <Icons.Briefcase />
-                    </InputGroupPrefix>
-                    <Field 
+              >
+                {/* Basic Project Information */}
+                <h5 className="mb-3">Basic Information</h5>
+
+                {/* Project Title */}
+                <InputGroup label="Project Name" required className="input-group-merge">
+                  <InputGroupPrefix>
+                    <Icons.Briefcase />
+                  </InputGroupPrefix>
+                  <Field
                       name="title"
                       placeholder="Enter project name here"
                       required
@@ -180,12 +179,12 @@ function NewProjectPage() {
                         validationRules.maxLength(100, 'Project name')
                       ]}
                       helpText="The main title of your project displayed publicly"
-                    />
-                  </InputGroup>
+                  />
+                </InputGroup>
 
-                  {/* Category and Year */}
-                  <FieldGroup>
-                    <SelectField 
+                {/* Category and Year */}
+                <FieldGroup>
+                  <SelectField
                       name="category"
                       label="Category"
                       columns={6}
@@ -195,9 +194,9 @@ function NewProjectPage() {
                       validators={[
                         validationRules.required('Category')
                       ]}
-                    />
-                    
-                    <SelectField 
+                  />
+
+                  <SelectField
                       name="year"
                       label="Year Completed"
                       columns={6}
@@ -207,50 +206,50 @@ function NewProjectPage() {
                       validators={[
                         validationRules.required('Completion year')
                       ]}
-                    />
-                  </FieldGroup>
+                  />
+                </FieldGroup>
 
-                  {/* Slug and Blog */}
-                  <FieldGroup>
-                    <div className="col-6">
-                      <InputGroup label="URL Slug" className="input-group-merge">
-                        <InputGroupPrefix>
-                          <Icons.Link45deg />
-                        </InputGroupPrefix>
-                        <Field 
+                {/* Slug and Blog */}
+                <FieldGroup>
+                  <div className="col-6">
+                    <InputGroup label="URL Slug" className="input-group-merge">
+                      <InputGroupPrefix>
+                        <Icons.Link45deg />
+                      </InputGroupPrefix>
+                      <Field
                           name="slug"
                           placeholder="generated-from-project-name"
                           validators={[
                             validationRules.pattern(
-                              /^[a-z0-9-]*$/,
-                              'Slug must contain only lowercase letters, numbers, and hyphens'
+                                /^[a-z0-9-]*$/,
+                                'Slug must contain only lowercase letters, numbers, and hyphens'
                             )
                           ]}
                           helpText="Auto-generated from title if left empty"
-                        />
-                      </InputGroup>
-                    </div>
+                      />
+                    </InputGroup>
+                  </div>
 
-                    <div className="col-6">
-                      <InputGroup label="Blog Post Slug" className="input-group-merge">
-                        <InputGroupPrefix>
-                          <Icons.Newspaper />
-                        </InputGroupPrefix>
-                        <Field 
+                  <div className="col-6">
+                    <InputGroup label="Blog Post Slug" className="input-group-merge">
+                      <InputGroupPrefix>
+                        <Icons.Newspaper />
+                      </InputGroupPrefix>
+                      <Field
                           name="blog"
                           placeholder="blog-post-slug"
                           helpText="Optional blog post slug"
-                        />
-                      </InputGroup>
-                    </div>
-                  </FieldGroup>
+                      />
+                    </InputGroup>
+                  </div>
+                </FieldGroup>
 
-                  {/* Demo URL */}
-                  <InputGroup label="Demo URL" className="input-group-merge">
-                    <InputGroupPrefix>
-                      <Icons.Globe />
-                    </InputGroupPrefix>
-                    <Field 
+                {/* Demo URL */}
+                <InputGroup label="Demo URL" className="input-group-merge">
+                  <InputGroupPrefix>
+                    <Icons.Globe />
+                  </InputGroupPrefix>
+                  <Field
                       name="demo"
                       type="url"
                       placeholder="https://demo.example.com"
@@ -258,14 +257,14 @@ function NewProjectPage() {
                         validationRules.url()
                       ]}
                       helpText="Optional demo or live project URL"
-                    />
-                  </InputGroup>
+                  />
+                </InputGroup>
 
-                  {/* Technologies */}
-                  <div className="border-top pt-4 mt-4">
-                    <h5 className="mb-3">Technologies</h5>
-                    
-                    <TagsField 
+                {/* Technologies */}
+                <div className="border-top pt-4 mt-4">
+                  <h5 className="mb-3">Technologies</h5>
+
+                  <TagsField
                       name="technologies"
                       label="Technologies & Tools"
                       suggestions={techSuggestions}
@@ -279,14 +278,14 @@ function NewProjectPage() {
                       ]}
                       tagTransform={(tag) => tag.trim()}
                       tagValidator={(tag) => tag.length >= 2 ? true : 'Technology must be at least 2 characters'}
-                    />
-                  </div>
+                  />
+                </div>
 
-                  {/* Content */}
-                  <div className="border-top pt-4 mt-4">
-                    <h5 className="mb-3">Content</h5>
-                    
-                    <Field 
+                {/* Content */}
+                <div className="border-top pt-4 mt-4">
+                  <h5 className="mb-3">Content</h5>
+
+                  <Field
                       name="shortDescription"
                       label="Short Description"
                       type="textarea"
@@ -299,9 +298,9 @@ function NewProjectPage() {
                         validationRules.maxLength(200, 'Short description')
                       ]}
                       helpText="Brief summary displayed in project listings (10-200 characters)"
-                    />
+                  />
 
-                    <Field 
+                  <Field
                       name="description"
                       label="Full Description"
                       type="textarea"
@@ -313,36 +312,35 @@ function NewProjectPage() {
                         validationRules.minLength(50, 'Full description')
                       ]}
                       helpText="Detailed description of your project (minimum 50 characters)"
-                    />
-                  </div>
+                  />
+                </div>
 
-                  {/* Publishing */}
-                  <div className="border-top pt-4 mt-4">
-                    <h5 className="mb-3">Publishing</h5>
-                    
-                    <SwitchField 
+                {/* Publishing */}
+                <div className="border-top pt-4 mt-4">
+                  <h5 className="mb-3">Publishing</h5>
+
+                  <SwitchField
                       name="published"
                       label="Publish Project"
                       helpText="Publishing this project will make it visible to the public immediately"
                       inline={true}
                       defaultValue={false}
-                    />
-                  </div>
+                  />
+                </div>
 
-                  {/* Submit button */}
-                  <div className="d-grid gap-2 mt-4">
-                    <SubmitButton />
-                    <button 
-                      type="button" 
+                {/* Submit button */}
+                <div className="d-grid gap-2 mt-4">
+                  <SubmitButton />
+                  <button
+                      type="button"
                       className="btn btn-outline-secondary"
                       onClick={() => router.push('/admin')}
                       disabled={loading}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </Form>
-              </div>
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </Form>
             </div>
           </div>
         </div>
