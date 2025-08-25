@@ -43,7 +43,8 @@ import {
   SwitchField,
   CheckboxField,
   validationRules, 
-  asyncValidationRules 
+  asyncValidationRules,
+  useFormContext
 } from './modern-forms';
 
 // import table components
@@ -101,6 +102,7 @@ export {
    // Modern Forms Validation
    validationRules,
    asyncValidationRules,
+   useFormContext,
    
    // Tables
    SmartTable,
