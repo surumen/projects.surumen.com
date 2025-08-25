@@ -10,12 +10,12 @@ import {
   InputGroupPrefix,
   validationRules,
   useFormContext,
-} from '@/widgets/modern-forms';
+} from '../../../app/widgets/forms';
 import { 
   SelectField,
   SwitchField,
   TagsField
-} from '@/widgets/modern-forms/advanced';
+} from '@/widgets/forms/advanced';
 import { useCMSStore } from '@/store/cmsStore';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import * as Icons from 'react-bootstrap-icons';
