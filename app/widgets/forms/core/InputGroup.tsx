@@ -1,8 +1,8 @@
-import React, { Children, cloneElement, isValidElement } from 'react';
+import React, { Children, isValidElement } from 'react';
 import { classNames } from '../utils/classNames';
 import { InputGroupProvider } from './Field';
 import { generateFieldId } from '../utils/fieldHelpers';
-import { useFormContext } from '@/widgets/modern-forms';
+import { useFormContext } from './Form';
 
 export interface InputGroupProps {
   children: React.ReactNode;

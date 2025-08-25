@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
-import { FieldProps } from '../../widgets/modern-forms/types/field';
-import { ValidationRule, AsyncValidationRule } from '../../widgets/modern-forms/types/validation';
+import { FieldProps } from '@/widgets/forms/types/field';
+import { ValidationRule, AsyncValidationRule } from '@/widgets/forms/types/validation';
 
 export interface UseFieldOptions extends Pick<
   FieldProps, 

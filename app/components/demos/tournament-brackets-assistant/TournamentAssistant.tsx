@@ -132,7 +132,6 @@ const TournamentAssistant: React.FC = () => {
                     columns={6}
                     options={leagueOptions}
                     onChange={handleLeagueChange}
-                    required
                 />
                 <SelectField
                     name="year"
@@ -140,7 +139,6 @@ const TournamentAssistant: React.FC = () => {
                     columns={6}
                     options={yearOptions}
                     onChange={handleYearChange}
-                    required
                 />
             </FieldGroup>
         </Form>

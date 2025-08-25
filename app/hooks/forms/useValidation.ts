@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
-import { ValidationRule, AsyncValidationRule } from '../../widgets/modern-forms/types/validation';
-import { validateValue, validateValueAsync } from '../../widgets/modern-forms/utils/validation';
-import { debounceAsync } from '../../widgets/modern-forms/utils/debounce';
+import { ValidationRule, AsyncValidationRule } from '@/widgets/forms/types/validation';
+import { validateValue, validateValueAsync } from '@/widgets/forms/utils/validation';
+import { debounceAsync } from '@/widgets/forms/utils/debounce';
 
 export interface UseValidationOptions {
   rules?: ValidationRule[];

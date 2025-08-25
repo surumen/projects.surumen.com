@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo, useRef } from 'react';
-import { FormState } from '../../widgets/modern-forms/types/form';
-import { ValidationRule, AsyncValidationRule } from '../../widgets/modern-forms/types/validation';
-import { validateValue, validateValueAsync } from '../../widgets/modern-forms/utils/validation';
+import { FormState } from '@/widgets/forms/types/form';
+import { ValidationRule, AsyncValidationRule } from '@/widgets/forms/types/validation';
+import { validateValue, validateValueAsync } from '@/widgets/forms/utils/validation';
 
 export interface UseFormOptions {
   initialValues?: Record<string, any>;

@@ -1,22 +1,33 @@
-// Core form components
-export { default as SmartForm } from './core/SmartForm';
-export { FormProvider, useFormContext, useFormStatus, useField } from './core/FormProvider';
+// Core Components
+export { Form } from './core/Form';
+export { Field } from './core/Field';
+export { FieldGroup } from './core/FieldGroup';
+export { InputGroup } from './core/InputGroup';
+export { InputGroupPrefix } from './core/InputGroupPrefix';
+export { InputGroupSuffix } from './core/InputGroupSuffix';
 
-// Advanced field components
-export { default as DateField } from './advanced/DateField';
-export { default as FileUploadField } from './advanced/FileUploadField';
-export { default as TagInputField } from './advanced/TagInputField';
-export { default as RichTextField } from './advanced/RichTextField';
-
-// Template system
-export { TemplateRenderer, BasicFieldTemplate, InputGroupTemplate, SwitchTemplate } from './templates';
-
-// Form icons
-export { FormIcons, CommonFieldIcons, IconCategories } from './icons';
-
-// Form utilities and validation (re-exported from SmartForm)
+// Advanced Components
 export { 
+  SelectField,
+  SwitchField, 
+  CheckboxField,
+  TagsField 
+} from './advanced';
+
+// Context hooks
+export { useFormContext } from './core/Form';
+
+// Types
+export type * from './types';
+
+// Utils & Constants
+export * from './utils';
+export * from './constants';
+
+// Validation utilities and rules (re-export for convenience)
+export { 
+  validationRules, 
+  asyncValidationRules, 
   createValidationRule, 
-  createAsyncValidationRule, 
-  validationRules 
-} from './core/SmartForm';
+  createAsyncValidationRule 
+} from './utils/validation';
