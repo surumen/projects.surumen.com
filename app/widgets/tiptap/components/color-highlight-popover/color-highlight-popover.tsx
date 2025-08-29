@@ -34,6 +34,9 @@ function useMultiColorHighlight(colors: BootstrapColor[], editor: Editor | null,
   const [activeColors, setActiveColors] = React.useState<Set<BootstrapColor>>(new Set())
   const [isVisible, setIsVisible] = React.useState(true)
 
+  // Memoize colors array to prevent infinite loops
+  const memoizedColors = React.useMemo(() => colors, [colors.join(',')])
+
   // Single effect to track all colors efficiently
   React.useEffect(() => {
     if (!editor) {
@@ -45,7 +48,7 @@ function useMultiColorHighlight(colors: BootstrapColor[], editor: Editor | null,
     const updateState = () => {
       // Check which colors are active
       const active = new Set<BootstrapColor>()
-      colors.forEach(color => {
+      memoizedColors.forEach(color => {
         if (isColorHighlightActive(editor, color)) {
           active.add(color)
         }
@@ -66,16 +69,16 @@ function useMultiColorHighlight(colors: BootstrapColor[], editor: Editor | null,
       editor.off('selectionUpdate', updateState)
       editor.off('transaction', updateState)
     }
-  }, [editor, colors, hideWhenUnavailable])
+  }, [editor, memoizedColors, hideWhenUnavailable])
 
   // Create color state objects
   const colorStates = React.useMemo(() => 
-    colors.map(color => ({
+    memoizedColors.map(color => ({
       color,
       isActive: activeColors.has(color),
       canHighlight: canColorHighlight(editor),
       handleToggle: () => toggleColorHighlight(editor, color)
-    })), [colors, activeColors, editor]
+    })), [memoizedColors, activeColors, editor]
   )
 
   return {
