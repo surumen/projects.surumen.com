@@ -167,7 +167,7 @@ export const LinkPopover = React.forwardRef<
           <div className="d-flex gap-2 align-items-center">
             <input
               type="url"
-              className="form-control form-control-sm"
+              className="form-control form-control-sm form-control-borderless form-control-flush"
               placeholder="Paste a link..."
               value={url}
               onChange={(e) => setUrl(e.target.value)}
