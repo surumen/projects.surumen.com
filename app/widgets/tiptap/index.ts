@@ -28,8 +28,8 @@ export * from './components/dropdown'
 export * from './components/popover'
 export * from './components/tooltip'
 export * from './components/link-popover'
-export * from './components/color-highlight-popover'
-export * from './components/color-text-popover'
+export { ColorPopover, ColorSwatch } from './components/shared'
+export type { BootstrapColor, ColorPopoverProps, ColorSwatchProps } from './components/shared'
 
 // Re-export hooks for advanced customization
 export * from './hooks/useTiptapEditor'

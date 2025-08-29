@@ -13,8 +13,7 @@ import { useListDropdownMenu } from '../hooks/useListDropdownMenu'
 
 // --- Import components ---
 import { LinkPopover } from '../components/link-popover'
-import { ColorHighlightPopover } from '../components/color-highlight-popover'
-import { ColorTextPopover } from '../components/color-text-popover'
+import { ColorPopover } from '../components/shared/ColorPopover'
 
 /**
  * Registry of all available toolbar items
@@ -138,14 +137,14 @@ export const TOOLBAR_ITEMS: ToolbarItemRegistry = {
 
   colorText: {
     type: 'popover',
-    component: ColorTextPopover,
-    props: { tooltip: 'Text color' }
+    component: ColorPopover,
+    props: { variant: 'text', tooltip: 'Text color' }
   },
 
   colorHighlight: {
     type: 'popover',
-    component: ColorHighlightPopover,
-    props: { tooltip: 'Highlight text' }
+    component: ColorPopover,
+    props: { variant: 'highlight', tooltip: 'Highlight text' }
   },
 
   // Block elements
