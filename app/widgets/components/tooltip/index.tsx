@@ -3,4 +3,4 @@ export {
   TooltipTrigger, 
   TooltipContent,
   TooltipProvider
-} from "./tooltip"
+} from "./Tooltip"

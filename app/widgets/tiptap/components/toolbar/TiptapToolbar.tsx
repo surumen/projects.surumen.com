@@ -4,7 +4,7 @@ import * as React from "react"
 import type { Editor } from "@tiptap/react"
 
 // --- Components ---
-import { ToolbarRenderer } from "../toolbar-renderer"
+import { ToolbarRenderer } from "./ToolbarRenderer"
 
 // --- Types ---
 import type { ToolbarVariantConfig } from "../../config/types"

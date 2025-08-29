@@ -13,7 +13,7 @@ import { useListDropdownMenu } from '../hooks/useListDropdownMenu'
 
 // --- Import components ---
 import { LinkPopover } from '../components/link-popover'
-import { ColorPopover } from '../components/shared/ColorPopover'
+import { ColorPopover } from '../components/color-popover/ColorPopover'
 
 /**
  * Registry of all available toolbar items

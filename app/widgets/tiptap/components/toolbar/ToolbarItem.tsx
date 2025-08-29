@@ -4,8 +4,8 @@ import * as React from "react"
 import type { Editor } from "@tiptap/react"
 
 // --- Components ---
-import { ToolbarButton } from "../toolbar-button"
-import { Dropdown } from "../dropdown"
+import { ToolbarButton } from "./ToolbarButton"
+import { Dropdown } from "@/widgets/components/dropdown"
 
 // --- Types ---
 import type { ToolbarItemProps } from "../../config/types"

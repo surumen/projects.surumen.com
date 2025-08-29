@@ -3,7 +3,7 @@
 import * as React from "react"
 import { createPortal } from "react-dom"
 import { createPopper, type Instance as PopperInstance, type Placement } from '@popperjs/core'
-import { cn } from "../../utils"
+import { cn } from "../../tiptap/utils"
 
 // --- Types ---
 export interface PopoverContextValue {

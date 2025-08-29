@@ -4,7 +4,7 @@ import type { Editor } from "@tiptap/react"
 import { useEditorCommand } from "./useEditorCommand"
 import { TypeBold } from 'react-bootstrap-icons'
 import { isMarkInSchema, isNodeTypeSelected } from "../utils"
-import type { BootstrapColor } from "../components/shared/ColorSwatch"
+import type { BootstrapColor } from "@/widgets/tiptap/components/color-popover/ColorSwatch"
 
 export interface UseColorTextConfig {
   editor?: Editor | null

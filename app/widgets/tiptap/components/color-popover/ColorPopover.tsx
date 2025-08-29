@@ -1,15 +1,14 @@
 "use client"
 
 import * as React from "react"
-import { type Editor } from "@tiptap/react"
-import { Fonts, Highlighter } from 'react-bootstrap-icons'
+import { Fonts, Highlighter, XCircle } from 'react-bootstrap-icons';
 
 // --- Hooks ---
 import { useColorPopover, type UseColorPopoverConfig } from "../../hooks/useColorPopover"
 
 // --- Components ---
-import { ColorSwatch, type BootstrapColor } from "../shared/ColorSwatch"
-import { Popover, PopoverTrigger, PopoverContent } from "../popover"
+import { ColorSwatch, } from "@/widgets/tiptap/components/color-popover/ColorSwatch"
+import { Popover, PopoverTrigger, PopoverContent } from "../../../components/popover"
 
 export interface ColorPopoverProps extends Omit<UseColorPopoverConfig, 'variant'> {
   variant: 'text' | 'highlight'
@@ -50,7 +49,9 @@ export function ColorPopover({
   const {
     isVisible,
     canToggle,
+    activeColor,
     colorStates,
+    handleClear,
     label
   } = useColorPopover({
     editor,
@@ -76,6 +77,14 @@ export function ColorPopover({
       setIsOpen(false)
     }
   }, [])
+
+  // Handle eraser/clear action  
+  const handleEraserClick = React.useCallback(() => {
+    const success = handleClear()
+    if (success) {
+      setIsOpen(false)
+    }
+  }, [handleClear])
 
   if (!isVisible) return null
 
@@ -106,6 +115,17 @@ export function ColorPopover({
               disabled={!canToggle}
             />
           ))}
+
+          <button
+              type="button"
+              onClick={handleEraserClick}
+              disabled={!canToggle}
+              aria-label={variant === 'text' ? "Remove text color" : "Remove highlight"}
+              title={variant === 'text' ? "Remove text color" : "Remove highlight"}
+              className='icon icon-xs icon-light rounded-circle p-0 border-0'
+          >
+            <XCircle size={14} />
+          </button>
         </div>
       </PopoverContent>
     </Popover>

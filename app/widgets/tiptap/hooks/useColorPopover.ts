@@ -3,13 +3,13 @@
 import * as React from "react"
 import { type Editor } from "@tiptap/react"
 import { isMarkInSchema, isNodeTypeSelected } from "../utils"
-import type { BootstrapColor } from "../components/shared/ColorSwatch"
+import type { BootstrapColor } from "@/widgets/tiptap/components/color-popover/ColorSwatch"
 
 export interface UseColorPopoverConfig {
   editor: Editor | null
   variant: 'text' | 'highlight'
   hideWhenUnavailable?: boolean
-  onColorChanged?: (color: BootstrapColor | 'default') => void
+  onColorChanged?: (color: BootstrapColor | null) => void
 }
 
 /**
@@ -45,7 +45,7 @@ const variantConfig = {
     markName: 'textStyle' as const,
     attributeName: 'color',
     colorMap: textColorMap,
-    colors: ["primary", "secondary", "success", "danger", "warning", "info", "dark"] as BootstrapColor[],
+    colors: ["primary", "secondary", "success", "danger", "warning", "info"] as BootstrapColor[],
     canExecuteTest: (editor: Editor) => editor.can().setColor("#000000"),
     setCommand: (editor: Editor, color: string) => editor.chain().focus().setColor(color).run(),
     unsetCommand: (editor: Editor) => editor.chain().focus().unsetColor().run(),
@@ -98,12 +98,12 @@ export function useColorPopover(config: UseColorPopoverConfig) {
   }, [editor, variantSettings])
 
   // Handle color changes
-  const handleColorChanged = React.useCallback((color: BootstrapColor | 'default') => {
+  const handleColorChanged = React.useCallback((color: BootstrapColor | null) => {
     if (!editor || !canToggle) return false
 
     let success = false
     
-    if (color === 'default') {
+    if (color === null) {
       // Remove color (set to default)
       success = variantSettings.unsetCommand(editor)
     } else {
@@ -123,9 +123,6 @@ export function useColorPopover(config: UseColorPopoverConfig) {
   const colorHandlers = React.useMemo(() => {
     const handlers: Record<string, () => boolean> = {}
     
-    // Default handler
-    handlers.default = () => handleColorChanged('default')
-    
     // Color handlers for each variant color
     variantSettings.colors.forEach(color => {
       handlers[color] = () => handleColorChanged(color)
@@ -134,22 +131,18 @@ export function useColorPopover(config: UseColorPopoverConfig) {
     return handlers
   }, [handleColorChanged, variantSettings.colors])
 
+  // Handle clearing color (eraser functionality)
+  const handleClear = React.useCallback(() => {
+    return handleColorChanged(null)
+  }, [handleColorChanged])
+
   // Color states for rendering with stable handler references
   const colorStates = React.useMemo(() => {
-    return [
-      // Default option first
-      {
-        color: 'default' as const,
-        isActive: !activeColor,
-        handleToggle: colorHandlers.default // STABLE REFERENCE
-      },
-      // Color options with stable references
-      ...variantSettings.colors.map(color => ({
-        color,
-        isActive: activeColor === variantSettings.colorMap[color],
-        handleToggle: colorHandlers[color] // STABLE REFERENCE
-      }))
-    ]
+    return variantSettings.colors.map(color => ({
+      color,
+      isActive: activeColor === variantSettings.colorMap[color],
+      handleToggle: colorHandlers[color] // STABLE REFERENCE
+    }))
   }, [activeColor, colorHandlers, variantSettings])
 
   return {
@@ -157,6 +150,7 @@ export function useColorPopover(config: UseColorPopoverConfig) {
     canToggle,
     activeColor,
     handleColorChanged,
+    handleClear,
     colorStates,
     label: variantSettings.label,
   }

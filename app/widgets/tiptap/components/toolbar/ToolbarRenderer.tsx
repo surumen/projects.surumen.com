@@ -4,7 +4,7 @@ import * as React from "react"
 import type { Editor } from "@tiptap/react"
 
 // --- Components ---
-import { ToolbarItem } from "../toolbar-item"
+import { ToolbarItem } from "./ToolbarItem"
 
 // --- Configuration ---
 import { TOOLBAR_ITEMS, TOOLBAR_VARIANTS } from "../../config"

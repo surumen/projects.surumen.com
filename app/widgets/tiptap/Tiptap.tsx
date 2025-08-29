@@ -2,9 +2,7 @@
 
 import * as React from "react"
 import { EditorContent, EditorContext, useEditor } from "@tiptap/react"
-import type { Extension } from "@tiptap/core"
 
-// --- TipTap Extensions ---
 import { StarterKit } from "@tiptap/starter-kit"
 import { Placeholder } from "@tiptap/extension-placeholder"
 import { TextAlign } from "@tiptap/extension-text-align"
@@ -17,8 +15,7 @@ import { TextStyle } from "@tiptap/extension-text-style"
 import { Color } from "@tiptap/extension-color"
 import { Image } from "@tiptap/extension-image"
 
-// --- Reuse Moses's Components ---
-import { TooltipProvider } from "./components/tooltip"
+import { TooltipProvider } from "../components/tooltip"
 import { TiptapToolbar } from "./components/toolbar"
 
 // --- Utils ---

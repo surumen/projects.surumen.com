@@ -7,7 +7,7 @@ import type { Editor } from "@tiptap/react"
 import { useTiptapEditor } from "../../hooks/useTiptapEditor"
 
 // --- New Radix Tooltip ---
-import { Tooltip, TooltipTrigger, TooltipContent } from "../tooltip"
+import { Tooltip, TooltipTrigger, TooltipContent } from "../../../components/tooltip"
 
 // --- Lib ---
 import { cn } from "../../utils"

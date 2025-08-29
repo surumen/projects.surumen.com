@@ -8,4 +8,4 @@ export {
   type DropdownContentProps,
   type DropdownItemProps,
   type DropdownContextValue
-} from "./dropdown"
+} from "./Dropdown"
