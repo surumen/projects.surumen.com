@@ -111,15 +111,13 @@ const ColorSwatch = React.memo<ColorSwatchProps>(({
     aria-label={`${color} highlight`}
     title={`Apply ${color} highlight`}
     className={`
-      btn btn-sm p-0 position-relative border-0
-      bg-soft-${color}
-      ${isActive ? 'ring ring-primary ring-opacity-50' : ''}
-      ${disabled ? 'opacity-50' : 'hover:scale-110'}
+      btn btn-sm p-0 position-relative rounded-circle bg-soft-${color}
+      ${isActive ? 'border border-primary' : ''}
+      ${disabled ? 'disabled' : ''}
     `}
     style={{ 
       minWidth: '1.5rem',
       minHeight: '1.5rem',
-      borderRadius: '50%',
       transition: 'transform 0.1s ease-in-out'
     }}
   />
