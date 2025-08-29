@@ -165,7 +165,6 @@ export const LinkPopover = React.forwardRef<
 
         <PopoverContent>
           <div className="d-flex gap-2 align-items-center">
-            {/* URL Input */}
             <input
               type="url"
               className="form-control form-control-sm"
@@ -179,44 +178,32 @@ export const LinkPopover = React.forwardRef<
               autoCapitalize="off"
             />
 
-            {/* Apply Link Button */}
-            <button
-              type="button"
-              onClick={handleSetLink}
-              title="Apply link"
-              disabled={!url && !linkHook.isActive}
-              className="btn btn-ghost btn-sm border-0 d-inline-flex align-items-center justify-content-center"
-              style={{ minWidth: '2rem', minHeight: '2rem' }}
-            >
-              <ArrowReturnLeft style={{ width: '1rem', height: '1rem' }} />
-            </button>
-
-            {/* Divider */}
-            <div className="vr"></div>
-
-            {/* Open Link Button */}
-            <button
-              type="button"
-              onClick={handleOpenLink}
-              title="Open in new window"
-              disabled={!url && !linkHook.isActive}
-              className="btn btn-ghost btn-sm border-0 d-inline-flex align-items-center justify-content-center"
-              style={{ minWidth: '2rem', minHeight: '2rem' }}
-            >
-              <BoxArrowUpRight style={{ width: '1rem', height: '1rem' }} />
-            </button>
-
-            {/* Remove Link Button */}
-            <button
-              type="button"
-              onClick={handleRemoveLink}
-              title="Remove link"
-              disabled={!url && !linkHook.isActive}
-              className="btn btn-ghost btn-sm border-0 d-inline-flex align-items-center justify-content-center"
-              style={{ minWidth: '2rem', minHeight: '2rem' }}
-            >
-              <Trash style={{ width: '1rem', height: '1rem' }} />
-            </button>
+            <div className="btn-group" role="group">
+              <button
+                  type="button"
+                  onClick={handleSetLink}
+                  title="Apply link"
+                  disabled={!url && !linkHook.isActive}
+                  className="btn btn-sm btn-icon btn-ghost-secondary">
+                <ArrowReturnLeft size={14} />
+              </button>
+              <button
+                  type="button"
+                  onClick={handleOpenLink}
+                  title="Open in new window"
+                  disabled={!url && !linkHook.isActive}
+                  className="btn btn-sm btn-icon btn-ghost-secondary">
+                <BoxArrowUpRight size={14} />
+              </button>
+              <button
+                  type="button"
+                  onClick={handleRemoveLink}
+                  title="Remove link"
+                  disabled={!url && !linkHook.isActive}
+                  className="btn btn-sm btn-icon btn-ghost-secondary">
+                <Trash size={14} />
+              </button>
+            </div>
           </div>
         </PopoverContent>
       </Popover>

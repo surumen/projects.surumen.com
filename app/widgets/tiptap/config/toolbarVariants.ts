@@ -29,6 +29,10 @@ export const TOOLBAR_VARIANTS: ToolbarVariantRegistry = {
         items: ['lists']
       },
       {
+        name: 'blocks',
+        items: ['blockquote', 'codeBlock']
+      },
+      {
         name: 'links',
         items: ['linkPopover']
       }
