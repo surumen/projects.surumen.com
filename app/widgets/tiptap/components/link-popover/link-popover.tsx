@@ -103,7 +103,7 @@ export const LinkPopover = React.forwardRef<
         setIsOpen(false)
         onToggled?.()
       }
-    }, [linkHook.handleSetLink, url, onToggled])
+    }, [linkHook, url, onToggled])
 
     // Handle removing the link
     const handleRemoveLink = React.useCallback(() => {
@@ -113,12 +113,12 @@ export const LinkPopover = React.forwardRef<
         setIsOpen(false)
         onToggled?.()
       }
-    }, [linkHook.handleRemoveLink, onToggled])
+    }, [linkHook, onToggled])
 
     // Handle opening the link in new window
     const handleOpenLink = React.useCallback(() => {
       linkHook.handleOpenLink()
-    }, [linkHook.handleOpenLink])
+    }, [linkHook])
 
     // Handle trigger button click
     const handleClick = React.useCallback(

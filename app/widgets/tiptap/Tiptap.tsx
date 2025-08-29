@@ -13,6 +13,9 @@ import { Highlight } from "@tiptap/extension-highlight"
 import { Subscript } from "@tiptap/extension-subscript"
 import { Superscript } from "@tiptap/extension-superscript"
 import { HorizontalRule } from "@tiptap/extension-horizontal-rule"
+import { TextStyle } from "@tiptap/extension-text-style"
+import { Color } from "@tiptap/extension-color"
+import { Image } from "@tiptap/extension-image"
 
 // --- Reuse Moses's Components ---
 import { TooltipProvider } from "./components/tooltip"
@@ -85,6 +88,13 @@ const getDefaultExtensions = (placeholder: string): any[] => [
       style: 'border: none; border-top: 2px solid var(--bs-border-color);'
     },
   }),
+  Image.configure({
+    HTMLAttributes: {
+      class: 'img-fluid rounded my-2',
+    },
+    inline: false,
+    allowBase64: true,
+  }),
   TextAlign.configure({ 
     types: ["heading", "paragraph"],
     alignments: ['left', 'center', 'right', 'justify'],
@@ -92,6 +102,8 @@ const getDefaultExtensions = (placeholder: string): any[] => [
   Highlight.configure({
     multicolor: true,
   }),
+  TextStyle,
+  Color,
   Typography,
   Superscript,
   Subscript,

@@ -7,12 +7,14 @@ import { useUndoRedo } from '../hooks/useUndoRedo'
 import { useBlockquote } from '../hooks/useBlockquote'
 import { useCodeBlock } from '../hooks/useCodeBlock'
 import { useHorizontalRule } from '../hooks/useHorizontalRule'
+import { useImageUpload } from '../hooks/useImageUpload'
 import { useHeadingDropdownMenu } from '../hooks/useHeadingDropdownMenu'
 import { useListDropdownMenu } from '../hooks/useListDropdownMenu'
 
 // --- Import components ---
 import { LinkPopover } from '../components/link-popover'
 import { ColorHighlightPopover } from '../components/color-highlight-popover'
+import { ColorTextPopover } from '../components/color-text-popover'
 
 /**
  * Registry of all available toolbar items
@@ -134,6 +136,12 @@ export const TOOLBAR_ITEMS: ToolbarItemRegistry = {
     props: {}
   },
 
+  colorText: {
+    type: 'popover',
+    component: ColorTextPopover,
+    props: { tooltip: 'Text color' }
+  },
+
   colorHighlight: {
     type: 'popover',
     component: ColorHighlightPopover,
@@ -159,6 +167,12 @@ export const TOOLBAR_ITEMS: ToolbarItemRegistry = {
     type: 'button',
     hook: useHorizontalRule,
     tooltip: 'Horizontal line'
+  },
+
+  imageUpload: {
+    type: 'button',
+    hook: useImageUpload,
+    tooltip: 'Insert Image'
   },
 
   // Separator

@@ -4,16 +4,16 @@ import * as React from "react"
 import { type Editor } from "@tiptap/react"
 
 // --- Hooks ---
-import { useColorHighlightPopover, type BootstrapColor } from "../../hooks/useColorHighlightPopover"
+import { useColorTextPopover, type BootstrapColor } from "../../hooks/useColorTextPopover"
 
 // --- Icons ---
-import { Highlighter } from 'react-bootstrap-icons'
+import { Fonts } from 'react-bootstrap-icons'
 
 // --- UI Primitives ---
 import { Popover, PopoverTrigger, PopoverContent } from "../../components/popover"
 
 // --- Types ---
-export interface ColorHighlightPopoverProps {
+export interface ColorTextPopoverProps {
   editor: Editor | null
   hideWhenUnavailable?: boolean
   onColorChanged?: (color: BootstrapColor | 'default') => void
@@ -21,16 +21,16 @@ export interface ColorHighlightPopoverProps {
 }
 
 // --- Color Swatch Component ---
-interface ColorSwatchProps {
+interface ColorTextSwatchProps {
   color: BootstrapColor | 'default'
   isActive: boolean
   onToggle: () => void
   disabled?: boolean
 }
 
-const ColorSwatch = React.memo<ColorSwatchProps>(({ 
+const ColorTextSwatch = React.memo<ColorTextSwatchProps>(({ 
   color, 
-  isActive, 
+  isActive,
   onToggle, 
   disabled = false 
 }) => {
@@ -41,21 +41,29 @@ const ColorSwatch = React.memo<ColorSwatchProps>(({
         type="button"
         onClick={onToggle}
         disabled={disabled}
-        aria-label="Default highlight (remove)"
-        title="Remove highlight"
+        aria-label="Default text color"
+        title="Default text color"
         className={`
-          btn btn-sm p-0 position-relative rounded-circle border border-2 border-secondary
-          bg-light text-dark
+          btn btn-sm p-1 position-relative border border-2 border-secondary
+          bg-light text-dark fw-bold
           ${isActive ? 'border-primary bg-primary-subtle' : ''}
-          ${disabled ? 'disabled' : ''}
+          ${disabled ? 'opacity-50' : 'hover:scale-110'}
         `}
         style={{ 
-          minWidth: '1.5rem',
-          minHeight: '1.5rem',
-          transition: 'transform 0.1s ease-in-out'
+          minWidth: '1.75rem',
+          minHeight: '1.75rem',
+          borderRadius: '50%',
+          transition: 'transform 0.1s ease-in-out',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
         }}
       >
-        <span style={{ fontSize: '0.7rem', lineHeight: 1 }}>×</span>
+        <span 
+          style={{ fontSize: '0.75rem', lineHeight: 1 }}
+        >
+          A
+        </span>
       </button>
     )
   }
@@ -66,31 +74,43 @@ const ColorSwatch = React.memo<ColorSwatchProps>(({
       type="button"
       onClick={onToggle}
       disabled={disabled}
-      aria-label={`${color} highlight`}
-      title={`Apply ${color} highlight`}
+      aria-label={`${color} text color`}
+      title={`Apply ${color} text color`}
       className={`
-        btn btn-sm p-0 position-relative rounded-circle bg-soft-${color}
-        ${isActive ? 'border border-primary' : ''}
-        ${disabled ? 'disabled' : ''}
+        btn btn-sm p-1 position-relative border-0
+        bg-soft-${color}
+        ${isActive ? 'border border-2 border-primary' : ''}
+        ${disabled ? 'opacity-50' : 'hover:scale-110'}
       `}
       style={{ 
-        minWidth: '1.5rem',
-        minHeight: '1.5rem',
-        transition: 'transform 0.1s ease-in-out'
+        minWidth: '1.75rem',
+        minHeight: '1.75rem',
+        borderRadius: '50%',
+        transition: 'transform 0.1s ease-in-out',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
       }}
-    />
+    >
+      <span 
+        className={`fw-bold text-${color}`}
+        style={{ fontSize: '0.75rem', lineHeight: 1 }}
+      >
+        A
+      </span>
+    </button>
   )
 })
 
-ColorSwatch.displayName = 'ColorSwatch'
+ColorTextSwatch.displayName = 'ColorTextSwatch'
 
 // --- Main Component ---
-export function ColorHighlightPopover({
+export function ColorTextPopover({
   editor,
   hideWhenUnavailable = false,
   onColorChanged,
-  tooltip = "Highlight text"
-}: ColorHighlightPopoverProps) {
+  tooltip = "Text color"
+}: ColorTextPopoverProps) {
   const [isOpen, setIsOpen] = React.useState(false)
   
   // Use the official TipTap pattern hook
@@ -99,7 +119,7 @@ export function ColorHighlightPopover({
     canToggle,
     colorStates,
     Icon
-  } = useColorHighlightPopover({
+  } = useColorTextPopover({
     editor,
     hideWhenUnavailable,
     onColorChanged
@@ -136,10 +156,10 @@ export function ColorHighlightPopover({
         </button>
       </PopoverTrigger>
       
-      <PopoverContent aria-label="Highlight colors">
+      <PopoverContent aria-label="Text colors">
         <div className="d-flex align-items-center gap-2">
           {colorStates.map(({ color, isActive, handleToggle }) => (
-            <ColorSwatch
+            <ColorTextSwatch
               key={color}
               color={color}
               isActive={isActive}
@@ -153,4 +173,4 @@ export function ColorHighlightPopover({
   )
 }
 
-export default ColorHighlightPopover
+export default ColorTextPopover

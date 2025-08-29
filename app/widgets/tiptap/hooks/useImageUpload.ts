@@ -1,175 +1,91 @@
 "use client"
 
 import * as React from "react"
-import { type Editor } from "@tiptap/react"
-
-// --- Hooks ---
-import { useTiptapEditor } from "./useTiptapEditor"
-
-// --- Lib ---
-import {
-  isExtensionAvailable,
-  isNodeTypeSelected,
-} from "../utils"
-
-// --- Icons ---
+import type { Editor } from "@tiptap/react"
+import { useEditorCommand } from "./useEditorCommand"
 import { Image } from "react-bootstrap-icons"
+import { isExtensionAvailable, isNodeTypeSelected } from "../utils"
 
-/**
- * Configuration for the image upload functionality
- */
 export interface UseImageUploadConfig {
-  /**
-   * The Tiptap editor instance.
-   */
   editor?: Editor | null
-  /**
-   * Whether the button should hide when insertion is not available.
-   * @default false
-   */
   hideWhenUnavailable?: boolean
-  /**
-   * Callback function called after a successful image insertion.
-   */
   onInserted?: () => void
 }
 
 /**
- * Checks if image can be inserted in the current editor state
+ * Internal utility: Handles file picker and image insertion
  */
-export function canInsertImage(editor: Editor | null): boolean {
-  if (!editor || !editor.isEditable) return false
-  if (
-    !isExtensionAvailable(editor, "image") ||
-    isNodeTypeSelected(editor, ["image"])
-  )
-    return false
-
-  return editor.can().chain().focus().run()
-}
-
-/**
- * Checks if image is currently active
- */
-export function isImageActive(editor: Editor | null): boolean {
-  if (!editor || !editor.isEditable) return false
-  return editor.isActive("image")
-}
-
-/**
- * Inserts an image in the editor
- */
-export function insertImage(editor: Editor | null, src?: string): boolean {
-  if (!editor || !editor.isEditable) return false
-  if (!canInsertImage(editor)) return false
-  if (!isExtensionAvailable(editor, "image")) return false
-
-  // If no src provided, open file picker
-  if (!src) {
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.accept = 'image/*'
-    input.onchange = (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0]
-      if (file) {
-        // Convert to data URL for immediate insertion
-        const reader = new FileReader()
-        reader.onload = (event) => {
-          const imageSrc = event.target?.result as string
-          if (imageSrc) {
-            // Check if setImage command exists
-            if ('setImage' in editor.commands && typeof editor.commands.setImage === 'function') {
-              (editor.chain().focus() as any).setImage({ src: imageSrc }).run()
-            }
-          }
+function insertImageWithFilePicker(editor: Editor, onInserted?: () => void): boolean {
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.accept = 'image/*'
+  
+  input.onchange = (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        const imageSrc = event.target?.result as string
+        if (imageSrc && 'setImage' in editor.commands) {
+          const success = (editor.chain().focus() as any).setImage({ src: imageSrc }).run()
+          if (success) onInserted?.()
         }
-        reader.readAsDataURL(file)
       }
+      reader.readAsDataURL(file)
     }
-    input.click()
-    return true
   }
-
-  try {
-    // Check if setImage command exists before using it
-    if ('setImage' in editor.commands && typeof editor.commands.setImage === 'function') {
-      return (editor
-        .chain()
-        .focus() as any).setImage({ src })
-        .run()
-    }
-    return false
-  } catch {
-    return false
-  }
-}
-
-/**
- * Determines if the image button should be shown
- */
-export function shouldShowButton(props: {
-  editor: Editor | null
-  hideWhenUnavailable: boolean
-}): boolean {
-  const { editor, hideWhenUnavailable } = props
-
-  if (!editor || !editor.isEditable) return false
-  if (!isExtensionAvailable(editor, "image")) return false
-
-  if (hideWhenUnavailable && !editor.isActive("code")) {
-    return canInsertImage(editor)
-  }
-
+  
+  input.click()
   return true
 }
 
-/**
- * Custom hook that provides image functionality for Tiptap editor
- */
 export function useImageUpload(config?: UseImageUploadConfig) {
   const {
-    editor: providedEditor,
+    editor,
     hideWhenUnavailable = false,
     onInserted,
   } = config || {}
 
-  const { editor } = useTiptapEditor(providedEditor)
-  const [isVisible, setIsVisible] = React.useState<boolean>(true)
-  const canInsert = canInsertImage(editor)
-  const isActive = isImageActive(editor)
+  const result = useEditorCommand({
+    editor,
+    hideWhenUnavailable,
+    onToggled: onInserted,
+    canExecute: (editor: Editor) => {
+      if (!editor.isEditable) return false
+      if (
+        !isExtensionAvailable(editor, "image") ||
+        isNodeTypeSelected(editor, ["image"])
+      ) return false
 
-  React.useEffect(() => {
-    if (!editor) return
+      return Boolean('setImage' in editor.commands)
+    },
+    isActive: (editor: Editor) => {
+      return editor.isActive("image")
+    },
+    executeCommand: (editor: Editor) => {
+      return insertImageWithFilePicker(editor, onInserted)
+    },
+    label: "Add image",
+  })
 
-    const handleSelectionUpdate = () => {
-      setIsVisible(shouldShowButton({ editor, hideWhenUnavailable }))
+  const handleInsertImage = React.useCallback((src: string) => {
+    if (!editor || !editor.isEditable || !src) return false
+
+    try {
+      if ('setImage' in editor.commands) {
+        const success = (editor.chain().focus() as any).setImage({ src }).run()
+        if (success) onInserted?.()
+        return success
+      }
+      return false
+    } catch {
+      return false
     }
-
-    handleSelectionUpdate()
-
-    editor.on("selectionUpdate", handleSelectionUpdate)
-
-    return () => {
-      editor.off("selectionUpdate", handleSelectionUpdate)
-    }
-  }, [editor, hideWhenUnavailable])
-
-  const handleImage = React.useCallback(() => {
-    if (!editor) return false
-
-    const success = insertImage(editor)
-    if (success) {
-      onInserted?.()
-    }
-    return success
   }, [editor, onInserted])
 
   return {
-    isVisible,
-    isActive,
-    handleImage,
-    canInsert,
-    label: "Add image",
+    ...result,
     Icon: Image,
+    handleInsertImage, // Direct image insertion with URL
   }
 }

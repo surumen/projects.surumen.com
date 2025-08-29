@@ -29,11 +29,13 @@ export * from './components/popover'
 export * from './components/tooltip'
 export * from './components/link-popover'
 export * from './components/color-highlight-popover'
+export * from './components/color-text-popover'
 
 // Re-export hooks for advanced customization
 export * from './hooks/useTiptapEditor'
 export * from './hooks/useEditorCommand'
 export * from './hooks/useMark'
+export * from './hooks/useColorText'
 
 // Re-export lib
 export * from './utils'

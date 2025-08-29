@@ -2,91 +2,26 @@
 
 import * as React from "react"
 import type { Editor } from "@tiptap/react"
-
-// --- Hooks ---
 import { useTiptapEditor } from "./useTiptapEditor"
+import { Level } from "./useHeading"
 
-// --- Icons ---
-// Note: Using text labels for headings instead of icons
-
-// --- Tiptap UI ---
-import {
-  type Level,
-  isHeadingActive,
-  canToggleHeading as canToggle,
-  shouldShowButton,
-} from "./useHeading"
-
-/**
- * Configuration for the heading dropdown menu functionality
- */
 export interface UseHeadingDropdownMenuConfig {
-  /**
-   * The Tiptap editor instance.
-   */
   editor?: Editor | null
-  /**
-   * Available heading levels to show in the dropdown
-   * @default [1, 2, 3, 4, 5, 6]
-   */
   levels?: Level[]
-  /**
-   * Whether the dropdown should hide when headings are not available.
-   * @default false
-   */
   hideWhenUnavailable?: boolean
 }
 
 /**
- * Gets the currently active heading level from the available levels
+ * Gets the currently active heading level
  */
-export function getActiveHeadingLevel(
+function getActiveHeadingLevel(
   editor: Editor | null,
   levels: Level[] = [1, 2, 3, 4, 5, 6]
 ): Level | undefined {
   if (!editor || !editor.isEditable) return undefined
-  return levels.find((level) => isHeadingActive(editor, level))
+  return levels.find((level) => editor.isActive("heading", { level }))
 }
 
-/**
- * Custom hook that provides heading dropdown menu functionality for Tiptap editor
- *
- * @example
- * ```tsx
- * // Simple usage
- * function MyHeadingDropdown() {
- *   const {
- *     isVisible,
- *     activeLevel,
- *     isAnyHeadingActive,
- *     canToggle,
- *     levels,
- *   } = useHeadingDropdownMenu()
- *
- *   if (!isVisible) return null
- *
- *   return (
- *     <DropdownMenu>
- *       // dropdown content
- *     </DropdownMenu>
- *   )
- * }
- *
- * // Advanced usage with configuration
- * function MyAdvancedHeadingDropdown() {
- *   const {
- *     isVisible,
- *     activeLevel,
- *   } = useHeadingDropdownMenu({
- *     editor: myEditor,
- *     levels: [1, 2, 3],
- *     hideWhenUnavailable: true,
- *   })
- *
- *   // component implementation
- * }
- * ```
- */
 export function useHeadingDropdownMenu(config?: UseHeadingDropdownMenuConfig) {
   const {
     editor: providedEditor,
@@ -98,26 +33,26 @@ export function useHeadingDropdownMenu(config?: UseHeadingDropdownMenuConfig) {
   const [isVisible, setIsVisible] = React.useState(true)
 
   const activeLevel = getActiveHeadingLevel(editor, levels)
-  const isActive = isHeadingActive(editor)
-  const canToggleState = canToggle(editor)
+  const isActive = Boolean(activeLevel)
 
   React.useEffect(() => {
     if (!editor) return
 
     const handleSelectionUpdate = () => {
-      setIsVisible(
-        shouldShowButton({ editor, hideWhenUnavailable, level: levels })
-      )
+      if (hideWhenUnavailable) {
+        setIsVisible(editor.can().setHeading({ level: 1 })) // Test if headings are available
+      } else {
+        setIsVisible(true)
+      }
     }
 
     handleSelectionUpdate()
-
     editor.on("selectionUpdate", handleSelectionUpdate)
-
+    
     return () => {
       editor.off("selectionUpdate", handleSelectionUpdate)
     }
-  }, [editor, hideWhenUnavailable, levels])
+  }, [editor, hideWhenUnavailable])
 
   // Generate items array for dropdown
   const items = React.useMemo(() => {
@@ -135,7 +70,7 @@ export function useHeadingDropdownMenu(config?: UseHeadingDropdownMenuConfig) {
       dropdownItems.push({
         text: `Heading ${level}`,
         onClick: () => editor.chain().focus().setHeading({ level }).run(),
-        active: isHeadingActive(editor, level)
+        active: editor.isActive("heading", { level })
       })
     })
     
@@ -146,7 +81,7 @@ export function useHeadingDropdownMenu(config?: UseHeadingDropdownMenuConfig) {
     isVisible,
     activeLevel,
     isActive,
-    canToggle: canToggleState,
+    canToggle: Boolean(editor?.can().setHeading({ level: 1 })),
     levels,
     label: "Text Format",
     displayText: activeLevel ? `Heading ${activeLevel}` : "Paragraph",

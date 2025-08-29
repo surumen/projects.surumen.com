@@ -1,13 +1,9 @@
 "use client"
 
-import * as React from "react"
-import { type Editor } from "@tiptap/react"
+import type { Editor } from "@tiptap/react"
 import { NodeSelection, TextSelection } from "@tiptap/pm/state"
-
-// --- Hooks ---
-import { useTiptapEditor } from "./useTiptapEditor"
-
-// --- Lib ---
+import { useEditorCommand } from "./useEditorCommand"
+import { CodeSquare } from 'react-bootstrap-icons'
 import {
   findNodePosition,
   isNodeInSchema,
@@ -15,78 +11,22 @@ import {
   isValidPosition,
 } from "../utils"
 
-// --- Icons ---
-import { CodeSquare } from 'react-bootstrap-icons'
-
-/**
- * Configuration for the code block functionality
- */
 export interface UseCodeBlockConfig {
-  /**
-   * The Tiptap editor instance.
-   */
   editor?: Editor | null
-  /**
-   * Whether the button should hide when code block is not available.
-   * @default false
-   */
   hideWhenUnavailable?: boolean
-  /**
-   * Callback function called after a successful code block toggle.
-   */
   onToggled?: () => void
 }
 
 /**
- * Checks if code block can be toggled in the current editor state
+ * Internal utility: Toggles code block with complex selection handling
  */
-export function canToggle(
-  editor: Editor | null,
-  turnInto: boolean = true
-): boolean {
-  if (!editor || !editor.isEditable) return false
-  if (
-    !isNodeInSchema("codeBlock", editor) ||
-    isNodeTypeSelected(editor, ["image"])
-  )
-    return false
-
-  if (!turnInto) {
-    return editor.can().toggleNode("codeBlock", "paragraph")
-  }
-
-  try {
-    const view = editor.view
-    const state = view.state
-    const selection = state.selection
-
-    if (selection.empty || selection instanceof TextSelection) {
-      const pos = findNodePosition({
-        editor,
-        node: state.selection.$anchor.node(1),
-      })?.pos
-      if (!isValidPosition(pos)) return false
-    }
-
-    return true
-  } catch {
-    return false
-  }
-}
-
-/**
- * Toggles code block in the editor
- */
-export function toggleCodeBlock(editor: Editor | null): boolean {
-  if (!editor || !editor.isEditable) return false
-  if (!canToggle(editor)) return false
-
+function toggleCodeBlockCommand(editor: Editor): boolean {
   try {
     const view = editor.view
     let state = view.state
     let tr = state.tr
 
-    // No selection, find the the cursor position
+    // Handle empty or text selections by finding the node position
     if (state.selection.empty || state.selection instanceof TextSelection) {
       const pos = findNodePosition({
         editor,
@@ -100,7 +40,6 @@ export function toggleCodeBlock(editor: Editor | null): boolean {
     }
 
     const selection = state.selection
-
     let chain = editor.chain().focus()
 
     // Handle NodeSelection
@@ -119,12 +58,12 @@ export function toggleCodeBlock(editor: Editor | null): boolean {
       chain = chain.setTextSelection({ from, to }).clearNodes()
     }
 
+    // Toggle code block
     const toggle = editor.isActive("codeBlock")
       ? chain.setNode("paragraph")
       : chain.toggleNode("codeBlock", "paragraph")
 
     toggle.run()
-
     editor.chain().focus().selectTextblockEnd().run()
 
     return true
@@ -133,72 +72,38 @@ export function toggleCodeBlock(editor: Editor | null): boolean {
   }
 }
 
-/**
- * Determines if the code block button should be shown
- */
-export function shouldShowButton(props: {
-  editor: Editor | null
-  hideWhenUnavailable: boolean
-}): boolean {
-  const { editor, hideWhenUnavailable } = props
-
-  if (!editor || !editor.isEditable) return false
-  if (!isNodeInSchema("codeBlock", editor)) return false
-
-  if (hideWhenUnavailable && !editor.isActive("code")) {
-    return canToggle(editor)
-  }
-
-  return true
-}
-
-/**
- * Custom hook that provides code block functionality for Tiptap editor
- */
 export function useCodeBlock(config?: UseCodeBlockConfig) {
   const {
-    editor: providedEditor,
+    editor,
     hideWhenUnavailable = false,
     onToggled,
   } = config || {}
 
-  const { editor } = useTiptapEditor(providedEditor)
-  const [isVisible, setIsVisible] = React.useState<boolean>(true)
-  const canToggleState = canToggle(editor)
-  const isActive = editor?.isActive("codeBlock") || false
+  const result = useEditorCommand({
+    editor,
+    hideWhenUnavailable,
+    onToggled,
+    shortcutKeys: "mod+alt+c",
+    canExecute: (editor: Editor) => {
+      if (!editor.isEditable) return false
+      if (
+        !isNodeInSchema("codeBlock", editor) ||
+        isNodeTypeSelected(editor, ["image"])
+      ) return false
 
-  React.useEffect(() => {
-    if (!editor) return
-
-    const handleSelectionUpdate = () => {
-      setIsVisible(shouldShowButton({ editor, hideWhenUnavailable }))
-    }
-
-    handleSelectionUpdate()
-
-    editor.on("selectionUpdate", handleSelectionUpdate)
-
-    return () => {
-      editor.off("selectionUpdate", handleSelectionUpdate)
-    }
-  }, [editor, hideWhenUnavailable])
-
-  const handleToggle = React.useCallback(() => {
-    if (!editor) return false
-
-    const success = toggleCodeBlock(editor)
-    if (success) {
-      onToggled?.()
-    }
-    return success
-  }, [editor, onToggled])
+      return editor.can().toggleNode("codeBlock", "paragraph")
+    },
+    isActive: (editor: Editor) => {
+      return editor.isActive("codeBlock")
+    },
+    executeCommand: (editor: Editor) => {
+      return toggleCodeBlockCommand(editor)
+    },
+    label: "Code Block",
+  })
 
   return {
-    isVisible,
-    isActive,
-    handleToggle,
-    canToggle: canToggleState,
-    label: "Code Block",
+    ...result,
     Icon: CodeSquare,
   }
 }

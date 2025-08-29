@@ -30,11 +30,11 @@ export const TOOLBAR_VARIANTS: ToolbarVariantRegistry = {
       },
       {
         name: 'blocks',
-        items: ['blockquote', 'codeBlock']
+        items: ['blockquote', 'codeBlock', 'imageUpload']
       },
       {
         name: 'links',
-        items: ['linkPopover', 'colorHighlight']
+        items: ['linkPopover', 'colorText', 'colorHighlight']
       }
     ]
   },
@@ -55,11 +55,11 @@ export const TOOLBAR_VARIANTS: ToolbarVariantRegistry = {
       },
       {
         name: 'advanced',
-        items: ['linkPopover', 'colorHighlight']
+        items: ['linkPopover', 'colorText', 'colorHighlight']
       },
       {
         name: 'blocks',
-        items: ['blockquote', 'codeBlock', 'horizontalRule']
+        items: ['blockquote', 'codeBlock', 'horizontalRule', 'imageUpload']
       },
       {
         name: 'textStyles',

@@ -70,19 +70,10 @@ export const ToolbarButton = React.forwardRef<HTMLButtonElement, ToolbarButtonPr
     const {
       isVisible,
       isActive = false,
+      handleToggle,
+      canToggle,
       label,
       Icon,
-      // Try different handler names for backward compatibility
-      handleAction,
-      handleToggle, 
-      handleTextAlign,
-      handleInsert,
-      handleImage,
-      // Capability checks
-      canAction,
-      canToggle,
-      canAlign,
-      canInsert,
     } = hookResult
 
     // Don't render if hook says not visible
@@ -90,11 +81,9 @@ export const ToolbarButton = React.forwardRef<HTMLButtonElement, ToolbarButtonPr
       return null
     }
 
-    // Determine the actual handler
-    const actualHandler = handleAction || handleToggle || handleTextAlign || handleInsert || handleImage
-
-    // Determine if button is disabled
-    const isDisabled = !(canAction ?? canToggle ?? canAlign ?? canInsert ?? true)
+    // All hooks now consistently return these properties
+    const actualHandler = handleToggle
+    const isDisabled = !canToggle
 
     // Determine button styling
     const buttonClass = cn(
