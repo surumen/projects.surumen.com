@@ -4,15 +4,7 @@ import type { Editor } from "@tiptap/react"
 import { useEditorCommand } from "./useEditorCommand"
 import { TypeBold } from 'react-bootstrap-icons'
 import { isMarkInSchema, isNodeTypeSelected } from "../utils"
-
-export type BootstrapColor = 
-  | "primary"
-  | "secondary" 
-  | "success"
-  | "danger"
-  | "warning"
-  | "info"
-  | "dark"
+import type { BootstrapColor } from "../components/shared/ColorSwatch"
 
 export interface UseColorTextConfig {
   editor?: Editor | null
@@ -28,6 +20,7 @@ const textColorMap: Record<BootstrapColor, string> = {
   danger: "var(--bs-danger)",
   warning: "var(--bs-warning)",
   info: "var(--bs-info)",
+  light: "var(--bs-light)",
   dark: "var(--bs-dark)",
 }
 

@@ -2,17 +2,9 @@
 
 import * as React from "react"
 import { type Editor } from "@tiptap/react"
+import { ColorPopover } from "../shared/ColorPopover"
+import type { BootstrapColor } from "../shared/ColorSwatch"
 
-// --- Hooks ---
-import { useColorHighlightPopover, type BootstrapColor } from "../../hooks/useColorHighlightPopover"
-
-// --- Icons ---
-import { Highlighter } from 'react-bootstrap-icons'
-
-// --- UI Primitives ---
-import { Popover, PopoverTrigger, PopoverContent } from "../../components/popover"
-
-// --- Types ---
 export interface ColorHighlightPopoverProps {
   editor: Editor | null
   hideWhenUnavailable?: boolean
@@ -20,137 +12,19 @@ export interface ColorHighlightPopoverProps {
   tooltip?: string
 }
 
-// --- Color Swatch Component ---
-interface ColorSwatchProps {
-  color: BootstrapColor | 'default'
-  isActive: boolean
-  onToggle: () => void
-  disabled?: boolean
-}
-
-const ColorSwatch = React.memo<ColorSwatchProps>(({ 
-  color, 
-  isActive, 
-  onToggle, 
-  disabled = false 
-}) => {
-  // Default color swatch styling
-  if (color === 'default') {
-    return (
-      <button
-        type="button"
-        onClick={onToggle}
-        disabled={disabled}
-        aria-label="Default highlight (remove)"
-        title="Remove highlight"
-        className={`
-          btn btn-sm p-0 position-relative rounded-circle border border-2 border-secondary
-          bg-light text-dark
-          ${isActive ? 'border-primary bg-primary-subtle' : ''}
-          ${disabled ? 'disabled' : ''}
-        `}
-        style={{ 
-          minWidth: '1.5rem',
-          minHeight: '1.5rem',
-          transition: 'transform 0.1s ease-in-out'
-        }}
-      >
-        <span style={{ fontSize: '0.7rem', lineHeight: 1 }}>×</span>
-      </button>
-    )
-  }
-
-  // Regular color swatch
+/**
+ * Highlight color popover component - specific implementation of ColorPopover
+ */
+export function ColorHighlightPopover(props: ColorHighlightPopoverProps) {
   return (
-    <button
-      type="button"
-      onClick={onToggle}
-      disabled={disabled}
-      aria-label={`${color} highlight`}
-      title={`Apply ${color} highlight`}
-      className={`
-        btn btn-sm p-0 position-relative rounded-circle bg-soft-${color}
-        ${isActive ? 'border border-primary' : ''}
-        ${disabled ? 'disabled' : ''}
-      `}
-      style={{ 
-        minWidth: '1.5rem',
-        minHeight: '1.5rem',
-        transition: 'transform 0.1s ease-in-out'
-      }}
+    <ColorPopover 
+      {...props} 
+      variant="highlight"
     />
-  )
-})
-
-ColorSwatch.displayName = 'ColorSwatch'
-
-// --- Main Component ---
-export function ColorHighlightPopover({
-  editor,
-  hideWhenUnavailable = false,
-  onColorChanged,
-  tooltip = "Highlight text"
-}: ColorHighlightPopoverProps) {
-  const [isOpen, setIsOpen] = React.useState(false)
-  
-  // Use the official TipTap pattern hook
-  const {
-    isVisible,
-    canToggle,
-    colorStates,
-    Icon
-  } = useColorHighlightPopover({
-    editor,
-    hideWhenUnavailable,
-    onColorChanged
-  })
-
-  // Handle trigger button click
-  const handleTriggerClick = React.useCallback((event: React.MouseEvent) => {
-    event.preventDefault()
-    setIsOpen(!isOpen)
-  }, [isOpen])
-
-  // Handle color toggle with callback
-  const handleColorToggle = React.useCallback((toggleFn: () => boolean) => {
-    const success = toggleFn()
-    if (success) {
-      setIsOpen(false)
-    }
-  }, [])
-
-  if (!isVisible) return null
-
-  return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
-          onClick={handleTriggerClick}
-          title={tooltip}
-          aria-label={tooltip}
-          disabled={!canToggle}
-          className="btn btn-sm btn-icon btn-ghost-secondary"
-        >
-          <Icon size={14} />
-        </button>
-      </PopoverTrigger>
-      
-      <PopoverContent aria-label="Highlight colors">
-        <div className="d-flex align-items-center gap-2">
-          {colorStates.map(({ color, isActive, handleToggle }) => (
-            <ColorSwatch
-              key={color}
-              color={color}
-              isActive={isActive}
-              onToggle={() => handleColorToggle(handleToggle)}
-              disabled={!canToggle}
-            />
-          ))}
-        </div>
-      </PopoverContent>
-    </Popover>
   )
 }
 
 export default ColorHighlightPopover
+
+// Re-export shared types  
+export type { BootstrapColor } from "../shared/ColorSwatch"
