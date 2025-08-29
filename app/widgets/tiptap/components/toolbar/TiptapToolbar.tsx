@@ -7,30 +7,7 @@ import type { Editor } from "@tiptap/react"
 import { ToolbarRenderer } from "./ToolbarRenderer"
 
 // --- Types ---
-import type { ToolbarVariantConfig } from "../../config/types"
-
-export interface TiptapToolbarProps {
-  /**
-   * The Tiptap editor instance
-   */
-  editor: Editor | null
-  /**
-   * Toolbar variant - controls which tools are displayed
-   */
-  variant?: 'full' | 'compact' | 'minimal'
-  /**
-   * Custom toolbar configuration (overrides variant)
-   */
-  customConfig?: ToolbarVariantConfig
-  /**
-   * Additional CSS classes
-   */
-  className?: string
-  /**
-   * Whether to show the toolbar
-   */
-  visible?: boolean
-}
+import type { TiptapToolbarProps } from "../../types"
 
 /**
  * TiptapToolbar Component - Configuration-based toolbar for the Tiptap editor

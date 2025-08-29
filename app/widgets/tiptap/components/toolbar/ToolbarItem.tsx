@@ -5,10 +5,10 @@ import type { Editor } from "@tiptap/react"
 
 // --- Components ---
 import { ToolbarButton } from "./ToolbarButton"
-import { Dropdown } from "@/widgets/components/dropdown"
+import { Dropdown } from "../../../components/dropdown"
 
 // --- Types ---
-import type { ToolbarItemProps } from "../../config/types"
+import type { ToolbarItemProps } from "../../types"
 
 // --- Utils ---
 import { cn } from "../../utils"

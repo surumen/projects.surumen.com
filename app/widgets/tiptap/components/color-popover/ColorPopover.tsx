@@ -1,19 +1,17 @@
 "use client"
 
 import * as React from "react"
-import { Fonts, Highlighter, XCircle } from 'react-bootstrap-icons';
+import { Fonts, Highlighter, XCircle } from 'react-bootstrap-icons'
 
 // --- Hooks ---
-import { useColorPopover, type UseColorPopoverConfig } from "../../hooks/useColorPopover"
+import { useColorPopover } from "../../hooks/useColorPopover"
 
 // --- Components ---
-import { ColorSwatch, } from "@/widgets/tiptap/components/color-popover/ColorSwatch"
+import { ColorSwatch } from "./ColorSwatch"
 import { Popover, PopoverTrigger, PopoverContent } from "../../../components/popover"
 
-export interface ColorPopoverProps extends Omit<UseColorPopoverConfig, 'variant'> {
-  variant: 'text' | 'highlight'
-  tooltip?: string
-}
+// --- Types ---
+import type { ColorPopoverProps } from "../../types"
 
 /**
  * Variant-specific configurations

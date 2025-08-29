@@ -21,38 +21,8 @@ import { TiptapToolbar } from "./components/toolbar"
 // --- Utils ---
 import { cn } from "./utils"
 
-/**
- * Props interface designed specifically for forms integration
- */
-export interface TiptapProps {
-  // Form integration (required - always controlled)
-  value: string
-  onChange?: (html: string) => void
-  
-  // Form events
-  onBlur?: (event?: FocusEvent) => void
-  onFocus?: (event?: FocusEvent) => void
-  
-  // Form field props
-  name?: string
-  id?: string
-  placeholder?: string
-  disabled?: boolean
-  readOnly?: boolean
-  required?: boolean
-  
-  // Styling
-  className?: string
-  minHeight?: string | number
-  
-  // Toolbar options
-  variant?: 'full' | 'compact' | 'minimal'
-  showToolbar?: boolean
-  
-  // Advanced
-  extensions?: any[]
-  autoFocus?: boolean
-}
+// --- Types ---
+import type { TiptapProps } from "./types"
 
 /**
  * Default extensions optimized for forms usage

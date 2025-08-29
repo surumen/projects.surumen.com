@@ -4,21 +4,21 @@ import * as React from "react"
 import type { Editor } from "@tiptap/react"
 
 // --- Hooks ---
-import { useTiptapEditor } from '@/widgets/tiptap'
+import { useTiptapEditor } from '../../hooks/useTiptapEditor'
 
 // --- Icons ---
 import { ArrowReturnLeft, BoxArrowUpRight, Link, Trash } from 'react-bootstrap-icons'
 
 // --- Tiptap UI ---
-import { useLink } from "@/widgets/tiptap/hooks/useLink"
+import { useLink } from "../../hooks/useLink"
 
 // --- UI Primitives ---
-import { ToolbarButton } from "@/widgets/tiptap/components/toolbar/ToolbarButton"
+import { ToolbarButton } from "../toolbar/ToolbarButton"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/widgets/components/popover"
+} from "../../../components/popover"
 
 export interface LinkPopoverProps {
   /**

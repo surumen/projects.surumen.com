@@ -4,7 +4,7 @@ import type { Editor } from "@tiptap/react"
 import { useEditorCommand } from "./useEditorCommand"
 import { PaletteFill } from 'react-bootstrap-icons'
 import { isMarkInSchema, isNodeTypeSelected } from "../utils"
-import type { BootstrapColor } from "@/widgets/tiptap/components/color-popover/ColorSwatch"
+import type { BootstrapColor } from "../types"
 
 export interface UseColorHighlightConfig {
   editor?: Editor | null

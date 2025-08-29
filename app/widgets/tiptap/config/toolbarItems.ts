@@ -1,4 +1,4 @@
-import type { ToolbarItemRegistry } from './types'
+import type { ToolbarItemRegistry } from '../types'
 
 // --- Import hooks ---
 import { useMark } from '../hooks/useMark'
@@ -13,7 +13,7 @@ import { useListDropdownMenu } from '../hooks/useListDropdownMenu'
 
 // --- Import components ---
 import { LinkPopover } from '../components/link-popover'
-import { ColorPopover } from '../components/color-popover/ColorPopover'
+import { ColorPopover } from '../components/color-popover'
 
 /**
  * Registry of all available toolbar items

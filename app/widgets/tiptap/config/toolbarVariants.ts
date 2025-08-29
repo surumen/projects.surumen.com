@@ -1,4 +1,4 @@
-import type { ToolbarVariantRegistry } from './types'
+import type { ToolbarVariantRegistry } from '../types'
 
 /**
  * Registry of toolbar variant configurations

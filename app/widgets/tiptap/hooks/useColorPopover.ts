@@ -3,14 +3,7 @@
 import * as React from "react"
 import { type Editor } from "@tiptap/react"
 import { isMarkInSchema, isNodeTypeSelected } from "../utils"
-import type { BootstrapColor } from "@/widgets/tiptap/components/color-popover/ColorSwatch"
-
-export interface UseColorPopoverConfig {
-  editor: Editor | null
-  variant: 'text' | 'highlight'
-  hideWhenUnavailable?: boolean
-  onColorChanged?: (color: BootstrapColor | null) => void
-}
+import type { BootstrapColor, UseColorPopoverConfig } from "../types"
 
 /**
  * Color maps for different variants

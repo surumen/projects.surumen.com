@@ -8,7 +8,7 @@ import { ToolbarItem } from "./ToolbarItem"
 
 // --- Configuration ---
 import { TOOLBAR_ITEMS, TOOLBAR_VARIANTS } from "../../config"
-import type { ToolbarRendererProps } from "../../config/types"
+import type { ToolbarRendererProps } from "../../types"
 
 // --- Utils ---
 import { cn } from "../../utils"
