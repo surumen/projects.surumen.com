@@ -49,14 +49,14 @@ export interface UseColorHighlightConfig {
  * Bootstrap semantic color to CSS color mapping
  */
 export const bootstrapColorMap: Record<BootstrapColor, string> = {
-  primary: "var(--bs-primary)",
-  secondary: "var(--bs-secondary)",
-  success: "var(--bs-success)", 
-  danger: "var(--bs-danger)",
-  warning: "var(--bs-warning)",
-  info: "var(--bs-info)",
-  light: "var(--bs-light)",
-  dark: "var(--bs-dark)",
+  primary: "rgba(var(--bs-primary-rgb), 0.1)",
+  secondary: "rgba(var(--bs-secondary-rgb), 0.1)",
+  success: "rgba(var(--bs-success-rgb), 0.1)", 
+  danger: "rgba(var(--bs-danger-rgb), 0.1)",
+  warning: "rgba(var(--bs-warning-rgb), 0.1)",
+  info: "rgba(var(--bs-info-rgb), 0.1)",
+  light: "rgba(var(--bs-light-rgb), 0.1)",
+  dark: "rgba(var(--bs-dark-rgb), 0.1)",
 }
 
 /**
@@ -209,7 +209,8 @@ export function useColorHighlight(config: UseColorHighlightConfig) {
     isActive,
     handleToggle,
     handleRemoveHighlight,
-    canHighlight,
+    canToggle: canHighlight,  // Renamed for ToolbarButton compatibility
+    canHighlight, // Keep original for backward compatibility
     label: `Highlight ${highlightColor}`,
     Icon: PaletteFill,
   }

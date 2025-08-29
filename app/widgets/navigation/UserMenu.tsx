@@ -1,6 +1,15 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Bell, BoxArrowRight, BrightnessHigh, UnlockFill, Unlock, XDiamond } from 'react-bootstrap-icons';
+import {
+    Bell,
+    BoxArrowRight,
+    BrightnessHigh,
+    UnlockFill,
+    Unlock,
+    XDiamond,
+    Unlock2,
+    ShieldLock
+} from 'react-bootstrap-icons';
 import { useAuth } from '../../../lib/firebase/AuthContext';
 import { useAppStore } from '@/store/store';
 
@@ -69,7 +78,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ className = "" }) => {
           title="Sign out"
           onClick={handleLogout}
         >
-          <Unlock size={16} />
+          <ShieldLock size={18} />
         </button>
       </li>
     </ul>

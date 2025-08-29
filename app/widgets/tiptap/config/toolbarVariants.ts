@@ -34,7 +34,7 @@ export const TOOLBAR_VARIANTS: ToolbarVariantRegistry = {
       },
       {
         name: 'links',
-        items: ['linkPopover']
+        items: ['linkPopover', 'colorHighlight']
       }
     ]
   },

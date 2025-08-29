@@ -5,99 +5,161 @@ import { type Editor } from "@tiptap/react"
 
 // --- Hooks ---
 import { useTiptapEditor } from "../../hooks/useTiptapEditor"
+import { 
+  type BootstrapColor,
+  type UseColorHighlightConfig,
+  canColorHighlight,
+  isColorHighlightActive,
+  toggleColorHighlight,
+  removeHighlight,
+  shouldShowButton
+} from "../../hooks/useColorHighlight"
 
 // --- Icons ---
-import { Eraser, PaletteFill } from 'react-bootstrap-icons'
+import { Eraser, Highlighter } from 'react-bootstrap-icons'
 
 // --- UI Primitives ---
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "../../components/popover"
-import { Tooltip, TooltipTrigger, TooltipContent } from "../../components/tooltip"
+import { Popover, PopoverTrigger, PopoverContent } from "../../components/popover"
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/widgets/tiptap';
 
-// --- Tiptap UI ---
-import type { BootstrapColor, UseColorHighlightConfig } from "../../hooks/useColorHighlight"
-import { useColorHighlight, bootstrapColorMap } from "../../hooks/useColorHighlight"
-
-export interface ColorHighlightPopoverProps
-  extends Pick<
-    UseColorHighlightConfig,
-    "editor" | "hideWhenUnavailable" | "onToggled"
-  > {
-  /**
-   * Optional colors to use in the highlight popover.
-   * If not provided, defaults to a predefined set of colors.
-   */
+// --- Types ---
+export interface ColorHighlightPopoverProps extends Pick<UseColorHighlightConfig, "editor" | "hideWhenUnavailable" | "onToggled"> {
   colors?: BootstrapColor[]
-  /**
-   * Tooltip text for the highlight button
-   */
   tooltip?: string
+  showRemoveButton?: boolean
 }
 
+// --- Single Hook Managing Multiple Colors ---
+function useMultiColorHighlight(colors: BootstrapColor[], editor: Editor | null, hideWhenUnavailable: boolean = false) {
+  const [activeColors, setActiveColors] = React.useState<Set<BootstrapColor>>(new Set())
+  const [isVisible, setIsVisible] = React.useState(true)
+
+  // Single effect to track all colors efficiently
+  React.useEffect(() => {
+    if (!editor) {
+      setActiveColors(new Set())
+      setIsVisible(false)
+      return
+    }
+
+    const updateState = () => {
+      // Check which colors are active
+      const active = new Set<BootstrapColor>()
+      colors.forEach(color => {
+        if (isColorHighlightActive(editor, color)) {
+          active.add(color)
+        }
+      })
+      setActiveColors(active)
+
+      // Update visibility
+      setIsVisible(shouldShowButton({ editor, hideWhenUnavailable }))
+    }
+
+    updateState()
+    
+    // Single event listener for all colors
+    editor.on('selectionUpdate', updateState)
+    editor.on('transaction', updateState)
+
+    return () => {
+      editor.off('selectionUpdate', updateState)
+      editor.off('transaction', updateState)
+    }
+  }, [editor, colors, hideWhenUnavailable])
+
+  // Create color state objects
+  const colorStates = React.useMemo(() => 
+    colors.map(color => ({
+      color,
+      isActive: activeColors.has(color),
+      canHighlight: canColorHighlight(editor),
+      handleToggle: () => toggleColorHighlight(editor, color)
+    })), [colors, activeColors, editor]
+  )
+
+  return {
+    colorStates,
+    isVisible,
+    canHighlight: canColorHighlight(editor),
+    hasAnyHighlight: activeColors.size > 0,
+    handleRemoveHighlight: () => removeHighlight(editor)
+  }
+}
+
+// --- Color Swatch Component ---
+interface ColorSwatchProps {
+  color: BootstrapColor
+  isActive: boolean
+  onToggle: () => void
+  disabled?: boolean
+}
+
+const ColorSwatch = React.memo<ColorSwatchProps>(({ 
+  color, 
+  isActive, 
+  onToggle, 
+  disabled = false 
+}) => (
+  <button
+    type="button"
+    onClick={onToggle}
+    disabled={disabled}
+    aria-label={`${color} highlight`}
+    title={`Apply ${color} highlight`}
+    className={`
+      btn btn-sm p-0 position-relative border-0
+      bg-soft-${color}
+      ${isActive ? 'ring ring-primary ring-opacity-50' : ''}
+      ${disabled ? 'opacity-50' : 'hover:scale-110'}
+    `}
+    style={{ 
+      minWidth: '1.5rem',
+      minHeight: '1.5rem',
+      borderRadius: '50%',
+      transition: 'transform 0.1s ease-in-out'
+    }}
+  />
+))
+
+ColorSwatch.displayName = 'ColorSwatch'
+
+// --- Main Component ---
 export function ColorHighlightPopover({
   editor: providedEditor,
-  colors = ["primary", "success", "warning", "danger", "info"] as BootstrapColor[],
   hideWhenUnavailable = false,
   onToggled,
+  colors = ["primary", "success", "warning", "danger", "info"],
   tooltip = "Highlight text",
+  showRemoveButton = true
 }: ColorHighlightPopoverProps) {
   const { editor } = useTiptapEditor(providedEditor)
   const [isOpen, setIsOpen] = React.useState(false)
+  
+  // Use our single efficient hook
+  const {
+    colorStates,
+    isVisible,
+    hasAnyHighlight,
+    handleRemoveHighlight
+  } = useMultiColorHighlight(colors, editor, hideWhenUnavailable)
 
-  // Use the hook just for visibility and state, but not for the trigger button action
-  const { isVisible, canHighlight } = useColorHighlight({
-    editor,
-    highlightColor: "primary", // Just for checking general highlight state
-    hideWhenUnavailable,
-    onToggled,
-  })
+  // Handle trigger button click
+  const handleTriggerClick = React.useCallback((event: React.MouseEvent) => {
+    event.preventDefault()
+    setIsOpen(!isOpen)
+  }, [isOpen])
 
-  // Get remove highlight function
-  const { handleRemoveHighlight } = useColorHighlight({ 
-    editor, 
-    highlightColor: "primary" // Just for the hook, we'll use the remove function
-  })
-
-  // Pre-create hooks for all possible colors to comply with rules of hooks
-  const primaryHook = useColorHighlight({ editor, highlightColor: "primary" })
-  const successHook = useColorHighlight({ editor, highlightColor: "success" })
-  const warningHook = useColorHighlight({ editor, highlightColor: "warning" })
-  const dangerHook = useColorHighlight({ editor, highlightColor: "danger" })
-  const infoHook = useColorHighlight({ editor, highlightColor: "info" })
-  const secondaryHook = useColorHighlight({ editor, highlightColor: "secondary" })
-  const lightHook = useColorHighlight({ editor, highlightColor: "light" })
-  const darkHook = useColorHighlight({ editor, highlightColor: "dark" })
-
-  // Map colors to their hooks
-  const colorHookMap: Record<BootstrapColor, ReturnType<typeof useColorHighlight>> = {
-    primary: primaryHook,
-    success: successHook,
-    warning: warningHook,
-    danger: dangerHook,
-    info: infoHook,
-    secondary: secondaryHook,
-    light: lightHook,
-    dark: darkHook,
-  }
-
-  // Filter to only the colors we want to display
-  const colorHooks = colors.map(color => ({
-    color,
-    ...colorHookMap[color]
-  }))
-
-  // Close popover when any color is selected
-  const handleColorToggle = React.useCallback((colorHandler: () => boolean | void) => {
-    const success = colorHandler()
+  // Handle color toggle with callback
+  const handleColorToggle = React.useCallback((toggleFn: () => boolean) => {
+    const success = toggleFn()
     if (success) {
       setIsOpen(false)
       onToggled?.()
     }
   }, [onToggled])
 
+  // Handle remove highlight
   const handleRemoveClick = React.useCallback(() => {
     const success = handleRemoveHighlight()
     if (success) {
@@ -110,61 +172,43 @@ export function ColorHighlightPopover({
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <PopoverTrigger asChild>
-            <button
-              type="button"
-              disabled={!canHighlight}
-              className="btn btn-sm btn-icon border-0 "
-              aria-label="Highlight text"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              <PaletteFill size={14} />
-            </button>
-          </PopoverTrigger>
-        </TooltipTrigger>
-        <TooltipContent>{tooltip}</TooltipContent>
-      </Tooltip>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          onClick={handleTriggerClick}
+          title={tooltip}
+          aria-label={tooltip}
+          className='btn btn-sm btn-icon btn-ghost-secondary'
+        >
+          <Highlighter size={14} />
+        </button>
+      </PopoverTrigger>
       
       <PopoverContent aria-label="Highlight colors">
-        <div className="d-flex gap-2 align-items-center">
-          {/* Color swatches */}
-          {colorHooks.map(({ color, isActive, handleToggle }) => (
+        <div className="row align-items-center col-sm-divider">
+          <div className="col d-flex align-items-center gap-2">
+            {colorStates.map(({ color, isActive, canHighlight, handleToggle }) => (
+                <ColorSwatch
+                    key={color}
+                    color={color}
+                    isActive={isActive}
+                    onToggle={() => handleColorToggle(handleToggle)}
+                    disabled={!canHighlight}
+                />
+            ))}
+          </div>
+          <div className="col-auto">
             <button
-              key={color}
-              type="button"
-              onClick={() => handleColorToggle(handleToggle)}
-              aria-label={`${color} highlight color`}
-              title={`${color} highlight`}
-              className={`btn d-inline-flex align-items-center justify-content-center text-decoration-none btn-sm p-0 position-relative ${
-                isActive 
-                  ? 'border border-primary' 
-                  : 'border'
-              }`}
-              style={{ 
-                minWidth: '1.5rem',
-                minHeight: '1.5rem',
-                borderRadius: '50%',
-                backgroundColor: bootstrapColorMap[color],
-              }}
-            />
-          ))}
-
-          {/* Divider */}
-          <div className="vr"></div>
-
-          {/* Remove highlight button */}
-          <button
-            onClick={handleRemoveClick}
-            aria-label="Remove highlight"
-            title="Remove highlight"
-            type="button"
-            className="btn btn-ghost btn-sm d-inline-flex align-items-center justify-content-center"
-            style={{ minWidth: '1.5rem', minHeight: '1.5rem' }}
-          >
-            <Eraser style={{ width: '1rem', height: '1rem' }} />
-          </button>
+                type="button"
+                onClick={handleRemoveClick}
+                title="Remove highlight"
+                aria-label="Remove highlight"
+                className="btn btn-sm btn-icon btn-ghost-secondary rounded-circle"
+                disabled={!hasAnyHighlight}
+            >
+              <Eraser size={14} />
+            </button>
+          </div>
         </div>
       </PopoverContent>
     </Popover>
