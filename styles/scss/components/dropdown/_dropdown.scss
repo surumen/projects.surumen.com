@@ -22,10 +22,17 @@
 
 // Item
 .dropdown-item {
+  color: $dropdown-color;
   @include border-radius($dropdown-item-border-radius);
 
   &:not(:last-child) {
     margin-bottom: $dropdown-item-margin-y;
+  }
+
+  &.active:not(:focus):not(:active),
+  &.active:active:focus {
+    color: $dropdown-link-active-color;
+    background-color: $dropdown-link-active-bg;
   }
 
   &:active {

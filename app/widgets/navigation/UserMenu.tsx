@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Bell, BoxArrowRight, BrightnessHigh } from 'react-bootstrap-icons';
+import { Bell, BoxArrowRight, BrightnessHigh, UnlockFill, Unlock, XDiamond } from 'react-bootstrap-icons';
 import { useAuth } from '../../../lib/firebase/AuthContext';
 import { useAppStore } from '@/store/store';
 
@@ -24,17 +24,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ className = "" }) => {
 
   return (
     <ul className={`navbar-nav ${className}`}>
-      {/* Theme Toggle */}
-      <li className="nav-item d-none d-sm-inline-block">
-        <button 
-          type="button" 
-          className="btn btn-ghost-secondary btn-icon rounded-circle" 
-          onClick={toggleSkin}
-          title="Toggle theme"
-        >
-          <BrightnessHigh size={16} />
-        </button>
-      </li>
 
       {/* Notifications */}
       <li className="nav-item d-none d-md-inline-block">
@@ -56,9 +45,21 @@ const UserMenu: React.FC<UserMenuProps> = ({ className = "" }) => {
           title="Back to site"
           onClick={handleBackToSite}
         >
-          <BoxArrowRight size={16} />
+          <XDiamond size={16} />
         </button>
       </li>
+
+        {/* Theme Toggle */}
+        <li className="nav-item d-none d-sm-inline-block">
+            <button
+                type="button"
+                className="btn btn-ghost-secondary btn-icon rounded-circle"
+                onClick={toggleSkin}
+                title="Toggle theme"
+            >
+                <BrightnessHigh size={16} />
+            </button>
+        </li>
 
       {/* Logout */}
       <li className="nav-item">
@@ -68,7 +69,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ className = "" }) => {
           title="Sign out"
           onClick={handleLogout}
         >
-          <BoxArrowRight size={16} style={{ transform: 'scaleX(-1)' }} />
+          <Unlock size={16} />
         </button>
       </li>
     </ul>

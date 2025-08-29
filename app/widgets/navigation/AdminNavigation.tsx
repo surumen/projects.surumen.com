@@ -1,7 +1,15 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { HouseDoor, Book, Layers, PencilSquare } from 'react-bootstrap-icons';
+import {
+  HouseDoor,
+  Book,
+  Layers,
+  PencilSquare,
+  UiChecksGrid,
+  PlusSquare,
+  PlusSquareDotted
+} from 'react-bootstrap-icons';
 
 interface AdminNavigationProps {
   isCollapsed?: boolean;
@@ -24,9 +32,10 @@ const AdminNavigation: React.FC<AdminNavigationProps> = () => {
         <div className="nav-item">
           <Link 
             href="/admin"
+            title="Dashboard"
             className={`nav-link justify-content-center align-items-center ${isActive('/admin') ? 'active' : ''}`}
           >
-            <HouseDoor size={24} className="nav-icon text-muted" />
+            <UiChecksGrid size={24} className="nav-icon text-muted" />
           </Link>
         </div>
 
@@ -35,9 +44,9 @@ const AdminNavigation: React.FC<AdminNavigationProps> = () => {
           <Link 
             href="/admin/project/new"
             className={`nav-link justify-content-center align-items-cente ${isActive('/admin/project/new') ? 'active' : ''}`}
-            data-placement="left"
+            title="Create New Project"
           >
-            <PencilSquare size={24} className="nav-icon text-muted" />
+            <PlusSquareDotted size={24} className="nav-icon text-warning" />
           </Link>
         </div>
 

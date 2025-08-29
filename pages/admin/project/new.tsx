@@ -14,7 +14,8 @@ import {
 import { 
   SelectField,
   SwitchField,
-  TagsField
+  TagsField,
+  RichTextField
 } from '@/widgets/forms/advanced';
 import { useCMSStore } from '@/store/cmsStore';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
@@ -300,18 +301,17 @@ function NewProjectPage() {
                       helpText="Brief summary displayed in project listings (10-200 characters)"
                   />
 
-                  <Field
+                  <RichTextField
                       name="description"
                       label="Full Description"
-                      type="textarea"
-                      rows={8}
                       placeholder="Enter detailed description of your project..."
+                      minHeight="300px"
                       required
                       validators={[
                         validationRules.required('Full description'),
                         validationRules.minLength(50, 'Full description')
                       ]}
-                      helpText="Detailed description of your project (minimum 50 characters)"
+                      helpText="Extended summary of the project. Minimum 50 characters required."
                   />
                 </div>
 
