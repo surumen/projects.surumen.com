@@ -119,23 +119,38 @@ export function useColorPopover(config: UseColorPopoverConfig) {
     return success
   }, [editor, canToggle, onColorChanged, variantSettings])
 
-  // Color states for rendering
+  // Create stable handler references for each color
+  const colorHandlers = React.useMemo(() => {
+    const handlers: Record<string, () => boolean> = {}
+    
+    // Default handler
+    handlers.default = () => handleColorChanged('default')
+    
+    // Color handlers for each variant color
+    variantSettings.colors.forEach(color => {
+      handlers[color] = () => handleColorChanged(color)
+    })
+    
+    return handlers
+  }, [handleColorChanged, variantSettings.colors])
+
+  // Color states for rendering with stable handler references
   const colorStates = React.useMemo(() => {
     return [
       // Default option first
       {
         color: 'default' as const,
         isActive: !activeColor,
-        handleToggle: () => handleColorChanged('default')
+        handleToggle: colorHandlers.default // STABLE REFERENCE
       },
-      // Color options
+      // Color options with stable references
       ...variantSettings.colors.map(color => ({
         color,
         isActive: activeColor === variantSettings.colorMap[color],
-        handleToggle: () => handleColorChanged(color)
+        handleToggle: colorHandlers[color] // STABLE REFERENCE
       }))
     ]
-  }, [activeColor, handleColorChanged, variantSettings])
+  }, [activeColor, colorHandlers, variantSettings])
 
   return {
     isVisible,
