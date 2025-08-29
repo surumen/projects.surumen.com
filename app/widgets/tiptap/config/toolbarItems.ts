@@ -103,7 +103,6 @@ export const TOOLBAR_ITEMS: ToolbarItemRegistry = {
     type: 'dropdown',
     hook: useListDropdownMenu,
     config: { types: ['bulletList', 'orderedList'] },
-    label: 'Lists'
   },
 
   // Text alignment

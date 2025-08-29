@@ -69,7 +69,7 @@ export const ToolbarItem: React.FC<ToolbarItemProps> = ({
               type="button" 
               className={cn("btn btn-sm btn-ghost-primary", className)}
             >
-              {dropdownHook.displayText || definition.label}
+              {definition.label}
               {dropdownHook.Icon && (
                 <dropdownHook.Icon style={{ width: '1rem', height: '1rem' }} />
               )}
