@@ -4,8 +4,23 @@ export { Tiptap as default } from './Tiptap'
 export { Tiptap } from './Tiptap'
 export type { TiptapProps } from './Tiptap'
 
-// Rich Text Field Validators
-export { RichTextFieldValidators } from './validators/RichTextFieldValidators'
+// Toolbar Components
+export { TiptapToolbar } from './components/toolbar'
+export type { TiptapToolbarProps } from './components/toolbar'
+export { ToolbarRenderer } from './components/toolbar-renderer'
+export { ToolbarItem } from './components/toolbar-item'
+
+// Configuration
+export { TOOLBAR_ITEMS, TOOLBAR_VARIANTS } from './config'
+export type { 
+  ToolbarItemDefinition, 
+  ToolbarVariantConfig, 
+  ToolbarItemRegistry,
+  ToolbarVariantRegistry
+} from './config'
+
+// Rich Text Field Validators (TODO: Create this)
+// export { RichTextFieldValidators } from './validators/RichTextFieldValidators'
 
 // Re-export components for advanced usage
 export * from './components/toolbar-button'

@@ -12,8 +12,7 @@ export {
   SwitchField, 
   CheckboxField,
   TagsField,
-  RichTextField,
-  RichTextFieldValidators
+  RichTextField
 } from './advanced';
 
 // Context hooks

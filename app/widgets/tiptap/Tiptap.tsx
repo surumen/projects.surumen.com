@@ -15,21 +15,8 @@ import { Superscript } from "@tiptap/extension-superscript"
 import { HorizontalRule } from "@tiptap/extension-horizontal-rule"
 
 // --- Reuse Moses's Components ---
-import { ToolbarButton } from "./components/toolbar-button"
-import { Dropdown } from "./components/dropdown"
 import { TooltipProvider } from "./components/tooltip"
-import { LinkPopover } from "./components/link-popover"
-import { ColorHighlightPopover } from "./components/color-highlight-popover"
-
-// --- Reuse Moses's Hooks ---
-import { useMark } from "./hooks/useMark"
-import { useTextAlign } from "./hooks/useTextAlign"
-import { useUndoRedo } from "./hooks/useUndoRedo"
-import { useBlockquote } from "./hooks/useBlockquote"
-import { useCodeBlock } from "./hooks/useCodeBlock"
-import { useHorizontalRule } from "./hooks/useHorizontalRule"
-import { useHeadingDropdownMenu } from "./hooks/useHeadingDropdownMenu"
-import { useListDropdownMenu } from "./hooks/useListDropdownMenu"
+import { TiptapToolbar } from "./components/toolbar"
 
 // --- Utils ---
 import { cn } from "./utils"
@@ -57,6 +44,10 @@ export interface TiptapProps {
   // Styling
   className?: string
   minHeight?: string | number
+  
+  // Toolbar options
+  variant?: 'full' | 'compact' | 'minimal'
+  showToolbar?: boolean
   
   // Advanced
   extensions?: any[]
@@ -133,6 +124,10 @@ export function Tiptap({
   className,
   minHeight = "300px",
   
+  // Toolbar options
+  variant = 'full',
+  showToolbar = true,
+  
   // Advanced
   extensions: customExtensions,
   autoFocus = false,
@@ -194,10 +189,6 @@ export function Tiptap({
     }
   }, [editor, disabled, readOnly])
 
-  // Get toolbar hook data
-  const headingDropdown = useHeadingDropdownMenu({ editor, levels: [1, 2, 3, 4, 5, 6] })
-  const listDropdown = useListDropdownMenu({ editor, types: ["bulletList", "orderedList"] })
-
   // Loading state
   if (!editor) {
     return (
@@ -229,134 +220,18 @@ export function Tiptap({
       >
         <EditorContext.Provider value={{ editor }}>
           
-          {/* Focused Toolbar for Forms */}
-          <div
-            role="toolbar"
-            aria-label="Text formatting toolbar"
-            className="d-flex align-items-center justify-content-start gap-1 flex-wrap bg-light-subtle border-bottom px-2 py-1 rounded-top"
-            style={{ zIndex: 1030 }}
-          >
-            
-            {/* Undo/Redo */}
-            <div role="group" className="d-flex align-items-center gap-1">
-              <ToolbarButton 
-                hook={useUndoRedo} 
-                config={{ action: "undo" }} 
-                tooltip="Undo"
-              />
-              <ToolbarButton 
-                hook={useUndoRedo} 
-                config={{ action: "redo" }} 
-                tooltip="Redo"
-              />
-            </div>
-
-            {/* Text Formatting */}
-            <div role="group" className="d-flex align-items-center gap-1">
-              {headingDropdown.isVisible && (
-                <Dropdown>
-                  <Dropdown.Trigger>
-                    <button 
-                      type="button"
-                      className="btn btn-sm btn-ghost-primary"
-                    >
-                      {headingDropdown.displayText}
-                    </button>
-                  </Dropdown.Trigger>
-                  <Dropdown.Content>
-                    {headingDropdown.items.map((item, index) => (
-                      <Dropdown.Item
-                        key={index}
-                        onClick={item.onClick}
-                        active={item.active}
-                      >
-                        {item.text}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown.Content>
-                </Dropdown>
-              )}
-              
-              <ToolbarButton hook={useMark} config={{ type: "bold" }} variant="toggle" tooltip="Bold" />
-              <ToolbarButton hook={useMark} config={{ type: "italic" }} variant="toggle" tooltip="Italic" />
-              <ToolbarButton hook={useMark} config={{ type: "underline" }} variant="toggle" tooltip="Underline" />
-              <ToolbarButton hook={useMark} config={{ type: "strike" }} variant="toggle" tooltip="Strikethrough" />
-            </div>
-
-            {/* Lists & Alignment */}
-            <div role="group" className="d-flex align-items-center gap-1">
-              {listDropdown.isVisible && (
-                <Dropdown>
-                  <Dropdown.Trigger>
-                    <button 
-                      type="button"
-                      className="btn btn-sm btn-ghost-secondary"
-                    >
-                      {listDropdown.Icon ? 
-                        React.createElement(listDropdown.Icon, { style: { width: '1rem', height: '1rem' } }) : 
-                        listDropdown.displayText
-                      }
-                    </button>
-                  </Dropdown.Trigger>
-                  <Dropdown.Content>
-                    {listDropdown.items.map((item, index) => (
-                      <Dropdown.Item
-                        key={index}
-                        onClick={item.onClick}
-                        active={item.active}
-                        icon={item.icon as React.ComponentType<{ style?: React.CSSProperties }>}
-                      >
-                        {item.text}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown.Content>
-                </Dropdown>
-              )}
-              
-              <ToolbarButton hook={useTextAlign} config={{ align: "left" }} tooltip="Align left" />
-              <ToolbarButton hook={useTextAlign} config={{ align: "center" }} tooltip="Align center" />
-              <ToolbarButton hook={useTextAlign} config={{ align: "right" }} tooltip="Align right" />
-            </div>
-
-            {/* Links & Highlighting */}
-            <div role="group" className="d-flex align-items-center gap-1">
-              <LinkPopover />
-              <ColorHighlightPopover tooltip="Highlight text" />
-            </div>
-
-
-            {/* Blocks */}
-            <div role="group" className="d-flex align-items-center gap-1">
-              <ToolbarButton hook={useBlockquote} variant="toggle" tooltip="Blockquote" />
-              <ToolbarButton hook={useCodeBlock} variant="toggle" tooltip="Code block" />
-              <ToolbarButton hook={useHorizontalRule} tooltip="Horizontal line" />
-            </div>
-
-            {/* Text Formatting */}
-            <div role="group" className="d-flex align-items-center gap-1">
-              <ToolbarButton hook={useMark} config={{ type: "code" }} variant="toggle" tooltip="Inline code" />
-              <ToolbarButton hook={useMark} config={{ type: "superscript" }} variant="toggle" tooltip="Superscript" />
-              <ToolbarButton hook={useMark} config={{ type: "subscript" }} variant="toggle" tooltip="Subscript" />
-            </div>
-
-          </div>
+          {/* Extracted Toolbar */}
+          <TiptapToolbar 
+            editor={editor}
+            variant={variant}
+            visible={showToolbar}
+          />
 
           {/* Editor Content */}
           <EditorContent
             editor={editor}
             className="flex-grow-1 overflow-auto"
           />
-          
-          {/* Hidden input for form submission if needed */}
-          {name && (
-            <input
-              type="hidden"
-              name={name}
-              id={id}
-              value={value}
-              required={required}
-            />
-          )}
           
         </EditorContext.Provider>
       </div>

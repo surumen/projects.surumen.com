@@ -18,6 +18,9 @@ export interface RichTextFieldProps extends Omit<FieldProps, 'type' | 'rows'> {
   // Rich text specific props
   minHeight?: string | number;
   extensions?: any[];
+  // Toolbar options
+  variant?: 'full' | 'compact' | 'minimal';
+  showToolbar?: boolean;
 }
 
 /**
@@ -49,6 +52,8 @@ export const RichTextField: React.FC<RichTextFieldProps> = (props) => {
     className,
     minHeight = "200px",
     extensions,
+    variant = 'full',
+    showToolbar = true,
     updateOn = 'blur',
     validators = [],
     asyncValidators = [],
@@ -187,6 +192,8 @@ export const RichTextField: React.FC<RichTextFieldProps> = (props) => {
         readOnly={readOnly}
         required={required}
         minHeight={minHeight}
+        variant={variant}
+        showToolbar={showToolbar}
         className={classNames(
           className,
           currentError && 'border-danger shadow'

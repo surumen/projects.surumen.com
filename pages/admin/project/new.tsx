@@ -306,6 +306,7 @@ function NewProjectPage() {
                       label="Full Description"
                       placeholder="Enter detailed description of your project..."
                       minHeight="300px"
+                      variant="compact"
                       required
                       validators={[
                         validationRules.required('Full description'),
