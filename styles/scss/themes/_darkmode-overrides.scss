@@ -524,3 +524,9 @@ select:-webkit-autofill:focus {
 .input-group-merge {
   border: $input-border-width solid $border-color !important;
 }
+
+
+.popover-body {
+  color: $body-color !important;
+  background-color: $body-bg !important;
+}

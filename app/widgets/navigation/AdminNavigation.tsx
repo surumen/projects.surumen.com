@@ -46,7 +46,7 @@ const AdminNavigation: React.FC<AdminNavigationProps> = () => {
             className={`nav-link justify-content-center align-items-cente ${isActive('/admin/project/new') ? 'active' : ''}`}
             title="Create New Project"
           >
-            <PlusSquareDotted size={24} className="nav-icon text-warning" />
+            <PlusSquare size={24} className="nav-icon text-warning" />
           </Link>
         </div>
 
