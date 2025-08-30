@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Breadcrumb } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
@@ -10,7 +10,7 @@ import {
   InputGroupPrefix,
   validationRules,
   useFormContext,
-} from '../../../app/widgets/forms';
+} from '../../../../app/widgets/forms';
 import { 
   SelectField,
   SwitchField,
@@ -33,9 +33,8 @@ const generateSlug = (title: string): string => {
 };
 
 // Submit button that accesses form validation state
-const SubmitButton = () => {
-  const { loading } = useCMSStore();
-  const { isValid, isSubmitting, values } = useFormContext();
+const SubmitButton = ({ loading, projectTitle }: { loading: boolean; projectTitle: string }) => {
+  const { isValid, isSubmitting, values, isDirty } = useFormContext();
   
   // Check if required fields have values
   const requiredFields = ['title', 'category', 'year', 'shortDescription', 'description', 'technologies'];
@@ -55,20 +54,61 @@ const SubmitButton = () => {
       className="btn btn-primary btn-lg"
       disabled={isDisabled}
     >
-      {loading || isSubmitting ? 'Creating Project...' : 'Create Project'}
+      {loading || isSubmitting ? 'Saving Changes...' : 'Save Changes'}
     </button>
   );
 };
 
-function NewProjectPage() {
+function EditProjectPage() {
   const router = useRouter();
-  const { createProject, loading } = useCMSStore();
+  const { id } = router.query;
+  const { updateProject, loading } = useCMSStore();
+  const [project, setProject] = useState<Project | null>(null);
+  const [fetchingProject, setFetchingProject] = useState(true);
+  const [initialSlug, setInitialSlug] = useState('');
+
+  // Fetch project data
+  useEffect(() => {
+    const fetchProject = async () => {
+      if (!id || typeof id !== 'string') return;
+      
+      setFetchingProject(true);
+      try {
+        const response = await fetch(`/api/projects/${id}`);
+        if (response.ok) {
+          const projectData = await response.json();
+          setProject(projectData);
+          setInitialSlug(projectData.slug);
+        } else {
+          // Project not found, redirect to admin
+          router.push('/admin');
+        }
+      } catch (error) {
+        console.error('Failed to fetch project:', error);
+        router.push('/admin');
+      } finally {
+        setFetchingProject(false);
+      }
+    };
+
+    fetchProject();
+  }, [id, router]);
 
   const handleSubmit = async (values: any) => {
+    if (!project) return;
+
     try {
       // Generate slug from title if not provided
       const slug = values.slug || generateSlug(values.title);
       
+      // Show warning if slug changed
+      if (slug !== initialSlug && initialSlug) {
+        const confirmChange = confirm(
+          `You're changing the URL slug from "${initialSlug}" to "${slug}". This will change the project's public URL. Are you sure you want to continue?`
+        );
+        if (!confirmChange) return;
+      }
+
       const projectData: Partial<Project> = {
         title: values.title,
         slug: slug,
@@ -82,12 +122,10 @@ function NewProjectPage() {
         published: values.published || false
       };
 
-      const newProject = await createProject(projectData);
-      if (newProject) {
-        router.push('/admin');
-      }
+      await updateProject(project.id, projectData);
+      router.push('/admin');
     } catch (error) {
-      console.error('Project creation failed:', error);
+      console.error('Project update failed:', error);
     }
   };
 
@@ -121,10 +159,56 @@ function NewProjectPage() {
     'C#', '.NET', 'Go', 'Rust', 'PHP', 'Ruby on Rails'
   ];
 
+  if (fetchingProject) {
+    return (
+      <ProtectedRoute>
+        <Head>
+          <title>Loading Project... | Admin</title>
+        </Head>
+        
+        <div className="page-header">
+          <div className="row align-items-center">
+            <div className="col-sm mb-2 mb-sm-0">
+              <div className="placeholder-glow">
+                <span className="placeholder col-6"></span>
+              </div>
+              <div className="placeholder-glow">
+                <span className="placeholder col-4"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="row justify-content-start">
+          <div className="col-lg-8">
+            <div className="card shadow">
+              <div className="card-header bg-primary">
+                <div className="placeholder-glow">
+                  <span className="placeholder col-3 text-bg-primary"></span>
+                </div>
+              </div>
+              <div className="card-body p-4">
+                <div className="placeholder-glow">
+                  <span className="placeholder col-7 mb-3"></span>
+                  <span className="placeholder col-4 mb-3"></span>
+                  <span className="placeholder col-6 mb-3"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ProtectedRoute>
+    );
+  }
+
+  if (!project) {
+    return null; // Router will redirect
+  }
+
   return (
     <ProtectedRoute>
       <Head>
-        <title>Add New Project | Admin</title>
+        <title>Edit Project: {project.title} | Admin</title>
       </Head>
       
       {/* Page Header */}
@@ -133,9 +217,9 @@ function NewProjectPage() {
           <div className="col-sm mb-2 mb-sm-0">
             <Breadcrumb className="breadcrumb breadcrumb-no-gutter">
               <Breadcrumb.Item href="/admin">Projects</Breadcrumb.Item>
-              <Breadcrumb.Item active>Add Project</Breadcrumb.Item>
+              <Breadcrumb.Item active>Edit Project</Breadcrumb.Item>
             </Breadcrumb>
-            <h1 className="page-header-title">Create New Project</h1>
+            <h1 className="page-header-title">Edit Project</h1>
           </div>
         </div>
       </div>
@@ -143,23 +227,23 @@ function NewProjectPage() {
       <div className="row justify-content-start">
         <div className="col-lg-10">
           <div className="card shadow">
-            <div className="card-header bg-primary">
-              <h4 className="text-bg-primary mb-0">Project Information</h4>
+            <div className="card-header bg-success">
+              <h4 className="text-bg-success mb-0">{project.title}</h4>
             </div>
             <div className="card-body p-4">
               <Form
                   onSubmit={handleSubmit}
                   initialValues={{
-                    title: '',
-                    slug: '',
-                    category: '',
-                    year: currentYear.toString(),
-                    shortDescription: '',
-                    description: '',
-                    technologies: [],
-                    demo: '',
-                    blog: '',
-                    published: false
+                    title: project.title,
+                    slug: project.slug,
+                    category: project.category,
+                    year: project.year.toString(),
+                    shortDescription: project.shortDescription,
+                    description: project.description,
+                    technologies: project.technologies || [],
+                    demo: project.demo || '',
+                    blog: project.blog || '',
+                    published: project.published
                   }}
               >
                 {/* Basic Project Information */}
@@ -226,7 +310,7 @@ function NewProjectPage() {
                                 'Slug must contain only lowercase letters, numbers, and hyphens'
                             )
                           ]}
-                          helpText="Auto-generated from title if left empty"
+                          helpText={initialSlug !== project.slug ? "Changing the slug will change the project's public URL" : "Auto-generated from title if left empty"}
                       />
                     </InputGroup>
                   </div>
@@ -306,7 +390,7 @@ function NewProjectPage() {
                       label="Full Description"
                       placeholder="Enter detailed description of your project..."
                       minHeight="300px"
-                      variant="compact"
+                      variant="full"
                       required
                       validators={[
                         validationRules.required('Full description'),
@@ -323,15 +407,14 @@ function NewProjectPage() {
                   <SwitchField
                       name="published"
                       label="Publish Project"
-                      helpText="Publishing this project will make it visible to the public immediately"
+                      helpText="Publishing this project will make it visible to the public"
                       inline={true}
-                      defaultValue={false}
                   />
                 </div>
 
                 {/* Submit button */}
                 <div className="d-grid gap-2 mt-4">
-                  <SubmitButton />
+                  <SubmitButton loading={loading} projectTitle={project.title} />
                   <button
                       type="button"
                       className="btn btn-outline-secondary"
@@ -350,4 +433,4 @@ function NewProjectPage() {
   );
 }
 
-export default NewProjectPage;
+export default EditProjectPage;
