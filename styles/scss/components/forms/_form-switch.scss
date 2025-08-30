@@ -33,6 +33,7 @@
 
 .form-check-input:checked {
   background-color: $form-check-input-checked-bg-color;
+  background-image: escape-svg($form-check-select-stretched-input-checked-bg-image);
 }
 
 // Between

@@ -15,8 +15,9 @@ const PortfolioLayout: React.FC<PortfolioLayoutProps> = ({ children }) => {
   useBodyClasses([
     'has-navbar-vertical-aside',
     'navbar-vertical-aside-show',
-    'navbar-vertical-aside-compact-mini-mode',
-    'navbar-vertical-aside-compact-mode'
+    'navbar-vertical-aside-compact-mode',
+    'navbar-vertical-aside-transition-on',
+    // 'navbar-vertical-aside-closed-mode'
   ]);
 
   return (

@@ -45,14 +45,12 @@ import {
 } from './forms';
 
 // import table components
-// import { SmartTable } from './tables';
+// export { DataTable } from './components/table'
 
 // import theme components  
 import { ThemeProvider } from './theme';
 
 // import general components
-import TabPane from './components/TabPane';
-import Pagination from './components/Pagination';
 import LogoIcon from './components/LogoIcon';
 
 export {
@@ -95,9 +93,6 @@ export {
    asyncValidationRules,
    useFormContext,
    
-   // Tables
-   // SmartTable,
-   
    // Theme
    ThemeProvider,
    
@@ -110,8 +105,5 @@ export {
    Connector,
    Final,
    
-   // Components
-   TabPane,
-   Pagination,
    LogoIcon
 };

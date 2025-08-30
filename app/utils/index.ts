@@ -5,11 +5,9 @@
 // TECHNOLOGY UTILITIES
 // ========================
 export { 
-  getTechnologyColor,
-  getTechnologyScheme, 
-  getTechnologyColors,
-  getColorDistribution,
-  getLanguageScheme
+  getHashedColor,
+  getTechnologyScheme,
+  getCategoryScheme
 } from './technologyColors';
 
 // ========================

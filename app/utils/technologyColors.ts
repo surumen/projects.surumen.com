@@ -23,6 +23,14 @@ const ACCENT_COLORS = [
   'primary'
 ] as const;
 
+const SEMANTIC_COLORS = [
+  'primary',
+  'info',
+  'dark',
+  'warning',
+  'success'
+] as const;
+
 /**
  * Simple hash function for consistent color assignment
  * Same input always produces same output
@@ -41,60 +49,40 @@ function hashString(str: string): number {
  * Get a consistent accent color for any technology
  * 
  * @param technology - Technology name (e.g., "TypeScript", "React", "OpenAI")
+ * @param color_map - color map
  * @returns Accent color name from your design system
  * 
  * @example
- * getTechnologyColor("TypeScript") // Always returns same color, e.g., "ocean"
- * getTechnologyColor("React") // Always returns same color, e.g., "crimson"
+ * getHashedColor("TypeScript") // Always returns same color, e.g., "ocean"
+ * getHashedColor("React") // Always returns same color, e.g., "crimson"
  */
-export function getTechnologyColor(technology: string): string {
+export function getHashedColor(technology: string, color_map): string {
   // Normalize input for consistency
   const normalizedTech = technology.toLowerCase().trim();
   
   // Generate hash and map to color index
   const hash = hashString(normalizedTech);
-  const colorIndex = hash % ACCENT_COLORS.length;
+  const colorIndex = hash % color_map.length;
   
-  return ACCENT_COLORS[colorIndex];
+  return color_map[colorIndex];
 }
 
 /**
- * Get accent color scheme for a technology (legacy compatibility)
+ * Get accent color scheme for a technology area
  * 
  * @param technology - Technology name
  * @returns Accent color scheme name
  */
 export function getTechnologyScheme(technology: string): string {
-  return getTechnologyColor(technology);
+  return getHashedColor(technology, ACCENT_COLORS);
 }
+
+
 
 /**
- * Batch get colors for multiple technologies
- * Useful for getting all colors at once for performance
+ * Get accent color scheme for a category
  */
-export function getTechnologyColors(technologies: string[]): Record<string, string> {
-  const colorMap: Record<string, string> = {};
-  
-  technologies.forEach(tech => {
-    colorMap[tech] = getTechnologyColor(tech);
-  });
-  
-  return colorMap;
+export function getCategoryScheme(technology: string): string {
+  return getHashedColor(technology, SEMANTIC_COLORS);
 }
 
-/**
- * Get color distribution statistics (useful for debugging)
- */
-export function getColorDistribution(technologies: string[]): Record<string, number> {
-  const distribution: Record<string, number> = {};
-  
-  technologies.forEach(tech => {
-    const color = getTechnologyColor(tech);
-    distribution[color] = (distribution[color] || 0) + 1;
-  });
-  
-  return distribution;
-}
-
-// Export the legacy function name for backward compatibility
-export const getLanguageScheme = getTechnologyScheme;

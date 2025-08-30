@@ -7,7 +7,7 @@ import { useCMSStore } from '@/store/cmsStore';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import DataTable from '@/widgets/components/table';
 import type { Project } from '@/types/project/project';
-import { getTechnologyScheme } from '@/utils';
+import { getCategoryScheme, getTechnologyScheme } from '@/utils';
 
 // Constants
 const FILTER_OPTIONS = {
@@ -459,9 +459,15 @@ function ProjectsManagementPage() {
 
             {/* Category column */}
             <DataTable.Column<Project> header="Category">
-              {({ row }) => (
-                <span className="badge bg-soft-info text-info">{row.category}</span>
-              )}
+              {({ row }) => {
+                const accentColor = getCategoryScheme(row.category);
+                return (
+                    <span className={`badge bg-soft-${accentColor} text-${accentColor}`}>
+                      <span className={`legend-indicator bg-${accentColor}`}></span>
+                      {row.category}
+                    </span>
+                )
+              }}
             </DataTable.Column>
 
             {/* Created date column */}

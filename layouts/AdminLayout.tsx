@@ -14,7 +14,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   // Apply body classes for admin layout
   useBodyClasses([
     'has-navbar-vertical-aside',
-    'navbar-vertical-aside-show-md',
+    'navbar-vertical-aside-show',
     'footer-offset',
     'navbar-vertical-aside-mini-mode',
     'navbar-vertical-aside-transition-on'
