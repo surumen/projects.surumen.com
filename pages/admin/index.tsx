@@ -5,8 +5,8 @@ import Link from 'next/link';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useCMSStore } from '@/store/cmsStore';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
-import { SmartTable } from '@/widgets';
-import type { ColumnConfig, SelectionConfig } from '@/types';
+import DataTable from '@/widgets/components/table';
+import type { Project } from '@/types/project/project';
 
 // Constants
 const FILTER_OPTIONS = {
@@ -25,116 +25,6 @@ const STATUS_CONFIG = {
 // Navigation helpers
 const navigateTo = (url: string) => window.location.href = url;
 const openInNewTab = (url: string) => window.open(url, '_blank');
-
-// Column definitions
-const createColumns = (handleDeleteProject: (project: any) => void, deleteInProgress: boolean): ColumnConfig[] => [
-  {
-    key: 'project',
-    header: 'Project',
-    renderer: 'custom',
-    customConfig: {
-      render: (value, row) => (
-        <div className="d-flex align-items-center">
-          <div className="avatar avatar-soft-primary avatar-circle me-3">
-            <span className="avatar-initials">
-              {row.title.charAt(0).toUpperCase()}
-            </span>
-          </div>
-          <div>
-            <span className="d-block h5 text-inherit mb-0">{row.title}</span>
-            <span className="d-block fs-6 text-body">
-              {row.shortDescription.length > 50 
-                ? `${row.shortDescription.substring(0, 50)}...` 
-                : row.shortDescription
-              }
-            </span>
-          </div>
-        </div>
-      )
-    }
-  },
-  {
-    key: 'status',
-    header: 'Status',
-    renderer: 'custom',
-    customConfig: {
-      render: (value, row) => {
-        if (row.archived) {
-          return (
-            <>
-              <span className="legend-indicator bg-secondary me-2"></span>
-              Archived
-            </>
-          );
-        }
-        return (
-          <>
-            <span className={`legend-indicator ${row.published ? 'bg-success' : 'bg-warning'} me-2`}></span>
-            {row.published ? 'Published' : 'Draft'}
-          </>
-        );
-      }
-    }
-  },
-  {
-    key: 'technologies',
-    header: 'Technologies',
-    renderer: 'badge'
-  },
-  {
-    key: 'category',
-    header: 'Category',
-    renderer: 'badge',
-    badgeConfig: {
-      colorMap: {
-        'web development': 'info',
-        'data science': 'primary',
-        'mobile': 'success'
-      },
-      maxVisible: 3,
-    }
-  },
-  {
-    key: 'createdAt',
-    header: 'Created',
-    format: 'date'
-  },
-  {
-    key: 'actions',
-    header: 'Actions',
-    renderer: 'custom',
-    customConfig: {
-      render: (value, row) => (
-        <div className="btn-group" role="group">
-          {row.published && (
-            <button
-              type="button"
-              className="btn btn-white btn-sm"
-              onClick={() => openInNewTab(`/project/${row.slug}`)}
-            >
-              <Eye size={12} className='me-1' /> View
-            </button>
-          )}
-          <button
-            type="button"
-            className="btn btn-white btn-sm"
-            onClick={() => navigateTo(`/admin/project/${row.id}/edit`)}
-          >
-            <Pencil size={12} className='me-1' /> Edit
-          </button>
-          <button
-            type="button"
-            className="btn btn-white text-danger btn-sm"
-            onClick={() => handleDeleteProject(row)}
-            disabled={deleteInProgress}
-          >
-            <Trash3 size={12} className='me-1'/> Delete
-          </button>
-        </div>
-      )
-    }
-  }
-];
 
 function ProjectsManagementPage() {
   const { 
@@ -230,10 +120,8 @@ function ProjectsManagementPage() {
       const projectIds = selectedProjects.map(p => p.id);
       await batchDeleteProjects(projectIds);
       setSelectedProjects([]);
-      // Success feedback could be added here (toast notification)
     } catch (error) {
       console.error('Failed to delete projects:', error);
-      // Error feedback could be added here
     }
   };
 
@@ -244,7 +132,6 @@ function ProjectsManagementPage() {
       const projectIds = selectedProjects.map(p => p.id);
       await batchArchiveProjects(projectIds);
       setSelectedProjects([]);
-      // Success: Projects archived and hidden from public view
     } catch (error) {
       console.error('Failed to archive projects:', error);
     }
@@ -253,7 +140,6 @@ function ProjectsManagementPage() {
   const handlePublishSelected = async () => {
     if (selectedProjects.length === 0) return;
     
-    // Only publish unpublished projects
     const unpublishedProjects = selectedProjects.filter(p => !p.published);
     if (unpublishedProjects.length === 0) {
       alert('All selected projects are already published.');
@@ -264,7 +150,6 @@ function ProjectsManagementPage() {
       const projectIds = unpublishedProjects.map(p => p.id);
       await batchPublishProjects(projectIds);
       setSelectedProjects([]);
-      // Success: Projects published and now visible on portfolio
     } catch (error) {
       console.error('Failed to publish projects:', error);
     }
@@ -273,7 +158,6 @@ function ProjectsManagementPage() {
   const handleUnpublishSelected = async () => {
     if (selectedProjects.length === 0) return;
     
-    // Only unpublish published projects
     const publishedProjects = selectedProjects.filter(p => p.published);
     if (publishedProjects.length === 0) {
       alert('All selected projects are already unpublished.');
@@ -284,23 +168,9 @@ function ProjectsManagementPage() {
       const projectIds = publishedProjects.map(p => p.id);
       await batchUnpublishProjects(projectIds);
       setSelectedProjects([]);
-      // Success: Projects hidden from public view
     } catch (error) {
       console.error('Failed to unpublish projects:', error);
     }
-  };
-
-  // Table configuration
-  const columns = useMemo(() => 
-    createColumns(handleDeleteProject, !!deleteTargetId), 
-    [deleteTargetId]
-  );
-
-  const selectionConfig: SelectionConfig = {
-    mode: 'multiple',
-    selectedRows: selectedProjects,
-    onSelectionChange: setSelectedProjects,
-    selectRowsBy: 'id'
   };
 
   return (
@@ -487,36 +357,169 @@ function ProjectsManagementPage() {
             </div>
           </div>
 
-          {/* Smart Table */}
-          <SmartTable
+          {/* NEW DataTable with Direct Children Pattern */}
+          <DataTable<Project>
             data={filteredProjects}
-            columns={columns}
-            selection={selectionConfig}
-            styling={{
-              size: 'lg',
-              theme: 'borderless',
-              headerLight: true,
-              nowrap: true,
-              verticalAlign: 'middle',
-              className: 'card-table'
-            }}
-            loading={{
-              show: loading,
-              rowCount: 5,
-              message: 'Loading projects...'
-            }}
-            emptyState={{
-              show: !loading && filteredProjects.length === 0,
-              message: projects.length === 0 
-                ? "You haven't created any projects yet." 
-                : "No projects match your current filters.",
-              icon: 'folder',
-              action: projects.length === 0 ? {
-                label: 'Create Your First Project',
-                onClick: () => navigateTo('/admin/project/new')
-              } : undefined
-            }}
-          />
+            keyBy="id"
+            loading={loading}
+            className="table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table dataTable no-footer"
+            id="datatable"
+            role="grid"
+          >
+            {/* Checkbox column */}
+            <DataTable.Column<Project> 
+              className="table-column-pe-0"
+              headerRender={() => (
+                <div className="form-check">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    checked={selectedProjects.length > 0 && selectedProjects.length === filteredProjects.length}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedProjects(filteredProjects);
+                      } else {
+                        setSelectedProjects([]);
+                      }
+                    }}
+                    id="datatableCheckAll"
+                  />
+                  <label className="form-check-label" htmlFor="datatableCheckAll" />
+                </div>
+              )}
+            >
+              {({ row }) => (
+                <div className="form-check">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    checked={selectedProjects.some(p => p.id === row.id)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedProjects(prev => [...prev, row]);
+                      } else {
+                        setSelectedProjects(prev => prev.filter(p => p.id !== row.id));
+                      }
+                    }}
+                  />
+                  <label className="form-check-label" />
+                </div>
+              )}
+            </DataTable.Column>
+
+            {/* Project column */}
+            <DataTable.Column<Project> header="Project" className="table-column-ps-0">
+              {({ row }) => (
+                <div className="d-flex align-items-center">
+                  <div className="avatar avatar-soft-primary avatar-circle me-3">
+                    <span className="avatar-initials">
+                      {row.title.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="d-block h5 text-inherit mb-0">{row.title}</span>
+                    <span className="d-block fs-6 text-body">
+                      {row.shortDescription.length > 50 
+                        ? `${row.shortDescription.substring(0, 50)}...` 
+                        : row.shortDescription
+                      }
+                    </span>
+                  </div>
+                </div>
+              )}
+            </DataTable.Column>
+
+            {/* Status column */}
+            <DataTable.Column<Project> header="Status">
+              {({ row }) => (
+                <>
+                  <span className={`legend-indicator ${row.archived ? 'bg-secondary' : (row.published ? 'bg-success' : 'bg-warning')} me-2`}></span>
+                  {row.archived ? 'Archived' : (row.published ? 'Published' : 'Draft')}
+                </>
+              )}
+            </DataTable.Column>
+
+            {/* Technologies column */}
+            <DataTable.Column<Project> header="Technologies">
+              {({ row }) => (
+                <div>
+                  {row.technologies.slice(0, 3).map(tech => (
+                    <span key={tech} className="badge bg-soft-secondary me-1">{tech}</span>
+                  ))}
+                  {row.technologies.length > 3 && (
+                    <span className="text-muted">+{row.technologies.length - 3} more</span>
+                  )}
+                </div>
+              )}
+            </DataTable.Column>
+
+            {/* Category column */}
+            <DataTable.Column<Project> header="Category">
+              {({ row }) => (
+                <span className="badge bg-soft-info">{row.category}</span>
+              )}
+            </DataTable.Column>
+
+            {/* Created date column */}
+            <DataTable.Column<Project> header="Created">
+              {({ row }) => new Date(row.createdAt).toLocaleDateString()}
+            </DataTable.Column>
+
+            {/* Actions column */}
+            <DataTable.Column<Project> header="Actions">
+              {({ row }) => (
+                <div className="btn-group" role="group">
+                  {row.published && (
+                    <button
+                      type="button"
+                      className="btn btn-white btn-sm"
+                      onClick={() => openInNewTab(`/project/${row.slug}`)}
+                    >
+                      <Eye size={12} className='me-1' /> View
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    className="btn btn-white btn-sm"
+                    onClick={() => navigateTo(`/admin/project/${row.id}/edit`)}
+                  >
+                    <Pencil size={12} className='me-1' /> Edit
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-white text-danger btn-sm"
+                    onClick={() => handleDeleteProject(row)}
+                    disabled={!!deleteTargetId}
+                  >
+                    <Trash3 size={12} className='me-1'/> Delete
+                  </button>
+                </div>
+              )}
+            </DataTable.Column>
+
+            <DataTable.LoadingState show={loading} rowCount={5} />
+            
+            <DataTable.EmptyState show={!loading && filteredProjects.length === 0}>
+              <div className="text-center py-4">
+                <i className="bi-folder fs-1 text-muted mb-3 d-block"></i>
+                <div className="text-muted mb-3">
+                  {projects.length === 0 
+                    ? "You haven't created any projects yet." 
+                    : "No projects match your current filters."
+                  }
+                </div>
+                {projects.length === 0 && (
+                  <button 
+                    type="button" 
+                    className="btn btn-primary btn-sm"
+                    onClick={() => navigateTo('/admin/project/new')}
+                  >
+                    Create Your First Project
+                  </button>
+                )}
+              </div>
+            </DataTable.EmptyState>
+          </DataTable>
 
           {/* Footer */}
           {filteredProjects.length > 0 && (
