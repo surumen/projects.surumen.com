@@ -8,5 +8,13 @@ export { useTableSelection } from './useTableSelection'
 export { useTableSorting } from './useTableSorting'
 // export { useDataTableContext } from './useDataTableContext' // Removed - no longer needed
 
-// Hook types - only export the main ones consumers need
-export type { UseDataTableConfig, UseDataTableReturn } from './useDataTable'
+// Hook types - re-export from main types
+export type { 
+  UseDataTableConfig, 
+  UseDataTableReturn,
+  UseTableDataConfig,
+  UseTableDataReturn,
+  UseTableSelectionConfig,
+  UseTableSortingConfig,
+  UseTableSortingReturn
+} from '../types/hooks'

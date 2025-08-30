@@ -7,7 +7,8 @@ import type {
   SelectionConfig, 
   SelectionState, 
   SelectionAction,
-  CheckboxProps 
+  CheckboxProps,
+  UseTableSelectionConfig
 } from '../types'
 import {
   defaultKeyExtractor,
@@ -22,14 +23,6 @@ import {
   canSelectMore,
   enforceSelectionLimits
 } from '../utils/selectionHelpers'
-
-/**
- * Configuration for useTableSelection hook
- */
-export interface UseTableSelectionConfig<T> extends SelectionConfig<T> {
-  /** Table data for selection operations */
-  data: T[]
-}
 
 /**
  * Hook for managing table row selection

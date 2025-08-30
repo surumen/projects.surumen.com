@@ -6,89 +6,16 @@ import type {
   DataTableProps,
   SelectionConfig,
   SortingConfig,
-  SortConfig
+  SortConfig,
+  UseDataTableConfig,
+  UseDataTableReturn,
+  UseTableDataConfig,
+  UseTableSelectionConfig,
+  UseTableSortingConfig
 } from '../types'
-import { useTableData, UseTableDataConfig } from './useTableData'
-import { useTableSelection, UseTableSelectionConfig } from './useTableSelection'
-import { useTableSorting, UseTableSortingConfig } from './useTableSorting'
-
-/**
- * Configuration for the main useDataTable hook
- */
-export interface UseDataTableConfig<T = any> extends 
-  Omit<UseTableDataConfig<T>, 'data'>,
-  Partial<UseTableSelectionConfig<T>>,
-  Partial<UseTableSortingConfig<T>> {
-  /** Table data */
-  data: T[]
-  /** Selection configuration */
-  selection?: SelectionConfig<T>
-  /** Sorting configuration */  
-  sorting?: SortingConfig<T>
-  /** Controlled sort state */
-  sortBy?: SortConfig[]
-  /** Sort change callback */
-  onSortChange?: (sortConfigs: SortConfig[]) => void
-}
-
-/**
- * Return type for the main useDataTable hook
- */
-export interface UseDataTableReturn<T = any> {
-  /** Table data and state for DataTable component */
-  table: {
-    /** Processed and sorted data */
-    data: T[]
-    /** Loading configuration */
-    loading: boolean
-    /** Error state */
-    error: boolean
-    /** Selection state */
-    selection?: ReturnType<typeof useTableSelection<T>>
-    /** Sorting state */
-    sorting?: ReturnType<typeof useTableSorting<T>>
-    /** Row key function */
-    getRowKey: (item: T, index?: number) => string | number
-    /** Sort handler */
-    onSort?: (config: SortConfig) => void
-  }
-  
-  /** Selection helpers for external components */
-  selection: {
-    /** Selected items */
-    items: T[]
-    /** Selection count */
-    count: number  
-    /** Whether any items are selected */
-    hasItems: boolean
-    /** Selection actions */
-    actions: {
-      selectAll: () => void
-      clearSelection: () => void
-      toggleItem: (item: T) => void
-    }
-  }
-  
-  /** Sorting helpers for external components */
-  sorting: {
-    /** Current sort configuration */
-    sortBy: SortConfig[]
-    /** Sort actions */
-    actions: {
-      sortBy: (columnKey: string, direction?: import('../types').SortDirection) => void
-      clearSort: () => void
-      toggleSort: (columnKey: string) => void
-    }
-  }
-  
-  /** Table metadata */
-  meta: {
-    /** Total items */
-    totalItems: number
-    /** Data validation status */
-    isValid: boolean
-  }
-}
+import { useTableData } from './useTableData'
+import { useTableSelection } from './useTableSelection'
+import { useTableSorting } from './useTableSorting'
 
 /**
  * Main composite hook for DataTable functionality

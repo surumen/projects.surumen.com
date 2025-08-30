@@ -2,32 +2,7 @@
 // Utility for extracting column and state configurations from React children
 
 import { ReactNode, Children, isValidElement } from 'react'
-import type { ColumnConfig } from '../types'
-
-/**
- * Result of extracting table children components
- */
-export interface ChildExtractionResult<T> {
-  columns: ColumnConfig<T>[]
-  loadingState: {
-    show: boolean
-    rowCount: number
-    children?: ReactNode
-  } | null
-  emptyState: {
-    show: boolean
-    children?: ReactNode
-  } | null
-}
-
-/**
- * Component types for identification during extraction
- */
-export interface ComponentTypes {
-  Column: any
-  LoadingState: any
-  EmptyState: any
-}
+import type { ColumnConfig, ChildExtractionResult, ComponentTypes } from '../types'
 
 /**
  * Extracts column configurations and state components from React children

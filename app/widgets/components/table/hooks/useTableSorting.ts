@@ -9,7 +9,9 @@ import type {
   SortingConfig,
   SortFunction,
   SortHelpers,
-  SortProps
+  SortProps,
+  UseTableSortingConfig,
+  UseTableSortingReturn
 } from '../types'
 import {
   applySorting,
@@ -23,28 +25,6 @@ import {
   getSortPriority,
   getSortAriaAttributes
 } from '../utils/sortingHelpers'
-
-/**
- * Configuration for useTableSorting hook
- */
-export interface UseTableSortingConfig<T> extends SortingConfig<T> {
-  /** Table data to sort */
-  data: T[]
-  /** Controlled sort state */
-  sortBy?: SortConfig[]
-  /** Sort change callback */
-  onSortChange?: (sortConfigs: SortConfig[]) => void
-}
-
-/**
- * Return type for useTableSorting hook
- */
-export interface UseTableSortingReturn<T> extends SortHelpers {
-  /** Sorted data */
-  sortedData: T[]
-  /** Whether sorting is enabled */
-  sortingEnabled: boolean
-}
 
 /**
  * Hook for managing table sorting

@@ -2,41 +2,12 @@
 // Basic data processing and state management hook
 
 import { useState, useMemo, useCallback } from 'react'
-import type { TableLoadingConfig, TableErrorConfig } from '../types'
-
-/**
- * Configuration for useTableData hook
- */
-export interface UseTableDataConfig<T> {
-  /** Initial data */
-  data: T[]
-  /** Loading configuration */
-  loading?: boolean | TableLoadingConfig
-  /** Error configuration */
-  error?: boolean | TableErrorConfig
-  /** Key extractor function */
-  keyBy?: keyof T | ((item: T) => string | number)
-}
-
-/**
- * Return type for useTableData hook
- */
-export interface UseTableDataReturn<T> {
-  /** Processed data */
-  data: T[]
-  /** Loading state */
-  loading: TableLoadingConfig
-  /** Error state */
-  error: TableErrorConfig
-  /** Total item count */
-  totalItems: number
-  /** Key extractor function */
-  getRowKey: (item: T, index?: number) => string | number
-  /** Data validation */
-  isValid: boolean
-  /** Refresh data (for error recovery) */
-  refresh: () => void
-}
+import type { 
+  TableLoadingConfig, 
+  TableErrorConfig,
+  UseTableDataConfig,
+  UseTableDataReturn
+} from '../types'
 
 /**
  * Hook for basic table data management
