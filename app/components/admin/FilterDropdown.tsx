@@ -28,9 +28,9 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
 }) => {
   const getActiveFilterCount = useCallback(() => {
     let count = 0;
-    if (!showPublished) count++;
-    if (!showDrafts) count++;
-    if (!showArchived) count++;
+    if (showPublished) count++;
+    if (showDrafts) count++;
+    if (showArchived) count++;
     return count;
   }, [showPublished, showDrafts, showArchived]);
 
@@ -55,7 +55,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
           <div className="card-body">
             <div className="d-grid gap-3">
               {/* Published Switch */}
-              <div className="d-flex justify-content-between align-items-center">
+              <div className="d-flex justify-content-between align-items-center gap-4">
                 <div>
                   <span>Published</span>
                   <span className="text-muted small ms-2">({projectStats.published})</span>
@@ -63,7 +63,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
                 <div className="form-check form-switch mb-0">
                   <input 
                     type="checkbox" 
-                    className="form-check-input" 
+                    className="form-check-input d-flex align-items-center justify-content-end me-0"
                     id="togglePublished"
                     checked={showPublished}
                     onChange={(e) => onTogglePublished(e.target.checked)}
@@ -72,7 +72,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
               </div>
 
               {/* Draft Switch */}
-              <div className="d-flex justify-content-between align-items-center">
+              <div className="d-flex justify-content-between align-items-center gap-4">
                 <div>
                   <span>Draft</span>
                   <span className="text-muted small ms-2">({projectStats.drafts})</span>
@@ -80,7 +80,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
                 <div className="form-check form-switch mb-0">
                   <input 
                     type="checkbox" 
-                    className="form-check-input" 
+                    className="form-check-input d-flex align-items-center justify-content-end me-0"
                     id="toggleDrafts"
                     checked={showDrafts}
                     onChange={(e) => onToggleDrafts(e.target.checked)}
@@ -89,7 +89,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
               </div>
 
               {/* Archived Switch */}
-              <div className="d-flex justify-content-between align-items-center">
+              <div className="d-flex justify-content-between align-items-center gap-4">
                 <div>
                   <span>Archived</span>
                   <span className="text-muted small ms-2">({projectStats.archived})</span>
@@ -97,7 +97,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
                 <div className="form-check form-switch mb-0">
                   <input 
                     type="checkbox" 
-                    className="form-check-input" 
+                    className="form-check-input d-flex align-items-center justify-content-end me-0"
                     id="toggleArchived"
                     checked={showArchived}
                     onChange={(e) => onToggleArchived(e.target.checked)}
