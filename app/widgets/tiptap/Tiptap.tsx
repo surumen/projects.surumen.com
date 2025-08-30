@@ -32,17 +32,12 @@ const getDefaultExtensions = (placeholder: string): any[] => [
     horizontalRule: false, // Use custom HorizontalRule
     blockquote: {
       HTMLAttributes: {
-        class: 'border-start border-primary border-4 ps-3 my-3 fst-italic text-body-secondary',
-      },
-    },
-    code: {
-      HTMLAttributes: {
-        class: 'bg-body-secondary text-body px-1 py-0 rounded-1 font-monospace',
+        class: 'blockquote',
       },
     },
     codeBlock: {
       HTMLAttributes: {
-        class: 'bg-dark text-light p-3 rounded overflow-auto my-3 font-monospace',
+        class: 'rounded mb-4',
       },
     },
   }),
@@ -51,8 +46,7 @@ const getDefaultExtensions = (placeholder: string): any[] => [
   }),
   HorizontalRule.configure({
     HTMLAttributes: {
-      class: 'my-4',
-      style: 'border: none; border-top: 2px solid var(--bs-border-color);'
+      class: 'my-4 border-top',
     },
   }),
   Image.configure({
