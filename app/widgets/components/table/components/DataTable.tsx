@@ -15,30 +15,13 @@ import DataTableColumn from './DataTableColumn'
 import DataTableLoadingState from './DataTableLoadingState'
 import DataTableEmptyState from './DataTableEmptyState'
 import { extractTableChildren } from '../utils/childrenExtraction'
-import { ArrowDown, ArrowDownUp, ArrowUp } from 'react-bootstrap-icons';
 
-// Sort indicator component
-const SortIndicator: React.FC<{
-  direction: SortDirection | null
-  isSorted: boolean
-  priority?: number | null
-}> = ({ direction, isSorted, priority }) => {
-  if (!isSorted) {
-    return <ArrowDownUp size={12} className="text-muted opacity-25 ms-2" />
-  }
-
-  return (
-    <span className="ms-2 d-flex align-items-center">
-      {direction === 'asc' ? (
-        <ArrowUp className="text-primary" size={12} />
-      ) : (
-        <ArrowDown className="text-primary" size={12} />
-      )}
-      {typeof priority === 'number' && priority > 0 && (
-        <small className="text-muted ms-1">{priority + 1}</small>
-      )}
-    </span>
-  )
+// Helper function to get sort CSS class
+const getSortClass = (sortable: boolean, direction: SortDirection | null): string => {
+  if (!sortable) return ''
+  if (direction === 'asc') return 'sorting_asc'
+  if (direction === 'desc') return 'sorting_desc'
+  return 'sorting'
 }
 
 // Extended props to include selection and sorting configurations
@@ -62,23 +45,14 @@ const DataTable = <T,>({
 
   const sortingHook = useTableSorting({
     data: dataHook.data,
-    enabled: sorting?.enabled !== false,
-    multiSort: sorting?.multiSort || false,
-    defaultSort: sorting?.defaultSort,
-    customSorters: sorting?.customSorters,
-    preserveSort: sorting?.preserveSort
+    ...sorting
   })
 
   const selectionHook = useTableSelection({
     data: sortingHook.sortedData,
     mode: selection?.mode || 'none',
     keyBy: selection?.keyBy || keyBy,
-    defaultSelected: selection?.defaultSelected,
-    selected: selection?.selected,
-    onSelectionChange: selection?.onSelectionChange,
-    preserveSelection: selection?.preserveSelection,
-    maxSelection: selection?.maxSelection,
-    showCheckboxes: selection?.showCheckboxes
+    ...selection
   })
 
   // Use processed data from hooks
@@ -106,12 +80,19 @@ const DataTable = <T,>({
             maxWidth: column.headerProps?.maxWidth
           }
 
+          // Get sort props if sortable
+          const sortProps = column.headerProps?.sortable && sortingHook.sortingEnabled 
+            ? sortingHook.getSortProps(column.key) 
+            : undefined
+
+          // Build header classes including sort state
           const headerClasses = [
             column.headerProps?.align && column.headerProps.align !== 'start' 
               ? `text-${column.headerProps.align === 'end' ? 'end' : column.headerProps.align}` 
               : '',
             column.headerProps?.sticky ? 'sticky-column' : '',
-            column.headerProps?.className || ''
+            column.headerProps?.className || '',
+            getSortClass(!!column.headerProps?.sortable && sortingHook.sortingEnabled, sortProps?.direction ?? null)
           ].filter(Boolean).join(' ')
 
           // Create header render context
@@ -120,7 +101,7 @@ const DataTable = <T,>({
             selection: selection?.mode !== 'none' ? {
               getSelectAllProps: selectionHook.getSelectAllProps
             } : undefined,
-            sorting: sorting?.enabled !== false ? sortingHook.getSortProps(column.key) : undefined,
+            sorting: sortProps,
             column
           }
 
@@ -130,38 +111,29 @@ const DataTable = <T,>({
           if (column.headerRender) {
             // Custom header render function
             headerContent = column.headerRender(headerContext)
-          } else if (column.headerProps?.sortable && sorting?.enabled !== false) {
-            // Sortable header with built-in sort indicator
-            const sortProps = sortingHook.getSortProps(column.key)
-            headerContent = (
-              <button
-                type="button"
-                className="btn btn-link p-0 text-start text-decoration-none d-flex align-items-center w-100"
-                onClick={sortProps.onClick}
-                aria-label={sortProps['aria-label']}
-              >
-                <span className="flex-grow-1">
-                  {typeof column.headerProps?.header === 'function' 
-                    ? (column.headerProps.header as () => React.ReactNode)()
-                    : column.headerProps?.header
-                  }
-                </span>
-                <SortIndicator 
-                  direction={sortProps.direction}
-                  isSorted={sortProps.isSorted}
-                  priority={sortProps.priority}
-                />
-              </button>
-            )
           } else {
-            // Regular static header
+            // Use header prop directly (no button wrapper needed)
             headerContent = typeof column.headerProps?.header === 'function' 
               ? (column.headerProps.header as () => React.ReactNode)()
               : column.headerProps?.header
           }
 
           return (
-            <th key={column.key} className={headerClasses} style={style}>
+            <th 
+              key={column.key} 
+              className={headerClasses} 
+              style={style}
+              onClick={sortProps?.onClick}
+              role={sortProps ? 'button' : undefined}
+              tabIndex={sortProps ? 0 : undefined}
+              aria-label={sortProps?.['aria-label']}
+              onKeyDown={sortProps ? (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  sortProps.onClick()
+                }
+              } : undefined}
+            >
               {headerContent}
             </th>
           )
@@ -267,7 +239,7 @@ const DataTable = <T,>({
   // Table wrapper component
   const TableWrapper = ({ children: tableChildren }: { children: React.ReactNode }) => (
     <div className="table-responsive">
-      <table className={`table ${className}`} id={id} role={role}>
+      <table className={`table datatable-custom ${className}`} id={id} role={role}>
         {tableChildren}
       </table>
     </div>
