@@ -118,18 +118,7 @@ const DataTable = <T,>({
           const headerContext: HeaderRenderContext<T> = {
             data: processedData,
             selection: selection?.mode !== 'none' ? {
-              isAllSelected: selectionHook.isAllSelected,
-              isSomeSelected: selectionHook.isSomeSelected,
-              selectedItems: selectionHook.selectedItems,
-              selectedCount: selectionHook.selectedCount,
-              hasSelected: selectionHook.hasSelected,
-              isSelected: selectionHook.isSelected,
-              toggleItem: selectionHook.toggleItem,
-              selectAll: selectionHook.selectAll,
-              clearSelection: selectionHook.clearSelection,
-              toggleAll: selectionHook.toggleAll,
-              getSelectAllProps: selectionHook.getSelectAllProps,
-              getItemProps: selectionHook.getItemProps
+              getSelectAllProps: selectionHook.getSelectAllProps
             } : undefined,
             sorting: sorting?.enabled !== false ? sortingHook.getSortProps(column.key) : undefined,
             column
@@ -201,17 +190,6 @@ const DataTable = <T,>({
                 value: cellValue,
                 isSelected: isRowSelected,
                 selection: selection?.mode !== 'none' ? {
-                  isAllSelected: selectionHook.isAllSelected,
-                  isSomeSelected: selectionHook.isSomeSelected,
-                  selectedItems: selectionHook.selectedItems,
-                  selectedCount: selectionHook.selectedCount,
-                  hasSelected: selectionHook.hasSelected,
-                  isSelected: selectionHook.isSelected,
-                  toggleItem: selectionHook.toggleItem,
-                  selectAll: selectionHook.selectAll,
-                  clearSelection: selectionHook.clearSelection,
-                  toggleAll: selectionHook.toggleAll,
-                  getSelectAllProps: selectionHook.getSelectAllProps,
                   getItemProps: selectionHook.getItemProps
                 } : undefined
               }

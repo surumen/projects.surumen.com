@@ -153,3 +153,12 @@ export interface UseDataTableReturn<T = any> {
     isValid: boolean
   }
 }
+
+/**
+ * Minimal selection state for external consumers
+ */
+export interface MinimalSelectionState<T> {
+  selectedItems: T[]
+  selectedCount: number
+  hasSelection: boolean
+}

@@ -83,33 +83,14 @@ export interface HeaderRenderContext<T = any> {
 }
 
 /**
- * Selection helpers passed to render contexts
+ * Minimal selection helpers passed to render contexts
+ * Only includes what's actually needed for UI rendering
  */
 export interface SelectionHelpers<T = any> {
-  /** Whether all items are selected */
-  isAllSelected: boolean
-  /** Whether some items are selected */
-  isSomeSelected: boolean
-  /** Currently selected items */
-  selectedItems: T[]
-  /** Number of selected items */
-  selectedCount: number
-  /** Whether any items are selected */
-  hasSelected: boolean
-  /** Check if specific item is selected */
-  isSelected: (item: T) => boolean
-  /** Toggle selection for specific item */
-  toggleItem: (item: T) => void
-  /** Select all items */
-  selectAll: () => void
-  /** Clear all selections */
-  clearSelection: () => void
-  /** Toggle all selection */
-  toggleAll: () => void
-  /** Get props for select-all checkbox */
-  getSelectAllProps: () => CheckboxProps
-  /** Get props for item checkbox */
-  getItemProps: (item: T) => CheckboxProps
+  /** Get props for select-all checkbox (headers) */
+  getSelectAllProps?: () => CheckboxProps
+  /** Get props for item checkbox (cells) */
+  getItemProps?: (item: T) => CheckboxProps
 }
 
 /**
