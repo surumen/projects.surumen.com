@@ -7,6 +7,7 @@ import { useCMSStore } from '@/store/cmsStore';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import DataTable from '@/widgets/components/table';
 import type { Project } from '@/types/project/project';
+import { getTechnologyScheme } from '@/utils';
 
 // Constants
 const FILTER_OPTIONS = {
@@ -362,7 +363,7 @@ function ProjectsManagementPage() {
             data={filteredProjects}
             keyBy="id"
             loading={loading}
-            className="table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table dataTable no-footer"
+            className="table-lg table-borderless table-hover table-thead-bordered table-nowrap table-align-middle card-table dataTable no-footer"
             id="datatable"
             role="grid"
           >
@@ -430,7 +431,7 @@ function ProjectsManagementPage() {
             </DataTable.Column>
 
             {/* Status column */}
-            <DataTable.Column<Project> header="Status">
+            <DataTable.Column<Project> header="Status" sortable>
               {({ row }) => (
                 <>
                   <span className={`legend-indicator ${row.archived ? 'bg-secondary' : (row.published ? 'bg-success' : 'bg-warning')} me-2`}></span>
@@ -443,11 +444,14 @@ function ProjectsManagementPage() {
             <DataTable.Column<Project> header="Technologies">
               {({ row }) => (
                 <div>
-                  {row.technologies.slice(0, 3).map(tech => (
-                    <span key={tech} className="badge bg-soft-secondary me-1">{tech}</span>
-                  ))}
+                  {row.technologies.slice(0, 3).map(tech => {
+                    const accentColor = getTechnologyScheme(tech);
+                    return (
+                      <span key={tech} className={`badge bg-soft-${accentColor} text-${accentColor} me-1`}>{tech}</span>
+                    )})
+                  }
                   {row.technologies.length > 3 && (
-                    <span className="text-muted">+{row.technologies.length - 3} more</span>
+                    <span className="badge bg-soft-dark text-muted">+{row.technologies.length - 3} more</span>
                   )}
                 </div>
               )}
@@ -456,7 +460,7 @@ function ProjectsManagementPage() {
             {/* Category column */}
             <DataTable.Column<Project> header="Category">
               {({ row }) => (
-                <span className="badge bg-soft-info">{row.category}</span>
+                <span className="badge bg-soft-info text-info">{row.category}</span>
               )}
             </DataTable.Column>
 
