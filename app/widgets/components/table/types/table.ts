@@ -1,10 +1,10 @@
 // app/widgets/components/table/types/table.ts
 // Core DataTable types
 
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import type { ColumnConfig } from './columns'
-import type { SelectionState } from './selection'
-import type { SortConfig, SortHelpers } from './sorting'
+import type { SelectionState, SelectionConfig } from './selection'
+import type { SortConfig, SortHelpers, SortingConfig } from './sorting'
 
 /**
  * Main DataTable component props
@@ -24,6 +24,10 @@ export interface DataTableProps<T = any> {
   role?: string
   /** Children components (DataTable.Column, LoadingState, EmptyState) */
   children: ReactNode
+  /** Selection configuration */
+  selection?: SelectionConfig<T>
+  /** Sorting configuration */
+  sorting?: SortingConfig<T>
 }
 
 // Table styling variants - kept for future features

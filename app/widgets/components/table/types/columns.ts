@@ -3,7 +3,7 @@
 
 import { ReactNode } from 'react'
 import type { SelectionState } from './selection'
-import type { SortConfig } from './sorting'
+import type { SortConfig, SortProps } from './sorting'
 
 /**
  * Column configuration for DataTable
@@ -76,8 +76,8 @@ export interface HeaderRenderContext<T = any> {
   data: T[]
   /** Selection state helpers */
   selection?: SelectionHelpers<T>
-  /** Current sort configuration */
-  sorting?: SortConfig
+  /** Current sort configuration and props */
+  sorting?: SortProps
   /** Column configuration */
   column: ColumnConfig<T>
 }
