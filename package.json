@@ -69,7 +69,7 @@
     "dropzone": "^6.0.0-beta.2",
     "file-loader": "^6.2.0",
     "firebase": "^12.1.0",
-    "firebase-admin": "^13.4.0",
+    "firebase-admin": "^12.6.0",
     "flag-icon-css": "^4.1.7",
     "flatpickr": "^4.6.13",
     "fs": "^0.0.1-security",
