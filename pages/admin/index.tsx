@@ -6,6 +6,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useCMSStore } from '@/store/cmsStore';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import DataTable from '@/widgets/components/table';
+import { FilterDropdown } from '@/components/admin';
 import type { Project } from '@/types/project/project';
 import { getCategoryScheme, getTechnologyScheme } from '@/utils';
 
@@ -40,7 +41,9 @@ function ProjectsManagementPage() {
     batchUnpublishProjects
   } = useCMSStore();
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState<'all' | 'published' | 'draft' | 'archived'>(FILTER_OPTIONS.ALL);
+  const [showPublished, setShowPublished] = useState(true);
+  const [showDrafts, setShowDrafts] = useState(true);
+  const [showArchived, setShowArchived] = useState(false);
   const [selectedProjects, setSelectedProjects] = useState<any[]>([]);
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
@@ -77,20 +80,28 @@ function ProjectsManagementPage() {
     };
   }, [projects]);
 
-  // Filtered projects based on search and filter
+  // Filtered projects based on search and toggle switches
   const filteredProjects = useMemo(() => {
     return projects.filter(project => {
       const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            project.technologies.some(tech => tech.toLowerCase().includes(searchTerm.toLowerCase()));
       
-      const matchesFilter = filterStatus === FILTER_OPTIONS.ALL || 
-                           (filterStatus === FILTER_OPTIONS.PUBLISHED && project.published && !project.archived) ||
-                           (filterStatus === FILTER_OPTIONS.DRAFT && !project.published && !project.archived) ||
-                           (filterStatus === FILTER_OPTIONS.ARCHIVED && project.archived);
+      // Check if project matches the enabled status filters
+      let matchesStatus = false;
       
-      return matchesSearch && matchesFilter;
+      if (project.published && !project.archived && showPublished) {
+        matchesStatus = true;
+      }
+      if (!project.published && !project.archived && showDrafts) {
+        matchesStatus = true;
+      }
+      if (project.archived && showArchived) {
+        matchesStatus = true;
+      }
+      
+      return matchesSearch && matchesStatus;
     });
-  }, [projects, searchTerm, filterStatus]);
+  }, [projects, searchTerm, showPublished, showDrafts, showArchived]);
 
   // Find project being deleted
   const deleteTarget = useMemo(() => 
@@ -314,46 +325,15 @@ function ProjectsManagementPage() {
                 </div>
               ) : (
                 /* Filter Dropdown */
-                <div className="dropdown">
-                  <button 
-                    type="button" 
-                    className="btn btn-ghost-white btn-sm w-100"
-                    data-bs-toggle="dropdown" 
-                    aria-expanded="false"
-                  >
-                    <Filter size={16} className="me-1" /> Filter
-                    {filterStatus !== FILTER_OPTIONS.ALL && (
-                      <span className="badge bg-soft-dark text-dark rounded-circle ms-1">1</span>
-                    )}
-                  </button>
-
-                  <div className="dropdown-menu dropdown-menu-end">
-                    <button 
-                      className={`dropdown-item ${filterStatus === FILTER_OPTIONS.ALL ? 'active' : ''}`}
-                      onClick={() => setFilterStatus(FILTER_OPTIONS.ALL)}
-                    >
-                      All Projects
-                    </button>
-                    <button 
-                      className={`dropdown-item ${filterStatus === FILTER_OPTIONS.PUBLISHED ? 'active' : ''}`}
-                      onClick={() => setFilterStatus(FILTER_OPTIONS.PUBLISHED)}
-                    >
-                      Published Only
-                    </button>
-                    <button 
-                      className={`dropdown-item ${filterStatus === FILTER_OPTIONS.DRAFT ? 'active' : ''}`}
-                      onClick={() => setFilterStatus(FILTER_OPTIONS.DRAFT)}
-                    >
-                      Drafts Only
-                    </button>
-                    <button 
-                      className={`dropdown-item ${filterStatus === FILTER_OPTIONS.ARCHIVED ? 'active' : ''}`}
-                      onClick={() => setFilterStatus(FILTER_OPTIONS.ARCHIVED)}
-                    >
-                      Archived Only
-                    </button>
-                  </div>
-                </div>
+                <FilterDropdown 
+                  showPublished={showPublished}
+                  showDrafts={showDrafts}
+                  showArchived={showArchived}
+                  onTogglePublished={setShowPublished}
+                  onToggleDrafts={setShowDrafts}
+                  onToggleArchived={setShowArchived}
+                  projectStats={projectStats}
+                />
               )}
             </div>
           </div>

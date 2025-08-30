@@ -98,15 +98,28 @@ export const Dropdown = ({ children, onOpenChange }: DropdownProps) => {
   React.useEffect(() => {
     if (isOpen && triggerRef.current && menuRef.current) {
       popperRef.current = createPopper(triggerRef.current, menuRef.current, {
-        placement: 'bottom-start',
+        placement: 'bottom-end',
+        strategy: 'absolute',
         modifiers: [
+          {
+            name: 'flip',
+            options: {
+              fallbackPlacements: ['bottom-start', 'top-end', 'top-start'],
+            },
+          },
+          {
+            name: 'preventOverflow',
+            options: {
+              padding: 8,
+            },
+          },
           {
             name: 'offset',
             options: {
-              offset: [0, 4]
-            }
-          }
-        ]
+              offset: [0, 4],
+            },
+          },
+        ],
       })
     }
 
@@ -217,7 +230,7 @@ export const DropdownContent = ({ children, className = '' }: DropdownContentPro
       ref={menuRef}
       className={`dropdown-menu show ${className}`}
       aria-labelledby="dropdownMenuButton"
-      data-popper-placement="bottom-start"
+      data-popper-placement="bottom-end"
       style={{ zIndex: 1000 }}
     >
       {children}

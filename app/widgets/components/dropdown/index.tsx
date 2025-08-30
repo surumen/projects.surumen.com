@@ -6,6 +6,5 @@ export {
   type DropdownProps,
   type DropdownTriggerProps,
   type DropdownContentProps,
-  type DropdownItemProps,
-  type DropdownContextValue
+  type DropdownItemProps
 } from "./Dropdown"
