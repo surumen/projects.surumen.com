@@ -10,7 +10,7 @@ import NavbarTop from './navbars/NavbarTop';
 import SidebarToggle from './navbars/SidebarToggle';
 
 // import navigation components
-import { AdminNavigation, AdminSearch, UserMenu, YearDisplay, PortfolioNavbar } from './navigation';
+import { AdminNavigation, AdminSearch, UserMenu, YearDisplay, PortfolioNavbar } from './navbars';
 
 // import bracket components
 import Bracket from './brackets/Bracket';
@@ -45,7 +45,7 @@ import {
 } from './forms';
 
 // import table components
-import { SmartTable } from './tables';
+// import { SmartTable } from './tables';
 
 // import theme components  
 import { ThemeProvider } from './theme';
@@ -96,7 +96,7 @@ export {
    useFormContext,
    
    // Tables
-   SmartTable,
+   // SmartTable,
    
    // Theme
    ThemeProvider,

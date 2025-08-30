@@ -10,7 +10,7 @@ import {
     Unlock2,
     ShieldLock
 } from 'react-bootstrap-icons';
-import { useAuth } from '../../../lib/firebase/AuthContext';
+import { useAuth } from '@/lib/firebase/AuthContext';
 import { useAppStore } from '@/store/store';
 
 interface UserMenuProps {
