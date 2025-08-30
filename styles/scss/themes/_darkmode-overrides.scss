@@ -291,6 +291,11 @@ select:-webkit-autofill:focus {
   background-color: rgba($gray-700, .05) !important;
 }
 
+.form-select {
+  color: $body-color !important;
+  border: $form-select-border-width solid $border-color !important;
+}
+
 .input-group-light {
   background-color: darken($gray-700, 1%) !important;
 }
@@ -329,6 +334,7 @@ select:-webkit-autofill:focus {
 .form-select {
   background-color: $gray-700 !important;
   border: $form-select-border-width solid $border-color !important;
+  color:$body-color !important;
 }
 
 .form-label,
@@ -341,6 +347,7 @@ select:-webkit-autofill:focus {
 .input-group-text {
   background-color: $gray-700 !important;
   border-color: $border-color !important;
+  color: $body-color !important;
 }
 
 // Form switches
@@ -516,4 +523,10 @@ select:-webkit-autofill:focus {
 
 .input-group-merge {
   border: $input-border-width solid $border-color !important;
+}
+
+
+.popover-body {
+  color: $body-color !important;
+  background-color: $body-bg !important;
 }

@@ -168,7 +168,7 @@
   .form-control,
   .form-select {
     --bs-form-control-bg: #{$white-bg};           // Override input backgrounds
-    --bs-form-control-color: #{$input-color};     // Override input text color
+    --bs-form-control-color: #{$body-color};     // Override input text color
     --bs-form-control-border-color: #{$border-color}; // Override input borders
   }
   

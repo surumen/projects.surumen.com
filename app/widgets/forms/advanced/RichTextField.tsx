@@ -1,106 +1,208 @@
-import React from 'react';
-import striptags from 'striptags';
-import type { RichTextFieldConfig } from '@/types/forms/advanced';
-import type { FieldState } from '@/types/forms/styling';
-import { TiptapEditor } from '../tiptap';
-import {
-  buildFieldClasses,
-  generateFieldId,
-  buildAriaDescribedBy,
-  shouldShowOptionalText
-} from '../utils';
+"use client"
 
-interface RichTextFieldProps {
-  field: RichTextFieldConfig;
-  value: string;
-  error?: string;
-  touched: boolean;
-  isValidating?: boolean;
-  onChange: (value: string) => void;
-  onBlur: () => void;
+import React from 'react';
+import { FieldProps } from '../../forms/types/field';
+import { useFormContext } from '../../forms/core/Form';
+import { useField } from '../../../hooks/forms/useField';
+import {
+  generateFieldId,
+  getDefaultFieldValue
+} from '../../forms/utils/fieldHelpers';
+import { classNames } from '../../forms/utils/classNames';
+import { Tiptap } from '../../tiptap/Tiptap';
+
+/**
+ * Rich Text Field Props - extends your existing FieldProps interface
+ */
+export interface RichTextFieldProps extends Omit<FieldProps, 'type' | 'rows'> {
+  // Rich text specific props
+  minHeight?: string | number;
+  extensions?: any[];
+  // Toolbar options
+  variant?: 'full' | 'compact' | 'minimal';
+  showToolbar?: boolean;
 }
 
-const RichTextField: React.FC<RichTextFieldProps> = ({
-  field,
-  value,
-  error,
-  touched,
-  isValidating,
-  onChange,
-  onBlur
-}) => {
-  const fieldState: FieldState = {
-    hasError: touched && !!error,
-    touched,
+/**
+ * RichTextField Component - Complete form field for rich text editing
+ * 
+ * A complete form field component that integrates TipTap with your existing form system.
+ * Provides the same API as your Field component but with rich text editing capabilities.
+ * 
+ * Features:
+ * - Full form integration with useField and useFormContext
+ * - Bootstrap styling and validation display  
+ * - Accessibility support
+ * - Rich text validation
+ * - Drop-in replacement for <Field type="textarea">
+ */
+export const RichTextField: React.FC<RichTextFieldProps> = (props) => {
+  const {
+    name,
+    label,
+    defaultValue,
+    value: controlledValue,
+    required = false,
+    disabled = false,
+    readOnly = false,
+    error,
+    placeholder = "Start typing...",
+    helpText,
+    autoFocus = false,
+    className,
+    minHeight = "200px",
+    extensions,
+    variant = 'full',
+    showToolbar = true,
+    updateOn = 'blur',
+    validators = [],
+    asyncValidators = [],
+    deps = [],
+    transform,
+    parse,
+    onChange,
+    onBlur,
+    onFocus,
+    ariaLabel,
+    ariaDescribedBy,
+    tabIndex,
+    columns
+  } = props;
+
+  // Get form context
+  const formContext = useFormContext();
+  
+  // Use field hook for field-specific logic
+  const { 
+    value: fieldValue, 
+    error: fieldError, 
+    touched, 
     isValidating,
-    isDisabled: field.readOnly,
-    isFocused: false
+    handleChange, 
+    handleBlur: fieldHandleBlur
+  } = useField({
+    name,
+    defaultValue: defaultValue ?? getDefaultFieldValue('textarea'),
+    transform,
+    parse,
+    onChange,
+    onBlur,
+    updateOn,
+    validators,
+    asyncValidators,
+    deps,
+    formValues: formContext.values,
+    formErrors: formContext.errors,
+    formTouched: formContext.touched,
+    formIsValidating: formContext.isValidating,
+    setValue: formContext.setValue,
+    setTouched: formContext.setTouched,
+    validateField: formContext.validateField,
+    registerFieldValidation: formContext.registerFieldValidation,
+    unregisterFieldValidation: formContext.unregisterFieldValidation
+  });
+
+  // Use controlled value if provided, otherwise use field value
+  const currentValue = controlledValue !== undefined ? controlledValue : fieldValue;
+  
+  // Use prop error if provided, otherwise use field error
+  const currentError = error || (touched ? fieldError : undefined);
+  
+  // Generate unique field ID
+  const fieldId = generateFieldId(name);
+  
+  // Handle rich text changes
+  const handleRichTextChange = React.useCallback((html: string) => {
+    // Convert TipTap onChange to React ChangeEvent for form integration
+    const syntheticEvent = {
+      target: { 
+        name,
+        value: html,
+        type: 'textarea'
+      },
+      currentTarget: { value: html },
+      preventDefault: () => {},
+      stopPropagation: () => {}
+    } as React.ChangeEvent<HTMLTextAreaElement>;
+    
+    handleChange(syntheticEvent);
+  }, [name, handleChange]);
+
+  // Handle blur events
+  const handleBlurEvent = React.useCallback((event?: FocusEvent) => {
+    fieldHandleBlur();
+    onBlur?.();
+  }, [fieldHandleBlur, onBlur]);
+
+  // Render label if provided
+  const renderLabel = () => {
+    if (!label) return null;
+
+    return (
+      <label className="form-label" htmlFor={fieldId}>
+        {label}
+        {required && <span className="text-danger ms-1">*</span>}
+      </label>
+    );
   };
 
-  const classes = buildFieldClasses(field, fieldState);
-  const fieldId = generateFieldId(field.name);
-  const helpTextId = field.helpText ? `${field.name}_help` : undefined;
-  const errorId = fieldState.hasError ? `${field.name}_error` : undefined;
-  const ariaDescribedBy = buildAriaDescribedBy(field.name, !!field.helpText, fieldState.hasError);
+  // Render help text and validation status
+  const renderHelpText = () => {
+    if (!helpText && !currentError && !isValidating) return null;
 
-  // Character count helper
-  const getCharacterCount = () => {
-    if (!field.maxLength) return null;
-    
-    // Strip HTML tags to get actual text length using secure striptags library
-    const textContent = value ? striptags(value) : '';
-    const currentLength = textContent.length;
-    const isOverLimit = currentLength > field.maxLength;
-    
+    // Show validation spinner if validating
+    if (isValidating) {
+      return (
+        <div className="form-text">
+          <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          Validating...
+        </div>
+      );
+    }
+
     return (
-      <div className={`form-text ${isOverLimit ? 'text-danger' : 'text-muted'}`}>
-        {currentLength}/{field.maxLength} characters
+      <div className={classNames(
+        currentError ? 'invalid-feedback' : 'form-text',
+        currentError && 'd-block' // Show error even without is-invalid on input
+      )}>
+        {currentError || helpText}
       </div>
     );
   };
 
+  // Handle columns for FieldGroup support
+  const wrapperClasses = classNames(
+    "mb-3",
+    (columns && columns > 0) ? `col-${columns}` : null
+  );
+
   return (
-    <div className={classes.group}>
-      <label htmlFor={fieldId} className={classes.label}>
-        {field.label}
-        {shouldShowOptionalText(field) && (
-          <span className="form-label-secondary">(Optional)</span>
-        )}
-      </label>
+    <div className={wrapperClasses}>
+      {renderLabel()}
       
-      <TiptapEditor
-        value={value || ''}
-        onChange={onChange}
-        onBlur={onBlur}
-        toolbar={field.toolbar || 'basic'}
-        height={field.height}
-        placeholder={field.placeholder}
-        readOnly={field.readOnly}
-        className={fieldState.hasError ? 'border-danger' : ''}
+      <Tiptap
+        id={fieldId}
+        name={name}
+        value={currentValue || ''}
+        onChange={handleRichTextChange}
+        onBlur={handleBlurEvent}
+        onFocus={onFocus}
+        placeholder={placeholder}
+        disabled={disabled}
+        readOnly={readOnly}
+        required={required}
+        minHeight={minHeight}
+        variant={variant}
+        showToolbar={showToolbar}
+        className={classNames(
+          className,
+          currentError && 'border-danger shadow'
+        )}
+        extensions={extensions}
+        autoFocus={autoFocus}
       />
       
-      {getCharacterCount()}
-      
-      {field.helpText && (
-        <div id={helpTextId} className={classes.helpText}>
-          {field.helpText}
-        </div>
-      )}
-      
-      {fieldState.hasError && error && (
-        <div id={errorId} className="invalid-feedback d-block">
-          {error}
-        </div>
-      )}
-
-      {isValidating && (
-        <div className="form-text text-muted">
-          <div className="spinner-border spinner-border-sm me-2" role="status">
-            <span className="visually-hidden">Validating...</span>
-          </div>
-          Validating...
-        </div>
-      )}
+      {renderHelpText()}
     </div>
   );
 };

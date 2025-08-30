@@ -5,9 +5,31 @@ import { sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink } fro
 import { auth, actionCodeSettings, isAdminEmail } from '../../lib/firebase/config';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/firebase/AuthContext';
-import { SmartForm, LogoIcon } from '@/widgets';
-import type { FieldConfig } from '@/types/forms/advanced';
+import { 
+  LogoIcon,
+  Form, 
+  Field, 
+  validationRules,
+  useFormContext 
+} from '@/widgets';
 import BlankLayout from '../../layouts/BlankLayout';
+
+// Custom submit button component that accesses form context
+const SubmitButton = ({ loading }: { loading: boolean }) => {
+  const { isValid, isSubmitting } = useFormContext();
+
+  return (
+    <div className="d-grid gap-2">
+      <button 
+        type="submit"
+        className="btn btn-primary btn-lg"
+        disabled={loading || !isValid || isSubmitting}
+      >
+        {loading || isSubmitting ? 'Sending Magic Link...' : 'Send Magic Link'}
+      </button>
+    </div>
+  );
+};
 
 function AdminLogin() {
   const [loading, setLoading] = useState(false);
@@ -68,34 +90,6 @@ function AdminLogin() {
     }
   }, [router]);
 
-  // Form fields for email input
-  const loginFields: FieldConfig[] = [
-    {
-      name: 'email',
-      label: 'Your email',
-      type: 'input',
-      inputType: 'email',
-      required: true,
-      validate: [
-        {
-          test: (email: string) => {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email) && isAdminEmail(email);
-          },
-          message: 'Please enter a valid admin email address'
-        }
-      ],
-      initialValue: '',
-      styling: {
-        size: 'lg',
-        customClasses: {
-          control: 'form-control-lg'
-        }
-      },
-      placeholder: 'Enter your email address'
-    }
-  ];
-
   const handleFormSubmit = async (values: Record<string, any>) => {
     const { email } = values;
     setLoading(true);
@@ -112,6 +106,12 @@ function AdminLogin() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Custom validation function for admin email
+  const validateAdminEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email) && isAdminEmail(email);
   };
 
   // Show loading while checking auth state
@@ -156,24 +156,30 @@ function AdminLogin() {
                   </Alert>
                 )}
 
-                <SmartForm
-                  config={{
-                    fields: loginFields,
-                    onSubmit: handleFormSubmit
+                <Form
+                  onSubmit={handleFormSubmit}
+                  initialValues={{
+                    email: ''
                   }}
-                  renderSubmitButton={({ isValid, submit }) => (
-                    <div className="d-grid gap-2">
-                      <button 
-                        type="button"
-                        onClick={submit}
-                        className="btn btn-primary btn-lg"
-                        disabled={loading || !isValid}
-                      >
-                        {loading ? 'Sending Magic Link...' : 'Send Magic Link'}
-                      </button>
-                    </div>
-                  )}
-                />
+                >
+                  <Field
+                    name="email"
+                    label="Your email"
+                    type="email"
+                    required
+                    placeholder="Enter your email address"
+                    className="form-control-lg"
+                    validators={[
+                      validationRules.required('Email'),
+                      validationRules.custom(
+                        validateAdminEmail,
+                        'Please enter a valid admin email address'
+                      )
+                    ]}
+                  />
+
+                  <SubmitButton loading={loading} />
+                </Form>
               </div>
             </div>
           </div>

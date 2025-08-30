@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import Link from 'next/link';
 import { NavbarTop, Sidebar } from '@/widgets/navbars';
-import { AdminNavigation, AdminSearch, UserMenu } from '@/widgets/navigation';
+import { AdminNavigation, AdminSearch, UserMenu } from '@/widgets';
 import { LogoIcon } from '@/widgets';
 import useBodyClasses from '@/hooks/useBodyClasses';
 

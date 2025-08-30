@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react';
 import Link from 'next/link';
 import { NavbarTop, Sidebar } from '@/widgets/navbars';
-import { YearDisplay } from '@/widgets/navigation';
-import PortfolioNavbar from '@/widgets/navigation/PortfolioNavbar';
+import { YearDisplay } from '@/widgets';
+import PortfolioNavbar from '@/widgets/navbars/PortfolioNavbar';
 import { LogoIcon } from '@/widgets';
 import useBodyClasses from '@/hooks/useBodyClasses';
 

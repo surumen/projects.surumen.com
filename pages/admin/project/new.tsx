@@ -1,13 +1,25 @@
-import React, { useState, useMemo, useCallback } from 'react';
-import { Container, Row, Col, Button, Breadcrumb, Card } from 'react-bootstrap';
+import React from 'react';
+import { Breadcrumb } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import { SmartForm } from '@/widgets';
-import { validationRules } from '@/widgets/forms';
-import { FormIcons } from '@/widgets/forms';
+import { 
+  Form, 
+  Field, 
+  FieldGroup, 
+  InputGroup, 
+  InputGroupPrefix,
+  validationRules,
+  useFormContext,
+} from '../../../app/widgets/forms';
+import { 
+  SelectField,
+  SwitchField,
+  TagsField,
+  RichTextField
+} from '@/widgets/forms/advanced';
 import { useCMSStore } from '@/store/cmsStore';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
-import type { FieldConfig } from '@/types/forms/advanced';
+import * as Icons from 'react-bootstrap-icons';
 import type { Project } from '@/types';
 
 // Project-specific slug generation
@@ -20,318 +32,54 @@ const generateSlug = (title: string): string => {
     .trim();
 };
 
+// Submit button that accesses form validation state
+const SubmitButton = () => {
+  const { loading } = useCMSStore();
+  const { isValid, isSubmitting, values } = useFormContext();
+  
+  // Check if required fields have values
+  const requiredFields = ['title', 'category', 'year', 'shortDescription', 'description', 'technologies'];
+  const hasRequiredValues = requiredFields.every(field => {
+    const value = values[field];
+    if (field === 'technologies') {
+      return Array.isArray(value) && value.length > 0;
+    }
+    return value && value.toString().trim().length > 0;
+  });
+  
+  const isDisabled = !isValid || !hasRequiredValues || isSubmitting || loading;
+  
+  return (
+    <button 
+      type="submit" 
+      className="btn btn-primary btn-lg"
+      disabled={isDisabled}
+    >
+      {loading || isSubmitting ? 'Creating Project...' : 'Create Project'}
+    </button>
+  );
+};
+
 function NewProjectPage() {
   const router = useRouter();
   const { createProject, loading } = useCMSStore();
 
-  // Simple coordination state
-  const [allFormValues, setAllFormValues] = useState<Record<string, any>>({});
-  const [sectionValidation, setSectionValidation] = useState<Record<string, { isValid: boolean; errors: Record<string, string> }>>({});
-  const [formKeys, setFormKeys] = useState({ basic: 0, tech: 0, content: 0, publish: 0 });
-  const [showResetConfirm, setShowResetConfirm] = useState(false);
-
-  // Project-specific field configurations (memoized to prevent re-creation)
-  const basicInfoFields: FieldConfig[] = useMemo(() => [
-    {
-      name: 'title',
-      label: 'Project name',
-      type: 'input',
-      inputType: 'text',
-      required: true,
-      placeholder: 'Enter project name here',
-      helpText: 'The main title of your project displayed publicly',
-      styling: {
-        inputGroup: {
-          prepend: {
-            icon: FormIcons.briefcase
-          },
-          merge: true
-        },
-        labelIcon: {
-          icon: FormIcons.help,
-          tooltip: 'Displayed on public forums, portfolios, and project listings',
-          position: 'after'
-        }
-      },
-      validate: [
-        validationRules.required('Project name'),
-        validationRules.minLength(3),
-        validationRules.maxLength(100)
-      ]
-    },
-    {
-      name: 'category',
-      label: 'Category',
-      type: 'select',
-      required: true,
-      placeholder: 'Select category',
-      row: { columns: 6 },
-      options: [
-        { value: 'Web Development', label: 'Web Development' },
-        { value: 'Mobile App', label: 'Mobile App' },
-        { value: 'AI/ML', label: 'AI/ML' },
-        { value: 'Data Science', label: 'Data Science' },
-        { value: 'DevOps', label: 'DevOps' },
-        { value: 'API/Backend', label: 'API/Backend' },
-        { value: 'Frontend', label: 'Frontend' },
-        { value: 'Full Stack', label: 'Full Stack' },
-        { value: 'Automation', label: 'Automation' },
-        { value: 'Other', label: 'Other' }
-      ],
-      validate: [
-        validationRules.required('Category')
-      ]
-    },
-    {
-      name: 'year',
-      label: 'Year Completed',
-      type: 'select',
-      required: true,
-      placeholder: 'Select year',
-      initialValue: new Date().getFullYear(),
-      row: { columns: 6 },
-      options: Array.from({ length: 10 }, (_, i) => {
-        const year = new Date().getFullYear() - i;
-        return { value: year, label: year.toString() };
-      }),
-      validate: [
-        validationRules.required('Completion year')
-      ]
-    },
-    {
-      name: 'slug',
-      label: 'URL Slug',
-      type: 'input',
-      inputType: 'text',
-      placeholder: 'generated-from-project-name',
-      helpText: 'Auto-generated from title if left empty',
-      row: { columns: 6 },
-      styling: {
-        inputGroup: {
-          prepend: {
-            icon: FormIcons.clipboard
-          },
-          merge: true
-        }
-      },
-      validate: [
-        validationRules.pattern(
-          /^[a-z0-9-]*$/,
-          'Slug must contain only lowercase letters, numbers, and hyphens'
-        )
-      ]
-    },
-    {
-      name: 'blog',
-      label: 'Blog',
-      type: 'input',
-      inputType: 'text',
-      placeholder: 'blog-post-slug',
-      row: { columns: 6 },
-      styling: {
-        inputGroup: {
-          prepend: {
-            icon: FormIcons.text
-          },
-          merge: true
-        }
-      }
-    }
-  ], []);
-
-  const technicalFields: FieldConfig[] = useMemo(() => [
-    {
-      name: 'technologies',
-      label: 'Technologies',
-      type: 'tags',
-      required: true,
-      placeholder: 'Add technologies...',
-      helpText: 'Tech stack used in this project',
-      suggestions: [
-        'React', 'Next.js', 'TypeScript', 'JavaScript', 'Python',
-        'Node.js', 'Firebase', 'MongoDB', 'PostgreSQL', 'AWS',
-        'Docker', 'Kubernetes', 'Machine Learning', 'AI/ML',
-        'OpenAI', 'Anthropic', 'TensorFlow', 'Bootstrap', 'Tailwind CSS'
-      ],
-      allowCustomTags: true,
-      maxTags: 10,
-      validate: [
-        validationRules.required('Technologies')
-      ]
-    }
-  ], []);
-
-  const contentFields: FieldConfig[] = useMemo(() => [
-    {
-      name: 'shortDescription',
-      label: 'Short description',
-      type: 'textarea',
-      required: true,
-      rows: 3,
-      placeholder: 'Short description',
-      helpText: 'Brief summary for project listings',
-      validate: [
-        validationRules.required('Short description'),
-        validationRules.minLength(10),
-        validationRules.maxLength(200)
-      ]
-    },
-    {
-      name: 'description',
-      label: 'Full description',
-      type: 'richtext',
-      required: true,
-      placeholder: 'Enter detailed description...',
-      toolbar: 'full',
-      height: 300,
-      validate: [
-        validationRules.required('Full description'),
-        validationRules.minLength(50)
-      ]
-    }
-  ], []);
-
-  const publishingFields: FieldConfig[] = useMemo(() => [
-    {
-      name: 'published',
-      label: 'Confirm you want to publish this project',
-      type: 'switch',
-      initialValue: false,
-      helpText: 'Publishing this project will show it to the public immediately'
-    }
-  ], []);
-
-  // Simple coordination handlers
-  const handleSectionChange = useCallback((sectionId: string, values: Record<string, any>) => {
-    setAllFormValues(prev => ({
-      ...prev,
-      ...values
-    }));
-
-    // Auto-generate slug from title if slug is empty
-    if (values.title && !values.slug) {
-      setAllFormValues(prev => ({
-        ...prev,
-        ...values,
-        slug: generateSlug(values.title)
-      }));
-    }
-  }, []);
-
-  const handleSectionValidation = useCallback((sectionId: string, isValid: boolean, errors: Record<string, string>) => {
-    setSectionValidation(prev => ({
-      ...prev,
-      [sectionId]: { isValid, errors }
-    }));
-  }, []);
-
-  // Memoized callback creators for each section to prevent infinite loops
-  const handleBasicChange = useCallback((name: string, value: any, allValues: Record<string, any>) => {
-    handleSectionChange('basic', allValues);
-  }, [handleSectionChange]);
-
-  const handleBasicValidation = useCallback((isValid: boolean, errors: Record<string, string>) => {
-    handleSectionValidation('basic', isValid, errors);
-  }, [handleSectionValidation]);
-
-  const handleTechChange = useCallback((name: string, value: any, allValues: Record<string, any>) => {
-    handleSectionChange('tech', allValues);
-  }, [handleSectionChange]);
-
-  const handleTechValidation = useCallback((isValid: boolean, errors: Record<string, string>) => {
-    handleSectionValidation('tech', isValid, errors);
-  }, [handleSectionValidation]);
-
-  const handleContentChange = useCallback((name: string, value: any, allValues: Record<string, any>) => {
-    handleSectionChange('content', allValues);
-  }, [handleSectionChange]);
-
-  const handleContentValidation = useCallback((isValid: boolean, errors: Record<string, string>) => {
-    handleSectionValidation('content', isValid, errors);
-  }, [handleSectionValidation]);
-
-  const handlePublishChange = useCallback((name: string, value: any, allValues: Record<string, any>) => {
-    handleSectionChange('publish', allValues);
-  }, [handleSectionChange]);
-
-  const handlePublishValidation = useCallback((isValid: boolean, errors: Record<string, string>) => {
-    handleSectionValidation('publish', isValid, errors);
-  }, [handleSectionValidation]);
-
-  // Reset all forms
-  const handleResetForm = () => {
-    setShowResetConfirm(true);
-  };
-
-  const confirmResetForm = () => {
-    setAllFormValues({});
-    setSectionValidation({});
-    setFormKeys(prev => ({
-      basic: prev.basic + 1,
-      tech: prev.tech + 1,
-      content: prev.content + 1,
-      publish: prev.publish + 1
-    }));
-    setShowResetConfirm(false);
-  };
-
-  const cancelResetForm = () => {
-    setShowResetConfirm(false);
-  };
-
-  // Handle discard with reliable navigation
-  const handleDiscard = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    window.location.href = '/admin';
-  };
-
-  // Calculate overall form status
-  const { progress, canSubmit, totalErrors } = useMemo(() => {
-    const allSections = Object.values(sectionValidation);
-    const isAllValid = allSections.length > 0 && allSections.every(section => section.isValid);
-    
-    // Required fields check
-    const requiredFields = ['title', 'shortDescription', 'description', 'technologies', 'year', 'category'];
-    const hasRequiredFields = requiredFields.every(field => {
-      const value = allFormValues[field];
-      if (field === 'technologies') {
-        return Array.isArray(value) && value.length > 0;
-      }
-      return value && value.toString().trim().length > 0;
-    });
-
-    const totalFields = basicInfoFields.length + technicalFields.length + contentFields.length + publishingFields.length;
-    const completedFields = Object.keys(allFormValues).filter(key => {
-      const value = allFormValues[key];
-      return value !== undefined && value !== null && value !== '';
-    }).length;
-
-    const calculatedProgress = totalFields > 0 ? (completedFields / totalFields) * 100 : 0;
-    const errors = allSections.reduce((sum, section) => sum + Object.keys(section.errors).length, 0);
-
-    return {
-      progress: calculatedProgress,
-      canSubmit: isAllValid && hasRequiredFields,
-      totalErrors: errors
-    };
-  }, [sectionValidation, allFormValues, basicInfoFields, technicalFields, contentFields, publishingFields]);
-
-  // Handle final form submission
-  const handleSubmit = async () => {
-    if (!canSubmit) return;
-
+  const handleSubmit = async (values: any) => {
     try {
+      // Generate slug from title if not provided
+      const slug = values.slug || generateSlug(values.title);
+      
       const projectData: Partial<Project> = {
-        title: allFormValues.title,
-        slug: allFormValues.slug || generateSlug(allFormValues.title),
-        shortDescription: allFormValues.shortDescription,
-        description: allFormValues.description,
-        technologies: allFormValues.technologies || [],
-        year: parseInt(allFormValues.year),
-        category: allFormValues.category,
-        blog: allFormValues.blog || undefined,
-        published: allFormValues.published || false
+        title: values.title,
+        slug: slug,
+        shortDescription: values.shortDescription,
+        description: values.description,
+        technologies: values.technologies || [],
+        year: parseInt(values.year),
+        category: values.category,
+        demo: values.demo || undefined,
+        blog: values.blog || undefined,
+        published: values.published || false
       };
 
       const newProject = await createProject(projectData);
@@ -342,6 +90,36 @@ function NewProjectPage() {
       console.error('Project creation failed:', error);
     }
   };
+
+  // Sample data for form fields
+  const categoryOptions = [
+    { value: 'Web Development', label: 'Web Development' },
+    { value: 'Mobile App', label: 'Mobile App' },
+    { value: 'AI/ML', label: 'AI/ML' },
+    { value: 'Data Science', label: 'Data Science' },
+    { value: 'DevOps', label: 'DevOps' },
+    { value: 'API/Backend', label: 'API/Backend' },
+    { value: 'Frontend', label: 'Frontend' },
+    { value: 'Full Stack', label: 'Full Stack' },
+    { value: 'Automation', label: 'Automation' },
+    { value: 'Other', label: 'Other' }
+  ];
+
+  const currentYear = new Date().getFullYear();
+  const yearOptions = Array.from({ length: 10 }, (_, i) => {
+    const year = currentYear - i;
+    return { value: year.toString(), label: year.toString() };
+  });
+
+  const techSuggestions = [
+    'React', 'Next.js', 'TypeScript', 'JavaScript', 'Python',
+    'Node.js', 'Firebase', 'MongoDB', 'PostgreSQL', 'AWS',
+    'Docker', 'Kubernetes', 'Machine Learning', 'AI/ML',
+    'OpenAI', 'Anthropic', 'TensorFlow', 'Bootstrap', 'Tailwind CSS',
+    'Vue.js', 'Angular', 'Express.js', 'Django', 'Laravel',
+    'React Native', 'Flutter', 'Swift', 'Kotlin', 'Java',
+    'C#', '.NET', 'Go', 'Rust', 'PHP', 'Ruby on Rails'
+  ];
 
   return (
     <ProtectedRoute>
@@ -362,312 +140,211 @@ function NewProjectPage() {
         </div>
       </div>
 
-      <Row>
-        <Col lg={8} className="mb-4">
-          <div className="d-grid gap-3 gap-lg-5">
-
-            {/* Basic Information Section */}
-            <div className="card card-lg">
-              <div className="card-header">
-                <h4 className="card-header-title">Project Details</h4>
-              </div>
-              <div className="card-body">
-                <SmartForm
-                  key={formKeys.basic}
-                  config={{
-                    fields: basicInfoFields,
-                    onSubmit: () => {},
-                    validation: { mode: 'onChange' }
-                  }}
-                  onFieldChange={handleBasicChange}
-                  onValidationChange={handleBasicValidation}
-                  renderSubmitButton={() => null}
-                />
-              </div>
+      <div className="row justify-content-start">
+        <div className="col-lg-10">
+          <div className="card shadow">
+            <div className="card-header bg-primary">
+              <h4 className="text-bg-primary mb-0">Project Information</h4>
             </div>
-
-            {/* Technologies Section */}
-            <Card className="card-lg">
-              <Card.Header>
-                <h4 className="card-header-title">Technologies</h4>
-              </Card.Header>
-              <Card.Body>
-                <SmartForm
-                  key={formKeys.tech}
-                  config={{
-                    fields: technicalFields,
-                    onSubmit: () => {},
-                    validation: { mode: 'onChange' }
+            <div className="card-body p-4">
+              <Form
+                  onSubmit={handleSubmit}
+                  initialValues={{
+                    title: '',
+                    slug: '',
+                    category: '',
+                    year: currentYear.toString(),
+                    shortDescription: '',
+                    description: '',
+                    technologies: [],
+                    demo: '',
+                    blog: '',
+                    published: false
                   }}
-                  onFieldChange={handleTechChange}
-                  onValidationChange={handleTechValidation}
-                  renderSubmitButton={() => null}
-                />
-              </Card.Body>
-            </Card>
+              >
+                {/* Basic Project Information */}
+                <h5 className="mb-3">Basic Information</h5>
 
-            {/* Description Section */}
-            <Card className="card-lg">
-              <Card.Header>
-                <h4 className="card-header-title">Description</h4>
-              </Card.Header>
-              <Card.Body>
-                <SmartForm
-                  key={formKeys.content}
-                  config={{
-                    fields: contentFields,
-                    onSubmit: () => {},
-                    validation: { mode: 'onChange' }
-                  }}
-                  onFieldChange={handleContentChange}
-                  onValidationChange={handleContentValidation}
-                  renderSubmitButton={() => null}
-                />
-              </Card.Body>
-            </Card>
+                {/* Project Title */}
+                <InputGroup label="Project Name" required className="input-group-merge">
+                  <InputGroupPrefix>
+                    <Icons.Briefcase />
+                  </InputGroupPrefix>
+                  <Field
+                      name="title"
+                      placeholder="Enter project name here"
+                      required
+                      validators={[
+                        validationRules.required('Project name'),
+                        validationRules.minLength(3, 'Project name'),
+                        validationRules.maxLength(100, 'Project name')
+                      ]}
+                      helpText="The main title of your project displayed publicly"
+                  />
+                </InputGroup>
 
-            {/* Publishing Section */}
-            <Card className="card-lg">
-              <Card.Header>
-                <h4 className="card-header-title">Publish</h4>
-              </Card.Header>
-              <Card.Body>
-                <SmartForm
-                  key={formKeys.publish}
-                  config={{
-                    fields: publishingFields,
-                    onSubmit: () => {},
-                    validation: { mode: 'onChange' }
-                  }}
-                  onFieldChange={handlePublishChange}
-                  onValidationChange={handlePublishValidation}
-                  renderSubmitButton={() => null}
-                />
-              </Card.Body>
-            </Card>
+                {/* Category and Year */}
+                <FieldGroup>
+                  <SelectField
+                      name="category"
+                      label="Category"
+                      columns={6}
+                      options={categoryOptions}
+                      placeholder="Select category"
+                      required
+                      validators={[
+                        validationRules.required('Category')
+                      ]}
+                  />
 
-          </div>
-        </Col>
+                  <SelectField
+                      name="year"
+                      label="Year Completed"
+                      columns={6}
+                      options={yearOptions}
+                      placeholder="Select year"
+                      required
+                      validators={[
+                        validationRules.required('Completion year')
+                      ]}
+                  />
+                </FieldGroup>
 
-        {/* Sidebar */}
-        <Col lg={4}>
-          {/* Progress Card */}
-          <Card className="card-body mb-3 mb-lg-5">
-            <h5>Progress</h5>
-            <div className="d-flex justify-content-between align-items-center">
-              <div className="progress flex-grow-1">
-                <div
-                  className="progress-bar bg-primary"
-                  style={{ width: `${progress}%` }}
-                  aria-valuenow={progress}
-                />
-              </div>
-              <span className="ms-4">{Math.round(progress)}%</span>
-            </div>
-
-            <div className="mt-3">
-              <div className="d-flex justify-content-between text-sm">
-                <span>Completed sections:</span>
-                <span>{Object.values(sectionValidation).filter(section => section.isValid).length} / {Object.keys(formKeys).length}</span>
-              </div>
-              {totalErrors > 0 && (
-                <div className="d-flex justify-content-between text-sm text-warning">
-                  <span>Total errors:</span>
-                  <span>{totalErrors}</span>
-                </div>
-              )}
-            </div>
-          </Card>
-
-          {/* Preview Card */}
-          <Card className="mb-3 mb-lg-5">
-            <Card.Header>
-              <h4 className="card-header-title">Preview</h4>
-            </Card.Header>
-            <Card.Body>
-              {allFormValues.title ? (
-                <div className="project-preview">
-                  {/* Header Section */}
-                  <div className="mb-4">
-                    <div className="d-flex justify-content-between align-items-start mb-2">
-                      <h5 className="mb-0 fw-bold">{allFormValues.title}</h5>
-                      {allFormValues.year && (
-                        <span className="badge bg-soft-secondary fs-6">
-                          {allFormValues.year}
-                        </span>
-                      )}
-                    </div>
-
-                    {allFormValues.category && (
-                      <div className="mb-2">
-                        <span className="badge bg-soft-info me-2">
-                          {allFormValues.category}
-                        </span>
-                        <span className={`badge ${allFormValues.published ? 'bg-soft-success' : 'bg-soft-warning'}`}>
-                          {allFormValues.published ? 'Published' : 'Draft'}
-                        </span>
-                      </div>
-                    )}
-
-                    {allFormValues.shortDescription && (
-                      <p className="text-muted mb-2 lh-sm">
-                        {allFormValues.shortDescription}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Rich Description Preview */}
-                  {allFormValues.description && (
-                    <div className="mb-3">
-                      <h6 className="text-muted small text-uppercase mb-2">Description</h6>
-                      <div
-                        className="border rounded p-3 bg-soft-light"
-                        style={{
-                          maxHeight: '200px',
-                          overflow: 'auto',
-                          fontSize: '0.875rem',
-                          lineHeight: '1.4'
-                        }}
-                        dangerouslySetInnerHTML={{ __html: allFormValues.description }}
+                {/* Slug and Blog */}
+                <FieldGroup>
+                  <div className="col-6">
+                    <InputGroup label="URL Slug" className="input-group-merge">
+                      <InputGroupPrefix>
+                        <Icons.Link45deg />
+                      </InputGroupPrefix>
+                      <Field
+                          name="slug"
+                          placeholder="generated-from-project-name"
+                          validators={[
+                            validationRules.pattern(
+                                /^[a-z0-9-]*$/,
+                                'Slug must contain only lowercase letters, numbers, and hyphens'
+                            )
+                          ]}
+                          helpText="Auto-generated from title if left empty"
                       />
-                    </div>
-                  )}
-
-                  {/* Technologies */}
-                  {allFormValues.technologies && allFormValues.technologies.length > 0 && (
-                    <div className="mb-3">
-                      <h6 className="text-muted small text-uppercase mb-2">Technologies</h6>
-                      <div className="d-flex gap-1 flex-wrap">
-                        {allFormValues.technologies.map((tech: string, index: number) => (
-                          <span key={index} className="badge bg-primary">
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Links Section */}
-                  {allFormValues.blog && (
-                    <div className="mb-3">
-                      <h6 className="text-muted small text-uppercase mb-2">Blog</h6>
-                      <div className="bg-soft-secondary p-2 rounded">
-                        <code className="small text-muted">
-                          {allFormValues.blog}
-                        </code>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* URL Preview */}
-                  {(allFormValues.slug || allFormValues.title) && (
-                    <div className="mb-3">
-                      <h6 className="text-muted small text-uppercase mb-2">URL</h6>
-                      <div className="bg-soft-secondary p-2 rounded">
-                        <code className="small text-muted">
-                          /project/{allFormValues.slug || generateSlug(allFormValues.title)}
-                        </code>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="text-center py-5">
-                  <p className="text-muted mb-0">
-                    Start filling out the form to see a live preview
-                  </p>
-                  <small className="text-muted">
-                    Preview will update as you type
-                  </small>
-                </div>
-              )}
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-
-      {/* Fixed Bottom Actions */}
-      <div className="position-fixed start-50 bottom-0 translate-middle-x w-100" style={{ zIndex: 99, marginBottom: '1rem', maxWidth: '40rem' }}>
-        <Card className="card-sm bg-dark border-dark mx-2">
-          <Card.Body>
-            {showResetConfirm ? (
-              // Reset Confirmation State
-              <div className="row justify-content-center align-items-center">
-                <div className="col">
-                  <span className="text-light">
-                    <i className="bi bi-exclamation-triangle me-2"></i>
-                    Reset form? All unsaved changes will be lost.
-                  </span>
-                </div>
-                <div className="col-auto">
-                  <div className="d-flex gap-3">
-                    <Button
-                      type="button"
-                      variant="ghost-light"
-                      onClick={cancelResetForm}
-                      disabled={loading}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="danger"
-                      onClick={confirmResetForm}
-                      disabled={loading}
-                    >
-                      Yes, Reset
-                    </Button>
+                    </InputGroup>
                   </div>
+
+                  <div className="col-6">
+                    <InputGroup label="Blog Post Slug" className="input-group-merge">
+                      <InputGroupPrefix>
+                        <Icons.Newspaper />
+                      </InputGroupPrefix>
+                      <Field
+                          name="blog"
+                          placeholder="blog-post-slug"
+                          helpText="Optional blog post slug"
+                      />
+                    </InputGroup>
+                  </div>
+                </FieldGroup>
+
+                {/* Demo URL */}
+                <InputGroup label="Demo URL" className="input-group-merge">
+                  <InputGroupPrefix>
+                    <Icons.Globe />
+                  </InputGroupPrefix>
+                  <Field
+                      name="demo"
+                      type="url"
+                      placeholder="https://demo.example.com"
+                      validators={[
+                        validationRules.url()
+                      ]}
+                      helpText="Optional demo or live project URL"
+                  />
+                </InputGroup>
+
+                {/* Technologies */}
+                <div className="border-top pt-4 mt-4">
+                  <h5 className="mb-3">Technologies</h5>
+
+                  <TagsField
+                      name="technologies"
+                      label="Technologies & Tools"
+                      suggestions={techSuggestions}
+                      maxTags={15}
+                      allowCustomOptions={true}
+                      placeholder="Type technologies and press Enter..."
+                      helpText="Add technologies, frameworks, and tools used in your project"
+                      required
+                      validators={[
+                        validationRules.required('Technologies')
+                      ]}
+                      tagTransform={(tag) => tag.trim()}
+                      tagValidator={(tag) => tag.length >= 2 ? true : 'Technology must be at least 2 characters'}
+                  />
                 </div>
-              </div>
-            ) : (
-              // Normal State
-              <div className="row justify-content-center justify-content-sm-between">
-                <div className="col">
-                  <Button
-                    type="button"
-                    variant="ghost-danger"
-                    disabled={loading}
-                    onClick={handleResetForm}
+
+                {/* Content */}
+                <div className="border-top pt-4 mt-4">
+                  <h5 className="mb-3">Content</h5>
+
+                  <Field
+                      name="shortDescription"
+                      label="Short Description"
+                      type="textarea"
+                      rows={3}
+                      placeholder="Brief summary for project listings"
+                      required
+                      validators={[
+                        validationRules.required('Short description'),
+                        validationRules.minLength(10, 'Short description'),
+                        validationRules.maxLength(200, 'Short description')
+                      ]}
+                      helpText="Brief summary displayed in project listings (10-200 characters)"
+                  />
+
+                  <RichTextField
+                      name="description"
+                      label="Full Description"
+                      placeholder="Enter detailed description of your project..."
+                      minHeight="300px"
+                      variant="compact"
+                      required
+                      validators={[
+                        validationRules.required('Full description'),
+                        validationRules.minLength(50, 'Full description')
+                      ]}
+                      helpText="Extended summary of the project. Minimum 50 characters required."
+                  />
+                </div>
+
+                {/* Publishing */}
+                <div className="border-top pt-4 mt-4">
+                  <h5 className="mb-3">Publishing</h5>
+
+                  <SwitchField
+                      name="published"
+                      label="Publish Project"
+                      helpText="Publishing this project will make it visible to the public immediately"
+                      inline={true}
+                      defaultValue={false}
+                  />
+                </div>
+
+                {/* Submit button */}
+                <div className="d-grid gap-2 mt-4">
+                  <SubmitButton />
+                  <button
+                      type="button"
+                      className="btn btn-outline-secondary"
+                      onClick={() => router.push('/admin')}
+                      disabled={loading}
                   >
-                    Reset Form
-                  </Button>
+                    Cancel
+                  </button>
                 </div>
-                <div className="col-auto">
-                  <div className="d-flex gap-3">
-                    <Button
-                      type="button"
-                      variant="ghost-light"
-                      onClick={handleDiscard}
-                      disabled={loading}
-                    >
-                      Discard
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="primary"
-                      disabled={!canSubmit || loading}
-                      onClick={handleSubmit}
-                    >
-                      {loading ? 'Saving...' : 'Save'}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Validation Status */}
-            {!showResetConfirm && !canSubmit && progress > 0 && (
-              <div className="row mt-2">
-                <div className="col">
-                  <small className="text-light opacity-75">
-                    Complete required fields to save
-                  </small>
-                </div>
-              </div>
-            )}
-          </Card.Body>
-        </Card>
+              </Form>
+            </div>
+          </div>
+        </div>
       </div>
     </ProtectedRoute>
   );

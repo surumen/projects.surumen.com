@@ -8,7 +8,7 @@ const BlankLayout: React.FC<BlankLayoutProps> = ({ children }) => {
   // No body classes needed for blank layout
   
   return (
-    <main id="content" role="main" className="main">
+    <main id="content" role="main" className="main bg-light vw-100 vh-100">
       <div className="container py-5 py-sm-7">
         <div className="mx-auto" style={{ maxWidth: '30rem' }}>
           {children}

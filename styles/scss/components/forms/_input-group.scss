@@ -38,3 +38,7 @@
     @include border-end-radius($input-border-radius);
   }
 }
+
+.input-group.is-invalid {
+  border: $input-border-width solid $form-feedback-invalid-color;
+}

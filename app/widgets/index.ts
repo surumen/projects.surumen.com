@@ -10,7 +10,7 @@ import NavbarTop from './navbars/NavbarTop';
 import SidebarToggle from './navbars/SidebarToggle';
 
 // import navigation components
-import { AdminNavigation, AdminSearch, UserMenu, YearDisplay, PortfolioNavbar } from './navigation';
+import { AdminNavigation, AdminSearch, UserMenu, YearDisplay, PortfolioNavbar } from './navbars';
 
 // import bracket components
 import Bracket from './brackets/Bracket';
@@ -29,9 +29,6 @@ import PlayerFormation from './football/PlayerFormation';
 import Pitch from './football/Pitch';
 
 // import form components
-import { SmartForm, FormIcons } from './forms';
-
-// import modern form components
 import { 
   Form, 
   Field, 
@@ -43,11 +40,12 @@ import {
   SwitchField,
   CheckboxField,
   validationRules, 
-  asyncValidationRules 
-} from './modern-forms';
+  asyncValidationRules,
+  useFormContext
+} from './forms';
 
 // import table components
-import { SmartTable } from './tables';
+// import { SmartTable } from './tables';
 
 // import theme components  
 import { ThemeProvider } from './theme';
@@ -82,28 +80,23 @@ export {
    Pitch,
    
    // Forms
-   SmartForm,
-   FormIcons,
-   
-   // Modern Forms (Phase 1, 2 & 3)
    Form,
    Field,
    FieldGroup,
    InputGroup,
    InputGroupPrefix,
    InputGroupSuffix,
-   
-   // Modern Forms Advanced Components (Phase 4)
    SelectField,
    SwitchField,
    CheckboxField,
    
-   // Modern Forms Validation
+   // Forms Validation
    validationRules,
    asyncValidationRules,
+   useFormContext,
    
    // Tables
-   SmartTable,
+   // SmartTable,
    
    // Theme
    ThemeProvider,
